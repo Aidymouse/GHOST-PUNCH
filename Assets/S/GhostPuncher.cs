@@ -7,6 +7,8 @@ public class GhostPuncher : MonoBehaviour
     InputAction action_attack;
     InputAction action_move;
 
+    CharacterController controller;
+
     public GhostUI ui;
 
     float move_speed;
@@ -27,6 +29,8 @@ public class GhostPuncher : MonoBehaviour
 	move_speed = 5;
 
 	layer_punchable = LayerMask.GetMask("Punchable");
+
+	controller = GetComponent<CharacterController>();
         
     }
 
@@ -103,27 +107,27 @@ public class GhostPuncher : MonoBehaviour
 
   void moveControls() {
     Vector2 move_value = action_move.ReadValue<Vector2>();
+    if (move_value.x == 0 && move_value.y == 0) { return; }
 
-    Vector3 movement = transform.TransformDirection(Vector3.forward);
-    movement.y = 0;
-    movement = movement.normalized;
-
-    Vector3 movement_hor = transform.TransformDirection(Vector3.right);
-    movement_hor.y = 0;
-    movement_hor = movement_hor.normalized;
+    Vector3 movement_frontback = new Vector3(0, 0, 0);
+    Vector3 movement_horiz = new Vector3(0, 0, 0);
 
     if (move_value.x > 0) {
-      // Move right
-      transform.Translate(movement_hor * move_speed * Time.deltaTime, Space.World);
+      movement_horiz = transform.TransformDirection(Vector3.right);
     } else if (move_value.x < 0) {
-      // Move left
-      transform.Translate(movement_hor * -move_speed * Time.deltaTime, Space.World);
+      movement_horiz = transform.TransformDirection(Vector3.left);
     }
 
     if (move_value.y > 0) {
-      transform.Translate(movement * move_speed * Time.deltaTime, Space.World);
-    } else if (move_value.y < 0) {
-      transform.Translate(movement * -move_speed * Time.deltaTime, Space.World);
+      movement_frontback = transform.TransformDirection(Vector3.forward);
+    } else if (move_value.y > 0) {
+      movement_frontback = transform.TransformDirection(Vector3.back);
     }
+
+    Vector3 movement = movement_frontback + movement_horiz;
+    movement.y = 0;
+    movement = movement.normalized;
+
+    controller.Move(movement * move_speed * Time.deltaTime);
   }
 }
