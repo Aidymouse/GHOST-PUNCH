@@ -88,8 +88,9 @@ public class GhostPuncher : MonoBehaviour
 					blast_dir.x += Random.Range(-3, 3);
 					blast_dir.y += Random.Range(-3, 3);
 					blast_dir.z += Random.Range(-3, 3);
-					crb.constraints = RigidbodyConstraints.None;
-					crb.AddForce(blast_dir.normalized * 1000);
+					//crb.constraints = RigidbodyConstraints.None;
+					crb.isKinematic = false;
+					crb.AddForce(blast_dir.normalized * 100);
 					//crb.gameObject.layer = LayerMask.NameToLayer("Punchable");
 				}
 			} else if (hit_col.CompareTag("Ghost")) {
