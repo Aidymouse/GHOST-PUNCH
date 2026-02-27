@@ -4,51 +4,63 @@ using UnityEngine.InputSystem;
 
 public class GhostPuncher : MonoBehaviour
 {
-    InputAction action_attack;
-    InputAction action_move;
+	InputAction action_attack;
+	InputAction action_move;
 
-    CharacterController controller;
+	CharacterController controller;
 
-    public GhostUI ui;
+	Timer punch_cooldown;
 
-    float move_speed;
+	public GhostUI ui;
 
-    int ectoplasm = 0;
+	float move_speed;
 
-    LayerMask layer_punchable;
+	int ectoplasm = 0;
 
-    const float PUNCH_RANGE = 2;
+	LayerMask layer_punchable;
+
+	const float PUNCH_RANGE = 2;
+
+	public PuncherDefaults defaults; 
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-	action_attack = InputSystem.actions.FindAction("Attack");
-	action_move = InputSystem.actions.FindAction("Move");
+	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Start()
+	{
+		action_attack = InputSystem.actions.FindAction("Attack");
+		action_move = InputSystem.actions.FindAction("Move");
 
-	move_speed = 5;
+		move_speed = 5;
 
-	layer_punchable = LayerMask.GetMask("Punchable");
+		layer_punchable = LayerMask.GetMask("Punchable");
 
-	controller = GetComponent<CharacterController>();
-        
-    }
+		controller = GetComponent<CharacterController>();
 
-    // Update is called once per frame
-    void Update()
-    {
-	// Attacking
-	if (action_attack.WasPerformedThisFrame()) {
-	  punchControls();
+		// Init Timers
+		punch_cooldown = new Timer(0, defaults.PUNCH_COOLDOWN);
+
 	}
 
-	// Moving
-	moveControls();
-        
-    }
+	// Update is called once per frame
+	void Update()
+	{
+		// Timers
+		tick_timers();
 
 
-    void punchControls() {
+		// Attacking
+		if (action_attack.WasPerformedThisFrame() && punch_cooldown.finished()) {
+			punchControls();
+			punch_cooldown.reset();	
+		}
+
+		// Moving
+		moveControls();
+
+	}
+
+
+	void punchControls() {
 
 		RaycastHit attack_hit;
 
@@ -69,12 +81,12 @@ public class GhostPuncher : MonoBehaviour
 
 
 			if (hit_rb != null) {
-			  // The object should really be taking care of this
+				// The object should really be taking care of this
 				//hit_rb.AddForce(transform.TransformDirection(Vector3.forward) * 1000);
 			}
 
 			if (hit_col == null) {
-			  return;
+				return;
 			}
 
 			if (hit_col.CompareTag("Breakable")) {
@@ -94,41 +106,47 @@ public class GhostPuncher : MonoBehaviour
 					//crb.gameObject.layer = LayerMask.NameToLayer("Punchable");
 				}
 			} else if (hit_col.CompareTag("Ghost")) {
-			  Ghost g = hit_col.gameObject.GetComponent<Ghost>();
-			  g.GetPunched();
-			  ectoplasm += 5;
-			  ui.UpdateEctoplasm(ectoplasm);
+				Ghost g = hit_col.gameObject.GetComponent<Ghost>();
+				g.GetPunched();
+				ectoplasm += 5;
+				ui.UpdateEctoplasm(ectoplasm);
 			}
 
 
 
 		}
-	
-    }
 
-  void moveControls() {
-    Vector2 move_value = action_move.ReadValue<Vector2>();
-    if (move_value.x == 0 && move_value.y == 0) { return; }
+	}
 
-    Vector3 movement_frontback = new Vector3(0, 0, 0);
-    Vector3 movement_horiz = new Vector3(0, 0, 0);
+	void moveControls() {
+		Vector2 move_value = action_move.ReadValue<Vector2>();
+		if (move_value.x == 0 && move_value.y == 0) { return; }
 
-    if (move_value.x > 0) {
-      movement_horiz = transform.TransformDirection(Vector3.right);
-    } else if (move_value.x < 0) {
-      movement_horiz = transform.TransformDirection(Vector3.left);
-    }
+		Vector3 movement_frontback = new Vector3(0, 0, 0);
+		Vector3 movement_horiz = new Vector3(0, 0, 0);
 
-    if (move_value.y > 0) {
-      movement_frontback = transform.TransformDirection(Vector3.forward);
-    } else if (move_value.y < 0) {
-      movement_frontback = transform.TransformDirection(Vector3.back);
-    }
+		if (move_value.x > 0) {
+			movement_horiz = transform.TransformDirection(Vector3.right);
+		} else if (move_value.x < 0) {
+			movement_horiz = transform.TransformDirection(Vector3.left);
+		}
 
-    Vector3 movement = movement_frontback + movement_horiz;
-    movement.y = 0;
-    movement = movement.normalized;
+		if (move_value.y > 0) {
+			movement_frontback = transform.TransformDirection(Vector3.forward);
+		} else if (move_value.y < 0) {
+			movement_frontback = transform.TransformDirection(Vector3.back);
+		}
 
-    controller.Move(movement * move_speed * Time.deltaTime);
-  }
+		Vector3 movement = movement_frontback + movement_horiz;
+		movement.y = 0;
+		movement = movement.normalized;
+
+		controller.Move(movement * move_speed * Time.deltaTime);
+	}
+
+	void tick_timers() {
+		punch_cooldown.tick(Time.deltaTime);
+	}
 }
+
+
