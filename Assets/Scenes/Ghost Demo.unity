@@ -1906,7 +1906,6 @@ GameObject:
   - component: {fileID: 305403029}
   - component: {fileID: 305403028}
   - component: {fileID: 305403032}
-  - component: {fileID: 305403033}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -2039,33 +2038,6 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 21292df2425f95b76910933be4bdc680, type: 2}
   m_BuildHeightMesh: 0
---- !u!54 &305403033
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 305403027}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!1001 &374501599
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12752,7 +12724,7 @@ NavMeshAgent:
   m_Speed: 6
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 240
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -14464,6 +14436,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5423855432113771526, guid: f5a0d96e5470d42c3adbb233df895793, type: 3}
+      propertyPath: m_ImplicitCom
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6962827137974422632, guid: f5a0d96e5470d42c3adbb233df895793, type: 3}
       propertyPath: m_Name
       value: table
