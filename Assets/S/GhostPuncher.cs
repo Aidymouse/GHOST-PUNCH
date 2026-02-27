@@ -120,7 +120,7 @@ public class GhostPuncher : MonoBehaviour
 
     if (move_value.y > 0) {
       movement_frontback = transform.TransformDirection(Vector3.forward);
-    } else if (move_value.y > 0) {
+    } else if (move_value.y < 0) {
       movement_frontback = transform.TransformDirection(Vector3.back);
     }
 
