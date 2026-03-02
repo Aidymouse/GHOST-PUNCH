@@ -4,15 +4,13 @@ public class Timer
 {
 	public float time_remaining;
 	public float default_time;
-	public bool active;
+	public bool finished_this_frame;
 
-	public Timer(float initial_time, float init_default_time=-1, bool init_active=true) {
+	public Timer(float initial_time, float init_default_time=-1) {
 		time_remaining = initial_time;
 		default_time = init_default_time;
-		active = init_active;
+		finished_this_frame = false;
 	}
-
-
 
 	public void set(float new_time) {
 		time_remaining = new_time;
@@ -22,22 +20,26 @@ public class Timer
 		time_remaining = default_time;
 	}
 
-	public void pause() {
-		active = false;
-	}
 
-	public void start() {
-		active = true;
-	}
-
+	/** Assumed to be called every update frame, at the beginning of the frame */
 	public float tick(float time) {
-		if (!active) return time_remaining;
-		time_remaining -= time;
-		return time_remaining;
-	}    
+		finished_this_frame = false;
 
+		if (!(time_remaining <= 0)) {
+			time_remaining -= time;
+
+			if (time_remaining <= 0) {
+				finished_this_frame = true;
+			}
+
+		}
+
+		return time_remaining;
+	}
 
 	public bool finished() {
 		return time_remaining <= 0;
 	}
+
+
 }

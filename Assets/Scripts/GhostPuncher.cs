@@ -9,9 +9,11 @@ public class GhostPuncher : MonoBehaviour
 
 	CharacterController controller;
 
-	Timer punch_cooldown;
+	Timer ti_punch_cooldown;
+	Timer ti_punch_again;
 
 	public GhostUI ui;
+	public DebugUI debug_ui;
 
 	float move_speed;
 
@@ -37,7 +39,8 @@ public class GhostPuncher : MonoBehaviour
 		controller = GetComponent<CharacterController>();
 
 		// Init Timers
-		punch_cooldown = new Timer(0, defaults.PUNCH_COOLDOWN);
+		ti_punch_cooldown = new Timer(0, defaults.PUNCH_COOLDOWN);
+		ti_punch_again = new Timer(0, defaults.PUNCH_COOLDOWN + defaults.PUNCH_AGAIN);
 
 	}
 
@@ -45,14 +48,24 @@ public class GhostPuncher : MonoBehaviour
 	void Update()
 	{
 		// Timers
-		tick_timers();
+		this.tick_timers();
+
+		// Animation State
+		Animator arm_animator = this.GetComponentInChildren<Animator>();
+		if (ti_punch_again.finished_this_frame) {
+			arm_animator.SetBool("PunchL", false);
+		}
 
 
 		// Attacking
-		if (action_attack.WasPerformedThisFrame() && punch_cooldown.finished()) {
+
+		if (action_attack.WasPerformedThisFrame()) {
 			punchControls();
-			punch_cooldown.reset();	
 		}
+		
+
+
+			
 
 		// Moving
 		moveControls();
@@ -61,14 +74,27 @@ public class GhostPuncher : MonoBehaviour
 
 
 	void punchControls() {
+		if (!ti_punch_cooldown.finished()) {
+			return;
+		}
+
+		ti_punch_cooldown.reset();	
+		ti_punch_again.reset();	
+
+		// Animator
+		Animator arm_animator = this.GetComponentInChildren<Animator>();
+
+		if (!ti_punch_again.finished()) {
+			bool punch_left = arm_animator.GetBool("PunchL");
+			arm_animator.SetBool("PunchL", !punch_left);
+		}
+
+		arm_animator.SetTrigger("DoPunch");
+
 
 		RaycastHit attack_hit;
 
 		Camera cam = this.GetComponentInChildren<Camera>();
-
-		Animator arm_animator = this.GetComponentInChildren<Animator>();
-
-		arm_animator.SetTrigger("DoPunch");
 
 		//Vector3 ray_dir = transform.TransformDirection(Vector3.forward);
 		Vector3 ray_dir = cam.transform.TransformDirection(Vector3.forward);
@@ -145,7 +171,10 @@ public class GhostPuncher : MonoBehaviour
 	}
 
 	void tick_timers() {
-		punch_cooldown.tick(Time.deltaTime);
+
+
+		ti_punch_cooldown.tick(Time.deltaTime);
+		ti_punch_again.tick(Time.deltaTime);
 	}
 }
 
