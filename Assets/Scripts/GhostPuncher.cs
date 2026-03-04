@@ -96,35 +96,21 @@ public class GhostPuncher : MonoBehaviour
     if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, PUNCH_RANGE, layer_punchable)) {
       Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
 
-      Rigidbody hit_rb = attack_hit.rigidbody;
       Collider hit_col = attack_hit.collider;
-
-
-      if (hit_rb != null) {
-	// The object should really be taking care of this
-	//hit_rb.AddForce(transform.TransformDirection(Vector3.forward) * 1000);
-      }
 
       if (hit_col == null) {
 	return;
       }
 
-      if (hit_col.CompareTag("Breakable")) {
+      if (hit_col.CompareTag("BreakableObject")) {
 
-	Destroy(hit_col);
+	Debug.Log("Punching Object!");
 
-	Rigidbody[] hit_rbs = hit_col.GetComponentsInChildren<Rigidbody>();
+	BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
+	bo.GetPunched(1, ray_dir);
 
-	foreach (Rigidbody crb in hit_rbs) {
-	  Vector3 blast_dir = ray_dir;
-	  blast_dir.x += Random.Range(-3, 3);
-	  blast_dir.y += Random.Range(-3, 3);
-	  blast_dir.z += Random.Range(-3, 3);
-	  //crb.constraints = RigidbodyConstraints.None;
-	  crb.isKinematic = false;
-	  crb.AddForce(blast_dir.normalized * 200);
-	  //crb.gameObject.layer = LayerMask.NameToLayer("Punchable");
-	}
+	//Destroy(hit_col);
+
       } else if (hit_col.CompareTag("Ghost")) {
 	Ghost g = hit_col.gameObject.GetComponent<Ghost>();
 	g.GetPunched();
