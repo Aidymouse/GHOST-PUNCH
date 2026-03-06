@@ -46,7 +46,7 @@ public class BreakableObject : MonoBehaviour
 
       //crb.constraints = RigidbodyConstraints.None;
       crb.isKinematic = false;
-      //crb.AddForce(blast_dir.normalized * 200);
+      crb.AddForce(blast_dir.normalized * 200);
       //crb.gameObject.layer = LayerMask.NameToLayer("Punchable");
     }
 
