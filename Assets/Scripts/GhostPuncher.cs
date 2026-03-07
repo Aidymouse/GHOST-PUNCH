@@ -110,6 +110,19 @@ public class GhostPuncher : MonoBehaviour
 
 				//Destroy(hit_col);
 
+			} else if (hit_col.CompareTag("PunchableObject")) {
+			  Destroy(hit_col.gameObject);
+			  // TODO: particles or some objs have HP or smn
+
+			  // GameObject punchable = hit_col.gameObject;
+			  // Rigidbody rb = punchable.GetComponent<Rigidbody>();
+			  //
+			  // if (rb) {
+			  //   Vector3 blast_dir = ray_dir;
+			  //   rb.isKinematic = false;
+			  //   rb.AddForce(blast_dir.normalized * 200);
+			  // }
+
 			} else if (hit_col.CompareTag("Ghost")) {
 				Ghost g = hit_col.gameObject.GetComponent<Ghost>();
 				g.GetPunched();

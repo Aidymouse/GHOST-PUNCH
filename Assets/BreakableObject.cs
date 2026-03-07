@@ -6,6 +6,9 @@ public class BreakableObject : MonoBehaviour
 
   public GameObject broken_obj;
   public float hp;
+  /* When the broken object spawns, apply this rotation. */
+  public Vector3 rotation_offset;
+
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
@@ -27,6 +30,15 @@ public class BreakableObject : MonoBehaviour
 	Break(punch_dir);
       } else {
 	// TODO: spawn particles
+
+	Rigidbody rb = this.GetComponent<Rigidbody>();
+	if (rb) {
+	  Vector3 blast_dir = punch_dir;
+
+	  //crb.constraints = RigidbodyConstraints.None;
+	  rb.isKinematic = false;
+	  rb.AddForce(blast_dir.normalized * 200);
+	}
       }
     }
 
@@ -34,7 +46,10 @@ public class BreakableObject : MonoBehaviour
   }
 
   void Break(Vector3 punch_dir) {
-    GameObject broken = Instantiate(broken_obj, this.transform.position, this.transform.rotation);
+    Transform initRotation = this.transform;
+    initRotation.Rotate(this.rotation_offset); // Local space ??
+
+    GameObject broken = Instantiate(broken_obj, this.transform.position, initRotation.rotation);
     //broken.SetActive(true);
     Destroy(this.gameObject);
 
