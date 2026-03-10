@@ -5,11 +5,13 @@ public class GhostPuncher : MonoBehaviour
 {
 	InputAction action_attack;
 	InputAction action_move;
+	InputAction action_chargePunch;
 
 	CharacterController controller;
 
 	Timer ti_punch_cooldown;
 	Timer ti_punch_again;
+	Timer ti_charge_up;
 
 	public GhostUI ui;
 	public DebugUI debug_ui;
@@ -24,12 +26,17 @@ public class GhostPuncher : MonoBehaviour
 
 	public PuncherDefaults defaults; 
 
+	Animator arm_animator;
+
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
+		action_chargePunch = InputSystem.actions.FindAction("ChargePunch");
 		action_attack = InputSystem.actions.FindAction("Attack");
 		action_move = InputSystem.actions.FindAction("Move");
+
+		arm_animator = this.GetComponentInChildren<Animator>();
 
 		move_speed = 5;
 
@@ -40,6 +47,8 @@ public class GhostPuncher : MonoBehaviour
 		// Init Timers
 		ti_punch_cooldown = new Timer(0, defaults.PUNCH_COOLDOWN);
 		ti_punch_again = new Timer(0, defaults.PUNCH_COOLDOWN + defaults.PUNCH_AGAIN);
+		ti_charge_up = new Timer(0, 0.5f);
+		ti_charge_up.deactivate();
 
 	}
 
@@ -50,14 +59,27 @@ public class GhostPuncher : MonoBehaviour
 		this.tick_timers();
 
 		// Animation State
-		Animator arm_animator = this.GetComponentInChildren<Animator>();
 		if (ti_punch_again.finished_this_frame) {
 			arm_animator.SetBool("PunchL", false);
 		}
 
 		// Attacking
+
+		if (action_chargePunch.WasPerformedThisFrame()) {
+		  arm_animator.SetTrigger("StartChargingPunch");
+		  arm_animator.SetBool("ChargingPunch", true);
+		  ti_charge_up.activate();
+		  ti_charge_up.reset();
+		}
+
 		if (action_attack.WasPerformedThisFrame()) {
-			doPunch();
+		  if (ti_charge_up.finished()) {
+		    doMegaPunch();
+		    ti_charge_up.deactivate();
+		  } else {
+		    arm_animator.SetBool("ChargingPunch", false);
+		    doPunch();
+		  }
 		}
 
 		// Moving
@@ -65,6 +87,12 @@ public class GhostPuncher : MonoBehaviour
 
 	}
 
+	void doMegaPunch() {
+	  Debug.Log("Mega Punch!");
+	  arm_animator.SetTrigger("DoPunch");
+	  //arm_animator.SetBool("ChargingPunch", false);
+	  // TODO
+	}
 
 	void doPunch() {
 
@@ -165,6 +193,7 @@ public class GhostPuncher : MonoBehaviour
 	void tick_timers() {
 		ti_punch_cooldown.tick(Time.deltaTime);
 		ti_punch_again.tick(Time.deltaTime);
+		ti_charge_up.tick(Time.deltaTime);
 	}
 
 }

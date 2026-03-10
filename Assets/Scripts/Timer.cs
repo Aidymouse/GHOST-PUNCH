@@ -5,11 +5,14 @@ public class Timer
 	public float time_remaining;
 	public float default_time;
 	public bool finished_this_frame;
+	private bool active;
 
 	public Timer(float initial_time, float init_default_time=-1) {
 		time_remaining = initial_time;
 		default_time = init_default_time;
 		finished_this_frame = false;
+
+		active = true;
 	}
 
 	public void set(float new_time) {
@@ -29,7 +32,7 @@ public class Timer
 			time_remaining -= time;
 
 			if (time_remaining <= 0) {
-				finished_this_frame = true;
+				finished_this_frame = this.active && true;
 			}
 
 		}
@@ -38,8 +41,17 @@ public class Timer
 	}
 
 	public bool finished() {
-		return time_remaining <= 0;
+		return this.active && time_remaining <= 0;
 	}
+
+	public void activate() {
+	  this.active = true;
+	}
+
+	public void deactivate() {
+	  this.active = true;
+	}
+
 
 
 }
