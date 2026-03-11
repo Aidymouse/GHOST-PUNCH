@@ -7,5 +7,7 @@ public class PuncherDefaults : ScriptableObject
 	public float PUNCH_COOLDOWN;
 	/** Starts after PUNCH_COOLDOWN. If punching during this duration, the punch chain continues rather than starting again **/
 	public float PUNCH_AGAIN;
+	/** If punch is clicked while cooldown has this time or less left, the punch input is buffered **/
+	public float PUNCH_BUFFER_TIME;
     
 }

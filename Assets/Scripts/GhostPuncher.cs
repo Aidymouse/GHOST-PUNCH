@@ -3,198 +3,217 @@ using UnityEngine.InputSystem;
 
 public class GhostPuncher : MonoBehaviour
 {
-	InputAction action_attack;
-	InputAction action_move;
-	InputAction action_chargePunch;
+  InputAction action_attack;
+  InputAction action_move;
+  InputAction action_chargePunch;
 
-	CharacterController controller;
+  CharacterController controller;
 
-	Timer ti_punch_cooldown;
-	Timer ti_punch_again;
-	Timer ti_charge_up;
+  Timer ti_punch_cooldown;
+  Timer ti_punch_again;
+  Timer ti_charge_up;
 
-	public GhostUI ui;
-	public DebugUI debug_ui;
+  public GhostUI ui;
+  public DebugUI debug_ui;
 
-	float move_speed;
+  float move_speed;
 
-	int ectoplasm = 0;
+  int ectoplasm = 0;
 
-	LayerMask layer_punchable;
+  LayerMask layer_punchable;
 
-	const float PUNCH_RANGE = 2;
+  const float PUNCH_RANGE = 2;
 
-	public PuncherDefaults defaults; 
+  public PuncherDefaults defaults; 
 
-	Animator arm_animator;
+  string punch_with = "RIGHT";
+  bool buffered_punch = false;
+  bool buffered_charge = false;
+
+  Animator arm_animator;
 
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
-	{
-		action_chargePunch = InputSystem.actions.FindAction("ChargePunch");
-		action_attack = InputSystem.actions.FindAction("Attack");
-		action_move = InputSystem.actions.FindAction("Move");
+  // Start is called once before the first execution of Update after the MonoBehaviour is created
+  void Start()
+  {
+    action_chargePunch = InputSystem.actions.FindAction("ChargePunch");
+    action_attack = InputSystem.actions.FindAction("Attack");
+    action_move = InputSystem.actions.FindAction("Move");
 
-		arm_animator = this.GetComponentInChildren<Animator>();
+    arm_animator = this.GetComponentInChildren<Animator>();
 
-		move_speed = 5;
+    move_speed = 5;
 
-		layer_punchable = LayerMask.GetMask("Punchable");
+    layer_punchable = LayerMask.GetMask("Punchable");
 
-		controller = GetComponent<CharacterController>();
+    controller = GetComponent<CharacterController>();
 
-		// Init Timers
-		ti_punch_cooldown = new Timer(0, defaults.PUNCH_COOLDOWN);
-		ti_punch_again = new Timer(0, defaults.PUNCH_COOLDOWN + defaults.PUNCH_AGAIN);
-		ti_charge_up = new Timer(0, 0.5f);
-		ti_charge_up.deactivate();
+    // Init Timers
+    ti_punch_cooldown = new Timer(0, defaults.PUNCH_COOLDOWN);
+    ti_punch_again = new Timer(0, defaults.PUNCH_COOLDOWN + defaults.PUNCH_AGAIN);
+    ti_charge_up = new Timer(0, 0.5f);
+    ti_charge_up.deactivate();
 
+  }
+
+  // Update is called once per frame
+  void Update()
+  {
+    // Timers
+    this.tick_timers();
+
+    // Attacking
+    if (ti_punch_again.finished_this_frame()) {
+      punch_with = "RIGHT";
+    }
+
+    if ((action_chargePunch.WasPerformedThisFrame() && !buffered_punch) || (buffered_charge && ti_punch_cooldown.finished_this_frame())) {
+
+      buffered_charge = true;
+
+      if (ti_punch_cooldown.finished()) {
+	ti_charge_up.activate();
+	ti_charge_up.reset();
+	change_anim("ARM_CHARGE_WINDUP");
+      }
+
+    }
+
+    if (action_attack.WasPerformedThisFrame() || (buffered_punch && ti_punch_cooldown.finished_this_frame())) {
+
+      buffered_charge = false;
+
+      if (ti_punch_cooldown.time_remaining < defaults.PUNCH_BUFFER_TIME) {
+	// This gets set even on successful punch, but doesn't matter cos it'll get unset when we punch
+	buffered_punch = true; 
+      }
+
+      if (ti_punch_cooldown.finished()) {
+
+	buffered_punch = false;
+
+	if (!ti_punch_again.finished()) {
+	  punch_with = punch_with == "RIGHT" ? "LEFT" : "RIGHT";
+	} 
+
+	ti_punch_cooldown.reset();	
+	ti_punch_again.reset();	
+
+	if (ti_charge_up.finished()) {
+	  doMegaPunch();
+	} else {
+	  doPunch();
 	}
 
-	// Update is called once per frame
-	void Update()
-	{
-		// Timers
-		this.tick_timers();
+	ti_charge_up.deactivate();
+	ti_charge_up.reset();
+      }
+    }
 
-		// Animation State
-		if (ti_punch_again.finished_this_frame) {
-			arm_animator.SetBool("PunchL", false);
-		}
+    // Moving
+    moveControls();
 
-		// Attacking
+  }
 
-		if (action_chargePunch.WasPerformedThisFrame()) {
-		  arm_animator.SetTrigger("StartChargingPunch");
-		  arm_animator.SetBool("ChargingPunch", true);
-		  ti_charge_up.activate();
-		  ti_charge_up.reset();
-		}
+  void doMegaPunch() {
+    Debug.Log("Mega Punch!");
+    change_anim("CHARGE_PUNCH");
+    //arm_animator.SetBool("ChargingPunch", false);
+    // TODO
+  }
 
-		if (action_attack.WasPerformedThisFrame()) {
-		  if (ti_charge_up.finished()) {
-		    doMegaPunch();
-		    ti_charge_up.deactivate();
-		  } else {
-		    arm_animator.SetBool("ChargingPunch", false);
-		    doPunch();
-		  }
-		}
+  void doPunch() {
 
-		// Moving
-		moveControls();
 
-	}
+    change_anim("PUNCH_"+punch_with);
 
-	void doMegaPunch() {
-	  Debug.Log("Mega Punch!");
-	  arm_animator.SetTrigger("DoPunch");
-	  //arm_animator.SetBool("ChargingPunch", false);
-	  // TODO
-	}
+    // Cast a ray - jeff says should be a box
+    RaycastHit attack_hit;
 
-	void doPunch() {
+    Camera cam = this.GetComponentInChildren<Camera>();
 
-		if (!ti_punch_cooldown.finished()) {
-			return;
-		}
+    //Vector3 ray_dir = transform.TransformDirection(Vector3.forward);
+    Vector3 ray_dir = cam.transform.TransformDirection(Vector3.forward);
 
-		ti_punch_cooldown.reset();	
-		ti_punch_again.reset();	
+    if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, PUNCH_RANGE, layer_punchable)) {
+      Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
 
-		// Animator
-		Animator arm_animator = this.GetComponentInChildren<Animator>();
+      Collider hit_col = attack_hit.collider;
 
-		if (!ti_punch_again.finished()) {
-			bool punch_left = arm_animator.GetBool("PunchL");
-			arm_animator.SetBool("PunchL", !punch_left);
-		}
+      if (hit_col == null) {
+	return;
+      }
 
-		arm_animator.SetTrigger("DoPunch");
+      if (hit_col.CompareTag("BreakableObject")) {
 
-		RaycastHit attack_hit;
+	Debug.Log("Punching Object!");
 
-		Camera cam = this.GetComponentInChildren<Camera>();
+	BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
+	bo.GetPunched(1, ray_dir);
 
-		//Vector3 ray_dir = transform.TransformDirection(Vector3.forward);
-		Vector3 ray_dir = cam.transform.TransformDirection(Vector3.forward);
+	//Destroy(hit_col);
 
-		if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, PUNCH_RANGE, layer_punchable)) {
-			Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
+      } else if (hit_col.CompareTag("PunchableObject")) {
+	Destroy(hit_col.gameObject);
+	// TODO: particles or some objs have HP or smn
 
-			Collider hit_col = attack_hit.collider;
+	// GameObject punchable = hit_col.gameObject;
+	// Rigidbody rb = punchable.GetComponent<Rigidbody>();
+	//
+	// if (rb) {
+	//   Vector3 blast_dir = ray_dir;
+	//   rb.isKinematic = false;
+	//   rb.AddForce(blast_dir.normalized * 200);
+	// }
 
-			if (hit_col == null) {
-				return;
-			}
-
-			if (hit_col.CompareTag("BreakableObject")) {
-
-				Debug.Log("Punching Object!");
-
-				BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
-				bo.GetPunched(1, ray_dir);
-
-				//Destroy(hit_col);
-
-			} else if (hit_col.CompareTag("PunchableObject")) {
-			  Destroy(hit_col.gameObject);
-			  // TODO: particles or some objs have HP or smn
-
-			  // GameObject punchable = hit_col.gameObject;
-			  // Rigidbody rb = punchable.GetComponent<Rigidbody>();
-			  //
-			  // if (rb) {
-			  //   Vector3 blast_dir = ray_dir;
-			  //   rb.isKinematic = false;
-			  //   rb.AddForce(blast_dir.normalized * 200);
-			  // }
-
-			} else if (hit_col.CompareTag("Ghost")) {
-				Ghost g = hit_col.gameObject.GetComponent<Ghost>();
-				g.GetPunched();
-				ectoplasm += 5;
-				ui.UpdateEctoplasm(ectoplasm);
-			}
+      } else if (hit_col.CompareTag("Ghost")) {
+	Ghost g = hit_col.gameObject.GetComponent<Ghost>();
+	g.GetPunched();
+	ectoplasm += 5;
+	ui.UpdateEctoplasm(ectoplasm);
+      }
 
 
 
-		}
+    }
 
-	}
+  }
 
-	void moveControls() {
-		Vector2 move_value = action_move.ReadValue<Vector2>();
-		if (move_value.x == 0 && move_value.y == 0) { return; }
+  void moveControls() {
+    Vector2 move_value = action_move.ReadValue<Vector2>();
+    if (move_value.x == 0 && move_value.y == 0) { return; }
 
-		Vector3 movement_frontback = new Vector3(0, 0, 0);
-		Vector3 movement_horiz = new Vector3(0, 0, 0);
+    Vector3 movement_frontback = new Vector3(0, 0, 0);
+    Vector3 movement_horiz = new Vector3(0, 0, 0);
 
-		if (move_value.x > 0) {
-			movement_horiz = transform.TransformDirection(Vector3.right);
-		} else if (move_value.x < 0) {
-			movement_horiz = transform.TransformDirection(Vector3.left);
-		}
+    if (move_value.x > 0) {
+      movement_horiz = transform.TransformDirection(Vector3.right);
+    } else if (move_value.x < 0) {
+      movement_horiz = transform.TransformDirection(Vector3.left);
+    }
 
-		if (move_value.y > 0) {
-			movement_frontback = transform.TransformDirection(Vector3.forward);
-		} else if (move_value.y < 0) {
-			movement_frontback = transform.TransformDirection(Vector3.back);
-		}
+    if (move_value.y > 0) {
+      movement_frontback = transform.TransformDirection(Vector3.forward);
+    } else if (move_value.y < 0) {
+      movement_frontback = transform.TransformDirection(Vector3.back);
+    }
 
-		Vector3 movement = movement_frontback + movement_horiz;
-		movement.y = 0;
-		movement = movement.normalized;
+    Vector3 movement = movement_frontback + movement_horiz;
+    movement.y = 0;
+    movement = movement.normalized;
 
-		controller.Move(movement * move_speed * Time.deltaTime);
-	}
+    controller.Move(movement * move_speed * Time.deltaTime);
+  }
 
-	void tick_timers() {
-		ti_punch_cooldown.tick(Time.deltaTime);
-		ti_punch_again.tick(Time.deltaTime);
-		ti_charge_up.tick(Time.deltaTime);
-	}
+  void tick_timers() {
+    ti_punch_cooldown.tick(Time.deltaTime);
+    ti_punch_again.tick(Time.deltaTime);
+    ti_charge_up.tick(Time.deltaTime);
+  }
+
+  void change_anim(string name, float fade=0) {
+    arm_animator.CrossFade(name, fade);
+  }
 
 }
 
