@@ -9,6 +9,8 @@ public class BreakableObject : MonoBehaviour
   /* When the broken object spawns, apply this rotation. */
   public Vector3 rotation_offset;
   // TODO: damage reduction modifier ?
+  public ParticleSystem hit_particles;
+  public ParticleSystem break_particles;
 
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -23,14 +25,18 @@ public class BreakableObject : MonoBehaviour
 
   }
 
-  public void GetPunched(float power, Vector3 punch_dir) {
+  public void GetPunched(float power, Vector3 punch_dir, RaycastHit hit) {
+
 
     if (hp > 0) {
       hp -= power;
       if (hp <= 0) {
+	Instantiate(break_particles, hit.point, new Quaternion());
 	Break(power, punch_dir);
       } else {
-	// TODO: spawn particles
+	// spawn particles
+	// TODO: rotation
+	Instantiate(hit_particles, hit.point, new Quaternion());
 
 	Rigidbody rb = this.GetComponent<Rigidbody>();
 	if (rb) {
@@ -50,32 +56,36 @@ public class BreakableObject : MonoBehaviour
     Transform initRotation = this.transform;
     initRotation.Rotate(this.rotation_offset); // Local space ??
 
-    GameObject broken = Instantiate(broken_obj, this.transform.position, initRotation.rotation);
-    //broken.SetActive(true);
-    Destroy(this.gameObject);
 
+    if (broken_obj) {
+      GameObject broken = Instantiate(broken_obj, this.transform.position, initRotation.rotation);
+      //broken.SetActive(true);
 
-    Rigidbody[] rbs = broken.GetComponentsInChildren<Rigidbody>();
+      Rigidbody[] rbs = broken.GetComponentsInChildren<Rigidbody>();
 
-    foreach (Rigidbody crb in rbs) {
-      Vector3 blast_dir = punch_dir;
+      foreach (Rigidbody crb in rbs) {
+	Instantiate(break_particles, crb.transform.position, new Quaternion());
+	Vector3 blast_dir = punch_dir;
 
-      //crb.constraints = RigidbodyConstraints.None;
-      crb.isKinematic = false;
-      crb.AddForce(blast_dir.normalized * power);
-      //crb.gameObject.layer = LayerMask.NameToLayer("Punchable");
+	//crb.constraints = RigidbodyConstraints.None;
+	crb.isKinematic = false;
+	crb.AddForce(blast_dir.normalized * power);
+	//crb.gameObject.layer = LayerMask.NameToLayer("Punchable");
+      }
     }
 
+    Destroy(this.gameObject);
+
     /*
-    Rigidbody[] hit_rbs = broken_obj.GetComponentsInChildren<Rigidbody>();
+       Rigidbody[] hit_rbs = broken_obj.GetComponentsInChildren<Rigidbody>();
 
-    foreach (Rigidbody crb in hit_rbs) {
-      Vector3 blast_dir = punch_dir;
+       foreach (Rigidbody crb in hit_rbs) {
+       Vector3 blast_dir = punch_dir;
 
-      //crb.constraints = RigidbodyConstraints.None;
-      crb.isKinematic = false;
-      crb.AddForce(blast_dir.normalized * 200);
-      //crb.gameObject.layer = LayerMask.NameToLayer("Punchable");
+    //crb.constraints = RigidbodyConstraints.None;
+    crb.isKinematic = false;
+    crb.AddForce(blast_dir.normalized * 200);
+    //crb.gameObject.layer = LayerMask.NameToLayer("Punchable");
     }
     */
   }
