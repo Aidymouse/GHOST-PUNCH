@@ -102,7 +102,7 @@ public class GhostPuncher : MonoBehaviour
 	if (ti_charge_up.finished()) {
 	  doMegaPunch();
 	} else {
-	  doPunch();
+	  doPunch(defaults.PUNCH_POWER);
 	}
 
 	ti_charge_up.deactivate();
@@ -116,14 +116,11 @@ public class GhostPuncher : MonoBehaviour
   }
 
   void doMegaPunch() {
-    Debug.Log("Mega Punch!");
-    change_anim("CHARGE_PUNCH");
-    //arm_animator.SetBool("ChargingPunch", false);
-    // TODO
+    doPunch(defaults.PUNCH_MEGA_POWER);
   }
 
-  void doPunch() {
 
+  void doPunch(float power) {
 
     change_anim("PUNCH_"+punch_with);
 
@@ -149,7 +146,7 @@ public class GhostPuncher : MonoBehaviour
 	Debug.Log("Punching Object!");
 
 	BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
-	bo.GetPunched(1, ray_dir);
+	bo.GetPunched(power, ray_dir);
 
 	//Destroy(hit_col);
 
@@ -168,7 +165,7 @@ public class GhostPuncher : MonoBehaviour
 
       } else if (hit_col.CompareTag("Ghost")) {
 	Ghost g = hit_col.gameObject.GetComponent<Ghost>();
-	g.GetPunched();
+	g.GetPunched(power);
 	ectoplasm += 5;
 	ui.UpdateEctoplasm(ectoplasm);
       }

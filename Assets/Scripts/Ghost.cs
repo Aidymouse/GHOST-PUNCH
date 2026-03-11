@@ -220,7 +220,7 @@ public class Ghost : MonoBehaviour
 
 
   /** EVENTS **/
-  public void GetPunched() {
+  public void GetPunched(float power) {
     if (hit_stun_resistance > 0.3) {
       timer_hit_stun_reset = 1;
       return;
@@ -228,6 +228,9 @@ public class Ghost : MonoBehaviour
 
     anim.SetTrigger("Punched");
     EnterAction(GhostAction.HIT_STUN);
+
+    // TODO: Track poise
+
   }
 
 

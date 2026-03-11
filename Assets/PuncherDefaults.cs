@@ -9,5 +9,10 @@ public class PuncherDefaults : ScriptableObject
 	public float PUNCH_AGAIN;
 	/** If punch is clicked while cooldown has this time or less left, the punch input is buffered **/
 	public float PUNCH_BUFFER_TIME;
+
+	/** Power of a punch. Power is damage dealt as well as force applied on hit to physics objects **/
+	public float PUNCH_POWER;
+	/** Power of a charge punch. Power is damage dealt as well as force applied on hit to physics objects **/
+	public float PUNCH_MEGA_POWER;
     
 }

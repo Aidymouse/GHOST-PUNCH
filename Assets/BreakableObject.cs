@@ -8,6 +8,7 @@ public class BreakableObject : MonoBehaviour
   public float hp;
   /* When the broken object spawns, apply this rotation. */
   public Vector3 rotation_offset;
+  // TODO: damage reduction modifier ?
 
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -22,12 +23,12 @@ public class BreakableObject : MonoBehaviour
 
   }
 
-  public void GetPunched(float damage, Vector3 punch_dir) {
+  public void GetPunched(float power, Vector3 punch_dir) {
 
     if (hp > 0) {
-      hp -= damage;
+      hp -= power;
       if (hp <= 0) {
-	Break(punch_dir);
+	Break(power, punch_dir);
       } else {
 	// TODO: spawn particles
 
@@ -37,7 +38,7 @@ public class BreakableObject : MonoBehaviour
 
 	  //crb.constraints = RigidbodyConstraints.None;
 	  rb.isKinematic = false;
-	  rb.AddForce(blast_dir.normalized * 200);
+	  rb.AddForce(blast_dir.normalized * power);
 	}
       }
     }
@@ -45,7 +46,7 @@ public class BreakableObject : MonoBehaviour
 
   }
 
-  void Break(Vector3 punch_dir) {
+  void Break(float power, Vector3 punch_dir) {
     Transform initRotation = this.transform;
     initRotation.Rotate(this.rotation_offset); // Local space ??
 
@@ -61,7 +62,7 @@ public class BreakableObject : MonoBehaviour
 
       //crb.constraints = RigidbodyConstraints.None;
       crb.isKinematic = false;
-      crb.AddForce(blast_dir.normalized * 200);
+      crb.AddForce(blast_dir.normalized * power);
       //crb.gameObject.layer = LayerMask.NameToLayer("Punchable");
     }
 
