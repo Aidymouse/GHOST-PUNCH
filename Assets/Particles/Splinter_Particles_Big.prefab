@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1780546180473290174}
   - component: {fileID: 3373178842766076626}
   m_Layer: 0
-  m_Name: Splinter_Particles
+  m_Name: Splinter_Particles_Big
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,7 +49,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 0
+  looping: 1
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -288,8 +288,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.2
-      minScalar: 0.06
+      scalar: 0.5
+      minScalar: 0.01
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -752,7 +752,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.02
+      value: 0.2
       mode: 0
       spread: 0
       speed:
@@ -1201,7 +1201,7 @@ ParticleSystem:
     x:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -1254,7 +1254,7 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -1307,7 +1307,7 @@ ParticleSystem:
     curve:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 52.35988
+      scalar: 34.906586
       minScalar: 0.7853982
       maxCurve:
         serializedVersion: 2
@@ -4905,15 +4905,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1021299722738733500, guid: 5d8bbab327d3aef44a9567cf5f687a29, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.2930615
       objectReference: {fileID: 0}
     - target: {fileID: 1021299722738733500, guid: 5d8bbab327d3aef44a9567cf5f687a29, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.23798661
       objectReference: {fileID: 0}
     - target: {fileID: 1021299722738733500, guid: 5d8bbab327d3aef44a9567cf5f687a29, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.09758082
       objectReference: {fileID: 0}
     - target: {fileID: 1021299722738733500, guid: 5d8bbab327d3aef44a9567cf5f687a29, type: 3}
       propertyPath: m_LocalRotation.w

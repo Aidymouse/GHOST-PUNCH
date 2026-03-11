@@ -11,6 +11,7 @@ public class Ghost : MonoBehaviour
   //
   public GhostUI ui;
   public DebugUI debug_ui;
+  public bool ragdoll;
 
   public float escape_meter;
   public float escape_needed;
@@ -57,9 +58,7 @@ public class Ghost : MonoBehaviour
 
 
     anim = this.GetComponentInChildren<Animator>();
-
-    EnableRagdoll();
-
+    
     nav_agent = GetComponent<NavMeshAgent>();
     //nav_agent.destination = nav_destination.position;
 
@@ -77,6 +76,9 @@ public class Ghost : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
+    if(ragdoll){
+    EnableRagdoll();
+    } else{DisableRagdoll();}
 
     // TODO: make this only affect the skeleton rig
     //transform.position += new Vector3(0, Mathf.Sin(escape_meter), 0);
