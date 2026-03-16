@@ -7,6 +7,7 @@ using UnityEditor;
 public class Ghost : MonoBehaviour
 {
 
+  public GhostDefaults defaults;
   //public GhostUI UIData;
   //
   public GhostUI ui;
@@ -26,21 +27,24 @@ public class Ghost : MonoBehaviour
   enum GhostAction {
     CHARGING_ESCAPE,
     STARTLED,
-    USING_POWER,
     HITSTUN,
     MOVING_ROOM,
     RECOVERY,
     HIT_STUN,
     RAGDOLL,
-  }
+
+    POWER_WAVE,
+  };
+
 
   GhostAction cur_action;
 
   NavMeshAgent nav_agent;
 
-  float timer_hit_stun;
-  // Reset every time the ghost gets hit
-  float timer_hit_stun_reset;
+  Timer ti_hit_stun;
+  // Reset every time the ghost gets hit. Resets hit stun resistance on finish
+  Timer ti_hit_stun_reset;
+  
   // Reduces hit stun and increases with each hit until reset
   float hit_stun_resistance;
 
@@ -52,10 +56,15 @@ public class Ghost : MonoBehaviour
   void Start()
   {
 
+
     rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
     rig_colliders = rig.GetComponentsInChildren<Collider>();
     rig_joints = rig.GetComponentsInChildren<CharacterJoint>();
 
+    DisableRagdoll();
+
+    ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
+    ti_hit_stun_reset = new Timer(0, defaults.HIT_STUN_RESET_TIME);
 
     anim = this.GetComponentInChildren<Animator>();
     
@@ -76,18 +85,10 @@ public class Ghost : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    if(ragdoll){
-    EnableRagdoll();
-    } else{DisableRagdoll();}
 
-    // TODO: make this only affect the skeleton rig
-    //transform.position += new Vector3(0, Mathf.Sin(escape_meter), 0);
-
-    //debug_ui.SetDebug1("Ghost Hitstun timer: " + timer_hit_stun);
-
-    if (timer_hit_stun_reset > 0) {
-      timer_hit_stun_reset -= Time.deltaTime;
-      if (timer_hit_stun_reset <= 0) {
+    if (!ti_hit_stun_reset.finished()) {
+      ti_hit_stun_reset.tick(Time.deltaTime);
+      if (ti_hit_stun_reset.finished()) {
 	hit_stun_resistance = 0;
       }
     }
@@ -103,14 +104,14 @@ public class Ghost : MonoBehaviour
 	state_MovingRoom();
 	break;
       }
-				    // case GhostAction.RECOVERY: {
-				    //   // TODO
-				    //   state_Recovery();
-				    //   break;
-				    // }
       case GhostAction.HIT_STUN: {
 	debug_ui.SetDebug2("Ghost Action: Hit Stun");
 	state_HitStun();
+	break;
+      }
+      case GhostAction.POWER_WAVE: {
+	debug_ui.SetDebug2("Ghost Action: Power - Wave");
+	//state_HitStun();
 	break;
       }
     }
@@ -125,42 +126,46 @@ public class Ghost : MonoBehaviour
 	charge_particles.Stop();
 	break;
       }
-    }
+    };
 
     // Enter New State Logic
-    if (action == GhostAction.CHARGING_ESCAPE) {
-      // TODO: If we can see the player, skip straight to choosing a power.
-      charge_particles.Play();
-      cur_action = action;
-
-    } else if (action == GhostAction.MOVING_ROOM) {
-
-      if (nav_destination == null) {
-	// Pick a room
-	// TODO: forbid this from being the room we're currently in
-	GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
-	int dest_idx = Random.Range(0, destinations.Length);
-	GameObject dest_obj = destinations[dest_idx];
-	nav_agent.destination = dest_obj.transform.position;
-	nav_destination = dest_obj;
-
-	// If we were moving when we got hit, we have not cleared our desired destination
-      } else {
-	nav_agent.destination = nav_destination.transform.position;
+    switch (action) {
+      case GhostAction.CHARGING_ESCAPE: {
+	// TODO: If we can see the player (i.e. they kept pace with us well), skip straight to choosing a power.
+	charge_particles.Play();
+	cur_action = action;
+	break;
       }
 
+      case GhostAction.MOVING_ROOM: {
+	if (nav_destination == null) {
+	  // Pick a room
+	  // TODO: forbid this from being the room we're currently in
+	  GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
+	  int dest_idx = Random.Range(0, destinations.Length);
+	  GameObject dest_obj = destinations[dest_idx];
+	  nav_agent.destination = dest_obj.transform.position;
+	  nav_destination = dest_obj;
 
-      cur_action = action;
+	  // If we were moving when we got hit, we have not cleared our desired destination
+	} else {
+	  nav_agent.destination = nav_destination.transform.position;
+	}
 
-    } else if (action == GhostAction.HIT_STUN) {
-      timer_hit_stun_reset = 1;
+	cur_action = action;
+	break;
+      }
 
-      timer_hit_stun = 0.3f; // - hit_stun_resistance;
+      case GhostAction.HIT_STUN: {
+	ti_hit_stun_reset.reset();
 
-      hit_stun_resistance += 0.08f;
-      nav_agent.enabled = false;
-      cur_action = action;
+	ti_hit_stun.reset();
 
+	hit_stun_resistance += 0.08f;
+	nav_agent.enabled = false;
+	cur_action = action;
+	break;
+      }
     }
 
   }
@@ -201,9 +206,9 @@ public class Ghost : MonoBehaviour
   }
 
   void state_HitStun() {
-    timer_hit_stun -= Time.deltaTime;
+    ti_hit_stun.tick(Time.deltaTime);
 
-    if (timer_hit_stun <= 0) {
+    if (ti_hit_stun.finished_this_frame()) {
       nav_agent.enabled = true;
 
       EnterAction(GhostAction.MOVING_ROOM);
@@ -222,12 +227,12 @@ public class Ghost : MonoBehaviour
   /** EVENTS **/
   public void GetPunched(float power) {
     if (hit_stun_resistance > 0.3) {
-      timer_hit_stun_reset = 1;
+      ti_hit_stun_reset.reset();
       return;
     }
 
     anim.SetTrigger("Punched");
-    EnterAction(GhostAction.HIT_STUN);
+    EnterAction(GhostAction.HIT_STUN); // Hmmm....
 
     // TODO: Track poise
 
