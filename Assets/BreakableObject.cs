@@ -36,7 +36,9 @@ public class BreakableObject : MonoBehaviour
       } else {
 	// spawn particles
 	// TODO: rotation
-	Instantiate(hit_particles, hit.point, new Quaternion());
+	if (hit_particles) {
+	  Instantiate(hit_particles, hit.point, new Quaternion());
+	}
 
 	Rigidbody rb = this.GetComponent<Rigidbody>();
 	if (rb) {
@@ -56,7 +58,6 @@ public class BreakableObject : MonoBehaviour
     Transform initRotation = this.transform;
     initRotation.Rotate(this.rotation_offset); // Local space ??
 
-
     if (broken_obj) {
       GameObject broken = Instantiate(broken_obj, this.transform.position, initRotation.rotation);
       //broken.SetActive(true);
@@ -64,7 +65,9 @@ public class BreakableObject : MonoBehaviour
       Rigidbody[] rbs = broken.GetComponentsInChildren<Rigidbody>();
 
       foreach (Rigidbody crb in rbs) {
-	Instantiate(break_particles, crb.transform.position, new Quaternion());
+	if (break_particles) {
+	  Instantiate(break_particles, crb.transform.position, new Quaternion());
+	}
 	Vector3 blast_dir = punch_dir;
 
 	//crb.constraints = RigidbodyConstraints.None;
