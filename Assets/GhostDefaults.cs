@@ -14,10 +14,14 @@ public class GhostDefaults : ScriptableObject
     public float DEFAULT_POISE;
 
     /** WAVE POWER **/
-    [Tooltip("Time the ghost spends charging up the shockwave")]
+    [Tooltip("(seconds) Time the ghost spends charging up the shockwave")]
     public float WAVE_CHARGE_TIME;
     [Tooltip("Power that forces you back when you get hit with the wave")]
     public float WAVE_POWER;
-    [Tooltip("Poise to break the wave")]
+    [Tooltip("Poise to break the wave power")]
     public float WAVE_POISE;
+    [Tooltip("(seconds) How long the ghost pauses after releasing a wave")]
+    public float WAVE_HANG_TIME;
+    [Tooltip("How fast the wave travels")]
+    public float WAVE_SPEED;
 }

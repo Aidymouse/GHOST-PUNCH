@@ -21,6 +21,7 @@ public class Timer
 
   public void reset() {
     time_remaining = default_time;
+    fin_this_frame = false;
   }
 
 
@@ -54,7 +55,7 @@ public class Timer
   }
 
   public void deactivate() {
-    this.active = true;
+    this.active = false;
   }
 
 

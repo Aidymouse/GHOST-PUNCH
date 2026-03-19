@@ -33,11 +33,20 @@ public class Ghost : MonoBehaviour
     HIT_STUN,
     RAGDOLL,
 
-    POWER_WAVE,
+    USING_POWER,
   };
+
+  enum GhostPowers {
+    NONE,
+    WAVE
+  }
 
 
   GhostAction cur_action;
+  GhostPowers cur_power;
+
+  // Spawns when the ghost uses her wave power
+  public GameObject wave_orb;
 
   NavMeshAgent nav_agent;
 
@@ -45,6 +54,12 @@ public class Ghost : MonoBehaviour
   // Reset every time the ghost gets hit. Resets hit stun resistance on finish
   Timer ti_hit_stun_reset;
   
+
+  /* Generic power timers that get repurposed a lot */
+  Timer ti_power_charge;
+  // Time spent standing still while power is used
+  Timer ti_power_hang;
+
   // Reduces hit stun and increases with each hit until reset
   float hit_stun_resistance;
 
@@ -63,9 +78,15 @@ public class Ghost : MonoBehaviour
 
     DisableRagdoll();
 
+    /* Timers */
     ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
     ti_hit_stun_reset = new Timer(0, defaults.HIT_STUN_RESET_TIME);
+    ti_power_charge = new Timer(0);
+    ti_power_charge.deactivate();
+    ti_power_hang = new Timer(0);
+    ti_power_hang.deactivate();
 
+    /* Animator */
     anim = this.GetComponentInChildren<Animator>();
     
     nav_agent = GetComponent<NavMeshAgent>();
@@ -109,13 +130,18 @@ public class Ghost : MonoBehaviour
 	state_HitStun();
 	break;
       }
-      case GhostAction.POWER_WAVE: {
-	debug_ui.SetDebug2("Ghost Action: Power - Wave");
+      case GhostAction.USING_POWER: {
 	//state_HitStun();
+	state_UsingPower();
 	break;
       }
+
     }
 
+    tick_timers();
+
+      debug_ui.SetDebug2("Ghost Action: Using Power - Wave" + ti_power_charge.time_remaining);
+      debug_ui.SetDebug1("Ghost Action: Using Power - Wave Hang" + ti_power_hang.time_remaining);
 
   }
 
@@ -124,6 +150,10 @@ public class Ghost : MonoBehaviour
     switch (cur_action) {
       case GhostAction.CHARGING_ESCAPE: {
 	charge_particles.Stop();
+	break;
+      }
+      case GhostAction.USING_POWER: {
+	cur_power = GhostPowers.NONE;
 	break;
       }
     };
@@ -139,7 +169,7 @@ public class Ghost : MonoBehaviour
 
       case GhostAction.MOVING_ROOM: {
 	if (nav_destination == null) {
-	  // Pick a room
+	  // Pick a room - do a power first
 	  // TODO: forbid this from being the room we're currently in
 	  GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
 	  int dest_idx = Random.Range(0, destinations.Length);
@@ -166,6 +196,11 @@ public class Ghost : MonoBehaviour
 	cur_action = action;
 	break;
       }
+
+      case GhostAction.USING_POWER: {
+	cur_action = action;
+	break;
+      }
     }
 
   }
@@ -189,16 +224,6 @@ public class Ghost : MonoBehaviour
 
     ui.UpdateEscapeMeter(escape_meter);
 
-    //UIData.escape_meter = escape_meter;
-
-    if (old_escape < escape_needed * 0.75 && escape_meter >= escape_needed * 0.75) {
-      // TODO: spawn particle effect + sound
-    } else if (old_escape < escape_needed*0.5 && escape_meter >= escape_needed * 0.5) {
-      // TODO: spawn particle effect + sound
-    } else if (old_escape < escape_needed*0.25 && escape_meter >= escape_needed * 0.25) {
-      // TODO: spawn particle effect + sound
-    }
-
     if (escape_meter >= escape_needed) {
       Debug.Log("You lose!");
     }
@@ -211,21 +236,107 @@ public class Ghost : MonoBehaviour
     if (ti_hit_stun.finished_this_frame()) {
       nav_agent.enabled = true;
 
-      EnterAction(GhostAction.MOVING_ROOM);
+      if (nav_destination == null) {
+	EnterAction(GhostAction.USING_POWER);
+      } else {
+	EnterAction(GhostAction.MOVING_ROOM);
+      }
+
 
     }
   }
 
-  // void state_Recovery() {
-  //   // Idk... move away? Move to another room?
-  // }
+  void state_UsingPower() {
+    // If we have no power ... pick one!
+      switch (cur_power) {
+	case GhostPowers.NONE: {
+	  PickRandomPower();
+	  break;
+	}
+
+	case GhostPowers.WAVE: {
+	  PowerUpdate_Wave();
+	  break;
+	}
+      }
+  }
 
 
 
 
+
+
+  /**** POWERS ****/
+  void PickRandomPower() {
+    switch (Random.Range(1,1)) {
+      case 1: {
+	StartPower(GhostPowers.WAVE);
+	break;
+      }
+    }
+  }
+
+  void StartPower(GhostPowers power) {
+    switch (power) {
+      case GhostPowers.WAVE: {
+	debug_ui.SetDebug2("Ghost Action: Using Power - Wave");
+	ti_power_charge.set(defaults.WAVE_CHARGE_TIME);
+	ti_power_charge.activate();
+	ti_power_hang.set(defaults.WAVE_HANG_TIME);
+	ti_power_hang.deactivate();
+
+	cur_power = GhostPowers.WAVE;
+	break;
+      }
+    }
+  }
+
+  void LeavePower() {
+    ti_power_hang.reset();
+    ti_power_hang.deactivate();
+    ti_power_charge.reset();
+    ti_power_charge.deactivate();
+
+    if (Random.Range(1,4) == 3) {
+      PickRandomPower();
+    } else {
+      EnterAction(GhostAction.MOVING_ROOM);
+    }
+  }
+
+  void PowerUpdate_Wave() {
+    // Charge
+    if (ti_power_charge.finished_this_frame()) {
+      ti_power_hang.activate();
+
+      // Play animation
+      // TODO:
+      
+      // Spawn wave orb
+      Instantiate(wave_orb, transform.position, new Quaternion()); 
+    } else {
+    }
+
+    if (ti_power_hang.finished_this_frame()) {
+      LeavePower();
+    }
+
+    
+    // Release - spawns a burst
+    // Hang time - The ghost waits around while it's burst goes
+  }
+
+  void tick_timers() {
+    ti_power_hang.tick(Time.deltaTime);
+    ti_power_charge.tick(Time.deltaTime);
+  }
 
   /** EVENTS **/
   public void GetPunched(float power) {
+    // if (poise > 0) {
+    //   return
+    // }
+
     if (hit_stun_resistance > 0.3) {
       ti_hit_stun_reset.reset();
       return;
@@ -234,11 +345,11 @@ public class Ghost : MonoBehaviour
     anim.SetTrigger("Punched");
     EnterAction(GhostAction.HIT_STUN); // Hmmm....
 
-    // TODO: Track poise
 
   }
 
 
+  // TODO: this currently bugs if we're standing in the spot we choose to move to before we choose to move to it
   public void OnTriggerEnter(Collider trigger) {
     if (trigger.gameObject == nav_destination) {
       nav_destination = null;
@@ -283,4 +394,5 @@ public class Ghost : MonoBehaviour
       joint.enableCollision = false;
     }
   }
+
 }
