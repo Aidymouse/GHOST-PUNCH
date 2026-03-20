@@ -186,7 +186,15 @@ public class GhostPuncher : MonoBehaviour
     movement.y = 0;
     movement = movement.normalized;
 
-    controller.Move(movement * move_speed * Time.deltaTime);
+
+	Vector3 move_vec = movement * move_speed * Time.deltaTime;
+
+	if (!controller.isGrounded) {
+		move_vec += Physics.gravity * Time.deltaTime;
+	}
+	
+
+    controller.Move(move_vec);
   }
 
   void tick_timers() {
