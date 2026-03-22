@@ -164,6 +164,7 @@ public class Ghost : MonoBehaviour
 	// TODO: If we can see the player (i.e. they kept pace with us well), skip straight to choosing a power.
 	charge_particles.Play();
 	cur_action = action;
+	ChangeAnimation("ChargeEscape");
 	break;
       }
 
@@ -342,7 +343,7 @@ public class Ghost : MonoBehaviour
       return;
     }
 
-    anim.SetTrigger("Punched");
+    PlayAnimation("Hit_Cower");
     EnterAction(GhostAction.HIT_STUN); // Hmmm....
 
 
@@ -366,6 +367,14 @@ public class Ghost : MonoBehaviour
 
   void DisableAnimator() {
     anim.enabled = false;
+  }
+
+  void PlayAnimation(string new_anim) {
+    //anim.Rewind(new_anim);
+    anim.Play(new_anim, -1, 0.0f);
+  }
+  void ChangeAnimation(string new_anim, float fade_time=0f) {
+    anim.CrossFade(new_anim, fade_time);
   }
 
   void EnableRagdoll() {
