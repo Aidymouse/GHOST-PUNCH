@@ -8,6 +8,10 @@ public class DebugUI : MonoBehaviour
     TMP_Text ui_debug2; // Ghost hitstun timer
     TMP_Text ui_debug3; 
 
+    TMP_Text ghost_state;
+    TMP_Text ghost_power;
+    TMP_Text ghost_power_timer;
+
     void Start()
     {
       TMP_Text[] texts = GetComponentsInChildren<TMP_Text>();
@@ -26,6 +30,19 @@ public class DebugUI : MonoBehaviour
 	    ui_debug3 = text;
 	    break;
 	  }
+
+	  case "DebugGhostState": {
+	    ghost_state = text;
+	    break;
+	  }
+	  case "DebugGhostPower": {
+	    ghost_power = text;
+	    break;
+	  }
+	  case "DebugGhostPowerTimer": {
+	    ghost_power_timer = text;
+	    break;
+	  }
 	}
       }
     }
@@ -40,5 +57,11 @@ public class DebugUI : MonoBehaviour
 
     public void SetDebug3(string text){
       ui_debug3.SetText(text);
+    }
+
+    public void SetGhostState(string state, string power, string power_timer) {
+      ghost_state.SetText(state);
+      ghost_power.SetText(power);
+      ghost_power_timer.SetText(power_timer);
     }
 }

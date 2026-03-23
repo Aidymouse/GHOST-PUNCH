@@ -8,6 +8,7 @@ public class Ghost : MonoBehaviour
 {
 
   public GhostDefaults defaults;
+  public GhostPowerAttribs power_attribs;
   //public GhostUI UIData;
   //
   public GhostUI ui;
@@ -16,6 +17,8 @@ public class Ghost : MonoBehaviour
 
   public float escape_meter;
   public float escape_needed;
+
+  public GameObject ghostPuncher;
 
   /** Used to find colliders and rigidbodies for switching between ragdoll and animator */
   public GameObject rig;
@@ -36,10 +39,15 @@ public class Ghost : MonoBehaviour
     USING_POWER,
   };
 
+  string[] ghost_action_strings = {"Charging Escape", "Startled", "Hit Stun" ,"Moving Room" ,"Recovery" ,"Hit Stun" ,"Ragdoll", "Using Power"};
+
   enum GhostPowers {
     NONE,
-    WAVE
-  }
+    WAVE,
+    SLAP,
+  };
+
+  string[] ghost_power_strings = {"-", "Wave", "Slap"};
 
 
   GhostAction cur_action;
@@ -53,7 +61,7 @@ public class Ghost : MonoBehaviour
   Timer ti_hit_stun;
   // Reset every time the ghost gets hit. Resets hit stun resistance on finish
   Timer ti_hit_stun_reset;
-  
+
 
   /* Generic power timers that get repurposed a lot */
   Timer ti_power_charge;
@@ -67,9 +75,11 @@ public class Ghost : MonoBehaviour
   Collider[] rig_colliders;
   CharacterJoint[] rig_joints;
 
+  float turn_speed;
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {
+
 
 
     rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
@@ -77,6 +87,8 @@ public class Ghost : MonoBehaviour
     rig_joints = rig.GetComponentsInChildren<CharacterJoint>();
 
     DisableRagdoll();
+
+    turn_speed = defaults.TURN_SPEED;
 
     /* Timers */
     ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
@@ -88,8 +100,10 @@ public class Ghost : MonoBehaviour
 
     /* Animator */
     anim = this.GetComponentInChildren<Animator>();
-    
+
+    /* Nav Settings */
     nav_agent = GetComponent<NavMeshAgent>();
+    nav_agent.updateRotation = false;
     //nav_agent.destination = nav_destination.position;
 
     charge_particles = GetComponentInChildren<ParticleSystem>();
@@ -114,19 +128,27 @@ public class Ghost : MonoBehaviour
       }
     }
 
+    /* Rotate towards ghost puncher */
+    // TODO: when we flee we should look that direction instead
+    Vector3 toGhostPuncher = ghostPuncher.transform.position - transform.position;
+    toGhostPuncher.y = 0;
+    Quaternion ghostPuncher_angle = Quaternion.LookRotation(toGhostPuncher);
+    float turn_speed = 100;
+    transform.rotation = Quaternion.RotateTowards(transform.rotation, ghostPuncher_angle, turn_speed * Time.deltaTime);
+    
+    //transform.TurnTowards(ghostPuncher.transform);
+
+    /* Actions */
     switch (cur_action) {
       case GhostAction.CHARGING_ESCAPE: {
-	debug_ui.SetDebug2("Ghost Action: Charging Escape");
 	state_ChargingEscape();
 	break;
       }
       case GhostAction.MOVING_ROOM: {
-	debug_ui.SetDebug2("Ghost Action: Moving Room");
 	state_MovingRoom();
 	break;
       }
       case GhostAction.HIT_STUN: {
-	debug_ui.SetDebug2("Ghost Action: Hit Stun");
 	state_HitStun();
 	break;
       }
@@ -140,9 +162,16 @@ public class Ghost : MonoBehaviour
 
     tick_timers();
 
-      debug_ui.SetDebug2("Ghost Action: Using Power - Wave" + ti_power_charge.time_remaining);
-      debug_ui.SetDebug1("Ghost Action: Using Power - Wave Hang" + ti_power_hang.time_remaining);
 
+    UpdateDebug();
+
+  }
+
+  void UpdateDebug() {
+    string ghost_state = ghost_action_strings[(int)cur_action];
+    string ghost_power = ghost_power_strings[(int)cur_power];
+    string ghost_power_timer = "Charge: " + ti_power_charge.time_remaining + ", " + ti_power_hang.time_remaining;
+    debug_ui.SetGhostState(ghost_state, ghost_power, ghost_power_timer);
   }
 
   void EnterAction(GhostAction action) {
@@ -249,17 +278,17 @@ public class Ghost : MonoBehaviour
 
   void state_UsingPower() {
     // If we have no power ... pick one!
-      switch (cur_power) {
-	case GhostPowers.NONE: {
-	  PickRandomPower();
-	  break;
-	}
-
-	case GhostPowers.WAVE: {
-	  PowerUpdate_Wave();
-	  break;
-	}
+    switch (cur_power) {
+      case GhostPowers.NONE: {
+	PickRandomPower();
+	break;
       }
+
+      case GhostPowers.WAVE: {
+	PowerUpdate_Wave();
+	break;
+      }
+    }
   }
 
 
@@ -280,10 +309,9 @@ public class Ghost : MonoBehaviour
   void StartPower(GhostPowers power) {
     switch (power) {
       case GhostPowers.WAVE: {
-	debug_ui.SetDebug2("Ghost Action: Using Power - Wave");
-	ti_power_charge.set(defaults.WAVE_CHARGE_TIME);
+	ti_power_charge.set(power_attribs.WAVE_CHARGE_TIME);
 	ti_power_charge.activate();
-	ti_power_hang.set(defaults.WAVE_HANG_TIME);
+	ti_power_hang.set(power_attribs.WAVE_HANG_TIME);
 	ti_power_hang.deactivate();
 
 	cur_power = GhostPowers.WAVE;
@@ -312,7 +340,7 @@ public class Ghost : MonoBehaviour
 
       // Play animation
       // TODO:
-      
+
       // Spawn wave orb
       Instantiate(wave_orb, transform.position, new Quaternion()); 
     } else {
@@ -322,9 +350,12 @@ public class Ghost : MonoBehaviour
       LeavePower();
     }
 
-    
+
     // Release - spawns a burst
     // Hang time - The ghost waits around while it's burst goes
+  }
+
+  void PowerUpdate_Slap() {
   }
 
   void tick_timers() {
