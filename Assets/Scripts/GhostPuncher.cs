@@ -138,13 +138,15 @@ public class GhostPuncher : MonoBehaviour
   }
 
   void doMegaPunch() {
-    doPunch(defaults.PUNCH_MEGA_POWER);
+    change_anim("CHARGE_PUNCH");
+    doPunch(defaults.PUNCH_MEGA_POWER, false);
   }
 
 
-  void doPunch(float power) {
-
-    change_anim("PUNCH_"+punch_with);
+  void doPunch(float power, bool do_anim = true) {
+    if (do_anim) {
+      change_anim("PUNCH_"+punch_with);
+    }
 
     // Cast a ray - jeff says should be a box
     RaycastHit attack_hit;
