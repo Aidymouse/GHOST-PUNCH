@@ -12,7 +12,7 @@ public class WaveOrb : MonoBehaviour
     {
       life = new Timer(life_timer);
 
-      Instantiate(wave_particles, transform.position + particle_offset);
+      Instantiate(wave_particles, transform.position + particle_offset, transform.rotation);
     }
 
     // Update is called once per frame
