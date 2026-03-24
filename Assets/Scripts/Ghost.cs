@@ -67,6 +67,8 @@ public class Ghost : MonoBehaviour
   Timer ti_power_charge;
   // Time spent standing still while power is used
   Timer ti_power_hang;
+  // Time that encompasses the time spent doing the action. Usually activated in sync with hang time to have the power activate after a certain time
+  Timer ti_power_do;
 
   // Reduces hit stun and increases with each hit until reset
   float hit_stun_resistance;
@@ -97,6 +99,8 @@ public class Ghost : MonoBehaviour
     ti_power_charge.deactivate();
     ti_power_hang = new Timer(0);
     ti_power_hang.deactivate();
+    ti_power_do = new Timer(0);
+    ti_power_do.deactivate();
 
     /* Animator */
     anim = this.GetComponentInChildren<Animator>();
@@ -128,6 +132,7 @@ public class Ghost : MonoBehaviour
       }
     }
 
+
     /* Rotate towards ghost puncher */
     // TODO: when we flee we should look that direction instead
     Vector3 toGhostPuncher = ghostPuncher.transform.position - transform.position;
@@ -135,7 +140,15 @@ public class Ghost : MonoBehaviour
     Quaternion ghostPuncher_angle = Quaternion.LookRotation(toGhostPuncher);
     float turn_speed = 100;
     transform.rotation = Quaternion.RotateTowards(transform.rotation, ghostPuncher_angle, turn_speed * Time.deltaTime);
-    
+
+
+    /* Rotate nav agent always towards its next target (infinite turn speed) */
+    Vector3 to_target = nav_agent.steeringTarget - transform.position;
+    if (to_target.magnitude > 0) {
+      to_target.y = 0;
+      Quaternion target_angle = Quaternion.LookRotation(to_target);
+      nav_agent.transform.rotation = target_angle;
+    }
     //transform.TurnTowards(ghostPuncher.transform);
 
     /* Actions */
@@ -204,6 +217,11 @@ public class Ghost : MonoBehaviour
 	  GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
 	  int dest_idx = Random.Range(0, destinations.Length);
 	  GameObject dest_obj = destinations[dest_idx];
+	  // WARN: this could be a problem if there's only one nav destination on the 
+	  while ((transform.position - dest_obj.transform.position).magnitude < 2) {
+	    dest_idx = Random.Range(0, destinations.Length);
+	    dest_obj = destinations[dest_idx];
+	  }
 	  nav_agent.destination = dest_obj.transform.position;
 	  nav_destination = dest_obj;
 
@@ -222,7 +240,7 @@ public class Ghost : MonoBehaviour
 	ti_hit_stun.reset();
 
 	hit_stun_resistance += 0.08f;
-	nav_agent.enabled = false;
+	nav_agent.isStopped = true;
 	cur_action = action;
 	break;
       }
@@ -264,7 +282,7 @@ public class Ghost : MonoBehaviour
     ti_hit_stun.tick(Time.deltaTime);
 
     if (ti_hit_stun.finished_this_frame()) {
-      nav_agent.enabled = true;
+      nav_agent.isStopped = false;
 
       if (nav_destination == null) {
 	EnterAction(GhostAction.USING_POWER);
@@ -288,6 +306,11 @@ public class Ghost : MonoBehaviour
 	PowerUpdate_Wave();
 	break;
       }
+
+      case GhostPowers.SLAP: {
+	PowerUpdate_Slap();
+	break;
+      }
     }
   }
 
@@ -298,9 +321,17 @@ public class Ghost : MonoBehaviour
 
   /**** POWERS ****/
   void PickRandomPower() {
-    switch (Random.Range(1,1)) {
+    /* Debug */
+    StartPower(GhostPowers.SLAP);
+    return;
+
+    switch (Random.Range(1,2)) {
       case 1: {
 	StartPower(GhostPowers.WAVE);
+	break;
+      }
+      case 2: {
+	StartPower(GhostPowers.SLAP);
 	break;
       }
     }
@@ -317,6 +348,15 @@ public class Ghost : MonoBehaviour
 	cur_power = GhostPowers.WAVE;
 	break;
       }
+
+      case GhostPowers.SLAP: {
+	Vector3 ghostPuncher_position = ghostPuncher.transform.position;
+	nav_agent.destination = ghostPuncher.transform.position;
+	nav_agent.stoppingDistance = power_attribs.SLAP_DISTANCE;
+
+	cur_power = GhostPowers.SLAP;
+	break;
+      }
     }
   }
 
@@ -325,6 +365,18 @@ public class Ghost : MonoBehaviour
     ti_power_hang.deactivate();
     ti_power_charge.reset();
     ti_power_charge.deactivate();
+    ti_power_do.reset();
+    ti_power_do.deactivate();
+
+    /* Clean up any aspects of the power we're leaving */
+    switch (cur_power) {
+      case GhostPowers.SLAP: {
+	// TODO: make this a point in the room
+	nav_agent.destination = transform.position;
+	nav_agent.stoppingDistance = 0;
+	break;
+      }
+    }
 
     if (Random.Range(1,4) == 3) {
       PickRandomPower();
@@ -343,19 +395,39 @@ public class Ghost : MonoBehaviour
 
       // Spawn wave orb
       Instantiate(wave_orb, transform.position, new Quaternion()); 
-    } else {
-    }
+    } 
 
     if (ti_power_hang.finished_this_frame()) {
       LeavePower();
     }
 
 
-    // Release - spawns a burst
-    // Hang time - The ghost waits around while it's burst goes
   }
 
   void PowerUpdate_Slap() {
+    if (nav_agent.remainingDistance <= power_attribs.SLAP_DISTANCE && !ti_power_charge.is_active() && !ti_power_hang.is_active()) {
+      Debug.Log("Again");
+      ti_power_charge.time_remaining = power_attribs.SLAP_CHARGE_TIME;
+      ti_power_charge.activate();
+    }
+
+    if (ti_power_charge.finished_this_frame()) {
+      ti_power_do.time_remaining = power_attribs.SLAP_DO_TIME;
+      ti_power_do.activate();
+      ti_power_hang.time_remaining = power_attribs.SLAP_HANG_TIME;
+      ti_power_hang.activate();
+
+      ChangeAnimation("Power_SlapLeft");
+    }
+    if (ti_power_do.finished_this_frame()) {
+      // TODO: spawn slap collision
+      Debug.Log("Slap!");
+    }
+    if (ti_power_hang.finished_this_frame()) {
+      LeavePower();
+    }
+    // Get up to the ghost puncher
+    // Do a slap
   }
 
   void tick_timers() {

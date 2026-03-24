@@ -58,6 +58,10 @@ public class Timer
     this.active = false;
   }
 
+  public bool is_active() {
+    return this.active;
+  }
+
 
 
 }
