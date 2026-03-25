@@ -20,4 +20,12 @@ public class GhostPowerAttribs : ScriptableObject
     public float WAVE_HANG_TIME;
     // [Tooltip("How fast the wave travels")]
     // public float WAVE_SPEED;
+    [Tooltip("(seconds)")]
+    public float SLAP_CHARGE_TIME;
+    [Tooltip("Distance from the ghost puncher to stop to do the slap")]
+    public float SLAP_DISTANCE;
+    [Tooltip("(seconds) time spent slapping + cooldown time")]
+    public float SLAP_HANG_TIME;
+    [Tooltip("(seconds) time after charge up before slap collision spawns")]
+    public float SLAP_DO_TIME;
 }
