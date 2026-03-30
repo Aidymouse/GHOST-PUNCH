@@ -144,7 +144,6 @@ public class GhostPuncher : MonoBehaviour
 
 
   void doPunch(float power, bool do_anim = true) {
-
     if (do_anim) {
       change_anim("PUNCH_"+punch_with);
     }
