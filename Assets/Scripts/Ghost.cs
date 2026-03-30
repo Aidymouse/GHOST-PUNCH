@@ -181,10 +181,12 @@ public class Ghost : MonoBehaviour
   }
 
   void UpdateDebug() {
-    string ghost_state = ghost_action_strings[(int)cur_action];
-    string ghost_power = ghost_power_strings[(int)cur_power];
-    string ghost_power_timer = "Charge: " + ti_power_charge.time_remaining + ", " + ti_power_hang.time_remaining;
-    debug_ui.SetGhostState(ghost_state, ghost_power, ghost_power_timer);
+    if (debug_ui) {
+      string ghost_state = ghost_action_strings[(int)cur_action];
+      string ghost_power = ghost_power_strings[(int)cur_power];
+      string ghost_power_timer = "Charge: " + ti_power_charge.time_remaining + ", " + ti_power_hang.time_remaining;
+      debug_ui.SetGhostState(ghost_state, ghost_power, ghost_power_timer);
+    }
   }
 
   void EnterAction(GhostAction action) {
