@@ -18,6 +18,9 @@ public class Ghost : MonoBehaviour
   public float escape_meter;
   public float escape_needed;
 
+  // If false, the ghost will do small staggers on hit.
+  bool small_hit_resist;
+
   public GameObject ghostPuncher;
 
   /** Used to find colliders and rigidbodies for switching between ragdoll and animator */
@@ -53,6 +56,8 @@ public class Ghost : MonoBehaviour
   GhostAction cur_action;
   GhostPowers cur_power;
 
+  GhostPower active_power;
+
   // Spawns when the ghost uses her wave power
   public GameObject wave_orb;
 
@@ -63,12 +68,17 @@ public class Ghost : MonoBehaviour
   Timer ti_hit_stun_reset;
 
 
+  /** Timers for power usage. **/
+
   /* Generic power timers that get repurposed a lot */
   Timer ti_power_charge;
-  // Time spent standing still while power is used
+  // Timer after the animation has triggered but 
+  Timer ti_power_active_delay;
+  // Time that encompasses the time spent doing the action. Usually activated at the same time as the animation to have the power activate during a certain point of the anim
+  // This is triggered at the same time as the powers hang time, so that you can calculate power durations by just doing charge + hang.
+  Timer ti_power_active;
+  // Time spent standing still after power is used
   Timer ti_power_hang;
-  // Time that encompasses the time spent doing the action. Usually activated in sync with hang time to have the power activate after a certain time
-  Timer ti_power_do;
 
   // Reduces hit stun and increases with each hit until reset
   float hit_stun_resistance;
@@ -297,23 +307,7 @@ public class Ghost : MonoBehaviour
   }
 
   void state_UsingPower() {
-    // If we have no power ... pick one!
-    switch (cur_power) {
-      case GhostPowers.NONE: {
-	PickRandomPower();
-	break;
-      }
-
-      case GhostPowers.WAVE: {
-	PowerUpdate_Wave();
-	break;
-      }
-
-      case GhostPowers.SLAP: {
-	PowerUpdate_Slap();
-	break;
-      }
-    }
+    active_power.Update();
   }
 
 
@@ -323,62 +317,13 @@ public class Ghost : MonoBehaviour
 
   /**** POWERS ****/
   void PickRandomPower() {
-    /* Debug */
-    StartPower(GhostPowers.SLAP);
-    return;
-
-    switch (Random.Range(1,2)) {
-      case 1: {
-	StartPower(GhostPowers.WAVE);
-	break;
-      }
-      case 2: {
-	StartPower(GhostPowers.SLAP);
-	break;
-      }
-    }
+    active_power = new GhostPower_Wave(this);
+    active_power.Start();
   }
 
-  void StartPower(GhostPowers power) {
-    switch (power) {
-      case GhostPowers.WAVE: {
-	ti_power_charge.set(power_attribs.WAVE_CHARGE_TIME);
-	ti_power_charge.activate();
-	ti_power_hang.set(power_attribs.WAVE_HANG_TIME);
-	ti_power_hang.deactivate();
-
-	cur_power = GhostPowers.WAVE;
-	break;
-      }
-
-      case GhostPowers.SLAP: {
-	Vector3 ghostPuncher_position = ghostPuncher.transform.position;
-	nav_agent.destination = ghostPuncher.transform.position;
-	nav_agent.stoppingDistance = power_attribs.SLAP_DISTANCE;
-
-	cur_power = GhostPowers.SLAP;
-	break;
-      }
-    }
-  }
 
   void LeavePower() {
-    ti_power_hang.reset();
-    ti_power_hang.deactivate();
-    ti_power_charge.reset();
-    ti_power_charge.deactivate();
-    ti_power_do.reset();
-    ti_power_do.deactivate();
-
-    /* Clean up any aspects of the power we're leaving */
-    switch (cur_power) {
-      case GhostPowers.SLAP: {
-	// TODO: make this a point in the room
-	nav_agent.destination = transform.position;
-	nav_agent.stoppingDistance = 0;
-	break;
-      }
-    }
+    active_power.End();
 
     if (Random.Range(1,4) == 3) {
       PickRandomPower();
@@ -391,12 +336,6 @@ public class Ghost : MonoBehaviour
     // Charge
     if (ti_power_charge.finished_this_frame()) {
       ti_power_hang.activate();
-
-      // Play animation
-      // TODO:
-
-      // Spawn wave orb
-      Instantiate(wave_orb, transform.position, new Quaternion()); 
     } 
 
     if (ti_power_hang.finished_this_frame()) {
@@ -407,10 +346,15 @@ public class Ghost : MonoBehaviour
   }
 
   void PowerUpdate_Slap() {
-    if (nav_agent.remainingDistance <= power_attribs.SLAP_DISTANCE && !ti_power_charge.is_active() && !ti_power_hang.is_active()) {
-      Debug.Log("Again");
-      ti_power_charge.time_remaining = power_attribs.SLAP_CHARGE_TIME;
-      ti_power_charge.activate();
+
+    // Update position so ghost will chase you
+    if (!ti_power_charge.is_active()) {
+      nav_agent.destination = ghostPuncher.transform.position;
+
+      if (nav_agent.remainingDistance <= power_attribs.SLAP_DISTANCE /*&& !ti_power_charge.is_active()*/ && !ti_power_hang.is_active()) {
+	ti_power_charge.time_remaining = power_attribs.SLAP_CHARGE_TIME;
+	ti_power_charge.activate();
+      }
     }
 
     if (ti_power_charge.finished_this_frame()) {
