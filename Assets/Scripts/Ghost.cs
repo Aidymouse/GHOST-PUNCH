@@ -310,17 +310,11 @@ public class Ghost : MonoBehaviour
     active_power.Update();
   }
 
-
-
-
-
-
   /**** POWERS ****/
   void PickRandomPower() {
     active_power = new GhostPower_Wave(this);
     active_power.Start();
   }
-
 
   void LeavePower() {
     active_power.End();
@@ -330,50 +324,6 @@ public class Ghost : MonoBehaviour
     } else {
       EnterAction(GhostAction.MOVING_ROOM);
     }
-  }
-
-  void PowerUpdate_Wave() {
-    // Charge
-    if (ti_power_charge.finished_this_frame()) {
-      ti_power_hang.activate();
-    } 
-
-    if (ti_power_hang.finished_this_frame()) {
-      LeavePower();
-    }
-
-
-  }
-
-  void PowerUpdate_Slap() {
-
-    // Update position so ghost will chase you
-    if (!ti_power_charge.is_active()) {
-      nav_agent.destination = ghostPuncher.transform.position;
-
-      if (nav_agent.remainingDistance <= power_attribs.SLAP_DISTANCE /*&& !ti_power_charge.is_active()*/ && !ti_power_hang.is_active()) {
-	ti_power_charge.time_remaining = power_attribs.SLAP_CHARGE_TIME;
-	ti_power_charge.activate();
-      }
-    }
-
-    if (ti_power_charge.finished_this_frame()) {
-      ti_power_do.time_remaining = power_attribs.SLAP_DO_TIME;
-      ti_power_do.activate();
-      ti_power_hang.time_remaining = power_attribs.SLAP_HANG_TIME;
-      ti_power_hang.activate();
-
-      ChangeAnimation("Power_SlapLeft");
-    }
-    if (ti_power_do.finished_this_frame()) {
-      // TODO: spawn slap collision
-      Debug.Log("Slap!");
-    }
-    if (ti_power_hang.finished_this_frame()) {
-      LeavePower();
-    }
-    // Get up to the ghost puncher
-    // Do a slap
   }
 
   void tick_timers() {

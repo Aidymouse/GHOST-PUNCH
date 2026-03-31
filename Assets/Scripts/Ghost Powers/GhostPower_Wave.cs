@@ -1,21 +1,10 @@
 using UnityEngine;
 
 class GhostPower_Wave : GhostPower {
-  public GhostPower_Wave(Ghost myghost) : base(myghost) {
+  public GhostPower_Wave(Ghost myghost, GhostPowerAttributes attrs) : base(myghost, attrs.WAVE_CHARGE_TIME, 0, 0, attrs.WAVE_HANG_TIME) {
   }
 
-  public void Start() {
-	this.ti_charge.set(power_attribs.WAVE_CHARGE_TIME);
-	this.ti_charge.activate();
-	this.ti_hang.set(power_attribs.WAVE_HANG_TIME);
-	this.ti_hang.deactivate();
-
-	this.ghost.cur_power = GhostPowers.WAVE;
-      }
-
-  }
-
-  public void EndCharge() {
+  public void OnEndCharge() {
 
       // Play animation
       // TODO:
