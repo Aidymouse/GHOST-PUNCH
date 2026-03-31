@@ -1,15 +1,15 @@
 using UnityEngine;
 
 class GhostPower_Wave : GhostPower {
-  public GhostPower_Wave(Ghost myghost, GhostPowerAttributes attrs) : base(myghost, attrs.WAVE_CHARGE_TIME, 0, 0, attrs.WAVE_HANG_TIME) {
+  public GhostPower_Wave(Ghost myghost, GhostPowerAttribs attrs) : base(myghost, attrs, attrs.WAVE_CHARGE_TIME, 0, 0, attrs.WAVE_HANG_TIME) {
   }
 
-  public void OnEndCharge() {
+  public override void OnEndCharge() {
 
       // Play animation
       // TODO:
 
       // Spawn wave orb
-      Instantiate(wave_orb, transform.position, new Quaternion()); 
+      Ghost.Instantiate(ghost.wave_orb, ghost.transform.position, new Quaternion()); 
   }
 }

@@ -8,43 +8,48 @@ class GhostPower {
   protected Timer ti_active;
   protected Timer ti_hang;
 
-  enum GhostPowerPhase {
+  public GhostPowerAttribs attrs;
+
+  public enum GhostPowerPhase {
     PRE_CHARGE,
     CHARGING,
     ACTIVE_DELAY,
     ACTIVE,
     HANG,
     POST_HANG,
+    /* Signals to the Ghost that this power is finished */
+    DONE,
   };
 
-  GhostPowerPhase phase;
+  public GhostPowerPhase phase;
 
-  public GhostPower(Ghost myghost, float charge_timer, float active_delay_timer, float active_timer, float hang_timer) {
+  public GhostPower(Ghost myghost, GhostPowerAttribs attrs, float charge_timer, float active_delay_timer, float active_timer, float hang_timer) {
     this.ghost = myghost;
+    this.attrs = attrs;
     this.ti_charge = new Timer(0);
     this.ti_active_delay = new Timer(0);
     this.ti_active = new Timer(0);
     this.ti_hang = new Timer(0);
 
-    this.ti_charge.deactive();
-    this.ti_active_delay.deactive();
-    this.ti_active.deactive();
-    this.ti_hang.deactive();
+    this.ti_charge.deactivate();
+    this.ti_active_delay.deactivate();
+    this.ti_active.deactivate();
+    this.ti_hang.deactivate();
 
     this.phase = GhostPowerPhase.PRE_CHARGE;
 
   }
 
-  public void Start() {
+  public virtual void Start() {
     ti_charge.activate();
-    StartCharge();
+    OnStartCharge();
     phase = GhostPowerPhase.CHARGING;
   }
 
   /** Default update fn just does these events
    * More hands on updates can implement their own update method
    * **/
-  public void Update() {
+  public virtual void Update() {
     // Call relevant methods and update timers
     UpdateTimers();
     HandleEvents();
@@ -78,7 +83,7 @@ class GhostPower {
       ti_active.activate();
       OnStartActive();
       phase = GhostPowerPhase.ACTIVE;
-    } else if (ti_active_dealy.is_active()) {
+    } else if (ti_active_delay.is_active()) {
       OnUpdateActiveDelay();
     }
 
@@ -94,9 +99,10 @@ class GhostPower {
     }
 
     if (ti_hang.finished()) {
+      phase = GhostPowerPhase.POST_HANG;
+
       OnEndHang();
       ti_hang.deactivate();
-      phase = GhostPowerPhase.POST_HANG;
 
     } else if (ti_hang.is_active()) {
       OnUpdateHang();
@@ -104,23 +110,27 @@ class GhostPower {
 
   }
 
-  public void End() {}
+  public virtual void End() {}
 
-  public void OnStartCharge() {}
-  public void OnUpdateCharge() {}
-  public void OnEndCharge() {}
+  public virtual void OnStartCharge() {}
+  public virtual void OnUpdateCharge() {}
+  public virtual void OnEndCharge() {}
 
-  public void OnStartActiveDelay() {}
-  public void OnUpdateActiveDelay() {}
-  public void OnEndActiveDelay() {}
+  public virtual void OnStartActiveDelay() {}
+  public virtual void OnUpdateActiveDelay() {}
+  public virtual void OnEndActiveDelay() {}
 
-  public void OnStartActive() {}
-  public void OnUpdateActive() {}
-  public void OnEndActive() {}
+  public virtual void OnStartActive() {}
+  public virtual void OnUpdateActive() {}
+  public virtual void OnEndActive() {}
 
-  public void OnStartHang() {}
-  public void OnUpdateHang() {}
-  public void OnEndHang() {}
+  public virtual void OnStartHang() {}
+  public virtual void OnUpdateHang() {}
+
+  /** By default, if we're not doing anything, we just mark ourselves as done **/
+  public virtual void OnEndHang() {
+    phase = GhostPowerPhase.DONE;
+  }
 
 
 }

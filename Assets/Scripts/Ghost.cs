@@ -61,7 +61,7 @@ public class Ghost : MonoBehaviour
   // Spawns when the ghost uses her wave power
   public GameObject wave_orb;
 
-  NavMeshAgent nav_agent;
+  public NavMeshAgent nav_agent;
 
   Timer ti_hit_stun;
   // Reset every time the ghost gets hit. Resets hit stun resistance on finish
@@ -105,12 +105,6 @@ public class Ghost : MonoBehaviour
     /* Timers */
     ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
     ti_hit_stun_reset = new Timer(0, defaults.HIT_STUN_RESET_TIME);
-    ti_power_charge = new Timer(0);
-    ti_power_charge.deactivate();
-    ti_power_hang = new Timer(0);
-    ti_power_hang.deactivate();
-    ti_power_do = new Timer(0);
-    ti_power_do.deactivate();
 
     /* Animator */
     anim = this.GetComponentInChildren<Animator>();
@@ -132,7 +126,7 @@ public class Ghost : MonoBehaviour
   }
 
   // Update is called once per frame
-  void Update()
+  public void Update()
   {
 
     if (!ti_hit_stun_reset.finished()) {
@@ -194,8 +188,7 @@ public class Ghost : MonoBehaviour
     if (debug_ui) {
       string ghost_state = ghost_action_strings[(int)cur_action];
       string ghost_power = ghost_power_strings[(int)cur_power];
-      string ghost_power_timer = "Charge: " + ti_power_charge.time_remaining + ", " + ti_power_hang.time_remaining;
-      debug_ui.SetGhostState(ghost_state, ghost_power, ghost_power_timer);
+      //debug_ui.SetGhostState(ghost_state, ghost_power, ghost_power_timer);
     }
   }
 
@@ -259,6 +252,7 @@ public class Ghost : MonoBehaviour
 
       case GhostAction.USING_POWER: {
 	cur_action = action;
+	PickRandomPower();
 	break;
       }
     }
@@ -308,11 +302,15 @@ public class Ghost : MonoBehaviour
 
   void state_UsingPower() {
     active_power.Update();
+
+    if (active_power.phase == GhostPower.GhostPowerPhase.DONE) {
+      LeavePower();
+    }
   }
 
   /**** POWERS ****/
   void PickRandomPower() {
-    active_power = new GhostPower_Wave(this);
+    active_power = new GhostPower_Wave(this, power_attribs);
     active_power.Start();
   }
 
@@ -327,8 +325,6 @@ public class Ghost : MonoBehaviour
   }
 
   void tick_timers() {
-    ti_power_hang.tick(Time.deltaTime);
-    ti_power_charge.tick(Time.deltaTime);
   }
 
   /** EVENTS **/
