@@ -26,10 +26,10 @@ class GhostPower {
   public GhostPower(Ghost myghost, GhostPowerAttribs attrs, float charge_timer, float active_delay_timer, float active_timer, float hang_timer) {
     this.ghost = myghost;
     this.attrs = attrs;
-    this.ti_charge = new Timer(0);
-    this.ti_active_delay = new Timer(0);
-    this.ti_active = new Timer(0);
-    this.ti_hang = new Timer(0);
+    this.ti_charge = new Timer(charge_timer);
+    this.ti_active_delay = new Timer(active_delay_timer);
+    this.ti_active = new Timer(active_timer);
+    this.ti_hang = new Timer(hang_timer);
 
     this.ti_charge.deactivate();
     this.ti_active_delay.deactivate();

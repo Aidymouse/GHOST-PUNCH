@@ -16,6 +16,7 @@ class GhostPower_Slap : GhostPower {
       ghost.nav_agent.destination = ghost.ghostPuncher.transform.position;
 
       if (ghost.nav_agent.remainingDistance <= attrs.SLAP_DISTANCE) {
+	ghost.nav_agent.isStopped = true;
 	ti_charge.activate();
 	OnStartCharge();
       }
@@ -29,6 +30,7 @@ class GhostPower_Slap : GhostPower {
 	// TODO: make this some point in the room
 	ghost.nav_agent.destination = ghost.transform.position;
 	ghost.nav_agent.stoppingDistance = 0;
+	ghost.nav_agent.isStopped = false;
   }
 
   public override void OnEndActiveDelay() {
@@ -39,5 +41,6 @@ class GhostPower_Slap : GhostPower {
   public override void OnEndActive() {
     // TODO: turn collider cold
   }
+
 }
 
