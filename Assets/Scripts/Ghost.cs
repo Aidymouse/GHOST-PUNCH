@@ -310,7 +310,7 @@ public class Ghost : MonoBehaviour
 
   /**** POWERS ****/
   void PickRandomPower() {
-    active_power = new GhostPower_Wave(this, power_attribs);
+    active_power = new GhostPower_Slap(this, power_attribs);
     active_power.Start();
   }
 
@@ -368,7 +368,8 @@ public class Ghost : MonoBehaviour
     //anim.Rewind(new_anim);
     anim.Play(new_anim, -1, 0.0f);
   }
-  void ChangeAnimation(string new_anim, float fade_time=0f) {
+
+  public void ChangeAnimation(string new_anim, float fade_time=0f) {
     anim.CrossFade(new_anim, fade_time);
   }
 

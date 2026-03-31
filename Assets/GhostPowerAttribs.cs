@@ -27,5 +27,7 @@ public class GhostPowerAttribs : ScriptableObject
     [Tooltip("(seconds) time spent slapping + cooldown time")]
     public float SLAP_HANG_TIME;
     [Tooltip("(seconds) time after charge up before slap collision spawns")]
-    public float SLAP_DO_TIME;
+    public float SLAP_ACTIVE_DELAY_TIME;
+    [Tooltip("(seconds) time the hitbox is active")]
+    public float SLAP_ACTIVE_TIME;
 }
