@@ -291,19 +291,21 @@ public class Ghost : MonoBehaviour
 
   /** EVENTS **/
   public void GetPunched(Punch punch) {
-    // if (poise > 0) {
-    //   return
-    // }
     
     poise -= punch.PoiseDamage;
 
-
     //PlayAnimation("Hit_Cower");
     if (poise <= 0) {
-    	EnterAction(GhostAction.HIT_STUN); // Hmmm....
+		// TODO: depending on hit strength, maybe enter ragdoll instead
+    	EnterAction(GhostAction.HIT_STUN);
 	} else {
 		// TODO: play a random hit animation
 		PlayAnimation("Hurt1");
+
+		if (cur_action == GhostAction.CHARGING_ESCAPE) {
+			// TODO: there should be a bit of buffer time here or powers come out super fast
+			EnterAction(GhostAction.USING_POWER);
+		}
 	}
 
 
