@@ -5,7 +5,13 @@ public class GhostPowerAttribs : ScriptableObject
 {
 
 
+	[Header("Power Debug Tools")]
+	[Tooltip("Sets the default power index. Set to -1 to pick a random power. (0) Wave; (1) Slap;")]
+	[Range(-1,1)]
+	public int OVERRIDE_POWER_IDX;
+
     /** WAVE POWER **/
+	[Header("Wave Power Attributes")]
     [Tooltip("(seconds) Time the ghost spends charging up the shockwave")]
     public float WAVE_CHARGE_TIME;
     [Tooltip("Power that forces you back when you get hit with the wave")]
@@ -20,6 +26,7 @@ public class GhostPowerAttribs : ScriptableObject
     public float WAVE_HANG_TIME;
     // [Tooltip("How fast the wave travels")]
     // public float WAVE_SPEED;
+	[Header("Slap Power Attributes")]
     [Tooltip("(seconds)")]
     public float SLAP_CHARGE_TIME;
     [Tooltip("Distance from the ghost puncher to stop to do the slap")]
