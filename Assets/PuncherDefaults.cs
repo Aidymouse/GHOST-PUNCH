@@ -12,9 +12,15 @@ public class PuncherDefaults : ScriptableObject
 	[Tooltip("If punch is clicked while cooldown has this time or less left, the punch input is buffered")]
 	public float PUNCH_BUFFER_TIME;
 
-	[Tooltip("Power of a punch. Power is damage dealt as well as force applied on hit to physics objects")]
-	public float PUNCH_POWER;
-	[Tooltip("Power of a charge punch. Power is damage dealt as well as force applied on hit to physics objects")]
-	public float PUNCH_MEGA_POWER;
+	[Tooltip("Physics force applied in direction of punch to objects")]
+	public float PUNCH_FORCE;
+	[Tooltip("Amount of damage objects take from default punch")]
+	public float PUNCH_OBJECT_DAMAGE;
+	[Tooltip("Poise damage the ghost takes from a default punch")]
+	public float PUNCH_POISE_DAMAGE;
+
+	public float MEGAPUNCH_FORCE;
+	public float MEGAPUNCH_OBJECT_DAMAGE;
+	public float MEGAPUNCH_POISE_DAMAGE;
     
 }

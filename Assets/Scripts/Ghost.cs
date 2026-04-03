@@ -44,7 +44,7 @@ public class Ghost : MonoBehaviour
 
   GhostAction cur_action;
 
-  GhostPower[] powers = new GhostPower[2];
+  GhostPower[] powers;
   GhostPower active_power;
 
   // Spawns when the ghost uses her wave power
@@ -53,24 +53,10 @@ public class Ghost : MonoBehaviour
   NavMeshAgent nav_agent;
 
   Timer ti_hit_stun;
-  // Reset every time the ghost gets hit. Resets hit stun resistance on finish
-  Timer ti_hit_stun_reset;
+  Timer ti_restore_poise;
 
-
-  /** Timers for power usage. **/
-
-  /* Generic power timers that get repurposed a lot */
-  Timer ti_power_charge;
-  // Timer after the animation has triggered but 
-  Timer ti_power_active_delay;
-  // Time that encompasses the time spent doing the action. Usually activated at the same time as the animation to have the power activate during a certain point of the anim
-  // This is triggered at the same time as the powers hang time, so that you can calculate power durations by just doing charge + hang.
-  Timer ti_power_active;
-  // Time spent standing still after power is used
-  Timer ti_power_hang;
-
-  // Reduces hit stun and increases with each hit until reset
-  float hit_stun_resistance;
+  // When poise hit's 0, the ghost staggers / goes flying, depending on strength
+  float poise;
 
   Rigidbody[] rig_rbs;
   Collider[] rig_colliders;
@@ -81,19 +67,19 @@ public class Ghost : MonoBehaviour
   void Start()
   {
 
-
-
     rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
     rig_colliders = rig.GetComponentsInChildren<Collider>();
     rig_joints = rig.GetComponentsInChildren<CharacterJoint>();
 
     DisableRagdoll();
 
+	poise = defaults.POISE;
+
     turn_speed = defaults.TURN_SPEED;
 
     /* Timers */
     ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
-    ti_hit_stun_reset = new Timer(0, defaults.HIT_STUN_RESET_TIME);
+	ti_restore_poise = new Timer(0, defaults.POISE_RESTORE_TIMER);
 
     /* Animator */
     anim = this.GetComponentInChildren<Animator>();
@@ -112,6 +98,7 @@ public class Ghost : MonoBehaviour
 
 	/* Powers */
 	// Set up last so any objects retrieved in constructors are present
+	powers = new GhostPower[2];
 	powers[0] = new GhostPower_Wave(this, power_attribs);
 	powers[1] = new GhostPower_Slap(this, power_attribs);
 
@@ -123,12 +110,6 @@ public class Ghost : MonoBehaviour
   public void Update()
   {
 
-    if (!ti_hit_stun_reset.finished()) {
-      ti_hit_stun_reset.tick(Time.deltaTime);
-      if (ti_hit_stun_reset.finished()) {
-	hit_stun_resistance = 0;
-      }
-    }
 
 
     /* Rotate towards ghost puncher */
@@ -223,11 +204,9 @@ public class Ghost : MonoBehaviour
       }
 
       case GhostAction.HIT_STUN: {
-	ti_hit_stun_reset.reset();
 
 	ti_hit_stun.reset();
 
-	hit_stun_resistance += 0.08f;
 	nav_agent.isStopped = true;
 	cur_action = action;
 	break;
@@ -311,18 +290,17 @@ public class Ghost : MonoBehaviour
   }
 
   /** EVENTS **/
-  public void GetPunched(float power) {
+  public void GetPunched(Punch punch) {
     // if (poise > 0) {
     //   return
     // }
+    
+    poise -= punch.PoiseDamage;
 
-    if (hit_stun_resistance > 0.3) {
-      ti_hit_stun_reset.reset();
-      return;
-    }
-
-    PlayAnimation("Hit_Cower");
-    EnterAction(GhostAction.HIT_STUN); // Hmmm....
+    //PlayAnimation("Hit_Cower");
+    if (poise <= 0) {
+    	EnterAction(GhostAction.HIT_STUN); // Hmmm....
+	}
 
 
   }

@@ -1,6 +1,19 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public struct Punch {
+	public Punch(Vector3 direction, float force, float object_damage, float poise_damage) {
+		Direction = direction;
+		Force = force;
+		ObjectDamage = object_damage;
+		PoiseDamage = poise_damage;
+	}
+	public Vector3 Direction;
+	public float Force;
+	public float ObjectDamage;
+	public float PoiseDamage;
+};
+
 public class GhostPuncher : MonoBehaviour
 {
 	InputAction action_attack;
@@ -110,7 +123,7 @@ public class GhostPuncher : MonoBehaviour
 				if (ti_charge_up.finished()) {
 					doMegaPunch();
 				} else {
-					doPunch(defaults.PUNCH_POWER);
+					doPunch(defaults.PUNCH_FORCE);
 				}
 
 				ti_charge_up.deactivate();
@@ -142,11 +155,11 @@ public class GhostPuncher : MonoBehaviour
 
 	void doMegaPunch() {
 		change_anim("CHARGE_PUNCH");
-		doPunch(defaults.PUNCH_MEGA_POWER, false);
+		doPunch(defaults.MEGAPUNCH_FORCE, false);
 	}
 
 
-	void doPunch(float power, bool do_anim = true) {
+	void doPunch(float force, bool do_anim = true) {
 		if (do_anim) {
 			change_anim("PUNCH_"+punch_with);
 		}
@@ -170,11 +183,13 @@ public class GhostPuncher : MonoBehaviour
 
 			if (hit_col.CompareTag("BreakableObject")) {
 				BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
-				bo.GetPunched(power, ray_dir, attack_hit);
+				Punch punch = new Punch(ray_dir, force, 1, 5);
+				bo.GetPunched(punch, attack_hit);
 
 			} else if (hit_col.CompareTag("Ghost")) {
+				Punch punch = new Punch(ray_dir, force, 1, 5);
 				Ghost g = hit_col.gameObject.GetComponent<Ghost>();
-				g.GetPunched(power);
+				g.GetPunched(punch);
 				ectoplasm += 5;
 			}
 
