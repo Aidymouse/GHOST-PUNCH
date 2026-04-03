@@ -297,9 +297,13 @@ public class Ghost : MonoBehaviour
     
     poise -= punch.PoiseDamage;
 
+
     //PlayAnimation("Hit_Cower");
     if (poise <= 0) {
     	EnterAction(GhostAction.HIT_STUN); // Hmmm....
+	} else {
+		// TODO: play a random hit animation
+		PlayAnimation("Hurt1");
 	}
 
 

@@ -95,7 +95,7 @@ public class GhostPuncher : MonoBehaviour
 			if (ti_punch_cooldown.finished()) {
 				ti_charge_up.activate();
 				ti_charge_up.reset();
-				change_anim("ARM_CHARGE_WINDUP");
+				ChangeAnimation("ARM_CHARGE_WINDUP");
 			}
 
 		}
@@ -133,7 +133,19 @@ public class GhostPuncher : MonoBehaviour
 
 		// Moving
 		Vector3 move_vec = controller.isGrounded ? new Vector3(0, 0, 0) : Physics.gravity;
-		move_vec += moveControls();
+		Vector3 desired_control_vec = moveControls();
+		move_vec += desired_control_vec;
+
+		if (desired_control_vec.magnitude > 0) {
+			if (!arm_animator.GetBool("Walking")) {
+				PlayAnimation("Walk", 1);
+				arm_animator.SetBool("Walking", true);
+			}
+		} else if (arm_animator.GetBool("Walking")) {
+			StopAnimation(1);
+			arm_animator.SetBool("Walking", false);
+		}
+
 
 		if (push_power > 0) {
 			move_vec += push_dir * push_power;
@@ -154,14 +166,14 @@ public class GhostPuncher : MonoBehaviour
 	}
 
 	void doMegaPunch() {
-		change_anim("CHARGE_PUNCH");
+		ChangeAnimation("CHARGE_PUNCH");
 		doPunch(defaults.MEGAPUNCH_FORCE, false);
 	}
 
 
 	void doPunch(float force, bool do_anim = true) {
 		if (do_anim) {
-			change_anim("PUNCH_"+punch_with);
+			ChangeAnimation("PUNCH_"+punch_with);
 		}
 
 		// Cast a ray - jeff says should be a box
@@ -234,8 +246,17 @@ public class GhostPuncher : MonoBehaviour
 		ti_charge_up.tick(Time.deltaTime);
 	}
 
-	void change_anim(string name, float fade=0) {
+	void ChangeAnimation(string name, float fade=0) {
 		arm_animator.CrossFade(name, fade);
+	}
+
+	/** Useful for layering anims together **/
+	void PlayAnimation(string name, int layer=-1) {
+		arm_animator.Play(name, layer, 0.0f);
+	}
+
+	void StopAnimation(int layer, float fade_time=0.25f, string stopAnimName="Stop") {
+		arm_animator.CrossFade(stopAnimName, fade_time, layer);
 	}
 
 
