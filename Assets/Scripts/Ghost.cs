@@ -42,18 +42,7 @@ public class Ghost : MonoBehaviour
 
   string[] ghost_action_strings = {"Charging Escape", "Startled", "Hit Stun" ,"Moving Room" ,"Recovery" ,"Hit Stun" ,"Ragdoll", "Using Power"};
 
-  enum GhostPowers {
-    NONE,
-    WAVE,
-    SLAP,
-  };
-
-  string[] ghost_power_strings = {"-", "Wave", "Slap"};
-
-
-
   GhostAction cur_action;
-  GhostPowers cur_power;
 
   GhostPower[] powers = new GhostPower[2];
   GhostPower active_power;
@@ -195,7 +184,6 @@ public class Ghost : MonoBehaviour
 	break;
       }
       case GhostAction.USING_POWER: {
-	cur_power = GhostPowers.NONE;
 	break;
       }
     };
