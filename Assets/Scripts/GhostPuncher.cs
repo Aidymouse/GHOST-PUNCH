@@ -121,9 +121,9 @@ public class GhostPuncher : MonoBehaviour
 				ti_punch_again.reset();	
 
 				if (ti_charge_up.finished()) {
-					doMegaPunch();
+					DoMegaPunch();
 				} else {
-					doPunch(defaults.PUNCH_FORCE);
+					DoPunch();
 				}
 
 				ti_charge_up.deactivate();
@@ -165,16 +165,17 @@ public class GhostPuncher : MonoBehaviour
 
 	}
 
-	void doMegaPunch() {
-		ChangeAnimation("CHARGE_PUNCH");
-		doPunch(defaults.MEGAPUNCH_FORCE, false);
+	void DoPunch() {
+		ChangeAnimation("PUNCH_"+punch_with);
+		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_POISE_DAMAGE);
 	}
 
+	void DoMegaPunch() {
+		ChangeAnimation("CHARGE_PUNCH");
+		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE);
+	}
 
-	void doPunch(float force, bool do_anim = true) {
-		if (do_anim) {
-			ChangeAnimation("PUNCH_"+punch_with);
-		}
+	void ExecutePunch(float force, float object_damage, float poise_damage) {
 
 		// Cast a ray - jeff says should be a box
 		RaycastHit attack_hit;
@@ -193,13 +194,13 @@ public class GhostPuncher : MonoBehaviour
 				return;
 			}
 
+			Punch punch = new Punch(ray_dir, force, object_damage, poise_damage);
+
 			if (hit_col.CompareTag("BreakableObject")) {
 				BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
-				Punch punch = new Punch(ray_dir, force, 1, 5);
 				bo.GetPunched(punch, attack_hit);
 
 			} else if (hit_col.CompareTag("Ghost")) {
-				Punch punch = new Punch(ray_dir, force, 1, 5);
 				Ghost g = hit_col.gameObject.GetComponent<Ghost>();
 				g.GetPunched(punch);
 				ectoplasm += 5;
