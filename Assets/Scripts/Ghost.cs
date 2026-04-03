@@ -342,6 +342,7 @@ public class Ghost : MonoBehaviour
     foreach (Rigidbody rb in rig_rbs) {
       rb.detectCollisions = true;
       rb.useGravity = true;
+	  rb.isKinematic = false;
     }
     foreach (CharacterJoint joint in rig_joints) {
       joint.enableCollision = true;
@@ -355,6 +356,7 @@ public class Ghost : MonoBehaviour
     foreach (Rigidbody rb in rig_rbs) {
       rb.detectCollisions = false;
       rb.useGravity = false;
+		rb.isKinematic = true;
     }
     foreach (CharacterJoint joint in rig_joints) {
       joint.enableCollision = false;
