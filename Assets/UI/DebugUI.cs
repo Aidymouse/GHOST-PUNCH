@@ -4,6 +4,10 @@ using TMPro;
 public class DebugUI : MonoBehaviour
 {
 
+		public Ghost ghost;
+		public GhostPuncher ghost_puncher;
+		
+
     TMP_Text ui_debug1; // Ghost action
     TMP_Text ui_debug2; // Ghost hitstun timer
     TMP_Text ui_debug3; 
@@ -46,6 +50,9 @@ public class DebugUI : MonoBehaviour
 	}
       }
     }
+
+		void Update() {
+		}
 
     public void SetDebug1(string text){
       ui_debug1.SetText(text);

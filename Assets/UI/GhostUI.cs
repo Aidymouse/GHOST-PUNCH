@@ -3,7 +3,9 @@ using TMPro;
 
 public class GhostUI : MonoBehaviour
 {
-    public float escape_meter;
+		public Ghost ghost;
+		public GhostPuncher ghost_puncher;
+
     TMP_Text ui_escape_meter;
     TMP_Text ui_ectoplasm;
 
@@ -31,13 +33,13 @@ public class GhostUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+			UpdateEscapeMeter(ghost.escape_meter);
         
     }
 
     public void UpdateEscapeMeter(float value) {
 
-      escape_meter = value;
-      ui_escape_meter.SetText("" + escape_meter);
+      ui_escape_meter.SetText("" + value);
 
     }
 

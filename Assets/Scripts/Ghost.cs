@@ -11,8 +11,6 @@ public class Ghost : MonoBehaviour
   public GhostPowerAttribs power_attribs;
   //public GhostUI UIData;
   //
-  public GhostUI ui;
-  public DebugUI debug_ui;
   public bool ragdoll;
 
   public float escape_meter;
@@ -61,7 +59,7 @@ public class Ghost : MonoBehaviour
   // Spawns when the ghost uses her wave power
   public GameObject wave_orb;
 
-  public NavMeshAgent nav_agent;
+  NavMeshAgent nav_agent;
 
   Timer ti_hit_stun;
   // Reset every time the ghost gets hit. Resets hit stun resistance on finish
@@ -179,18 +177,8 @@ public class Ghost : MonoBehaviour
 
     tick_timers();
 
-
-    UpdateDebug();
-
   }
 
-  void UpdateDebug() {
-    if (debug_ui) {
-      string ghost_state = ghost_action_strings[(int)cur_action];
-      string ghost_power = ghost_power_strings[(int)cur_power];
-      //debug_ui.SetGhostState(ghost_state, ghost_power, ghost_power_timer);
-    }
-  }
 
   void EnterAction(GhostAction action) {
     // Logic based on what state we're leaving
@@ -275,8 +263,6 @@ public class Ghost : MonoBehaviour
 
     float old_escape = escape_meter;
     escape_meter += Time.deltaTime;
-
-    ui.UpdateEscapeMeter(escape_meter);
 
     if (escape_meter >= escape_needed) {
       Debug.Log("You lose!");
@@ -400,4 +386,8 @@ public class Ghost : MonoBehaviour
     }
   }
 
+
+	/** GETTERS */
+
+	public NavMeshAgent get_nav_agent() { return nav_agent; }
 }
