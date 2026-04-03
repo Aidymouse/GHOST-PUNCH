@@ -291,8 +291,7 @@ public class Ghost : MonoBehaviour
 
   /**** POWERS ****/
   void PickRandomPower() {
-	//int power_index = Random.Range(0, powers.Length);
-	int power_index = 1; // slap
+	int power_index = power_attribs.OVERRIDE_POWER_IDX == -1 ? Random.Range(0, powers.Length) : power_attribs.OVERRIDE_POWER_IDX; 
     active_power = powers[power_index];
     active_power.Reset();
     active_power.Start();
