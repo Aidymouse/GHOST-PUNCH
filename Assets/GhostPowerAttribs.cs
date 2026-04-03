@@ -30,4 +30,6 @@ public class GhostPowerAttribs : ScriptableObject
     public float SLAP_ACTIVE_DELAY_TIME;
     [Tooltip("(seconds) time the hitbox is active")]
     public float SLAP_ACTIVE_TIME;
+    [Tooltip("Distance of ghost to be counter as a slap")]
+    public float SLAP_HIT_DISTANCE;
 }
