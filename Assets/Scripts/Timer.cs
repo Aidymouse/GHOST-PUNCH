@@ -62,6 +62,10 @@ public class Timer
     return this.active;
   }
 
+	public float percent_complete() {
+		return this.time_remaining / this.default_time;
+	}
+
 
 
 }

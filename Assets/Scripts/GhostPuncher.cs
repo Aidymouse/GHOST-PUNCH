@@ -37,6 +37,9 @@ public class GhostPuncher : MonoBehaviour
 	float push_power;
 	float push_power_decay = 25;
 
+	// UI Control Vars. That is - cleared or manipulated by UI ONLY!
+	public bool uiFlag_slapped_this_frame;
+
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -235,8 +238,8 @@ public class GhostPuncher : MonoBehaviour
 	}
 
 	public void GetSlapped() {
-		Debug.Log("Ouch, I got slapped!");
-		// TODO: Spawn red on UI
+		// Used by UI
+		uiFlag_slapped_this_frame = true;
 	}
 
 }
