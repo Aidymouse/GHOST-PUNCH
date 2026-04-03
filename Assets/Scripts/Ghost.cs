@@ -51,9 +51,11 @@ public class Ghost : MonoBehaviour
   string[] ghost_power_strings = {"-", "Wave", "Slap"};
 
 
+
   GhostAction cur_action;
   GhostPowers cur_power;
 
+  GhostPower[] powers = new GhostPower[2];
   GhostPower active_power;
 
   // Spawns when the ghost uses her wave power
@@ -118,6 +120,11 @@ public class Ghost : MonoBehaviour
 
     escape_meter = 0;
     escape_needed = 60;
+
+	/* Powers */
+	// Set up last so any objects retrieved in constructors are present
+	powers[0] = new GhostPower_Wave(this, power_attribs);
+	powers[1] = new GhostPower_Slap(this, power_attribs);
 
     EnterAction(GhostAction.MOVING_ROOM);
 
@@ -296,7 +303,10 @@ public class Ghost : MonoBehaviour
 
   /**** POWERS ****/
   void PickRandomPower() {
-    active_power = new GhostPower_Slap(this, power_attribs);
+	//int power_index = Random.Range(0, powers.Length);
+	int power_index = 1; // slap
+    active_power = powers[power_index];
+    active_power.Reset();
     active_power.Start();
   }
 

@@ -46,6 +46,19 @@ class GhostPower {
     phase = GhostPowerPhase.CHARGING;
   }
 
+	/* Power objects get instantiated once and re-used. The reset method puts a power back into its first state */
+  public virtual void Reset() {
+		ti_charge.deactivate();
+		ti_active_delay.deactivate();
+		ti_active.deactivate();
+		ti_hang.deactivate();
+		ti_charge.reset();
+		ti_active_delay.reset();
+		ti_active.reset();
+		ti_hang.reset();
+		this.phase = GhostPowerPhase.PRE_CHARGE;
+  }
+
   /** Default update fn just does these events
    * More hands on updates can implement their own update method
    * **/
@@ -131,6 +144,7 @@ class GhostPower {
   public virtual void OnEndHang() {
     phase = GhostPowerPhase.DONE;
   }
+
 
 
 }
