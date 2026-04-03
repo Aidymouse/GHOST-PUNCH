@@ -54,6 +54,12 @@ public class GhostUI : MonoBehaviour
 			hurt_indicator.color = hurt_color;
 		} 
 
+		if (ti_hurt_indicator.finished_this_frame()) {
+			Color hurt_color = hurt_indicator.color;
+			hurt_color.a = 0.0f;
+			hurt_indicator.color = hurt_color;
+		}
+
 		if (ghost_puncher.uiFlag_slapped_this_frame) {
 			TriggerHurtIndicator();
 			ghost_puncher.uiFlag_slapped_this_frame = false;
@@ -75,7 +81,7 @@ public class GhostUI : MonoBehaviour
 
 	public void TriggerHurtIndicator() {
 		Color hurt_color = hurt_indicator.color;
-		hurt_color.a = 6;
+		hurt_color.a = 0.6f;
 		hurt_indicator.color = hurt_color;
 		//hurt_indicator.color.a = 1;
 		ti_hurt_indicator.reset();
