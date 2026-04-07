@@ -12,5 +12,7 @@ public class GhostDefaults : ScriptableObject
     public float POISE;
     [Tooltip("If the ghost isn't hit for this much time, her poise replenishes to full")]
     public float POISE_RESTORE_TIMER;
+    [Tooltip("Time spent ragdolled after being SMASHED!")]
+    public float RAGDOLL_TIME;
 
 }
