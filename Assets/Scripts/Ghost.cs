@@ -7,367 +7,408 @@ using UnityEditor;
 public class Ghost : MonoBehaviour
 {
 
-  public GhostDefaults defaults;
-  public GhostPowerAttribs power_attribs;
-  //public GhostUI UIData;
-  //
-  public bool ragdoll;
+	public GhostDefaults defaults;
+	public GhostPowerAttribs power_attribs;
+	//public GhostUI UIData;
+	//
+	public bool ragdoll;
 
-  public float escape_meter;
-  public float escape_needed;
+	public float escape_meter;
+	public float escape_needed;
 
-  // If false, the ghost will do small staggers on hit.
-  bool small_hit_resist;
+	// If false, the ghost will do small staggers on hit.
+	bool small_hit_resist;
 
-  public GameObject ghostPuncher;
+	public GameObject ghostPuncher;
 
-  /** Used to find colliders and rigidbodies for switching between ragdoll and animator */
-  public GameObject rig;
+	/** Used to find colliders and rigidbodies for switching between ragdoll and animator */
+	public GameObject rig;
 
-  GameObject nav_destination;
-  ParticleSystem charge_particles;
-  Animator anim;
+	GameObject nav_destination;
+	ParticleSystem charge_particles;
+	Animator anim;
 
-  enum GhostAction {
-    CHARGING_ESCAPE,
-    STARTLED,
-    HITSTUN,
-    MOVING_ROOM,
-    RECOVERY,
-    HIT_STUN,
-    RAGDOLL,
+	enum GhostAction {
+		CHARGING_ESCAPE,
+		STARTLED,
+		HITSTUN,
+		MOVING_ROOM,
+		HIT_STUN,
+		RAGDOLL,
+		RECOVERY,
 
-    USING_POWER,
-  };
+		USING_POWER,
+	};
 
-  string[] ghost_action_strings = {"Charging Escape", "Startled", "Hit Stun" ,"Moving Room" ,"Recovery" ,"Hit Stun" ,"Ragdoll", "Using Power"};
+	string[] ghost_action_strings = {"Charging Escape", "Startled", "Hit Stun" ,"Moving Room" ,"Recovery" ,"Hit Stun" ,"Ragdoll", "Recovery", "Using Power"};
 
-  GhostAction cur_action;
+	GhostAction cur_action;
 
-  GhostPower[] powers;
-  GhostPower active_power;
+	GhostPower[] powers;
+	GhostPower active_power;
 
-  // Spawns when the ghost uses her wave power
-  public GameObject wave_orb;
+	// Spawns when the ghost uses her wave power
+	public GameObject wave_orb;
 
-  NavMeshAgent nav_agent;
+	NavMeshAgent nav_agent;
 
-  Timer ti_hit_stun;
-  Timer ti_restore_poise;
+	Timer ti_hit_stun;
+	Timer ti_ragdoll;
+	Timer ti_restore_poise;
 
-  // When poise hit's 0, the ghost staggers / goes flying, depending on strength
-  float poise;
+	// When poise hit's 0, the ghost staggers / goes flying, depending on strength
+	float poise;
 
-  Rigidbody[] rig_rbs;
-  Collider[] rig_colliders;
-  CharacterJoint[] rig_joints;
+	Rigidbody[] rig_rbs;
+	Collider[] rig_colliders;
+	CharacterJoint[] rig_joints;
 
-  float turn_speed;
-  // Start is called once before the first execution of Update after the MonoBehaviour is created
-  void Start()
-  {
+	float turn_speed;
+	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Start()
+	{
 
-    rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
-    rig_colliders = rig.GetComponentsInChildren<Collider>();
-    rig_joints = rig.GetComponentsInChildren<CharacterJoint>();
+		rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
+		rig_colliders = rig.GetComponentsInChildren<Collider>();
+		rig_joints = rig.GetComponentsInChildren<CharacterJoint>();
 
-    DisableRagdoll();
+		DisableRagdoll();
 
-	poise = defaults.POISE;
+		poise = defaults.POISE;
 
-    turn_speed = defaults.TURN_SPEED;
+		turn_speed = defaults.TURN_SPEED;
 
-    /* Timers */
-    ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
-	ti_restore_poise = new Timer(0, defaults.POISE_RESTORE_TIMER);
+		/* Timers */
+		ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
+		ti_restore_poise = new Timer(0, defaults.POISE_RESTORE_TIMER);
+		ti_ragdoll = new Timer(0, defaults.RAGDOLL_TIME);
 
-    /* Animator */
-    anim = this.GetComponentInChildren<Animator>();
+		/* Animator */
+		anim = this.GetComponentInChildren<Animator>();
 
-    /* Nav Settings */
-    nav_agent = GetComponent<NavMeshAgent>();
-    nav_agent.updateRotation = false;
-    //nav_agent.destination = nav_destination.position;
+		/* Nav Settings */
+		nav_agent = GetComponent<NavMeshAgent>();
+		nav_agent.updateRotation = false;
+		//nav_agent.destination = nav_destination.position;
 
-    charge_particles = GetComponentInChildren<ParticleSystem>();
+		charge_particles = GetComponentInChildren<ParticleSystem>();
 
-    //nav_destination = null;
+		//nav_destination = null;
 
-    escape_meter = 0;
-    escape_needed = 60;
+		escape_meter = 0;
+		escape_needed = 60;
 
-	/* Powers */
-	// Set up last so any objects retrieved in constructors are present
-	powers = new GhostPower[2];
-	powers[0] = new GhostPower_Wave(this, power_attribs);
-	powers[1] = new GhostPower_Slap(this, power_attribs);
+		/* Powers */
+		// Set up last so any objects retrieved in constructors are present
+		powers = new GhostPower[2];
+		powers[0] = new GhostPower_Wave(this, power_attribs);
+		powers[1] = new GhostPower_Slap(this, power_attribs);
 
-    EnterAction(GhostAction.MOVING_ROOM);
+		EnterAction(GhostAction.MOVING_ROOM);
 
-  }
-
-  // Update is called once per frame
-  public void Update()
-  {
-
-
-
-    /* Rotate towards ghost puncher */
-    // TODO: when we flee we should look that direction instead
-    Vector3 toGhostPuncher = ghostPuncher.transform.position - transform.position;
-    toGhostPuncher.y = 0;
-    Quaternion ghostPuncher_angle = Quaternion.LookRotation(toGhostPuncher);
-    float turn_speed = 100;
-    transform.rotation = Quaternion.RotateTowards(transform.rotation, ghostPuncher_angle, turn_speed * Time.deltaTime);
-
-
-    /* Rotate nav agent always towards its next target (infinite turn speed) */
-    Vector3 to_target = nav_agent.steeringTarget - transform.position;
-    if (to_target.magnitude > 0) {
-      to_target.y = 0;
-      Quaternion target_angle = Quaternion.LookRotation(to_target);
-      nav_agent.transform.rotation = target_angle;
-    }
-    //transform.TurnTowards(ghostPuncher.transform);
-
-    /* Actions */
-    switch (cur_action) {
-      case GhostAction.CHARGING_ESCAPE: {
-	state_ChargingEscape();
-	break;
-      }
-      case GhostAction.MOVING_ROOM: {
-	state_MovingRoom();
-	break;
-      }
-      case GhostAction.HIT_STUN: {
-	state_HitStun();
-	break;
-      }
-      case GhostAction.USING_POWER: {
-	//state_HitStun();
-	state_UsingPower();
-	break;
-      }
-
-    }
-
-    tick_timers();
-
-  }
-
-
-  void EnterAction(GhostAction action) {
-    // Logic based on what state we're leaving
-    switch (cur_action) {
-      case GhostAction.CHARGING_ESCAPE: {
-	charge_particles.Stop();
-	break;
-      }
-      case GhostAction.USING_POWER: {
-	break;
-      }
-    };
-
-    // Enter New State Logic
-    switch (action) {
-      case GhostAction.CHARGING_ESCAPE: {
-	// TODO: If we can see the player (i.e. they kept pace with us well), skip straight to choosing a power.
-	charge_particles.Play();
-	cur_action = action;
-	ChangeAnimation("ChargeEscape");
-	break;
-      }
-
-      case GhostAction.MOVING_ROOM: {
-	if (nav_destination == null) {
-	  // Pick a room - do a power first
-	  // TODO: forbid this from being the room we're currently in
-	  GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
-	  int dest_idx = Random.Range(0, destinations.Length);
-	  GameObject dest_obj = destinations[dest_idx];
-	  // WARN: this could be a problem if there's only one nav destination on the 
-	  while ((transform.position - dest_obj.transform.position).magnitude < 2) {
-	    dest_idx = Random.Range(0, destinations.Length);
-	    dest_obj = destinations[dest_idx];
-	  }
-	  nav_agent.destination = dest_obj.transform.position;
-	  nav_destination = dest_obj;
-
-	  // If we were moving when we got hit, we have not cleared our desired destination
-	} else {
-	  nav_agent.destination = nav_destination.transform.position;
 	}
 
-	cur_action = action;
-	break;
-      }
-
-      case GhostAction.HIT_STUN: {
-
-	ti_hit_stun.reset();
-
-	nav_agent.isStopped = true;
-	cur_action = action;
-	break;
-      }
-
-      case GhostAction.USING_POWER: {
-	cur_action = action;
-	PickRandomPower();
-	break;
-      }
-    }
-
-  }
+	// Update is called once per frame
+	public void Update()
+	{
 
 
 
+		/* Rotate towards ghost puncher */
+		// TODO: when we flee we should look that direction instead
+		Vector3 toGhostPuncher = ghostPuncher.transform.position - transform.position;
+		toGhostPuncher.y = 0;
+		Quaternion ghostPuncher_angle = Quaternion.LookRotation(toGhostPuncher);
+		float turn_speed = 100;
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, ghostPuncher_angle, turn_speed * Time.deltaTime);
 
 
-  /** STATES **/
+		/* Rotate nav agent always towards its next target (infinite turn speed) */
+		Vector3 to_target = nav_agent.steeringTarget - transform.position;
+		if (to_target.magnitude > 0) {
+			to_target.y = 0;
+			Quaternion target_angle = Quaternion.LookRotation(to_target);
+			nav_agent.transform.rotation = target_angle;
+		}
+		//transform.TurnTowards(ghostPuncher.transform);
 
-  void state_MovingRoom() {
-    // Are we at the room? If so, start charging. Otherwise, keep moving.
-    // Handcled in OnTriggerEnter
-  }
+		/* Actions */
+		switch (cur_action) {
+			case GhostAction.CHARGING_ESCAPE: 
+				state_ChargingEscape();
+				break;
+											  
+			case GhostAction.MOVING_ROOM: 
+				state_MovingRoom();
+				break;
+										  
+			case GhostAction.HIT_STUN: 
+				state_HitStun();
+				break;
 
-  void state_ChargingEscape() {
-    // TODO: be making wubwubwubwubwubwubwub sound
+			case GhostAction.RAGDOLL: 
+				state_Ragdoll();
+				break;
 
-    float old_escape = escape_meter;
-    escape_meter += Time.deltaTime;
+			case GhostAction.RECOVERY: 
+				state_Recovery();
+				break;
 
-    if (escape_meter >= escape_needed) {
-      Debug.Log("You lose!");
-    }
-    // Can I see the player? Have I seen them for some amount of timer? Startle!
-  }
+			case GhostAction.USING_POWER: 
+				//state_HitStun();
+				state_UsingPower();
+				break;
+										  
 
-  void state_HitStun() {
-    ti_hit_stun.tick(Time.deltaTime);
+		}
 
-    if (ti_hit_stun.finished_this_frame()) {
-      nav_agent.isStopped = false;
+		tick_timers();
 
-      if (nav_destination == null) {
-	EnterAction(GhostAction.USING_POWER);
-      } else {
-	EnterAction(GhostAction.MOVING_ROOM);
-      }
+	}
 
 
-    }
-  }
+	void EnterAction(GhostAction action) {
+		// Logic based on what state we're leaving
+		switch (cur_action) {
+			case GhostAction.CHARGING_ESCAPE: 
+				charge_particles.Stop();
+				break;
 
-  void state_UsingPower() {
-    active_power.Update();
+			case GhostAction.USING_POWER: 
+				break;
 
-    if (active_power.phase == GhostPower.GhostPowerPhase.DONE) {
-      LeavePower();
-    }
-  }
+			case GhostAction.RAGDOLL:
+				DisableRagdoll();
+				EnableAnimator();
+				break;
 
-  /**** POWERS ****/
-  void PickRandomPower() {
-	int power_index = power_attribs.OVERRIDE_POWER_IDX == -1 ? Random.Range(0, powers.Length) : power_attribs.OVERRIDE_POWER_IDX; 
-    active_power = powers[power_index];
-    active_power.Reset();
-    active_power.Start();
-  }
+		};
 
-  void LeavePower() {
-    active_power.End();
 
-    if (Random.Range(1,4) == 3) {
-      PickRandomPower();
-    } else {
-      EnterAction(GhostAction.MOVING_ROOM);
-    }
-  }
 
-  void tick_timers() {
-  }
+		// Enter New State Logic
+		switch (action) {
+			case GhostAction.CHARGING_ESCAPE: 
+				// TODO: If we can see the player (i.e. they kept pace with us well), skip straight to choosing a power.
+				charge_particles.Play();
+				cur_action = action;
+				ChangeAnimation("ChargeEscape");
+				break;
 
-  /** EVENTS **/
-  public void GetPunched(Punch punch) {
-    
-    poise -= punch.PoiseDamage;
 
-    //PlayAnimation("Hit_Cower");
-    if (poise <= 0) {
-		// TODO: depending on hit strength, maybe enter ragdoll instead
-    	EnterAction(GhostAction.HIT_STUN);
-	} else {
-		// TODO: play a random hit animation
-		PlayAnimation("Hurt1");
+			case GhostAction.MOVING_ROOM: 
+				if (nav_destination == null) {
+					// Pick a room - do a power first
+					// TODO: forbid this from being the room we're currently in
+					GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
+					int dest_idx = Random.Range(0, destinations.Length);
+					GameObject dest_obj = destinations[dest_idx];
+					// WARN: this could be a problem if there's only one nav destination on the 
+					while ((transform.position - dest_obj.transform.position).magnitude < 2) {
+						dest_idx = Random.Range(0, destinations.Length);
+						dest_obj = destinations[dest_idx];
+					}
+					nav_agent.destination = dest_obj.transform.position;
+					nav_destination = dest_obj;
 
-		if (cur_action == GhostAction.CHARGING_ESCAPE) {
-			// TODO: there should be a bit of buffer time here or powers come out super fast
-			EnterAction(GhostAction.USING_POWER);
+					// If we were moving when we got hit, we have not cleared our desired destination
+				} else {
+					nav_agent.destination = nav_destination.transform.position;
+				}
+
+				cur_action = action;
+				break;
+
+
+			case GhostAction.HIT_STUN: 
+
+				ti_hit_stun.reset();
+
+				PlayAnimation("Hit_Cower");
+				nav_agent.isStopped = true;
+				cur_action = action;
+				break;
+
+			case GhostAction.RAGDOLL:
+				cur_action = action;
+				ti_ragdoll.reset();
+				DisableAnimator();
+				EnableRagdoll();
+				nav_agent.isStopped = true;
+				break;
+
+			case GhostAction.RECOVERY:
+				cur_action = action;
+				break;
+
+
+			case GhostAction.USING_POWER: 
+				cur_action = action;
+				PickRandomPower();
+				break;
+
+		}
+
+	}
+
+
+
+
+
+	/** STATES **/
+
+	void state_MovingRoom() {
+		// Are we at the room? If so, start charging. Otherwise, keep moving.
+		// Handcled in OnTriggerEnter
+	}
+
+	void state_ChargingEscape() {
+		// TODO: be making wubwubwubwubwubwubwub sound
+
+		float old_escape = escape_meter;
+		escape_meter += Time.deltaTime;
+
+		if (escape_meter >= escape_needed) {
+			Debug.Log("You lose!");
+		}
+		// Can I see the player? Have I seen them for some amount of timer? Startle!
+	}
+
+	void state_HitStun() {
+		ti_hit_stun.tick(Time.deltaTime);
+
+		if (ti_hit_stun.finished_this_frame()) {
+				EnterAction(GhostAction.RECOVERY);
+		}
+	}
+
+	void state_Ragdoll() {
+		ti_ragdoll.tick(Time.deltaTime);
+
+		if (ti_ragdoll.finished_this_frame()) {
+				EnterAction(GhostAction.RECOVERY);
+		}
+
+	}
+
+	void state_Recovery() {
+			nav_agent.isStopped = false;
+
+			if (nav_destination == null) {
+					EnterAction(GhostAction.USING_POWER);
+			} else {
+					EnterAction(GhostAction.MOVING_ROOM);
+			}
+	}
+
+	void state_UsingPower() {
+		active_power.Update();
+
+		if (active_power.phase == GhostPower.GhostPowerPhase.DONE) {
+			LeavePower();
+		}
+	}
+
+	/**** POWERS ****/
+	void PickRandomPower() {
+		int power_index = power_attribs.OVERRIDE_POWER_IDX == -1 ? Random.Range(0, powers.Length) : power_attribs.OVERRIDE_POWER_IDX; 
+		active_power = powers[power_index];
+		active_power.Reset();
+		active_power.Start();
+	}
+
+	void LeavePower() {
+		active_power.End();
+
+		if (Random.Range(1,4) == 3) {
+			PickRandomPower();
+		} else {
+			EnterAction(GhostAction.MOVING_ROOM);
+		}
+	}
+
+	void tick_timers() {
+	}
+
+	/** EVENTS **/
+	public void GetPunched(Punch punch) {
+
+		if (poise <= 0 && cur_action != GhostAction.HIT_STUN) {
+			// TODO: depending on hit strength, maybe enter ragdoll instead
+			//EnterAction(GhostAction.HIT_STUN);
+			EnterAction(GhostAction.RAGDOLL);
+		} else {
+			poise -= punch.PoiseDamage;
+
+			// TODO: play a random hit animation
+			PlayAnimation("Hurt1");
+
+			if (cur_action == GhostAction.CHARGING_ESCAPE) {
+				// TODO: there should be a bit of buffer time here or powers come out super fast
+				EnterAction(GhostAction.USING_POWER);
+			}
+		}
+
+
+	}
+
+
+	// TODO: this currently bugs if we're standing in the spot we choose to move to before we choose to move to it
+	public void OnTriggerEnter(Collider trigger) {
+		if (trigger.gameObject == nav_destination) {
+			nav_destination = null;
+			EnterAction(GhostAction.CHARGING_ESCAPE);
 		}
 	}
 
 
-  }
+	// TODO: wrap these in actual state changes so she doesn't keep trying to move around when she's ragdolled
+	void EnableAnimator() {
+		DisableRagdoll();
+		anim.enabled = true;
+	}
 
+	void DisableAnimator() {
+		anim.enabled = false;
+	}
 
-  // TODO: this currently bugs if we're standing in the spot we choose to move to before we choose to move to it
-  public void OnTriggerEnter(Collider trigger) {
-    if (trigger.gameObject == nav_destination) {
-      nav_destination = null;
-      EnterAction(GhostAction.CHARGING_ESCAPE);
-    }
-  }
+	void PlayAnimation(string new_anim) {
+		//anim.Rewind(new_anim);
+		anim.Play(new_anim, -1, 0.0f);
+	}
 
+	public void ChangeAnimation(string new_anim, float fade_time=0f) {
+		anim.CrossFade(new_anim, fade_time);
+	}
 
-  // TODO: wrap these in actual state changes so she doesn't keep trying to move around when she's ragdolled
-  void EnableAnimator() {
-    DisableRagdoll();
-    anim.enabled = true;
-  }
+	void EnableRagdoll() {
+		DisableAnimator();
+		foreach (Collider col in rig_colliders) {
+			col.enabled = true;
+		}
+		foreach (Rigidbody rb in rig_rbs) {
+			rb.detectCollisions = true;
+			rb.useGravity = true;
+			rb.isKinematic = false;
+		}
+		foreach (CharacterJoint joint in rig_joints) {
+			joint.enableCollision = true;
+		}
+	}
 
-  void DisableAnimator() {
-    anim.enabled = false;
-  }
-
-  void PlayAnimation(string new_anim) {
-    //anim.Rewind(new_anim);
-    anim.Play(new_anim, -1, 0.0f);
-  }
-
-  public void ChangeAnimation(string new_anim, float fade_time=0f) {
-    anim.CrossFade(new_anim, fade_time);
-  }
-
-  void EnableRagdoll() {
-    DisableAnimator();
-    foreach (Collider col in rig_colliders) {
-      col.enabled = true;
-    }
-    foreach (Rigidbody rb in rig_rbs) {
-      rb.detectCollisions = true;
-      rb.useGravity = true;
-	  rb.isKinematic = false;
-    }
-    foreach (CharacterJoint joint in rig_joints) {
-      joint.enableCollision = true;
-    }
-  }
-
-  void DisableRagdoll() {
-    foreach (Collider col in rig_colliders) {
-      col.enabled = false;
-    }
-    foreach (Rigidbody rb in rig_rbs) {
-      rb.detectCollisions = false;
-      rb.useGravity = false;
-		rb.isKinematic = true;
-    }
-    foreach (CharacterJoint joint in rig_joints) {
-      joint.enableCollision = false;
-    }
-  }
+	void DisableRagdoll() {
+		foreach (Collider col in rig_colliders) {
+			col.enabled = false;
+		}
+		foreach (Rigidbody rb in rig_rbs) {
+			rb.detectCollisions = false;
+			rb.useGravity = false;
+			rb.isKinematic = true;
+		}
+		foreach (CharacterJoint joint in rig_joints) {
+			joint.enableCollision = false;
+		}
+	}
 
 
 	/** GETTERS */
