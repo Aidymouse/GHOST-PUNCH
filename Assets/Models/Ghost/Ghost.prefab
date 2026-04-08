@@ -686,7 +686,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3149427366534954570}
-  - component: {fileID: 6253838538564673925}
   m_Layer: 0
   m_Name: DEF-spine.001
   m_TagString: Untagged
@@ -710,33 +709,6 @@ Transform:
   - {fileID: 2607005501693023622}
   m_Father: {fileID: 307023679820868191}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &6253838538564673925
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: -4770177921598283096}
-  serializedVersion: 5
-  m_Mass: 3.125
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &-4563923068997085490
 GameObject:
   m_ObjectHideFlags: 0
@@ -1206,7 +1178,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.0026460837, y: 0.0018752024, z: 0.0021543377}
-  m_Center: {x: -1.1641532e-10, y: 0.00008723524, z: -0.00007625378}
+  m_Center: {x: 0, y: 0.0015, z: 0}
 --- !u!54 &598405550337374266
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1417,7 +1389,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.0010601124
+  m_Radius: 0.000660112
   m_Height: 0.003533708
   m_Direction: 1
   m_Center: {x: 0, y: 0.001766854, z: 0}
@@ -1739,15 +1711,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'DEF-f_middle.01.L'\n\tTransform 'DEF-f_ring.01.R'\n\tTransform
-    'DEF-f_index.01.L'\n\tTransform 'DEF-f_ring.01.L'\n\tTransform 'DEF-hand.L'\n\tTransform
-    'DEF-forearm.R'\n\tTransform 'DEF-f_middle.01.R'\n\tTransform 'DEF-foot.L'\n\tTransform
-    'DEF-shin.R'\n\tTransform 'DEF-f_pinky.01.R'\n\tand more ...\n\tFrom animation
-    clip 'Ghost_Idle'\n\tFrom animation clip 'Ghost_Charge_Escape'\n\tFrom animation
-    clip 'Ghost_HitCower'\n\tFrom animation clip 'Ghost_Slap_Right'\n\tFrom animation
-    clip 'Ghost_Slap_Left'\n\tFrom animation clip 'Ghost_HitCower'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -2321,7 +2285,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.0009914814
+  m_Radius: 0.000560112
   m_Height: 0.0039659254
   m_Direction: 1
   m_Center: {x: 0, y: 0.0019829627, z: 0}
@@ -2808,7 +2772,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.0009914815
+  m_Radius: 0.000560112
   m_Height: 0.003965926
   m_Direction: 1
   m_Center: {x: 0, y: 0.001982963, z: 0}
@@ -3003,7 +2967,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.0010601124
+  m_Radius: 0.000660112
   m_Height: 0.003533708
   m_Direction: 1
   m_Center: {x: 0, y: 0.001766854, z: 0}
@@ -3439,8 +3403,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Ghost
   defaults: {fileID: 11400000, guid: f65ac4378dccf01439f9d94d46eefaed, type: 2}
   power_attribs: {fileID: 11400000, guid: fc65ad9f8851a8a57b643e0d517af7a8, type: 2}
-  ui: {fileID: 0}
-  debug_ui: {fileID: 0}
   ragdoll: 0
   escape_meter: 0
   escape_needed: 60
@@ -3574,7 +3536,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.0009463993
+  m_Radius: 0.0005463993
   m_Height: 0.0047319965
   m_Direction: 1
   m_Center: {x: 0, y: 0.0023659982, z: 0}
@@ -3769,7 +3731,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.00094639976
+  m_Radius: 0.0005463998
   m_Height: 0.004731999
   m_Direction: 1
   m_Center: {x: 0, y: 0.0023659994, z: 0}
