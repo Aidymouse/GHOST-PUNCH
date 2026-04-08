@@ -1156,6 +1156,7 @@ Transform:
   - {fileID: 3149427366534954570}
   - {fileID: 754931441554146854}
   - {fileID: 1000492186300746579}
+  - {fileID: 8206483196524396470}
   m_Father: {fileID: -6247945034147084998}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &8574979419287139184
@@ -1805,12 +1806,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1331380771203910140}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.07, y: 1.003, z: 0.07}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.022533298, y: 0.000000119179006, z: 0.0000000026861784, w: 0.9997461}
+  m_LocalPosition: {x: 0.0007000002, y: 0.0010272866, z: 0.0008931022}
+  m_LocalScale: {x: 0.01, y: 0.010000003, z: 0.010000003}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6297242645450633799}
+  m_Father: {fileID: 307023679820868191}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &768437122288896829
 Light:
@@ -3362,7 +3363,6 @@ GameObject:
   - component: {fileID: 3144165178190365273}
   - component: {fileID: 5282436875883076793}
   - component: {fileID: 7419865137658449099}
-  - component: {fileID: 7889548759369145673}
   m_Layer: 6
   m_Name: Ghost
   m_TagString: Ghost
@@ -3386,7 +3386,6 @@ Transform:
   - {fileID: 7139870346701416738}
   - {fileID: -8679921383154817045}
   - {fileID: 6187503951013725587}
-  - {fileID: 8206483196524396470}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3144165178190365273
@@ -3403,7 +3402,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Ghost
   defaults: {fileID: 11400000, guid: f65ac4378dccf01439f9d94d46eefaed, type: 2}
   power_attribs: {fileID: 11400000, guid: fc65ad9f8851a8a57b643e0d517af7a8, type: 2}
-  ragdoll: 0
+  rig_core: {fileID: 598405550337374266}
   escape_meter: 0
   escape_needed: 60
   ghostPuncher: {fileID: 0}
@@ -3454,33 +3453,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!54 &7889548759369145673
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6642700044538931453}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 10
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
 --- !u!1 &6751027727628168915
 GameObject:
   m_ObjectHideFlags: 0
