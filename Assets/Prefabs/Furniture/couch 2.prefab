@@ -138,7 +138,7 @@ MonoBehaviour:
   broken_obj: {fileID: 0}
   hp: 20000
   rotation_offset: {x: 0, y: 0, z: 0}
-  hit_particles: {fileID: 0}
+  hit_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
   break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
 --- !u!65 &3376070021765295479
 BoxCollider:
@@ -359,7 +359,7 @@ MonoBehaviour:
   broken_obj: {fileID: 0}
   hp: 20000
   rotation_offset: {x: 0, y: 0, z: 0}
-  hit_particles: {fileID: 0}
+  hit_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
   break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
 --- !u!65 &8542372518341760798
 BoxCollider:
@@ -396,6 +396,7 @@ GameObject:
   - component: {fileID: 4369122354867681098}
   - component: {fileID: 7847248206906555185}
   - component: {fileID: 2554457452788718547}
+  - component: {fileID: 9180188190551339321}
   m_Layer: 6
   m_Name: couch_top_2.001
   m_TagString: BreakableObject
@@ -483,7 +484,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4733483520356139763}
   serializedVersion: 5
-  m_Mass: 0.3
+  m_Mass: 0.7
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -517,7 +518,7 @@ MonoBehaviour:
   broken_obj: {fileID: 0}
   hp: 20000
   rotation_offset: {x: 0, y: 0, z: 0}
-  hit_particles: {fileID: 0}
+  hit_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
   break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
 --- !u!65 &2554457452788718547
 BoxCollider:
@@ -540,6 +541,45 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.008168967, y: 0.0016588772, z: 0.0047363373}
   m_Center: {x: -0.0046117883, y: 0.0025117309, z: 0.007014996}
+--- !u!59 &9180188190551339321
+HingeJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4733483520356139763}
+  serializedVersion: 3
+  m_ConnectedBody: {fileID: 7683785292491695667}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: -0.004, y: 0.0025, z: 0.00458}
+  m_Axis: {x: 0, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_UseSpring: 0
+  m_Spring:
+    spring: 0
+    damper: 0
+    targetPosition: 0
+  m_UseMotor: 0
+  m_Motor:
+    targetVelocity: 0
+    force: 0
+    freeSpin: 0
+  m_UseLimits: 1
+  m_ExtendedLimits: 0
+  m_UseAcceleration: 0
+  m_Limits:
+    min: -10
+    max: 80
+    bounciness: 0
+    bounceMinVelocity: 0.2
+    contactDistance: 0
+  m_BreakForce: 200
+  m_BreakTorque: 200
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &4969418281840302617
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,6 +632,7 @@ GameObject:
   - component: {fileID: 1692119997231427094}
   - component: {fileID: 5743507388922635286}
   - component: {fileID: 5821484193065586154}
+  - component: {fileID: 5890455139812415217}
   m_Layer: 6
   m_Name: couch_top_1.001
   m_TagString: BreakableObject
@@ -679,7 +720,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5314078598700960304}
   serializedVersion: 5
-  m_Mass: 0.3
+  m_Mass: 0.7
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -713,7 +754,7 @@ MonoBehaviour:
   broken_obj: {fileID: 0}
   hp: 20000
   rotation_offset: {x: 0, y: 0, z: 0}
-  hit_particles: {fileID: 0}
+  hit_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
   break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
 --- !u!65 &5821484193065586154
 BoxCollider:
@@ -736,6 +777,45 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.008168967, y: 0.0016588772, z: 0.0047363373}
   m_Center: {x: 0.004561789, y: 0.0025117309, z: 0.007014996}
+--- !u!59 &5890455139812415217
+HingeJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5314078598700960304}
+  serializedVersion: 3
+  m_ConnectedBody: {fileID: 7683785292491695667}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: 0.004, y: 0.0025, z: 0.00458}
+  m_Axis: {x: 0, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_UseSpring: 0
+  m_Spring:
+    spring: 0
+    damper: 0
+    targetPosition: 0
+  m_UseMotor: 0
+  m_Motor:
+    targetVelocity: 0
+    force: 0
+    freeSpin: 0
+  m_UseLimits: 1
+  m_ExtendedLimits: 0
+  m_UseAcceleration: 0
+  m_Limits:
+    min: -10
+    max: 80
+    bounciness: 0
+    bounceMinVelocity: 0.2
+    contactDistance: 0
+  m_BreakForce: 200
+  m_BreakTorque: 200
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &7025257892148804145
 GameObject:
   m_ObjectHideFlags: 0
@@ -750,6 +830,7 @@ GameObject:
   - component: {fileID: 6726760853718279224}
   - component: {fileID: 820436323371741971}
   - component: {fileID: 7714786659479960450}
+  - component: {fileID: 5839602732986628634}
   m_Layer: 6
   m_Name: couch_top_2.002
   m_TagString: BreakableObject
@@ -837,7 +918,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7025257892148804145}
   serializedVersion: 5
-  m_Mass: 0.3
+  m_Mass: 0.7
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -871,7 +952,7 @@ MonoBehaviour:
   broken_obj: {fileID: 0}
   hp: 20000
   rotation_offset: {x: 0, y: 0, z: 0}
-  hit_particles: {fileID: 0}
+  hit_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
   break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
 --- !u!65 &7714786659479960450
 BoxCollider:
@@ -894,6 +975,45 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.008168967, y: 0.0016588772, z: 0.0047363373}
   m_Center: {x: -0.0044500465, y: 0.0025117309, z: 0.007014996}
+--- !u!59 &5839602732986628634
+HingeJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7025257892148804145}
+  serializedVersion: 3
+  m_ConnectedBody: {fileID: 7683785292491695667}
+  m_ConnectedArticulationBody: {fileID: 0}
+  m_Anchor: {x: -0.0045, y: 0.0025, z: 0.00458}
+  m_Axis: {x: 0, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_UseSpring: 0
+  m_Spring:
+    spring: 0
+    damper: 0
+    targetPosition: 0
+  m_UseMotor: 0
+  m_Motor:
+    targetVelocity: 0
+    force: 0
+    freeSpin: 0
+  m_UseLimits: 1
+  m_ExtendedLimits: 0
+  m_UseAcceleration: 0
+  m_Limits:
+    min: -10
+    max: 80
+    bounciness: 0
+    bounceMinVelocity: 0.2
+    contactDistance: 0
+  m_BreakForce: 200
+  m_BreakTorque: 200
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &8246980554928288367
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,7 +1149,7 @@ MonoBehaviour:
   broken_obj: {fileID: 0}
   hp: 20000
   rotation_offset: {x: 0, y: 0, z: 0}
-  hit_particles: {fileID: 0}
+  hit_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
   break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
 --- !u!65 &1734399949010060336
 BoxCollider:
@@ -1187,7 +1307,7 @@ MonoBehaviour:
   broken_obj: {fileID: 0}
   hp: 20000
   rotation_offset: {x: 0, y: 0, z: 0}
-  hit_particles: {fileID: 0}
+  hit_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
   break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
 --- !u!65 &8155899896174149354
 BoxCollider:
