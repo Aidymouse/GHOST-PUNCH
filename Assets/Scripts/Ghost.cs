@@ -215,9 +215,9 @@ public class Ghost : MonoBehaviour
 	  int dest_idx = Random.Range(0, destinations.Length);
 	  GameObject dest_obj = destinations[dest_idx];
 	  // WARN: this could be a problem if there's only one nav destination on the map. So don't do that.
-	  while ((transform.position - dest_obj.transform.position).magnitude < 2) {
-	    dest_idx = Random.Range(0, destinations.Length);
-	    dest_obj = destinations[dest_idx];
+	  if ((transform.position - dest_obj.transform.position).magnitude < 2) {
+		EnterAction(GhostActions.CHARGING_ESCAPE);
+		return;
 	  }
 	  nav_agent.destination = dest_obj.transform.position;
 	  nav_destination = dest_obj;
