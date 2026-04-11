@@ -201,7 +201,7 @@ public class GhostPuncher : MonoBehaviour
 
 			if (hit_col.CompareTag("BreakableObject")) {
 				BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
-				bo.GetPunched(punch, attack_hit);
+				bo.GetPunched(punch, attack_hit.point);
 
 			} else if (hit_col.CompareTag("Ghost")) {
 				Ghost g = hit_col.gameObject.GetComponent<Ghost>();

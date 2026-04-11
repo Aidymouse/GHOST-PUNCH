@@ -12,6 +12,8 @@ public class BreakableObject : MonoBehaviour
 	public ParticleSystem hit_particles;
 	public ParticleSystem break_particles;
 
+	// TODO: hit class resistance matrix
+
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -25,21 +27,51 @@ public class BreakableObject : MonoBehaviour
 
 	}
 
-	public void GetPunched(Punch punch, RaycastHit hit) {
+	public void OnCollisionEnter(Collision col) {
+
+		// If we hit an object
+		if (col.gameObject.tag == "BreakableObject") {
+			if (col.relativeVelocity.magnitude > 6) {
+				// Punch dat freaking object yo!
+				BreakableObject bo = col.gameObject.GetComponent<BreakableObject>();
+				if (bo) {
+					// TODO: make damage based on relative velocity ?
+					Vector3 toCollided = this.transform.position - col.gameObject.transform.position;
+					Punch objectPunch = new Punch(toCollided.normalized, 0, 0, 0, 3);
+					bo.GetPunched(objectPunch, col.contacts[0].point);
+				}
+			}
+		}
+
+		if (col.gameObject.tag == "GhostBodyCollider") {
+			if (col.relativeVelocity.magnitude > 6) {
+				Ghost ghost = col.gameObject.GetComponentInParent<Ghost>();
+				if (ghost) {
+					Debug.Log("Object collision with '" + col.gameObject.tag + "' at " + col.relativeVelocity.magnitude);
+					Punch objectPunch = new Punch(GetComponent<Rigidbody>().linearVelocity.normalized, 0, 0, 1550, 3);
+					ghost.GetPunched(objectPunch);
+				} 			
+		}
+		}
+
+		
+	}
+
+	public void GetPunched(Punch punch, Vector3 hit_point) {
 
 		if (hp > 0) {
 			hp -= punch.ObjectDamage;
 
 			if (hp <= 0) {
 				if (break_particles) {
-					Instantiate(break_particles, hit.point, new Quaternion());
+					Instantiate(break_particles, hit_point, new Quaternion());
 				}
 				Break(punch.Force, punch.Direction);
 			} else {
 				// spawn particles
 				// TODO: rotation
 				if (hit_particles) {
-					Instantiate(hit_particles, hit.point, new Quaternion());
+					Instantiate(hit_particles, hit_point, new Quaternion());
 				}
 
 				Rigidbody rb = this.GetComponent<Rigidbody>();

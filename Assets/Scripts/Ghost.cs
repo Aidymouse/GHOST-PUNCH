@@ -441,9 +441,9 @@ public class Ghost : MonoBehaviour
 
   void EnableRagdoll() {
     DisableAnimator();
-    foreach (Collider col in rig_colliders) {
+    /*foreach (Collider col in rig_colliders) {
       col.enabled = true;
-    }
+    }*/
     foreach (Rigidbody rb in rig_rbs) {
       rb.detectCollisions = true;
       rb.useGravity = true;
@@ -455,11 +455,11 @@ public class Ghost : MonoBehaviour
   }
 
   void DisableRagdoll() {
-    foreach (Collider col in rig_colliders) {
+    /*foreach (Collider col in rig_colliders) {
       col.enabled = false;
-    }
+    }*/
     foreach (Rigidbody rb in rig_rbs) {
-      rb.detectCollisions = false;
+      //rb.detectCollisions = false;
       rb.useGravity = false;
       rb.isKinematic = true;
     }
