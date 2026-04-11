@@ -29,8 +29,11 @@ public class BreakableObject : MonoBehaviour
 
 		if (hp > 0) {
 			hp -= punch.ObjectDamage;
+
 			if (hp <= 0) {
-				Instantiate(break_particles, hit.point, new Quaternion());
+				if (break_particles) {
+					Instantiate(break_particles, hit.point, new Quaternion());
+				}
 				Break(punch.Force, punch.Direction);
 			} else {
 				// spawn particles
