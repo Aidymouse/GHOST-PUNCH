@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 [CreateAssetMenu(fileName = "GhostPowerAttribs", menuName = "Scriptable Objects/GhostPowerAttribs")]
 public class GhostPowerAttribs : ScriptableObject
@@ -26,6 +27,7 @@ public class GhostPowerAttribs : ScriptableObject
     public float WAVE_HANG_TIME;
     // [Tooltip("How fast the wave travels")]
     // public float WAVE_SPEED;
+
 	[Header("Slap Power Attributes")]
     [Tooltip("(seconds)")]
     public float SLAP_CHARGE_TIME;
@@ -39,4 +41,6 @@ public class GhostPowerAttribs : ScriptableObject
     public float SLAP_ACTIVE_TIME;
     [Tooltip("Distance of ghost to be counter as a slap")]
     public float SLAP_HIT_DISTANCE;
+		[Tooltip("The slash effect game object to use")]
+		public GameObject SLASH_EFFECT_OBJECT;
 }

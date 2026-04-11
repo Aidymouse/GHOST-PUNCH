@@ -38,7 +38,7 @@ public class GhostPuncher : MonoBehaviour
 
 	LayerMask layer_punchable;
 
-	const float PUNCH_RANGE = 2;
+	const float PUNCH_RANGE = 3;
 
 	public PuncherDefaults defaults; 
 	public GhostPowerAttribs power_attribs;
@@ -188,8 +188,9 @@ public class GhostPuncher : MonoBehaviour
 		//Vector3 ray_dir = transform.TransformDirection(Vector3.forward);
 		Vector3 ray_dir = cam.transform.TransformDirection(Vector3.forward);
 
+
 		if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, PUNCH_RANGE, layer_punchable)) {
-			Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
+		Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
 
 			Collider hit_col = attack_hit.collider;
 
@@ -203,12 +204,14 @@ public class GhostPuncher : MonoBehaviour
 				BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
 				bo.GetPunched(punch, attack_hit.point);
 
-			} else if (hit_col.CompareTag("Ghost")) {
+			} else if (hit_col.CompareTag("Ghost") || hit_col.CompareTag("GhostBodyCollider")) {
 				Ghost g = hit_col.gameObject.GetComponent<Ghost>();
+				if (!g) {
+					g = hit_col.gameObject.GetComponentInParent<Ghost>();
+				}
 				g.GetPunched(punch);
 				ectoplasm += 5;
-			}
-
+			} 
 
 
 		}

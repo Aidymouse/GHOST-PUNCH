@@ -1,12 +1,17 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.VFX;
 
 class GhostPower_Slap : GhostPower {
 
 	NavMeshAgent nav_agent;
+	GameObject slash_effect_obj;
+	VisualEffect slash_vfx;
 
 	public GhostPower_Slap(Ghost myghost, GhostPowerAttribs attrs) : base(myghost, attrs, attrs.SLAP_CHARGE_TIME, attrs.SLAP_ACTIVE_DELAY_TIME, attrs.SLAP_ACTIVE_TIME, attrs.SLAP_HANG_TIME) {
 		nav_agent = this.ghost.get_nav_agent();
+		slash_effect_obj = Ghost.Instantiate(attrs.SLASH_EFFECT_OBJECT, myghost.transform);
+		slash_vfx = slash_effect_obj.GetComponent<VisualEffect>();
 	}
 
 	public override void Start() {
@@ -15,6 +20,7 @@ class GhostPower_Slap : GhostPower {
 		Vector3 ghostPuncher_position = ghost.ghostPuncher.transform.position;
 		nav_agent.destination = ghost.ghostPuncher.transform.position;
 		nav_agent.stoppingDistance = attrs.SLAP_DISTANCE;
+
 		// Intentionally don't start timer phases yet
 	}
 
@@ -52,6 +58,8 @@ class GhostPower_Slap : GhostPower {
 			this.ghost.escape_meter += 10;
 			this.ghost.ghostPuncher.GetComponent<GhostPuncher>().GetSlapped();
 		}
+		slash_vfx.Play();
+		
 
 
 	}
