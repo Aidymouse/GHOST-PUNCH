@@ -2,16 +2,19 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public struct Punch {
-	public Punch(Vector3 direction, float force, float object_damage, float poise_damage) {
+	public Punch(Vector3 direction, float force, float object_damage, float poise_damage, int hitClass) {
 		Direction = direction;
 		Force = force;
 		ObjectDamage = object_damage;
 		PoiseDamage = poise_damage;
+		HitClass = hitClass;
 	}
 	public Vector3 Direction;
 	public float Force;
 	public float ObjectDamage;
 	public float PoiseDamage;
+	// 1st class punch is the strongest, 2nd class is a normal punch
+	public int HitClass;
 };
 
 public class GhostPuncher : MonoBehaviour
@@ -167,15 +170,15 @@ public class GhostPuncher : MonoBehaviour
 
 	void DoPunch() {
 		ChangeAnimation("PUNCH_"+punch_with);
-		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_POISE_DAMAGE);
+		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2);
 	}
 
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
-		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE);
+		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1);
 	}
 
-	void ExecutePunch(float force, float object_damage, float poise_damage) {
+	void ExecutePunch(float force, float object_damage, float poise_damage, int hitClass) {
 
 		// Cast a ray - jeff says should be a box
 		RaycastHit attack_hit;
@@ -194,7 +197,7 @@ public class GhostPuncher : MonoBehaviour
 				return;
 			}
 
-			Punch punch = new Punch(ray_dir, force, object_damage, poise_damage);
+			Punch punch = new Punch(ray_dir, force, object_damage, poise_damage, hitClass);
 
 			if (hit_col.CompareTag("BreakableObject")) {
 				BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
