@@ -39,4 +39,12 @@ public class GhostPowerAttribs : ScriptableObject
     public float SLAP_HIT_DISTANCE;
 		[Tooltip("The slash effect game object to use")]
 		public GameObject SLASH_EFFECT_OBJECT;
+
+	[Header("Scream Power Attributes")]
+    public float SCREAM_CHARGE_TIME;
+    public float SCREAM_HANG_TIME;
+    public float SCREAM_ACTIVE_DELAY_TIME;
+    public float SCREAM_ACTIVE_TIME;
+    [Tooltip("Distance of ghost to be counter as a slap")]
+    public float SCREAM_HIT_DISTANCE;
 }
