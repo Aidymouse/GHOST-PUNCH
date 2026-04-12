@@ -6,9 +6,9 @@ public struct Punch {
 		Direction = direction;
 		Force = force;
 		ObjectDamage = object_damage;
+		GhostDamage = ghost_damage;
 		PoiseDamage = poise_damage;
 		HitClass = hitClass;
-		GhostDamage = ghost_damage;
 	}
 	public Vector3 Direction;
 	public float Force;
@@ -270,16 +270,10 @@ public class GhostPuncher : MonoBehaviour
 
 
 	/** EVENTS **/
-	void OnTriggerEnter(Collider trig) {
-		if (trig.name == "WaveOrb(Clone)") {
-			Vector3 to_wave_orb = transform.position - trig.transform.position;
-			to_wave_orb.y = 0;
 
-			push_dir = to_wave_orb.normalized;
-			push_power = power_attribs.WAVE_POWER;
-
-			Debug.Log("Hit wave orb! " + trig.name);
-		}
+	public void GetPushed(Vector3 dir, float power) {
+			push_dir = dir.normalized;
+			push_power = power;
 	}
 
 	public void GetSlapped() {

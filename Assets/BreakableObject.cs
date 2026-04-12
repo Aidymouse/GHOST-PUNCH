@@ -65,6 +65,10 @@ public class BreakableObject : MonoBehaviour
 		
 	}
 
+	public void GetPunched(Punch punch) {
+		GetPunched(punch, transform.position);
+	}
+
 	public void GetPunched(Punch punch, Vector3 hit_point) {
 
 			// Roundabout logic lets us treat -1 as infinite HP

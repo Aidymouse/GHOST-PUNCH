@@ -7,8 +7,8 @@ public class GhostPowerAttribs : ScriptableObject
 
 
 	[Header("Power Debug Tools")]
-	[Tooltip("Sets the default power index. Set to -1 to pick a random power. (0) Wave; (1) Slap;")]
-	[Range(-1,1)]
+	[Tooltip("Sets the default power index. Set to -1 to pick a random power. (0) Wave; (1) Slap; (2) Scream; ")]
+	[Range(-1,2)]
 	public int OVERRIDE_POWER_IDX;
 
     /** WAVE POWER **/

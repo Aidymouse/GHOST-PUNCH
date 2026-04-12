@@ -106,9 +106,10 @@ public class Ghost : MonoBehaviour
 
 		/* Powers */
 		// Set up last so any objects retrieved in constructors are present
-		powers = new GhostPower[2];
+		powers = new GhostPower[3];
 		powers[0] = new GhostPower_Wave(this, power_attribs);
 		powers[1] = new GhostPower_Slap(this, power_attribs);
+		powers[2] = new GhostPower_Scream(this, power_attribs);
 
 		EnterAction(GhostAction.MOVING_ROOM);
 
