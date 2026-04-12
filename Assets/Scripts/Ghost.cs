@@ -18,6 +18,8 @@ public class Ghost : MonoBehaviour
 
 	// If false, the ghost will do small staggers on hit.
 	bool small_hit_resist;
+	// Hit points
+	float hp;
 
 	public GameObject ghostPuncher;
 
@@ -79,6 +81,8 @@ public class Ghost : MonoBehaviour
 
 		turn_speed = defaults.TURN_SPEED;
 
+		hp = defaults.HP;
+
 		/* Timers */
 		ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
 		ti_restore_poise = new Timer(0, defaults.POISE_RESTORE_TIMER);
@@ -102,9 +106,10 @@ public class Ghost : MonoBehaviour
 
 		/* Powers */
 		// Set up last so any objects retrieved in constructors are present
-		powers = new GhostPower[2];
+		powers = new GhostPower[3];
 		powers[0] = new GhostPower_Wave(this, power_attribs);
 		powers[1] = new GhostPower_Slap(this, power_attribs);
+		powers[2] = new GhostPower_Scream(this, power_attribs);
 
 		EnterAction(GhostAction.MOVING_ROOM);
 
@@ -356,9 +361,8 @@ public class Ghost : MonoBehaviour
 	/** EVENTS **/
 	public void GetPunched(Punch punch) {
 
-		Debug.Log("Ow! "+punch);
-
-		if (vulnerable && punch.HitClass <= 1) {
+		// 1 is mega punch and 3 is big object hit
+		if (vulnerable && (punch.HitClass == 1 || punch.HitClass == 3)) {
 			Ragdoll(punch);
 			return;
 		}

@@ -12,6 +12,13 @@ public class BreakableObject : MonoBehaviour
 	public ParticleSystem hit_particles;
 	public ParticleSystem break_particles;
 
+	public float poise_damage = 0;
+	public float ghost_damage = 0;
+	public float object_damage = 0;
+	public float force = 0;
+	[Tooltip("(3) heavy object; (4) light object")]
+	public int hit_class = 4;
+
 	// TODO: hit class resistance matrix
 
 
@@ -29,7 +36,7 @@ public class BreakableObject : MonoBehaviour
 
 	public void OnCollisionEnter(Collision col) {
 
-		// If we hit an object
+		// We don't need to worry about dealing damage from incoming objects because their breakable object scripts will take care of it
 		if (col.gameObject.tag == "BreakableObject") {
 			if (col.relativeVelocity.magnitude > 6) {
 				// Punch dat freaking object yo!
@@ -37,32 +44,43 @@ public class BreakableObject : MonoBehaviour
 				if (bo) {
 					// TODO: make damage based on relative velocity ?
 					Vector3 toCollided = this.transform.position - col.gameObject.transform.position;
-					Punch objectPunch = new Punch(toCollided.normalized, 0, 0, 0, 3);
+					Punch objectPunch = new Punch(toCollided.normalized, force, object_damage, ghost_damage, poise_damage, hit_class);
 					bo.GetPunched(objectPunch, col.contacts[0].point);
 				}
 			}
-		}
-
-		if (col.gameObject.tag == "GhostBodyCollider") {
+		} else if (col.gameObject.tag == "GhostBodyCollider") {
 			if (col.relativeVelocity.magnitude > 6) {
 				Ghost ghost = col.gameObject.GetComponentInParent<Ghost>();
 				if (ghost) {
 					Debug.Log("Object collision with '" + col.gameObject.tag + "' at " + col.relativeVelocity.magnitude);
-					Punch objectPunch = new Punch(GetComponent<Rigidbody>().linearVelocity.normalized, 0, 0, 1550, 3);
+					Punch objectPunch = new Punch(GetComponent<Rigidbody>().linearVelocity.normalized, force, object_damage, ghost_damage, poise_damage, hit_class);
 					ghost.GetPunched(objectPunch);
 				} 			
-		}
-		}
+			}
 
+			// The ghost should also deal damage to me!
+		} else {
+			// This thing won't be damaging me, so I should take damage.
+		}
 		
+	}
+
+	public void GetPunched(Punch punch) {
+		GetPunched(punch, transform.position);
 	}
 
 	public void GetPunched(Punch punch, Vector3 hit_point) {
 
-		if (hp > 0) {
-			hp -= punch.ObjectDamage;
+			// Roundabout logic lets us treat -1 as infinite HP
+			bool broken_this_punch = false;
+			if (hp > 0) {
+				hp -= punch.ObjectDamage;
+				if (hp <= 0) {
+					broken_this_punch = true;
+				}
+			}
 
-			if (hp <= 0) {
+			if (broken_this_punch) {
 				if (break_particles) {
 					Instantiate(break_particles, hit_point, new Quaternion());
 				}
@@ -83,7 +101,6 @@ public class BreakableObject : MonoBehaviour
 					rb.AddForce(blast_dir.normalized * punch.Force);
 				}
 			}
-		}
 
 
 	}

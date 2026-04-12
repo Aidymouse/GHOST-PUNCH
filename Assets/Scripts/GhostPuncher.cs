@@ -2,10 +2,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public struct Punch {
-	public Punch(Vector3 direction, float force, float object_damage, float poise_damage, int hitClass) {
+	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
 		Direction = direction;
 		Force = force;
 		ObjectDamage = object_damage;
+		GhostDamage = ghost_damage;
 		PoiseDamage = poise_damage;
 		HitClass = hitClass;
 	}
@@ -13,7 +14,8 @@ public struct Punch {
 	public float Force;
 	public float ObjectDamage;
 	public float PoiseDamage;
-	// 1st class punch is the strongest, 2nd class is a normal punch
+	public float GhostDamage;
+	// 1st class punch is the strongest, 2nd class is a normal punch, 3 is big object, 4 is light object
 	public int HitClass;
 };
 
@@ -170,15 +172,15 @@ public class GhostPuncher : MonoBehaviour
 
 	void DoPunch() {
 		ChangeAnimation("PUNCH_"+punch_with);
-		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2);
+		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2);
 	}
 
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
-		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1);
+		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_GHOST_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1);
 	}
 
-	void ExecutePunch(float force, float object_damage, float poise_damage, int hitClass) {
+	void ExecutePunch(float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
 
 		// Cast a ray - jeff says should be a box
 		RaycastHit attack_hit;
@@ -198,7 +200,7 @@ public class GhostPuncher : MonoBehaviour
 				return;
 			}
 
-			Punch punch = new Punch(ray_dir, force, object_damage, poise_damage, hitClass);
+			Punch punch = new Punch(ray_dir, force, object_damage, ghost_damage, poise_damage, hitClass);
 
 			if (hit_col.CompareTag("BreakableObject")) {
 				BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
@@ -268,16 +270,10 @@ public class GhostPuncher : MonoBehaviour
 
 
 	/** EVENTS **/
-	void OnTriggerEnter(Collider trig) {
-		if (trig.name == "WaveOrb(Clone)") {
-			Vector3 to_wave_orb = transform.position - trig.transform.position;
-			to_wave_orb.y = 0;
 
-			push_dir = to_wave_orb.normalized;
-			push_power = power_attribs.WAVE_POWER;
-
-			Debug.Log("Hit wave orb! " + trig.name);
-		}
+	public void GetPushed(Vector3 dir, float power) {
+			push_dir = dir.normalized;
+			push_power = power;
 	}
 
 	public void GetSlapped() {

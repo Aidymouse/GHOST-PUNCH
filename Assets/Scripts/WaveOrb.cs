@@ -6,6 +6,12 @@ public class WaveOrb : MonoBehaviour
 	public ParticleSystem wave_particles;
 	public Vector3 particle_offset;
 	public float life_timer;
+
+	public GhostPowerAttribs attrs;
+
+	public float object_damage;
+	public float object_force;
+
 	Timer life;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -28,5 +34,27 @@ public class WaveOrb : MonoBehaviour
 			Destroy(this.gameObject);
 		}
 
+	}
+
+	void OnTriggerEnter(Collider col) {
+
+		
+		if (col.gameObject.CompareTag("BreakableObject")) {
+			Vector3 dir = (col.transform.position - transform.position).normalized;
+			dir.y = 0;
+			Punch wave_punch = new Punch(dir, object_force, object_damage, 0, 0, 5);
+			BreakableObject bo = col.gameObject.GetComponent<BreakableObject>();
+			if (bo) {
+				bo.GetPunched(wave_punch);
+			}
+		} else if (col.gameObject.CompareTag("GhostPuncher")) {
+			Debug.Log("I hit the ghost puncher!");
+				GhostPuncher gp = col.gameObject.GetComponent<GhostPuncher>();
+				if (gp) {
+						Vector3 dir = (col.transform.position - transform.position).normalized;
+						dir.y = 0;
+						gp.GetPushed(dir, attrs.WAVE_POWER);
+				}
+		}
 	}
 }
