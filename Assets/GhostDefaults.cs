@@ -4,6 +4,8 @@ using UnityEngine;
 public class GhostDefaults : ScriptableObject
 {
 
+    [Tooltip("Amount of hit points")]
+    public float HP;
     [Tooltip("How fast (in degress/second I think) the ghost rotates towards you")]
     public float TURN_SPEED;
     [Tooltip("How long the ghost is stunned for")]

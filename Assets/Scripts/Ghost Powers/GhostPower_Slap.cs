@@ -50,6 +50,7 @@ class GhostPower_Slap : GhostPower {
 	public override void OnEndCharge() {
 		ghost.ChangeAnimation("Power_SlapLeft");
 	}
+
 	public override void OnEndActiveDelay() {
 
 		float dist_to_gp = (this.ghost.transform.position - this.ghost.ghostPuncher.transform.position).magnitude;

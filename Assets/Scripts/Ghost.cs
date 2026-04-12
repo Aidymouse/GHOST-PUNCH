@@ -18,6 +18,8 @@ public class Ghost : MonoBehaviour
 
 	// If false, the ghost will do small staggers on hit.
 	bool small_hit_resist;
+	// Hit points
+	float hp;
 
 	public GameObject ghostPuncher;
 
@@ -78,6 +80,8 @@ public class Ghost : MonoBehaviour
 		poise = defaults.POISE;
 
 		turn_speed = defaults.TURN_SPEED;
+
+		hp = defaults.HP;
 
 		/* Timers */
 		ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
@@ -356,9 +360,8 @@ public class Ghost : MonoBehaviour
 	/** EVENTS **/
 	public void GetPunched(Punch punch) {
 
-		Debug.Log("Ow! "+punch);
-
-		if (vulnerable && punch.HitClass <= 1) {
+		// 1 is mega punch and 3 is big object hit
+		if (vulnerable && (punch.HitClass == 1 || punch.HitClass == 3)) {
 			Ragdoll(punch);
 			return;
 		}
