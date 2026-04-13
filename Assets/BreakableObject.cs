@@ -9,7 +9,6 @@ public class BreakableObject : MonoBehaviour
 	/* When the broken object spawns, apply this rotation. */
 	public Vector3 rotation_offset;
 	// TODO: damage reduction modifier ?
-	public ParticleSystem spawn_particles;
 	[Tooltip("Particles spawned at hit location when hit")]
 	public ParticleSystem hit_particles;
 	[Tooltip("Particles spawned for each child object when breaking into pieces")]
