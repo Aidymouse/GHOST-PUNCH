@@ -9,8 +9,13 @@ public class BreakableObject : MonoBehaviour
 	/* When the broken object spawns, apply this rotation. */
 	public Vector3 rotation_offset;
 	// TODO: damage reduction modifier ?
+	public ParticleSystem spawn_particles;
+	[Tooltip("Particles spawned at hit location when hit")]
 	public ParticleSystem hit_particles;
+	[Tooltip("Particles spawned for each child object when breaking into pieces")]
 	public ParticleSystem break_particles;
+	[Tooltip("Particles this object spawns for itself when it breaks")]
+	public ParticleSystem break_self_particles;
 
 	public float poise_damage = 0;
 	public float ghost_damage = 0;
@@ -81,8 +86,8 @@ public class BreakableObject : MonoBehaviour
 			}
 
 			if (broken_this_punch) {
-				if (break_particles) {
-					Instantiate(break_particles, hit_point, new Quaternion());
+				if (break_self_particles) {
+					Instantiate(break_self_particles, hit_point, new Quaternion());
 				}
 				Break(punch.Force, punch.Direction);
 			} else {
