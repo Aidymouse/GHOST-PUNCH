@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections.Generic;
 
 public struct Punch {
 	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
@@ -19,8 +18,6 @@ public struct Punch {
 	// 1st class punch is the strongest, 2nd class is a normal punch, 3 is big object, 4 is light object
 	public int HitClass;
 };
-
-
 
 public class GhostPuncher : MonoBehaviour
 {
@@ -58,11 +55,6 @@ public class GhostPuncher : MonoBehaviour
 	float push_power;
 	float push_power_decay = 25;
 
-	float speed_penalty;
-	Timer ti_slowed;
-
-	List<Status> statuses = new List<Status>();
-
 	// UI Control Vars. That is - cleared or manipulated by UI ONLY!
 	public bool uiFlag_slapped_this_frame;
 
@@ -88,7 +80,6 @@ public class GhostPuncher : MonoBehaviour
 		ti_charge_up = new Timer(0, 0.5f);
 		ti_charge_up.deactivate();
 
-		speed_penalty = 0;
 	}
 
 	// Update is called once per frame
@@ -148,11 +139,6 @@ public class GhostPuncher : MonoBehaviour
 		// Moving
 		Vector3 move_vec = controller.isGrounded ? new Vector3(0, 0, 0) : Physics.gravity;
 		Vector3 desired_control_vec = moveControls();
-
-		float speed_multiplier = 1 - GetSlowMultiplier();
-
-		desired_control_vec *= speed_multiplier;
-
 		move_vec += desired_control_vec;
 
 		if (desired_control_vec.magnitude > 0) {
@@ -267,14 +253,6 @@ public class GhostPuncher : MonoBehaviour
 		ti_punch_cooldown.tick(Time.deltaTime);
 		ti_punch_again.tick(Time.deltaTime);
 		ti_charge_up.tick(Time.deltaTime);
-
-	
-		for (int i=statuses.Count-1; i>=0; i--) {
-			statuses[i].Duration.tick(Time.deltaTime);
-			if (statuses[i].Duration.finished()) {
-				statuses.RemoveAt(i);
-			}
-		}
 	}
 
 	void ChangeAnimation(string name, float fade=0) {
@@ -292,6 +270,7 @@ public class GhostPuncher : MonoBehaviour
 
 
 	/** EVENTS **/
+
 	public void GetPushed(Vector3 dir, float power) {
 			push_dir = dir.normalized;
 			push_power = power;
@@ -302,22 +281,6 @@ public class GhostPuncher : MonoBehaviour
 		uiFlag_slapped_this_frame = true;
 	}
 
-	public void AddStatus(Status new_status) {
-		statuses.Add(new_status);
-	}
-
-	/** STATUS **/
-	float GetSlowMultiplier() {
-		float total_slow_multiplier = 0;
-
-		for (int i=statuses.Count-1; i>=0; i--) {
-			if (statuses[i].StatusType == StatusTypes.SLOWED) {
-				total_slow_multiplier += statuses[i].Slot1;
-			}
-		}
-
-		return total_slow_multiplier;
-	}
 }
 
 
