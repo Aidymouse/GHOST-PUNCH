@@ -9,6 +9,7 @@ public class GhostUI : MonoBehaviour
 
 	TMP_Text ui_escape_meter;
 	TMP_Text ui_ectoplasm;
+	TMP_Text txt_youlose;
 
 	Image hurt_indicator;
 
@@ -25,14 +26,19 @@ public class GhostUI : MonoBehaviour
 
 		foreach (TMP_Text text in texts) {
 			switch (text.name) {
-				case "EscapeMeter": {
-										ui_escape_meter = text;
-										break;
-									}
-				case "Ectoplasm": {
-														ui_ectoplasm = text;
-														break;
-													}
+				case "EscapeMeter": 
+					ui_escape_meter = text;
+					break;
+
+				case "Ectoplasm": 
+					ui_ectoplasm = text;
+					break;
+
+				case "YouLose":
+					txt_youlose = text;
+					text.enabled = false;
+					break;
+
 			}
 		}
 
@@ -45,6 +51,10 @@ public class GhostUI : MonoBehaviour
 		TickTimers();
 
 		UpdateEscapeMeter(ghost.escape_meter);
+
+		if (ghost.Escaped()) {
+			EnableYouLose();
+		}
 
 
 		/** Hurt Indicator **/
@@ -85,5 +95,9 @@ public class GhostUI : MonoBehaviour
 		hurt_indicator.color = hurt_color;
 		//hurt_indicator.color.a = 1;
 		ti_hurt_indicator.reset();
+	}
+
+	public void EnableYouLose() {
+		txt_youlose.enabled = true;
 	}
 }

@@ -101,9 +101,6 @@ public class Ghost : MonoBehaviour
 
 		//nav_destination = null;
 
-		escape_meter = 0;
-		escape_needed = 60;
-
 		/* Powers */
 		// Set up last so any objects retrieved in constructors are present
 		powers = new GhostPower[3];
@@ -284,11 +281,12 @@ public class Ghost : MonoBehaviour
 		// TODO: be making wubwubwubwubwubwubwub sound
 
 		float old_escape = escape_meter;
+		bool prevEscaped = Escaped();
 		escape_meter += Time.deltaTime;
-
-		if (escape_meter >= escape_needed) {
-			Debug.Log("You lose!");
+		if (!prevEscaped && Escaped()) {
+			ghostPuncher.GetComponent<GhostPuncher>().EndRun();
 		}
+
 		// Can I see the player? Have I seen them for some amount of timer? Startle!
 	}
 
@@ -427,6 +425,12 @@ public class Ghost : MonoBehaviour
 		return cur_action == GhostAction.RAGDOLL;
 	}
 
+	public bool Escaped() {
+		return escape_meter >= escape_needed;
+	}
+
+	/** RAGDOLL **/
+
 	// TODO: wrap these in actual state changes so she doesn't keep trying to move around when she's ragdolled
 	void EnableAnimator() {
 		DisableRagdoll();
@@ -474,6 +478,8 @@ public class Ghost : MonoBehaviour
 			joint.enableCollision = false;
 		}
 	}
+
+
 
 
 	/** GETTERS */

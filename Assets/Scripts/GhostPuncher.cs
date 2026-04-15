@@ -52,6 +52,8 @@ public class GhostPuncher : MonoBehaviour
 	bool buffered_punch = false;
 	bool buffered_charge = false;
 
+	public Vector3 lose_point;
+
 	Animator arm_animator;
 
 	Vector3 push_dir;
@@ -304,6 +306,11 @@ public class GhostPuncher : MonoBehaviour
 
 	public void AddStatus(StatusEffect new_status) {
 		statuses.Add(new_status);
+	}
+
+	public void EndRun() {
+		this.transform.position = lose_point;
+
 	}
 
 	/** STATUS **/
