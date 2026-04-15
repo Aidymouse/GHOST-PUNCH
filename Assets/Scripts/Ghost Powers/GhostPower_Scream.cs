@@ -10,6 +10,13 @@ class GhostPower_Scream : GhostPower {
 	public override void OnEndActiveDelay() {
 		// TODO: spawn cylinder? 
 		// Anything within is 
+		if ((ghost.ghostPuncher.transform.position - ghost.transform.position).magnitude < attrs.SCREAM_HIT_DISTANCE) {
+
+
+			StatusEffect slowed = new S_Slowed(attrs.SCREAM_SPEED_REDUCTION_DURATION, attrs.SCREAM_SPEED_REDUCTION);
+
+			ghost.ghostPuncher.GetComponent<GhostPuncher>().AddStatus(slowed);
+		}
 	}
 
 }
