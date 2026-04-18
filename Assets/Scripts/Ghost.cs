@@ -44,6 +44,8 @@ public class Ghost : MonoBehaviour
 
 	public GhostAction cur_action;
 
+	public ParticleSystem ectoplasm_particles;
+
 	GhostPower[] powers;
 	GhostPower active_power;
 
@@ -359,6 +361,7 @@ public class Ghost : MonoBehaviour
 	/** EVENTS **/
 	public void GetPunched(Punch punch) {
 
+
 		// 1 is mega punch and 3 is big object hit
 		if (vulnerable && (punch.HitClass == 1 || punch.HitClass == 3)) {
 			Ragdoll(punch);
@@ -371,6 +374,10 @@ public class Ghost : MonoBehaviour
 		}
 	
 		poise -= punch.PoiseDamage;
+
+		if (ectoplasm_particles) {
+			Instantiate(ectoplasm_particles, transform.position, new Quaternion());
+		}
 
 		if (poise <= 0) {
 			if (punch.HitClass <= 1) {
