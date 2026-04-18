@@ -129,8 +129,16 @@ MonoBehaviour:
   broken_obj: {fileID: 0}
   hp: 2000
   rotation_offset: {x: 0, y: 0, z: 0}
+  weight: 2
+  attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   hit_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
   break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
+  break_self_particles: {fileID: 0}
+  poise_damage: 0
+  ghost_damage: 0
+  object_damage: 0
+  force: 0
+  hit_class: 4
 --- !u!54 &6027503608220747374
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -333,8 +341,16 @@ MonoBehaviour:
   broken_obj: {fileID: 6741316542421900815, guid: ef8e3eda5d4b6234f908d5ba520398b1, type: 3}
   hp: 400
   rotation_offset: {x: 90, y: 0, z: 0}
+  weight: 4
+  attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   hit_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
   break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
+  break_self_particles: {fileID: 0}
+  poise_damage: 0
+  ghost_damage: 0
+  object_damage: 0
+  force: 0
+  hit_class: 4
 --- !u!54 &2005340074862756859
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -372,7 +388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7974668793410265620}
   m_Layer: 0
-  m_Name: Bed
+  m_Name: bed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
