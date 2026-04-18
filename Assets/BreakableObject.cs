@@ -32,8 +32,11 @@ public class BreakableObject : MonoBehaviour
 	[Header("Custom Hit Attributes")]
 	[Tooltip("How much poise damage to deal when hitting the ghost")]
 	public float poise_damage = 0;
+	[Tooltip("How much HP damage to deal when hitting the ghost")]
 	public float ghost_damage = 0;
+	[Tooltip("How much object damage to deal when smashing into another object")]
 	public float object_damage = 0;
+	[Tooltip("How much physics force to apply when hitting an object (this is in addition to normal physics engine force so usually can be 0)")]
 	public float force = 0;
 	[Tooltip("(3) heavy object; (4) light object")]
 	public int hit_class = 4;
@@ -112,6 +115,7 @@ public class BreakableObject : MonoBehaviour
 		GetPunched(punch, transform.position);
 	}
 
+	/** Apply force, then deal damage. Force should be conserved in Break logic */
 	public void GetPunched(Punch punch, Vector3 hit_point) {
 
 			// spawn particles
@@ -146,31 +150,6 @@ public class BreakableObject : MonoBehaviour
 				if (hp <= 0) {
 					Break(force, hit_dir, hit_point);
 				}
-			}
-
-			if (broken_this_punch) {
-				if (break_self_particles) {
-					Instantiate(break_self_particles, hit_point, new Quaternion());
-				}
-				Break(punch.Force, punch.Direction);
-			} else {
-				// spawn particles
-				// TODO: rotation
-				if (hit_particles) {
-					Instantiate(hit_particles, hit_point, new Quaternion());
-				}
-
-				Rigidbody rb = this.GetComponent<Rigidbody>();
-				if (rb) {
-					Vector3 blast_dir = punch.Direction;
-
-					//crb.constraints = RigidbodyConstraints.None;
-					rb.isKinematic = false;
-					rb.AddForce(blast_dir.normalized * punch.Force);
-				}
-			}
-
-
 	}
 
 	/** Spawn broken object (which may comprise of many smaller objects) and conserve the force I'm experiencing to them **/
@@ -178,6 +157,11 @@ public class BreakableObject : MonoBehaviour
 		Transform initRotation = this.transform;
 		initRotation.Rotate(this.rotation_offset); // Local space ??
 
+		if (break_self_particles) {
+				Instantiate(break_self_particles, hit_point, new Quaternion());
+		}
+
+		// Spawn broken object
 		if (broken_obj) {
 			GameObject broken = Instantiate(broken_obj, this.transform.position, initRotation.rotation);
 
@@ -190,9 +174,6 @@ public class BreakableObject : MonoBehaviour
 				if (break_particles) {
 					Instantiate(break_particles, crb.transform.position, new Quaternion());
 				}
-				Vector3 blast_dir = punch_dir;
-
-				//crb.constraints = RigidbodyConstraints.None;
 				crb.isKinematic = false;
 				crb.AddForce( (velocity+hit_dir).normalized * (velocity.magnitude + force));
 			}
