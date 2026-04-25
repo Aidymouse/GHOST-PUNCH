@@ -88,6 +88,7 @@ public class Ghost : MonoBehaviour
 		poise = defaults.POISE;
 		poiseBar.SetMaxPoise(defaults.POISE);
 		escapeBar.SetMaxEscape(escape_needed);
+		// needs to update on ghost slap somehow too		
 
 		turn_speed = defaults.TURN_SPEED;
 
