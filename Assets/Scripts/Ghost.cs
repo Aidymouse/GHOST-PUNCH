@@ -70,6 +70,12 @@ public class Ghost : MonoBehaviour
 
 	float turn_speed;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
+
+	public HealthBar healthBar;
+	public PoiseBar poiseBar;
+	public EscapeBar escapeBar;
+	// sorry you should probably put these in one script but idk how
+
 	void Start()
 	{
 
@@ -80,10 +86,14 @@ public class Ghost : MonoBehaviour
 		DisableRagdoll();
 
 		poise = defaults.POISE;
+		poiseBar.SetMaxPoise(defaults.POISE);
+		escapeBar.SetMaxEscape(escape_needed);
 
 		turn_speed = defaults.TURN_SPEED;
 
 		hp = defaults.HP;
+		healthBar.SetMaxHealth(defaults.HP);
+		// sets healthbar to max, doesn't update yet
 
 		/* Timers */
 		ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
@@ -285,6 +295,8 @@ public class Ghost : MonoBehaviour
 		float old_escape = escape_meter;
 		bool prevEscaped = Escaped();
 		escape_meter += Time.deltaTime;
+		escapeBar.SetEscape(escape_meter);
+
 		if (!prevEscaped && Escaped()) {
 			ghostPuncher.GetComponent<GhostPuncher>().EndRun();
 		}
@@ -374,6 +386,7 @@ public class Ghost : MonoBehaviour
 		}
 	
 		poise -= punch.PoiseDamage;
+		poiseBar.SetPoise(poise);		
 
 		if (ectoplasm_particles) {
 			Instantiate(ectoplasm_particles, transform.position, new Quaternion());
@@ -405,6 +418,7 @@ public class Ghost : MonoBehaviour
 
 	void RestorePoise() {
 		poise = defaults.POISE;
+		poiseBar.SetPoise(poise);
 	}
 
 	void BecomeVulnerable() {
