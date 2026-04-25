@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: 3212554282771935542}
   - component: {fileID: 7420009110725381289}
   - component: {fileID: 3218267716955017101}
+  - component: {fileID: 3097308151265311111}
   m_Layer: 5
   m_Name: YouLose
   m_TagString: Untagged
@@ -277,7 +278,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: YOU LOSE
+  m_text: KICKED OUT
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a2a123941693c5844bd0b291ffb1c845, type: 2}
   m_sharedMaterial: {fileID: -921008402793433560, guid: a2a123941693c5844bd0b291ffb1c845, type: 2}
@@ -349,6 +350,30 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3097308151265311111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500419522841980338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: EasyTextEffects::EasyTextEffects.TextEffect
+  text: {fileID: 3218267716955017101}
+  usePreset: 0
+  preset: {fileID: 0}
+  tagEffects: []
+  globalEffects:
+  - triggerWhen: 0
+    effect: {fileID: 11400000, guid: b35e91f2ba42c4508990bb116bf016ee, type: 2}
+    onEffectCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    overrideTagEffects: 0
+  updatesPerSecond: 30
 --- !u!1 &538571580882217154
 GameObject:
   m_ObjectHideFlags: 0
@@ -1947,6 +1972,7 @@ GameObject:
   - component: {fileID: 2052624967714113648}
   - component: {fileID: 5505348866823458686}
   - component: {fileID: 5477444386949114462}
+  - component: {fileID: 722674722101068880}
   m_Layer: 5
   m_Name: Status
   m_TagString: Untagged
@@ -2073,6 +2099,30 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &722674722101068880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5944437045118377516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: EasyTextEffects::EasyTextEffects.TextEffect
+  text: {fileID: 5477444386949114462}
+  usePreset: 1
+  preset: {fileID: 0}
+  tagEffects: []
+  globalEffects:
+  - triggerWhen: 0
+    effect: {fileID: 11400000, guid: b35e91f2ba42c4508990bb116bf016ee, type: 2}
+    onEffectCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    overrideTagEffects: 0
+  updatesPerSecond: 11
 --- !u!1 &6054975841442959972
 GameObject:
   m_ObjectHideFlags: 0
