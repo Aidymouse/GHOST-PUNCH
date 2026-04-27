@@ -56,17 +56,19 @@ public class GhostPuncher : MonoBehaviour
 
 	Animator arm_animator;
 
+	// TODO: this could totally be a status effect
 	Vector3 push_dir;
 	float push_power;
 	float push_power_decay = 25;
 
-	float speed_penalty;
-	Timer ti_slowed;
-
 	List<StatusEffect> statuses = new List<StatusEffect>();
+	public List<ParticleSystem> punch_particles = new List<ParticleSystem>();
 
 	// UI Control Vars. That is - cleared or manipulated by UI ONLY!
-	public bool uiFlag_slapped_this_frame;
+	[HideInInspector]
+		public bool uiFlag_slapped_this_frame;
+	[HideInInspector]
+		public bool uiFlag_slowed;
 
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -90,7 +92,6 @@ public class GhostPuncher : MonoBehaviour
 		ti_charge_up = new Timer(0, 0.5f);
 		ti_charge_up.deactivate();
 
-		speed_penalty = 0;
 	}
 
 	// Update is called once per frame
@@ -208,7 +209,7 @@ public class GhostPuncher : MonoBehaviour
 
 
 		if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, PUNCH_RANGE, layer_punchable)) {
-		Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
+			Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
 
 			Collider hit_col = attack_hit.collider;
 
@@ -218,6 +219,12 @@ public class GhostPuncher : MonoBehaviour
 
 			Punch punch = new Punch(ray_dir, force, object_damage, ghost_damage, poise_damage, hitClass);
 
+			// Spawn Punch Particles
+			if (hitClass-1 < punch_particles.Count && punch_particles[hitClass-1]) {
+				Instantiate(punch_particles[hitClass-1], attack_hit.point, new Quaternion());
+			}
+			
+			// Receiver handle punch
 			if (hit_col.CompareTag("BreakableObject")) {
 				BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
 				bo.GetPunched(punch, attack_hit.point);
@@ -270,7 +277,7 @@ public class GhostPuncher : MonoBehaviour
 		ti_punch_again.tick(Time.deltaTime);
 		ti_charge_up.tick(Time.deltaTime);
 
-	
+
 		for (int i=statuses.Count-1; i>=0; i--) {
 			statuses[i].Duration.tick(Time.deltaTime);
 			if (statuses[i].Duration.finished()) {
@@ -295,8 +302,8 @@ public class GhostPuncher : MonoBehaviour
 
 	/** EVENTS **/
 	public void GetPushed(Vector3 dir, float power) {
-			push_dir = dir.normalized;
-			push_power = power;
+		push_dir = dir.normalized;
+		push_power = power;
 	}
 
 	public void GetSlapped() {
