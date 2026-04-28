@@ -34,10 +34,9 @@ public class GhostPuncher : MonoBehaviour
 	Timer ti_punch_again;
 	Timer ti_charge_up;
 
-	public GhostUI ui;
-	public DebugUI debug_ui;
-
 	float move_speed;
+	[HideInInspector]
+	public float stamina;
 
 	int ectoplasm = 0;
 
@@ -62,13 +61,14 @@ public class GhostPuncher : MonoBehaviour
 	float push_power_decay = 25;
 
 	List<StatusEffect> statuses = new List<StatusEffect>();
+	[Tooltip("The position in the list corresponds to the hit class. Slot 1 = hit class 1 (strong punch), etc.")]
 	public List<ParticleSystem> punch_particles = new List<ParticleSystem>();
 
 	// UI Control Vars. That is - cleared or manipulated by UI ONLY!
 	[HideInInspector]
-		public bool uiFlag_slapped_this_frame;
+	public bool uiFlag_slapped_this_frame;
 	[HideInInspector]
-		public bool uiFlag_slowed;
+	public bool uiFlag_slowed;
 
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -189,15 +189,18 @@ public class GhostPuncher : MonoBehaviour
 
 	void DoPunch() {
 		ChangeAnimation("PUNCH_"+punch_with);
-		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2);
+		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_STAMINA);
 	}
 
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
-		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_GHOST_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1);
+		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_GHOST_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1, defaults.MEGAPUNCH_STAMINA);
 	}
 
-	void ExecutePunch(float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
+	void ExecutePunch(float force, float object_damage, float ghost_damage, float poise_damage, int hitClass, float stamina_used) {
+
+		this.stamina -= stamina_used;
+
 
 		// Cast a ray - jeff says should be a box
 		RaycastHit attack_hit;
@@ -221,7 +224,7 @@ public class GhostPuncher : MonoBehaviour
 
 			// Spawn Punch Particles
 			if (hitClass-1 < punch_particles.Count && punch_particles[hitClass-1]) {
-				Instantiate(punch_particles[hitClass-1], attack_hit.point, new Quaternion());
+				Instantiate(punch_particles[hitClass-1], attack_hit.point, this.transform.rotation);
 			}
 			
 			// Receiver handle punch
