@@ -253,6 +253,7 @@ public class Ghost : MonoBehaviour
 
 			case GhostAction.RECOVERY:
 				ti_recovery.activate();
+				// TODO: if the ghost was attacking this should probably be 0...
 				ChangeAnimation("Idle", ti_recovery.time_remaining);
 				cur_action = action;
 				break;
