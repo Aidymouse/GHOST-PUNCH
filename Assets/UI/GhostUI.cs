@@ -12,17 +12,32 @@ public class GhostUI : MonoBehaviour
 	TMP_Text txt_youlose;
 
 	Image hurt_indicator;
+	Image slow_indicator;
 
 	Timer ti_hurt_indicator;
+
+	UIBar ghost_health_bar;
+	UIBar poise_bar;
+	UIBar escape_bar;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
-		TMP_Text[] texts = GetComponentsInChildren<TMP_Text>();
 
-		hurt_indicator = GetComponentInChildren<Image>();
 
 		ti_hurt_indicator = new Timer(0.0f, 0.6f);
+
+		Image[] images = GetComponentsInChildren<Image>();
+		foreach (Image img in images) {
+			switch (img.name) {
+				case "HurtIndicator": {
+					hurt_indicator = img;
+					break;
+				}
+			}
+		}
+
+		TMP_Text[] texts = GetComponentsInChildren<TMP_Text>();
 
 		foreach (TMP_Text text in texts) {
 			switch (text.name) {
@@ -42,6 +57,26 @@ public class GhostUI : MonoBehaviour
 			}
 		}
 
+		UIBar[] bars = GetComponentsInChildren<UIBar>();
+		foreach (UIBar bar in bars) {
+			switch (bar.name) {
+				case "EscapeBar":
+					escape_bar = bar;
+					escape_bar.SetMaxValue(ghost.escape_needed);
+					break;
+				case "PoiseBar":
+					poise_bar = bar;
+					poise_bar.SetMaxValue(ghost.defaults.POISE);
+					break;
+				case "HealthBar":
+					ghost_health_bar = bar;
+					ghost_health_bar.SetMaxValue(ghost.defaults.HP);
+					break;
+			}
+		}
+
+		escape_bar.SetValue(ghost.escape_meter);
+
 		//ui_escape_meter = UnityEngine.GameObject.Find<TMP_Text>("EscapeMeter");
 	}
 
@@ -56,6 +91,9 @@ public class GhostUI : MonoBehaviour
 			EnableYouLose();
 		}
 
+		escape_bar.SetValue(ghost.escape_meter);
+		ghost_health_bar.SetValue(ghost.hp);
+		poise_bar.SetValue(ghost.poise);
 
 		/** Hurt Indicator **/
 		if (!ti_hurt_indicator.finished()) {
@@ -74,6 +112,8 @@ public class GhostUI : MonoBehaviour
 			TriggerHurtIndicator();
 			ghost_puncher.uiFlag_slapped_this_frame = false;
 		}
+
+		/** Slowed Indicator **/
 
 	}
 
