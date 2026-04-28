@@ -44,7 +44,7 @@ Light:
   serializedVersion: 12
   m_Type: 2
   m_Color: {r: 1, g: 0.73434424, b: 0.4666667, a: 1}
-  m_Intensity: 0.7
+  m_Intensity: 0.2
   m_Range: 15.9
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -236,12 +236,12 @@ MonoBehaviour:
   ui: {fileID: 0}
   debug_ui: {fileID: 0}
   defaults: {fileID: 11400000, guid: 48a8d901d4900a847b4f4760c956c68b, type: 2}
-  power_attribs: {fileID: 0}
+  power_attribs: {fileID: 11400000, guid: fc65ad9f8851a8a57b643e0d517af7a8, type: 2}
   lose_point: {x: 0, y: 0, z: 0}
   punch_particles:
   - {fileID: 4226632422216323330, guid: 417989f038870724588a1b48ae583ae9, type: 3}
   - {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
-  uiFlag_slapped_this_frame: 0
+  uiFlag_slapped_this_frame: 1
   uiFlag_slowed: 0
 --- !u!143 &1233107051729008915
 CharacterController:
@@ -261,8 +261,8 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.3
+  m_Height: 1.7
+  m_Radius: 0.1
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -409,6 +409,7 @@ GameObject:
   - component: {fileID: 3010951960943385744}
   - component: {fileID: 3179702319467840720}
   - component: {fileID: 5337797673559904314}
+  - component: {fileID: 3751721390637537685}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -430,6 +431,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4100245199560880615}
+  - {fileID: 2365713439931545000}
   m_Father: {fileID: 9000023764314467486}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &2095396587671259540
@@ -471,7 +473,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 631
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -550,6 +552,83 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   player_transform: {fileID: 9000023764314467486}
   sensitivity: 0.3
+--- !u!114 &3751721390637537685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8352656943790910052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
+--- !u!1 &8469445252680515106
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2365713439931545000}
+  - component: {fileID: 5931265421944529151}
+  m_Layer: 0
+  m_Name: Battle Theme Emitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2365713439931545000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8469445252680515106}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.00000008940697, y: -0, z: -3.5527137e-15, w: 1}
+  m_LocalPosition: {x: -0.13599992, y: -0.161, z: -0.079000264}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 518822545576690959}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5931265421944529151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8469445252680515106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1017652083
+      Data2: 1201001436
+      Data3: -1986002254
+      Data4: -1315536627
+    Path: event:/Battle Theme
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1001 &4570104917694273036
 PrefabInstance:
   m_ObjectHideFlags: 0

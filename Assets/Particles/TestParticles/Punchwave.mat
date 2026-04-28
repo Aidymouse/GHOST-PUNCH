@@ -27,7 +27,6 @@ Material:
   m_ValidKeywords:
   - _DISTORTION_ON
   - _FADING_ON
-  - _NORMALMAP
   - _SOFTPARTICLES_ON
   - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords:
@@ -48,11 +47,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: e0268701e68c9684f9f401eddd4a4b1a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 797d5dfb9c300ac40a6279bc02ac312d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 26f5602b36803f841967e013adb82670, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -91,7 +90,7 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Blend: 0
+    - _Blend: 2
     - _BlendOp: 0
     - _BumpScale: 10
     - _CameraFadingEnabled: 0
@@ -99,14 +98,14 @@ Material:
     - _CameraNearFadeDistance: 1
     - _ColorMode: 0
     - _Cull: 0
-    - _Cutoff: 0
+    - _Cutoff: 0.294
     - _DetailNormalMapScale: 1
     - _DistortionBlend: 0.724
     - _DistortionEnabled: 1
     - _DistortionStrength: 10
     - _DistortionStrengthScaled: 1
-    - _DstBlend: 10
-    - _DstBlendAlpha: 10
+    - _DstBlend: 1
+    - _DstBlendAlpha: 1
     - _EmissionEnabled: 0
     - _FlipbookBlending: 0
     - _FlipbookMode: 0
@@ -130,10 +129,10 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 8.000001, g: 8.000001, b: 8.000001, a: 1}
+    - _BaseColor: {r: 1, g: 0.89411765, b: 0.56078434, a: 1}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 8.000002, g: 8.000002, b: 8.000002, a: 1}
+    - _Color: {r: 1, g: 0.89411765, b: 0.5607843, a: 1}
     - _ColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 1.6792452, g: 3.763418, b: 4, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 1, b: 0, a: 0}
