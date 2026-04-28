@@ -12,6 +12,10 @@ public class PuncherDefaults : ScriptableObject
 	[Tooltip("If punch is clicked while cooldown has this time or less left, the punch input is buffered")]
 	public float PUNCH_BUFFER_TIME;
 
+
+	[Tooltip("Maximum stamina to start with")]
+	public float MAX_STAMINA;
+
 	[Tooltip("Physics force applied in direction of punch to objects")]
 	public float PUNCH_FORCE;
 	[Tooltip("Amount of damage objects take from default punch")]
@@ -20,11 +24,13 @@ public class PuncherDefaults : ScriptableObject
 	public float PUNCH_GHOST_DAMAGE;
 	[Tooltip("Poise damage the ghost takes from a default punch")]
 	public float PUNCH_POISE_DAMAGE;
+	public float PUNCH_STAMINA;
 
 	public float MEGAPUNCH_FORCE;
 	public float MEGAPUNCH_OBJECT_DAMAGE;
 	[Tooltip("Damage the ghost takes from a mega punch")]
 	public float MEGAPUNCH_GHOST_DAMAGE;
 	public float MEGAPUNCH_POISE_DAMAGE;
+	public float MEGAPUNCH_STAMINA;
     
 }
