@@ -11,10 +11,18 @@ public class PuncherDefaults : ScriptableObject
 	public float PUNCH_AGAIN;
 	[Tooltip("If punch is clicked while cooldown has this time or less left, the punch input is buffered")]
 	public float PUNCH_BUFFER_TIME;
+	[Tooltip("Range of the punch in default unity units")]
+	public float PUNCH_RANGE;
+	[Tooltip("How much this contributes to the fear meter")]
+	public float PUNCH_FEAR;
 
 
 	[Tooltip("Maximum stamina to start with")]
 	public float MAX_STAMINA;
+	[Tooltip("How long to wait in between stamina usage and starting to recharge")]
+	public float STAMINA_RECHARGE_DELAY;
+	[Tooltip("Stamina per second regained")]
+	public float STAMINA_RECHARGE_RATE;
 
 	[Tooltip("Physics force applied in direction of punch to objects")]
 	public float PUNCH_FORCE;
@@ -32,5 +40,6 @@ public class PuncherDefaults : ScriptableObject
 	public float MEGAPUNCH_GHOST_DAMAGE;
 	public float MEGAPUNCH_POISE_DAMAGE;
 	public float MEGAPUNCH_STAMINA;
+	public float MEGAPUNCH_FEAR;
     
 }

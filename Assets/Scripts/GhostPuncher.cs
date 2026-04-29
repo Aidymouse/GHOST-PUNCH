@@ -3,19 +3,22 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 public struct Punch {
-	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
+	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass, float fear) {
 		Direction = direction;
 		Force = force;
 		ObjectDamage = object_damage;
 		GhostDamage = ghost_damage;
 		PoiseDamage = poise_damage;
 		HitClass = hitClass;
+		Fear = fear;
 	}
 	public Vector3 Direction;
 	public float Force;
 	public float ObjectDamage;
 	public float PoiseDamage;
 	public float GhostDamage;
+	// Only used by the ghost
+	public float Fear;
 	// 1st class punch is the strongest, 2nd class is a normal punch, 3 is big object, 4 is light object
 	public int HitClass;
 };
@@ -29,27 +32,32 @@ public class GhostPuncher : MonoBehaviour
 	InputAction action_chargePunch;
 
 	CharacterController controller;
-
-	Timer ti_punch_cooldown;
-	Timer ti_punch_again;
-	Timer ti_charge_up;
-
 	float move_speed;
-	[HideInInspector]
-	public float stamina;
-
-	int ectoplasm = 0;
-
-	LayerMask layer_punchable;
-
-	const float PUNCH_RANGE = 3;
 
 	public PuncherDefaults defaults; 
 	public GhostPowerAttribs power_attribs;
 
+	/* Stamina */
+	[HideInInspector]
+	public float max_stamina;
+	public float stamina;
+	float stamina_recharge_rate;
+	Timer ti_stamina_recharge;
+
+	/* Punch */
+	Timer ti_punch_cooldown;
+	Timer ti_punch_again;
+	Timer ti_charge_up;
+	float punch_range;
 	string punch_with = "RIGHT";
 	bool buffered_punch = false;
 	bool buffered_charge = false;
+	bool charging_punch = false;
+
+	/* Other */
+	int ectoplasm = 0;
+
+	LayerMask layer_punchable;
 
 	public Vector3 lose_point;
 
@@ -71,7 +79,6 @@ public class GhostPuncher : MonoBehaviour
 	public bool uiFlag_slowed;
 
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
 		action_chargePunch = InputSystem.actions.FindAction("ChargePunch");
@@ -80,7 +87,14 @@ public class GhostPuncher : MonoBehaviour
 
 		arm_animator = this.GetComponentInChildren<Animator>();
 
+		/* Load Defaults */
 		move_speed = defaults.MOVE_SPEED;
+		max_stamina = defaults.MAX_STAMINA;
+		stamina = defaults.MAX_STAMINA;
+		stamina_recharge_rate = defaults.STAMINA_RECHARGE_RATE;
+		punch_range = defaults.PUNCH_RANGE;
+
+		
 
 		layer_punchable = LayerMask.GetMask("Punchable");
 
@@ -91,6 +105,7 @@ public class GhostPuncher : MonoBehaviour
 		ti_punch_again = new Timer(0, defaults.PUNCH_COOLDOWN + defaults.PUNCH_AGAIN);
 		ti_charge_up = new Timer(0, 0.5f);
 		ti_charge_up.deactivate();
+		ti_stamina_recharge = new Timer(0, defaults.STAMINA_RECHARGE_DELAY);
 
 	}
 
@@ -113,6 +128,7 @@ public class GhostPuncher : MonoBehaviour
 				ti_charge_up.activate();
 				ti_charge_up.reset();
 				ChangeAnimation("ARM_CHARGE_WINDUP");
+				charging_punch = true;
 			}
 
 		}
@@ -137,11 +153,14 @@ public class GhostPuncher : MonoBehaviour
 				ti_punch_cooldown.reset();	
 				ti_punch_again.reset();	
 
-				if (ti_charge_up.finished()) {
+				if (ti_charge_up.finished() && stamina > 0) {
+					// TODO: feebler animation if this happens
 					DoMegaPunch();
 				} else {
 					DoPunch();
 				}
+
+				charging_punch = false;
 
 				ti_charge_up.deactivate();
 				ti_charge_up.reset();
@@ -169,6 +188,7 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 
+		/* Push */
 		if (push_power > 0) {
 			move_vec += push_dir * push_power;
 			// There is probably a better way of making the push ease out
@@ -180,6 +200,13 @@ public class GhostPuncher : MonoBehaviour
 			if (push_power < power_attribs.WAVE_POWER_THRESHOLD) { push_power = 0; }
 		}
 
+		/* Stamina */
+		if (ti_stamina_recharge.finished() && !charging_punch) {
+			stamina += stamina_recharge_rate * Time.deltaTime;
+			if (stamina > max_stamina) { stamina = max_stamina; }
+		}
+
+		/* Execute the move */
 		controller.Move(move_vec * Time.deltaTime);
 
 		//controller.move(move_vec);
@@ -189,18 +216,17 @@ public class GhostPuncher : MonoBehaviour
 
 	void DoPunch() {
 		ChangeAnimation("PUNCH_"+punch_with);
-		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_STAMINA);
+		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_STAMINA, defaults.PUNCH_FEAR);
 	}
 
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
-		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_GHOST_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1, defaults.MEGAPUNCH_STAMINA);
+		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_GHOST_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1, defaults.MEGAPUNCH_STAMINA, defaults.MEGAPUNCH_FEAR);
 	}
 
-	void ExecutePunch(float force, float object_damage, float ghost_damage, float poise_damage, int hitClass, float stamina_used) {
+	void ExecutePunch(float force, float object_damage, float ghost_damage, float poise_damage, int hitClass, float stamina_used, float fear) {
 
-		this.stamina -= stamina_used;
-
+		SpendStamina(stamina_used);
 
 		// Cast a ray - jeff says should be a box
 		RaycastHit attack_hit;
@@ -211,7 +237,7 @@ public class GhostPuncher : MonoBehaviour
 		Vector3 ray_dir = cam.transform.TransformDirection(Vector3.forward);
 
 
-		if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, PUNCH_RANGE, layer_punchable)) {
+		if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, punch_range, layer_punchable)) {
 			Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
 
 			Collider hit_col = attack_hit.collider;
@@ -220,7 +246,7 @@ public class GhostPuncher : MonoBehaviour
 				return;
 			}
 
-			Punch punch = new Punch(ray_dir, force, object_damage, ghost_damage, poise_damage, hitClass);
+			Punch punch = new Punch(ray_dir, force, object_damage, ghost_damage, poise_damage, hitClass, fear);
 
 			// Spawn Punch Particles
 			if (hitClass-1 < punch_particles.Count && punch_particles[hitClass-1]) {
@@ -279,6 +305,7 @@ public class GhostPuncher : MonoBehaviour
 		ti_punch_cooldown.tick(Time.deltaTime);
 		ti_punch_again.tick(Time.deltaTime);
 		ti_charge_up.tick(Time.deltaTime);
+		ti_stamina_recharge.tick(Time.deltaTime);
 
 
 		for (int i=statuses.Count-1; i>=0; i--) {
@@ -304,6 +331,13 @@ public class GhostPuncher : MonoBehaviour
 
 
 	/** EVENTS **/
+	public void SpendStamina(float stamina_used) {
+		if (stamina_used == 0) { return; }
+		ti_stamina_recharge.reset();
+		stamina -= stamina_used;
+		if (stamina < 0) { stamina = 0; }
+	}
+
 	public void GetPushed(Vector3 dir, float power) {
 		push_dir = dir.normalized;
 		push_power = power;
