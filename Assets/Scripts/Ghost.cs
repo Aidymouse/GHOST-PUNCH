@@ -16,10 +16,9 @@ public class Ghost : MonoBehaviour
 	public float escape_meter;
 	public float escape_needed;
 
-	// If false, the ghost will do small staggers on hit.
-	bool small_hit_resist;
 	// Hit points
-	float hp;
+	[HideInInspector]
+	public	float hp;
 
 	public GameObject ghostPuncher;
 
@@ -46,6 +45,8 @@ public class Ghost : MonoBehaviour
 
 	public ParticleSystem ectoplasm_particles;
 
+	public float fear_meter;
+
 	GhostPower[] powers;
 	GhostPower active_power;
 
@@ -60,7 +61,8 @@ public class Ghost : MonoBehaviour
 	Timer ti_recovery;
 
 	// When poise hit's 0, the ghost staggers, which makes her vulnerable.
-	float poise;
+	[HideInInspector]
+	public float poise;
 	// If the ghost is vulnerable, a mega punch will send her flying
 	bool vulnerable;
 
@@ -69,12 +71,6 @@ public class Ghost : MonoBehaviour
 	CharacterJoint[] rig_joints;
 
 	float turn_speed;
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-
-	public HealthBar healthBar;
-	public PoiseBar poiseBar;
-	public EscapeBar escapeBar;
-	// sorry you should probably put these in one script but idk how
 
 	void Start()
 	{
@@ -86,15 +82,12 @@ public class Ghost : MonoBehaviour
 		DisableRagdoll();
 
 		poise = defaults.POISE;
-		poiseBar.SetMaxPoise(defaults.POISE);
-		escapeBar.SetMaxEscape(escape_needed);
 		// needs to update on ghost slap somehow too		
 
 		turn_speed = defaults.TURN_SPEED;
+		fear_meter = 0;
 
 		hp = defaults.HP;
-		healthBar.SetMaxHealth(defaults.HP);
-		// sets healthbar to max, doesn't update yet
 
 		/* Timers */
 		ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
@@ -149,7 +142,7 @@ public class Ghost : MonoBehaviour
 		}
 		//transform.TurnTowards(ghostPuncher.transform);
 
-		if (ti_restore_poise.finished()) {
+		if (ti_restore_poise.finished_this_frame()) {
 			RestorePoise();
 		}
 
@@ -263,6 +256,7 @@ public class Ghost : MonoBehaviour
 
 			case GhostAction.RECOVERY:
 				ti_recovery.activate();
+				// TODO: if the ghost was attacking this should probably be 0...
 				ChangeAnimation("Idle", ti_recovery.time_remaining);
 				cur_action = action;
 				break;
@@ -296,7 +290,6 @@ public class Ghost : MonoBehaviour
 		float old_escape = escape_meter;
 		bool prevEscaped = Escaped();
 		escape_meter += Time.deltaTime;
-		escapeBar.SetEscape(escape_meter);
 
 		if (!prevEscaped && Escaped()) {
 			ghostPuncher.GetComponent<GhostPuncher>().EndRun();
@@ -368,11 +361,16 @@ public class Ghost : MonoBehaviour
 	}
 
 	void tick_timers() {
-		ti_restore_poise.tick(Time.deltaTime);
+		if (cur_action != GhostAction.HIT_STUN) {
+			ti_restore_poise.tick(Time.deltaTime);
+		}
 	}
 
 	/** EVENTS **/
 	public void GetPunched(Punch punch) {
+
+		hp -= punch.GhostDamage;
+		fear_meter += punch.Fear;
 
 
 		// 1 is mega punch and 3 is big object hit
@@ -387,7 +385,6 @@ public class Ghost : MonoBehaviour
 		}
 	
 		poise -= punch.PoiseDamage;
-		poiseBar.SetPoise(poise);		
 
 		if (ectoplasm_particles) {
 			Instantiate(ectoplasm_particles, transform.position, new Quaternion());
@@ -417,13 +414,21 @@ public class Ghost : MonoBehaviour
 
 	}
 
+	void GainFear(int fear_gained) {
+		fear_meter += fear_gained;
+	}
+
+	void LoseFear(int fear_lost) {
+		fear_meter -= fear_lost;
+	}
+
 	void RestorePoise() {
 		poise = defaults.POISE;
-		poiseBar.SetPoise(poise);
 	}
 
 	void BecomeVulnerable() {
 		vulnerable = true;
+		fear_meter += 5;
 	}
 
 	void StopBeingVulnerable() {
@@ -433,7 +438,6 @@ public class Ghost : MonoBehaviour
 	void Ragdoll(Punch punch) {
 		EnterAction(GhostAction.RAGDOLL);
 		rig_core.AddForce(punch.Direction * punch.Force * defaults.MAKE_HER_FLY_FACTOR);
-
 	}
 
 	/** STATUS **/

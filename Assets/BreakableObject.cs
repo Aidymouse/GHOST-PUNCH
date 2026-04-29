@@ -84,7 +84,7 @@ public class BreakableObject : MonoBehaviour
 				if (bo) {
 					// TODO: make damage based on relative velocity ?
 					Vector3 toCollided = this.transform.position - col.gameObject.transform.position;
-					Punch objectPunch = new Punch(toCollided.normalized, force, object_damage, ghost_damage, poise_damage, hit_class);
+					Punch objectPunch = new Punch(toCollided.normalized, force, object_damage, ghost_damage, poise_damage, hit_class, 0);
 					bo.GetPunched(objectPunch, col.contacts[0].point);
 				}
 			}
@@ -93,7 +93,7 @@ public class BreakableObject : MonoBehaviour
 				Ghost ghost = col.gameObject.GetComponentInParent<Ghost>();
 				if (ghost) {
 					Debug.Log("Object collision with '" + col.gameObject.tag + "' at " + col.relativeVelocity.magnitude);
-					Punch objectPunch = new Punch(GetComponent<Rigidbody>().linearVelocity.normalized, force, object_damage, ghost_damage, poise_damage, hit_class);
+					Punch objectPunch = new Punch(GetComponent<Rigidbody>().linearVelocity.normalized, force, object_damage, ghost_damage, poise_damage, hit_class, 0);
 					ghost.GetPunched(objectPunch);
 
 				} 			

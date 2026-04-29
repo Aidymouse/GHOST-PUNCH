@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee4b0ef2dd414493a6f1da97633e9e39, type: 3}
-  m_Name: Rotate_Swing
+  m_Script: {fileID: 11500000, guid: 8f8a5a04a3b145299afb77db9d03c233, type: 3}
+  m_Name: Move_Shake 1
   m_EditorClassIdentifier: 
-  effectTag: swing
+  effectTag: shake
   startCharIndex: 0
   charLength: 132
   animationType: 2
   fixedDuration: 0
-  durationPerChar: 0.3
-  timeBetweenChars: 0.1
+  durationPerChar: 0.07
+  timeBetweenChars: 0.45
   noDelayForChars: 1
   reverseCharOrder: 0
   easingCurve:
@@ -27,26 +27,25 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
-    m_PreInfinity: 0
-    m_PostInfinity: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
     m_RotationOrder: 4
   clampBetween0And1: 0
   timeType: 0
-  centerOffset: {x: 0, y: 0}
-  startAngle: 3
-  endAngle: -3
+  startOffset: {x: 0, y: 0}
+  endOffset: {x: -0.4, y: 0}
