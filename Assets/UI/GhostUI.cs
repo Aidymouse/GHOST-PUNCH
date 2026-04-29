@@ -10,6 +10,7 @@ public class GhostUI : MonoBehaviour
 	TMP_Text ui_escape_meter;
 	TMP_Text ui_ectoplasm;
 	TMP_Text txt_youlose;
+	TMP_Text txt_fear_meter;
 
 	Image hurt_indicator;
 	Image slow_indicator;
@@ -55,6 +56,10 @@ public class GhostUI : MonoBehaviour
 					text.enabled = false;
 					break;
 
+				case "FearMeter":
+					txt_fear_meter = text;
+					break;
+
 			}
 		}
 
@@ -95,6 +100,8 @@ public class GhostUI : MonoBehaviour
 		if (ghost.Escaped()) {
 			EnableYouLose();
 		}
+
+		txt_fear_meter.SetText("Fear:\n" + Mathf.Floor(ghost.fear_meter));
 
 		escape_bar.SetValue(ghost.escape_meter);
 		ghost_health_bar.SetValue(ghost.hp);

@@ -45,6 +45,8 @@ public class Ghost : MonoBehaviour
 
 	public ParticleSystem ectoplasm_particles;
 
+	public float fear_meter;
+
 	GhostPower[] powers;
 	GhostPower active_power;
 
@@ -83,6 +85,7 @@ public class Ghost : MonoBehaviour
 		// needs to update on ghost slap somehow too		
 
 		turn_speed = defaults.TURN_SPEED;
+		fear_meter = 0;
 
 		hp = defaults.HP;
 
@@ -366,6 +369,9 @@ public class Ghost : MonoBehaviour
 	/** EVENTS **/
 	public void GetPunched(Punch punch) {
 
+		hp -= punch.GhostDamage;
+		fear_meter += punch.Fear;
+
 
 		// 1 is mega punch and 3 is big object hit
 		if (vulnerable && (punch.HitClass == 1 || punch.HitClass == 3)) {
@@ -379,7 +385,6 @@ public class Ghost : MonoBehaviour
 		}
 	
 		poise -= punch.PoiseDamage;
-		Debug.Log("P.A.P " + poise);
 
 		if (ectoplasm_particles) {
 			Instantiate(ectoplasm_particles, transform.position, new Quaternion());
@@ -409,13 +414,21 @@ public class Ghost : MonoBehaviour
 
 	}
 
+	void GainFear(int fear_gained) {
+		fear_meter += fear_gained;
+	}
+
+	void LoseFear(int fear_lost) {
+		fear_meter -= fear_lost;
+	}
+
 	void RestorePoise() {
-		Debug.Log("Poise Restored");
 		poise = defaults.POISE;
 	}
 
 	void BecomeVulnerable() {
 		vulnerable = true;
+		fear_meter += 5;
 	}
 
 	void StopBeingVulnerable() {

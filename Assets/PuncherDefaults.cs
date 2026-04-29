@@ -13,6 +13,8 @@ public class PuncherDefaults : ScriptableObject
 	public float PUNCH_BUFFER_TIME;
 	[Tooltip("Range of the punch in default unity units")]
 	public float PUNCH_RANGE;
+	[Tooltip("How much this contributes to the fear meter")]
+	public float PUNCH_FEAR;
 
 
 	[Tooltip("Maximum stamina to start with")]
@@ -38,5 +40,6 @@ public class PuncherDefaults : ScriptableObject
 	public float MEGAPUNCH_GHOST_DAMAGE;
 	public float MEGAPUNCH_POISE_DAMAGE;
 	public float MEGAPUNCH_STAMINA;
+	public float MEGAPUNCH_FEAR;
     
 }
