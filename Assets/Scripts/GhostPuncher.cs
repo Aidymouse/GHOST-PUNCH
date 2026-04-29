@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public struct Punch {
-	public Punch(Vector3 direction, float force, float object_damage, float poise_damage, int hitClass) {
+	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
 		Direction = direction;
 		Force = force;
 		ObjectDamage = object_damage;
+		GhostDamage = ghost_damage;
 		PoiseDamage = poise_damage;
 		HitClass = hitClass;
 	}
@@ -13,9 +15,12 @@ public struct Punch {
 	public float Force;
 	public float ObjectDamage;
 	public float PoiseDamage;
-	// 1st class punch is the strongest, 2nd class is a normal punch
+	public float GhostDamage;
+	// 1st class punch is the strongest, 2nd class is a normal punch, 3 is big object, 4 is light object
 	public int HitClass;
 };
+
+
 
 public class GhostPuncher : MonoBehaviour
 {
@@ -47,14 +52,23 @@ public class GhostPuncher : MonoBehaviour
 	bool buffered_punch = false;
 	bool buffered_charge = false;
 
+	public Vector3 lose_point;
+
 	Animator arm_animator;
 
+	// TODO: this could totally be a status effect
 	Vector3 push_dir;
 	float push_power;
 	float push_power_decay = 25;
 
+	List<StatusEffect> statuses = new List<StatusEffect>();
+	public List<ParticleSystem> punch_particles = new List<ParticleSystem>();
+
 	// UI Control Vars. That is - cleared or manipulated by UI ONLY!
-	public bool uiFlag_slapped_this_frame;
+	[HideInInspector]
+		public bool uiFlag_slapped_this_frame;
+	[HideInInspector]
+		public bool uiFlag_slowed;
 
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -137,6 +151,11 @@ public class GhostPuncher : MonoBehaviour
 		// Moving
 		Vector3 move_vec = controller.isGrounded ? new Vector3(0, 0, 0) : Physics.gravity;
 		Vector3 desired_control_vec = moveControls();
+
+		float speed_multiplier = 1 - GetSlowMultiplier();
+
+		desired_control_vec *= speed_multiplier;
+
 		move_vec += desired_control_vec;
 
 		if (desired_control_vec.magnitude > 0) {
@@ -170,15 +189,15 @@ public class GhostPuncher : MonoBehaviour
 
 	void DoPunch() {
 		ChangeAnimation("PUNCH_"+punch_with);
-		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2);
+		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2);
 	}
 
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
-		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1);
+		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_GHOST_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1);
 	}
 
-	void ExecutePunch(float force, float object_damage, float poise_damage, int hitClass) {
+	void ExecutePunch(float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
 
 		// Cast a ray - jeff says should be a box
 		RaycastHit attack_hit;
@@ -190,7 +209,7 @@ public class GhostPuncher : MonoBehaviour
 
 
 		if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, PUNCH_RANGE, layer_punchable)) {
-		Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
+			Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
 
 			Collider hit_col = attack_hit.collider;
 
@@ -198,8 +217,14 @@ public class GhostPuncher : MonoBehaviour
 				return;
 			}
 
-			Punch punch = new Punch(ray_dir, force, object_damage, poise_damage, hitClass);
+			Punch punch = new Punch(ray_dir, force, object_damage, ghost_damage, poise_damage, hitClass);
 
+			// Spawn Punch Particles
+			if (hitClass-1 < punch_particles.Count && punch_particles[hitClass-1]) {
+				Instantiate(punch_particles[hitClass-1], attack_hit.point, new Quaternion());
+			}
+			
+			// Receiver handle punch
 			if (hit_col.CompareTag("BreakableObject")) {
 				BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
 				bo.GetPunched(punch, attack_hit.point);
@@ -251,6 +276,14 @@ public class GhostPuncher : MonoBehaviour
 		ti_punch_cooldown.tick(Time.deltaTime);
 		ti_punch_again.tick(Time.deltaTime);
 		ti_charge_up.tick(Time.deltaTime);
+
+
+		for (int i=statuses.Count-1; i>=0; i--) {
+			statuses[i].Duration.tick(Time.deltaTime);
+			if (statuses[i].Duration.finished()) {
+				statuses.RemoveAt(i);
+			}
+		}
 	}
 
 	void ChangeAnimation(string name, float fade=0) {
@@ -268,16 +301,9 @@ public class GhostPuncher : MonoBehaviour
 
 
 	/** EVENTS **/
-	void OnTriggerEnter(Collider trig) {
-		if (trig.name == "WaveOrb(Clone)") {
-			Vector3 to_wave_orb = transform.position - trig.transform.position;
-			to_wave_orb.y = 0;
-
-			push_dir = to_wave_orb.normalized;
-			push_power = power_attribs.WAVE_POWER;
-
-			Debug.Log("Hit wave orb! " + trig.name);
-		}
+	public void GetPushed(Vector3 dir, float power) {
+		push_dir = dir.normalized;
+		push_power = power;
 	}
 
 	public void GetSlapped() {
@@ -285,6 +311,27 @@ public class GhostPuncher : MonoBehaviour
 		uiFlag_slapped_this_frame = true;
 	}
 
+	public void AddStatus(StatusEffect new_status) {
+		statuses.Add(new_status);
+	}
+
+	public void EndRun() {
+		this.transform.position = lose_point;
+
+	}
+
+	/** STATUS **/
+	float GetSlowMultiplier() {
+		float total_slow_multiplier = 0;
+
+		for (int i=statuses.Count-1; i>=0; i--) {
+			if (statuses[i].Type == StatusType.SLOWED) {
+				total_slow_multiplier += statuses[i].GetFloatValue(StatusAttribs.SLOWED_STRENGTH);
+			}
+		}
+
+		return total_slow_multiplier;
+	}
 }
 
 

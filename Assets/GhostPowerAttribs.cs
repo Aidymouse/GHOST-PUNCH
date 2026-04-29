@@ -7,26 +7,22 @@ public class GhostPowerAttribs : ScriptableObject
 
 
 	[Header("Power Debug Tools")]
-	[Tooltip("Sets the default power index. Set to -1 to pick a random power. (0) Wave; (1) Slap;")]
-	[Range(-1,1)]
+	[Tooltip("Sets the default power index. Set to -1 to pick a random power. (0) Wave; (1) Slap; (2) Scream; ")]
+	[Range(-1,2)]
 	public int OVERRIDE_POWER_IDX;
 
     /** WAVE POWER **/
 	[Header("Wave Power Attributes")]
-    [Tooltip("(seconds) Time the ghost spends charging up the shockwave")]
-    public float WAVE_CHARGE_TIME;
     [Tooltip("Power that forces you back when you get hit with the wave")]
     public float WAVE_POWER;
     [Tooltip("How quickly the wave loses power when pushing the ghost puncher")]
     public float WAVE_DECAY;
     [Tooltip("The threshold at which push power is so weak the ghost puncher is no longer pushed")]
     public float WAVE_POWER_THRESHOLD;
-    // [Tooltip("Poise to break the wave power")]
-    // public float WAVE_POISE;
-    [Tooltip("(seconds) How long the ghost pauses after releasing a wave")]
+    public float WAVE_CHARGE_TIME;
+    public float WAVE_ACTIVE_DELAY_TIME;
+    public float WAVE_ACTIVE_TIME;
     public float WAVE_HANG_TIME;
-    // [Tooltip("How fast the wave travels")]
-    // public float WAVE_SPEED;
 
 	[Header("Slap Power Attributes")]
     [Tooltip("(seconds)")]
@@ -43,4 +39,16 @@ public class GhostPowerAttribs : ScriptableObject
     public float SLAP_HIT_DISTANCE;
 		[Tooltip("The slash effect game object to use")]
 		public GameObject SLASH_EFFECT_OBJECT;
+
+	[Header("Scream Power Attributes")]
+    public float SCREAM_CHARGE_TIME;
+    public float SCREAM_HANG_TIME;
+    public float SCREAM_ACTIVE_DELAY_TIME;
+    public float SCREAM_ACTIVE_TIME;
+    [Tooltip("Distance of ghost to be counter as a slap")]
+    public float SCREAM_HIT_DISTANCE;
+    [Tooltip("Percentage reduction in ghost punchers speed when screamed at")]
+    public float SCREAM_SPEED_REDUCTION;
+    [Tooltip("How long puncher is slowed for")]
+    public float SCREAM_SPEED_REDUCTION_DURATION;
 }

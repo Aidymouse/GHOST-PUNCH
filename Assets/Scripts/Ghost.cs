@@ -18,6 +18,8 @@ public class Ghost : MonoBehaviour
 
 	// If false, the ghost will do small staggers on hit.
 	bool small_hit_resist;
+	// Hit points
+	float hp;
 
 	public GameObject ghostPuncher;
 
@@ -41,6 +43,8 @@ public class Ghost : MonoBehaviour
 
 
 	public GhostAction cur_action;
+
+	public ParticleSystem ectoplasm_particles;
 
 	GhostPower[] powers;
 	GhostPower active_power;
@@ -66,6 +70,12 @@ public class Ghost : MonoBehaviour
 
 	float turn_speed;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
+
+	public HealthBar healthBar;
+	public PoiseBar poiseBar;
+	public EscapeBar escapeBar;
+	// sorry you should probably put these in one script but idk how
+
 	void Start()
 	{
 
@@ -76,8 +86,15 @@ public class Ghost : MonoBehaviour
 		DisableRagdoll();
 
 		poise = defaults.POISE;
+		poiseBar.SetMaxPoise(defaults.POISE);
+		escapeBar.SetMaxEscape(escape_needed);
+		// needs to update on ghost slap somehow too		
 
 		turn_speed = defaults.TURN_SPEED;
+
+		hp = defaults.HP;
+		healthBar.SetMaxHealth(defaults.HP);
+		// sets healthbar to max, doesn't update yet
 
 		/* Timers */
 		ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
@@ -97,14 +114,12 @@ public class Ghost : MonoBehaviour
 
 		//nav_destination = null;
 
-		escape_meter = 0;
-		escape_needed = 60;
-
 		/* Powers */
 		// Set up last so any objects retrieved in constructors are present
-		powers = new GhostPower[2];
+		powers = new GhostPower[3];
 		powers[0] = new GhostPower_Wave(this, power_attribs);
 		powers[1] = new GhostPower_Slap(this, power_attribs);
+		powers[2] = new GhostPower_Scream(this, power_attribs);
 
 		EnterAction(GhostAction.MOVING_ROOM);
 
@@ -279,11 +294,14 @@ public class Ghost : MonoBehaviour
 		// TODO: be making wubwubwubwubwubwubwub sound
 
 		float old_escape = escape_meter;
+		bool prevEscaped = Escaped();
 		escape_meter += Time.deltaTime;
+		escapeBar.SetEscape(escape_meter);
 
-		if (escape_meter >= escape_needed) {
-			Debug.Log("You lose!");
+		if (!prevEscaped && Escaped()) {
+			ghostPuncher.GetComponent<GhostPuncher>().EndRun();
 		}
+
 		// Can I see the player? Have I seen them for some amount of timer? Startle!
 	}
 
@@ -356,9 +374,9 @@ public class Ghost : MonoBehaviour
 	/** EVENTS **/
 	public void GetPunched(Punch punch) {
 
-		Debug.Log("Ow! "+punch);
 
-		if (vulnerable && punch.HitClass <= 1) {
+		// 1 is mega punch and 3 is big object hit
+		if (vulnerable && (punch.HitClass == 1 || punch.HitClass == 3)) {
 			Ragdoll(punch);
 			return;
 		}
@@ -369,6 +387,11 @@ public class Ghost : MonoBehaviour
 		}
 	
 		poise -= punch.PoiseDamage;
+		poiseBar.SetPoise(poise);		
+
+		if (ectoplasm_particles) {
+			Instantiate(ectoplasm_particles, transform.position, new Quaternion());
+		}
 
 		if (poise <= 0) {
 			if (punch.HitClass <= 1) {
@@ -396,6 +419,7 @@ public class Ghost : MonoBehaviour
 
 	void RestorePoise() {
 		poise = defaults.POISE;
+		poiseBar.SetPoise(poise);
 	}
 
 	void BecomeVulnerable() {
@@ -422,6 +446,12 @@ public class Ghost : MonoBehaviour
 	bool SpinDisabled() {
 		return cur_action == GhostAction.RAGDOLL;
 	}
+
+	public bool Escaped() {
+		return escape_meter >= escape_needed;
+	}
+
+	/** RAGDOLL **/
 
 	// TODO: wrap these in actual state changes so she doesn't keep trying to move around when she's ragdolled
 	void EnableAnimator() {
@@ -470,6 +500,8 @@ public class Ghost : MonoBehaviour
 			joint.enableCollision = false;
 		}
 	}
+
+
 
 
 	/** GETTERS */

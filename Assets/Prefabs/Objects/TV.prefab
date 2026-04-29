@@ -29,13 +29,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7353870470511214975}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
 --- !u!33 &1411940056336209589
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -108,8 +108,16 @@ MonoBehaviour:
   broken_obj: {fileID: 7339789612094513743, guid: 56088327cf7b9fd4eba199e55d5f6aaa, type: 3}
   hp: 400
   rotation_offset: {x: 0, y: 0, z: 0}
-  hit_particles: {fileID: 1780546180473290174, guid: cedd9937caa25674c93683941466c4dd, type: 3}
+  weight: 2
+  attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
+  hit_particles: {fileID: 1780546180473290174, guid: 0cc26e7d35e1ebf4685ca0e471f4d6e5, type: 3}
   break_particles: {fileID: 3113698054283111208, guid: 483592ff25c1dba40bae20fee6965a6e, type: 3}
+  break_self_particles: {fileID: 1780546180473290174, guid: 0cc26e7d35e1ebf4685ca0e471f4d6e5, type: 3}
+  poise_damage: 0
+  ghost_damage: 0
+  object_damage: 0
+  force: 0
+  hit_class: 4
 --- !u!65 &-6712286940345468702
 BoxCollider:
   m_ObjectHideFlags: 0

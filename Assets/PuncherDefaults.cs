@@ -16,11 +16,15 @@ public class PuncherDefaults : ScriptableObject
 	public float PUNCH_FORCE;
 	[Tooltip("Amount of damage objects take from default punch")]
 	public float PUNCH_OBJECT_DAMAGE;
+	[Tooltip("Damage the ghost takes from a default punch")]
+	public float PUNCH_GHOST_DAMAGE;
 	[Tooltip("Poise damage the ghost takes from a default punch")]
 	public float PUNCH_POISE_DAMAGE;
 
 	public float MEGAPUNCH_FORCE;
 	public float MEGAPUNCH_OBJECT_DAMAGE;
+	[Tooltip("Damage the ghost takes from a mega punch")]
+	public float MEGAPUNCH_GHOST_DAMAGE;
 	public float MEGAPUNCH_POISE_DAMAGE;
     
 }
