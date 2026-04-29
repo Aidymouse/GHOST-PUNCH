@@ -29,27 +29,32 @@ public class GhostPuncher : MonoBehaviour
 	InputAction action_chargePunch;
 
 	CharacterController controller;
-
-	Timer ti_punch_cooldown;
-	Timer ti_punch_again;
-	Timer ti_charge_up;
-
 	float move_speed;
-	[HideInInspector]
-	public float stamina;
-
-	int ectoplasm = 0;
-
-	LayerMask layer_punchable;
-
-	const float PUNCH_RANGE = 3;
 
 	public PuncherDefaults defaults; 
 	public GhostPowerAttribs power_attribs;
 
+	/* Stamina */
+	[HideInInspector]
+	public float max_stamina;
+	public float stamina;
+	float stamina_recharge_rate;
+	Timer ti_stamina_recharge;
+
+	/* Punch */
+	Timer ti_punch_cooldown;
+	Timer ti_punch_again;
+	Timer ti_charge_up;
+	float punch_range;
 	string punch_with = "RIGHT";
 	bool buffered_punch = false;
 	bool buffered_charge = false;
+	bool charging_punch = false;
+
+	/* Other */
+	int ectoplasm = 0;
+
+	LayerMask layer_punchable;
 
 	public Vector3 lose_point;
 
@@ -81,7 +86,12 @@ public class GhostPuncher : MonoBehaviour
 
 		/* Load Defaults */
 		move_speed = defaults.MOVE_SPEED;
+		max_stamina = defaults.MAX_STAMINA;
 		stamina = defaults.MAX_STAMINA;
+		stamina_recharge_rate = defaults.STAMINA_RECHARGE_RATE;
+		punch_range = defaults.PUNCH_RANGE;
+
+		
 
 		layer_punchable = LayerMask.GetMask("Punchable");
 
@@ -92,6 +102,7 @@ public class GhostPuncher : MonoBehaviour
 		ti_punch_again = new Timer(0, defaults.PUNCH_COOLDOWN + defaults.PUNCH_AGAIN);
 		ti_charge_up = new Timer(0, 0.5f);
 		ti_charge_up.deactivate();
+		ti_stamina_recharge = new Timer(0, defaults.STAMINA_RECHARGE_DELAY);
 
 	}
 
@@ -114,6 +125,7 @@ public class GhostPuncher : MonoBehaviour
 				ti_charge_up.activate();
 				ti_charge_up.reset();
 				ChangeAnimation("ARM_CHARGE_WINDUP");
+				charging_punch = true;
 			}
 
 		}
@@ -138,11 +150,14 @@ public class GhostPuncher : MonoBehaviour
 				ti_punch_cooldown.reset();	
 				ti_punch_again.reset();	
 
-				if (ti_charge_up.finished()) {
+				if (ti_charge_up.finished() && stamina > 0) {
+					// TODO: feebler animation if this happens
 					DoMegaPunch();
 				} else {
 					DoPunch();
 				}
+
+				charging_punch = false;
 
 				ti_charge_up.deactivate();
 				ti_charge_up.reset();
@@ -170,6 +185,7 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 
+		/* Push */
 		if (push_power > 0) {
 			move_vec += push_dir * push_power;
 			// There is probably a better way of making the push ease out
@@ -181,6 +197,13 @@ public class GhostPuncher : MonoBehaviour
 			if (push_power < power_attribs.WAVE_POWER_THRESHOLD) { push_power = 0; }
 		}
 
+		/* Stamina */
+		if (ti_stamina_recharge.finished() && !charging_punch) {
+			stamina += stamina_recharge_rate * Time.deltaTime;
+			if (stamina > max_stamina) { stamina = max_stamina; }
+		}
+
+		/* Execute the move */
 		controller.Move(move_vec * Time.deltaTime);
 
 		//controller.move(move_vec);
@@ -211,7 +234,7 @@ public class GhostPuncher : MonoBehaviour
 		Vector3 ray_dir = cam.transform.TransformDirection(Vector3.forward);
 
 
-		if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, PUNCH_RANGE, layer_punchable)) {
+		if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, punch_range, layer_punchable)) {
 			Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
 
 			Collider hit_col = attack_hit.collider;
@@ -279,6 +302,7 @@ public class GhostPuncher : MonoBehaviour
 		ti_punch_cooldown.tick(Time.deltaTime);
 		ti_punch_again.tick(Time.deltaTime);
 		ti_charge_up.tick(Time.deltaTime);
+		ti_stamina_recharge.tick(Time.deltaTime);
 
 
 		for (int i=statuses.Count-1; i>=0; i--) {
@@ -305,7 +329,10 @@ public class GhostPuncher : MonoBehaviour
 
 	/** EVENTS **/
 	public void SpendStamina(float stamina_used) {
+		if (stamina_used == 0) { return; }
+		ti_stamina_recharge.reset();
 		stamina -= stamina_used;
+		if (stamina < 0) { stamina = 0; }
 	}
 
 	public void GetPushed(Vector3 dir, float power) {
