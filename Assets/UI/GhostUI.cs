@@ -19,6 +19,7 @@ public class GhostUI : MonoBehaviour
 	UIBar ghost_health_bar;
 	UIBar poise_bar;
 	UIBar escape_bar;
+	UIBar stamina_bar;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -72,6 +73,10 @@ public class GhostUI : MonoBehaviour
 					ghost_health_bar = bar;
 					ghost_health_bar.SetMaxValue(ghost.defaults.HP);
 					break;
+				case "StaminaBar":
+					stamina_bar = bar;
+					stamina_bar.SetMaxValue(ghost_puncher.defaults.MAX_STAMINA);
+					break;
 			}
 		}
 
@@ -94,6 +99,7 @@ public class GhostUI : MonoBehaviour
 		escape_bar.SetValue(ghost.escape_meter);
 		ghost_health_bar.SetValue(ghost.hp);
 		poise_bar.SetValue(ghost.poise);
+		stamina_bar.SetValue(ghost_puncher.stamina);
 
 		/** Hurt Indicator **/
 		if (!ti_hurt_indicator.finished()) {

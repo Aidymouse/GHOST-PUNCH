@@ -71,7 +71,6 @@ public class GhostPuncher : MonoBehaviour
 	public bool uiFlag_slowed;
 
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
 		action_chargePunch = InputSystem.actions.FindAction("ChargePunch");
@@ -80,7 +79,9 @@ public class GhostPuncher : MonoBehaviour
 
 		arm_animator = this.GetComponentInChildren<Animator>();
 
+		/* Load Defaults */
 		move_speed = defaults.MOVE_SPEED;
+		stamina = defaults.MAX_STAMINA;
 
 		layer_punchable = LayerMask.GetMask("Punchable");
 
@@ -199,8 +200,7 @@ public class GhostPuncher : MonoBehaviour
 
 	void ExecutePunch(float force, float object_damage, float ghost_damage, float poise_damage, int hitClass, float stamina_used) {
 
-		this.stamina -= stamina_used;
-
+		SpendStamina(stamina_used);
 
 		// Cast a ray - jeff says should be a box
 		RaycastHit attack_hit;
@@ -304,6 +304,10 @@ public class GhostPuncher : MonoBehaviour
 
 
 	/** EVENTS **/
+	public void SpendStamina(float stamina_used) {
+		stamina -= stamina_used;
+	}
+
 	public void GetPushed(Vector3 dir, float power) {
 		push_dir = dir.normalized;
 		push_power = power;
