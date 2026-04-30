@@ -16685,7 +16685,7 @@ GameObject:
   - component: {fileID: 597965097}
   m_Layer: 0
   m_Name: Dest_Hallway
-  m_TagString: Untagged
+  m_TagString: GhostDestination
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18755,7 +18755,7 @@ GameObject:
   - component: {fileID: 704024951}
   m_Layer: 10
   m_Name: Dest_Office
-  m_TagString: GhostDestination
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21078,7 +21078,7 @@ GameObject:
   - component: {fileID: 788076968}
   m_Layer: 10
   m_Name: Dest_Nothing
-  m_TagString: GhostDestination
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25451,17 +25451,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1021190264}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1022940288 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6475607107318112257, guid: f2030ea18dfd960278f839469591acf2, type: 3}
-  m_PrefabInstance: {fileID: 1759184450}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e40a2d2b6b24e34e9797c8f56b5ec62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PoiseBar
 --- !u!4 &1025103074 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1460949858535746709, guid: aba4aad8da2ae7247b0106da71246fa9, type: 3}
@@ -28650,15 +28639,15 @@ PrefabInstance:
     - target: {fileID: 3144165178190365273, guid: 9cb07e892f71e6f45a964c14e93aeb22, type: 3}
       propertyPath: poiseBar
       value: 
-      objectReference: {fileID: 1022940288}
+      objectReference: {fileID: 0}
     - target: {fileID: 3144165178190365273, guid: 9cb07e892f71e6f45a964c14e93aeb22, type: 3}
       propertyPath: escapeBar
       value: 
-      objectReference: {fileID: 1465624895}
+      objectReference: {fileID: 0}
     - target: {fileID: 3144165178190365273, guid: 9cb07e892f71e6f45a964c14e93aeb22, type: 3}
       propertyPath: healthBar
       value: 
-      objectReference: {fileID: 1413325587}
+      objectReference: {fileID: 0}
     - target: {fileID: 3144165178190365273, guid: 9cb07e892f71e6f45a964c14e93aeb22, type: 3}
       propertyPath: ghostPuncher
       value: 
@@ -36780,7 +36769,7 @@ GameObject:
   - component: {fileID: 1341519548}
   m_Layer: 10
   m_Name: Dest_Otis_Bed
-  m_TagString: GhostDestination
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38009,17 +37998,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b76ef677e9da8db078a9b001ff45c76c, type: 3}
---- !u!114 &1413325587 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6327062831188879063, guid: f2030ea18dfd960278f839469591acf2, type: 3}
-  m_PrefabInstance: {fileID: 1759184450}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5d334b3409eb024987eb9b67208cdba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
 --- !u!4 &1415269290 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7435519218163802523, guid: cbe57e6393de5cf4a97d4cb8b0341cd6, type: 3}
@@ -38988,17 +38966,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d02f7f9ffc41a24e9d8e0d0e283cbc4, type: 3}
---- !u!114 &1465624895 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5958604094264208916, guid: f2030ea18dfd960278f839469591acf2, type: 3}
-  m_PrefabInstance: {fileID: 1759184450}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b08f6b05140792f4d99a8529dd1f23c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EscapeBar
 --- !u!1001 &1467553447
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42365,7 +42332,7 @@ GameObject:
   - component: {fileID: 1602546322}
   m_Layer: 10
   m_Name: Dest_Garage
-  m_TagString: GhostDestination
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45412,7 +45379,7 @@ GameObject:
   - component: {fileID: 1761973787}
   m_Layer: 10
   m_Name: Dest_Closet
-  m_TagString: GhostDestination
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
