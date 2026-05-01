@@ -364,7 +364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
   broken_obj: {fileID: 0}
-  hp: 400
+  hp: 600
   rotation_offset: {x: 0, y: 0, z: 0}
   weight: 2
   attrs: {fileID: 0}
@@ -413,14 +413,14 @@ HingeJoint:
   serializedVersion: 3
   m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0.005, y: -0.0093, z: 0.005}
+  m_Anchor: {x: 0.0048, y: -0.0093, z: 0.005}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   m_UseSpring: 0
   m_Spring:
-    spring: 0
-    damper: 0
+    spring: 0.1
+    damper: 0.2
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
@@ -431,8 +431,8 @@ HingeJoint:
   m_ExtendedLimits: 0
   m_UseAcceleration: 0
   m_Limits:
-    min: 0
-    max: 0
+    min: -180
+    max: -33.2
     bounciness: 0
     bounceMinVelocity: 0.2
     contactDistance: 0
@@ -570,7 +570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
   broken_obj: {fileID: 0}
-  hp: 400
+  hp: 600
   rotation_offset: {x: 0, y: 0, z: 0}
   weight: 2
   attrs: {fileID: 0}
@@ -619,14 +619,14 @@ HingeJoint:
   serializedVersion: 3
   m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: -0.005, y: -0.0093, z: 0.005}
+  m_Anchor: {x: -0.0048, y: -0.0093, z: 0.005}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   m_UseSpring: 0
   m_Spring:
-    spring: 0
-    damper: 0
+    spring: 0.1
+    damper: 0.2
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
@@ -637,8 +637,8 @@ HingeJoint:
   m_ExtendedLimits: 0
   m_UseAcceleration: 0
   m_Limits:
-    min: 0
-    max: 0
+    min: -180
+    max: -33.2
     bounciness: 0
     bounceMinVelocity: 0.2
     contactDistance: 0
