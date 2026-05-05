@@ -12625,6 +12625,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: console (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3426222128727218124, guid: 299a2437245b9494f81f1fddbf0de703, type: 3}
+      propertyPath: broken_obj
+      value: 
+      objectReference: {fileID: 711270185277338154, guid: f1fd0a74ce83cdc4f9adf10809cff296, type: 3}
+    - target: {fileID: 3426222128727218124, guid: 299a2437245b9494f81f1fddbf0de703, type: 3}
+      propertyPath: break_particles
+      value: 
+      objectReference: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
     - target: {fileID: 8566510111674658548, guid: 299a2437245b9494f81f1fddbf0de703, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2
@@ -44546,12 +44554,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2220114159199529653, guid: 299a2437245b9494f81f1fddbf0de703, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1977770871}
-    - targetCorrespondingSourceObject: {fileID: 2220114159199529653, guid: 299a2437245b9494f81f1fddbf0de703, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1977770870}
-    - targetCorrespondingSourceObject: {fileID: 2220114159199529653, guid: 299a2437245b9494f81f1fddbf0de703, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1977770869}
   m_SourcePrefab: {fileID: 100100000, guid: 299a2437245b9494f81f1fddbf0de703, type: 3}
 --- !u!1 &1599340933
 GameObject:
@@ -53767,52 +53769,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2220114159199529653, guid: 299a2437245b9494f81f1fddbf0de703, type: 3}
   m_PrefabInstance: {fileID: 1594131088}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1977770869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1977770868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
-  hp: 400
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 0
-  attrs: {fileID: 0}
-  hit_particles: {fileID: 0}
-  break_particles: {fileID: 0}
-  break_self_particles: {fileID: 0}
-  poise_damage: 0
-  ghost_damage: 0
-  object_damage: 0
-  force: 0
-  hit_class: 4
---- !u!65 &1977770870
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1977770868}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.018, y: 0.0069, z: 0.0059999996}
-  m_Center: {x: 0, y: -8.940697e-11, z: 0.0029999998}
 --- !u!54 &1977770871
 Rigidbody:
   m_ObjectHideFlags: 0
