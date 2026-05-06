@@ -150,14 +150,15 @@ public class GhostPuncher : MonoBehaviour
 					punch_with = punch_with == "RIGHT" ? "LEFT" : "RIGHT";
 				} 
 
-				ti_punch_cooldown.reset();	
-				ti_punch_again.reset();	
 
 				if (ti_charge_up.finished() && stamina > 0) {
 					// TODO: feebler animation if this happens
 					DoMegaPunch();
+					ti_punch_cooldown.set(GetMegaPunchCooldown());	
 				} else {
 					DoPunch();
+					ti_punch_cooldown.set(GetPunchCooldown());	
+					ti_punch_again.reset();	
 				}
 
 				charging_punch = false;
@@ -355,6 +356,14 @@ public class GhostPuncher : MonoBehaviour
 	public void EndRun() {
 		this.transform.position = lose_point;
 
+	}
+
+	float GetPunchCooldown() {
+		return defaults.PUNCH_COOLDOWN;
+	}
+
+	float GetMegaPunchCooldown() {
+		return defaults.MEGAPUNCH_COOLDOWN;
 	}
 
 	/** STATUS **/
