@@ -9,20 +9,19 @@ public class ShopCamera : MonoBehaviour
 
     void Start()
     {
+			turnGoal = this.transform.rotation;
         
     }
 
     void Update()
     {
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, turnGoal, turnSpeed*Time.deltaTime);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, turnGoal, turnSpeed * Time.deltaTime);
     }
 
-		void LookTowardsShop() {
-			turnGoal.y = 90;
+		public void LookTowardsShop() {
 		}
 
-		void LookTowardsDoor() {
-			turnGoal.y = 0;
+		public void LookTowardsDoor() {
 		}
 
 		
