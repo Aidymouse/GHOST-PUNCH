@@ -105,7 +105,7 @@ public class BreakableObject : MonoBehaviour
 		} else {
 			if (col.relativeVelocity.magnitude > 6) {
 					// This thing won't be damaging me, so I should take damage.
-					TakeDamage(1000);
+					TakeDamage(200);
 			}
 		}
 		
