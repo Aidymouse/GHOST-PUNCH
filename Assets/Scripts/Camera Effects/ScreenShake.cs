@@ -8,7 +8,6 @@ public class ScreenShake : MonoBehaviour
 
     Vector3 originalPos;
     float shakeIntensity;
-    float noiseTime;
 
     void Start()
     {
@@ -31,7 +30,6 @@ public class ScreenShake : MonoBehaviour
         else
         {
             shakeIntensity = 0f;
-            noiseTime = 0f;
             transform.localPosition = originalPos;
         }
     }
