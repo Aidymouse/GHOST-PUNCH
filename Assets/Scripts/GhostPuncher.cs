@@ -233,8 +233,6 @@ public class GhostPuncher : MonoBehaviour
 		if (fovKick) fovKick.SmallKick();
 		if (screenShake) screenShake.Shake(0.05f);
 		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_STAMINA, defaults.PUNCH_FEAR);
-		Debug.Log("Playing animation: PUNCH_" + punch_with);
-		arm_animator.Play("PUNCH_" + punch_with, 0, 0f);
 	}
 
 	void DoMegaPunch() {
