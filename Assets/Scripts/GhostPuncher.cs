@@ -63,6 +63,13 @@ public class GhostPuncher : MonoBehaviour
 
 	Animator arm_animator;
 
+	/* Camera effects */
+	FOVKick fovKick;
+	ScreenShake screenShake;
+
+	/* Cutscene control toggle */
+	public bool inCutscene = false;
+
 	// TODO: this could totally be a status effect
 	Vector3 push_dir;
 	float push_power;
@@ -86,6 +93,7 @@ public class GhostPuncher : MonoBehaviour
 		action_move = InputSystem.actions.FindAction("Move");
 
 		arm_animator = this.GetComponentInChildren<Animator>();
+		layer_punchable = LayerMask.GetMask("Punchable");
 
 		/* Load Defaults */
 		move_speed = defaults.MOVE_SPEED;
@@ -94,9 +102,10 @@ public class GhostPuncher : MonoBehaviour
 		stamina_recharge_rate = defaults.STAMINA_RECHARGE_RATE;
 		punch_range = defaults.PUNCH_RANGE;
 
-		
+		/* Camera effects */
+		fovKick = GetComponentInChildren<FOVKick>();
+		screenShake = GetComponentInChildren<ScreenShake>();
 
-		layer_punchable = LayerMask.GetMask("Punchable");
 
 		controller = GetComponent<CharacterController>();
 
@@ -112,6 +121,10 @@ public class GhostPuncher : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		if (inCutscene)	{
+			controller.Move(Vector3.zero);
+			return;
+		}
 		// Timers
 		this.tick_timers();
 
@@ -150,14 +163,15 @@ public class GhostPuncher : MonoBehaviour
 					punch_with = punch_with == "RIGHT" ? "LEFT" : "RIGHT";
 				} 
 
-				ti_punch_cooldown.reset();	
-				ti_punch_again.reset();	
 
 				if (ti_charge_up.finished() && stamina > 0) {
 					// TODO: feebler animation if this happens
 					DoMegaPunch();
+					ti_punch_cooldown.set(GetMegaPunchCooldown());	
 				} else {
 					DoPunch();
+					ti_punch_cooldown.set(GetPunchCooldown());	
+					ti_punch_again.reset();	
 				}
 
 				charging_punch = false;
@@ -216,11 +230,15 @@ public class GhostPuncher : MonoBehaviour
 
 	void DoPunch() {
 		ChangeAnimation("PUNCH_"+punch_with);
+		if (fovKick) fovKick.SmallKick();
+		if (screenShake) screenShake.Shake(0.05f);
 		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_STAMINA, defaults.PUNCH_FEAR);
 	}
 
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
+		if (fovKick) fovKick.BigKick();
+		if (screenShake) screenShake.Shake(0.2f);
 		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_GHOST_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1, defaults.MEGAPUNCH_STAMINA, defaults.MEGAPUNCH_FEAR);
 	}
 
@@ -355,6 +373,14 @@ public class GhostPuncher : MonoBehaviour
 	public void EndRun() {
 		this.transform.position = lose_point;
 
+	}
+
+	float GetPunchCooldown() {
+		return defaults.PUNCH_COOLDOWN;
+	}
+
+	float GetMegaPunchCooldown() {
+		return defaults.MEGAPUNCH_COOLDOWN;
 	}
 
 	/** STATUS **/

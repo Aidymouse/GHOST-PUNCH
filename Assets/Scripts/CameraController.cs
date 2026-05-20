@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour
 
 	float lookX;
 	float lookY;
+	[HideInInspector] public Vector2 lookDelta;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -24,7 +25,8 @@ public class CameraController : MonoBehaviour
 	void Update()
 	{
 		// Looking Around
-		Vector2 look_value = action_look.ReadValue<Vector2>();
+		lookDelta = action_look.ReadValue<Vector2>();
+		Vector2 look_value = lookDelta;
 
 		lookY -= look_value.y * sensitivity;
 		lookY = Mathf.Clamp(lookY, -90f, 90f);

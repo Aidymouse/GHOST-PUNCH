@@ -99,7 +99,7 @@ MeshRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 3
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 6ca1c8a0b2f89d143bb7cb9379ce653e, type: 2}
@@ -202,6 +202,18 @@ PrefabInstance:
     - target: {fileID: 712889849742036088, guid: 0eece4d6d3be1747cb49566e4c9d39e7, type: 3}
       propertyPath: m_Name
       value: Door
+      objectReference: {fileID: 0}
+    - target: {fileID: 2130723119973819822, guid: 0eece4d6d3be1747cb49566e4c9d39e7, type: 3}
+      propertyPath: m_BreakForce
+      value: Infinity
+      objectReference: {fileID: 0}
+    - target: {fileID: 2130723119973819822, guid: 0eece4d6d3be1747cb49566e4c9d39e7, type: 3}
+      propertyPath: m_BreakTorque
+      value: Infinity
+      objectReference: {fileID: 0}
+    - target: {fileID: 4241485026271525904, guid: 0eece4d6d3be1747cb49566e4c9d39e7, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4374712435177406707, guid: 0eece4d6d3be1747cb49566e4c9d39e7, type: 3}
       propertyPath: m_LocalPosition.x
