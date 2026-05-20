@@ -67,6 +67,9 @@ public class GhostPuncher : MonoBehaviour
 	FOVKick fovKick;
 	ScreenShake screenShake;
 
+	/* Cutscene control toggle */
+	public bool inCutscene = false;
+
 	// TODO: this could totally be a status effect
 	Vector3 push_dir;
 	float push_power;
@@ -118,6 +121,10 @@ public class GhostPuncher : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		if (inCutscene)	{
+			controller.Move(Vector3.zero);
+			return;
+		}
 		// Timers
 		this.tick_timers();
 
@@ -226,6 +233,8 @@ public class GhostPuncher : MonoBehaviour
 		if (fovKick) fovKick.SmallKick();
 		if (screenShake) screenShake.Shake(0.05f);
 		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_STAMINA, defaults.PUNCH_FEAR);
+		Debug.Log("Playing animation: PUNCH_" + punch_with);
+		arm_animator.Play("PUNCH_" + punch_with, 0, 0f);
 	}
 
 	void DoMegaPunch() {
