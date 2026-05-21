@@ -29,6 +29,16 @@ public class BreakableObject : MonoBehaviour
 	[Tooltip("Particles this object spawns for itself when it breaks")]
 	public ParticleSystem break_self_particles;
 
+	[Header("Audio")]
+	public AudioSource destroyedSound;
+	public AudioClip hitSoundEffect;
+	public AudioClip hitSoundEffect2;
+	public AudioClip hitSoundEffect3;
+	public AudioClip destroyedSoundEffect;
+	public float pitchLow;
+	public float pitchHigh;
+	int audioX = 3;
+
 	[Header("Custom Hit Attributes")]
 	[Tooltip("How much poise damage to deal when hitting the ghost")]
 	public float poise_damage = 0;
@@ -45,6 +55,7 @@ public class BreakableObject : MonoBehaviour
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
+
 		if (weight == ObjectWeight.LIGHT) {
 			poise_damage = attrs.LIGHT_POISE_DAMAGE;
 			object_damage = attrs.LIGHT_OBJECT_DAMAGE;
@@ -66,18 +77,32 @@ public class BreakableObject : MonoBehaviour
 			ghost_damage = attrs.VERY_HEAVY_GHOST_DAMAGE;
 			force = attrs.VERY_HEAVY_FORCE;
 		}
+
+		//Audio Initialization
+		if(hitSoundEffect3 == null)
+        {
+			audioX = audioX - 1;
+        }
+		if(hitSoundEffect2 == null)
+        {
+			audioX = audioX - 1;
+        }
+		
+
+
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-
+		
 	}
 
 	public void OnCollisionEnter(Collision col) {
 
 		// We don't need to worry about dealing damage from incoming objects because their breakable object scripts will take care of it
 		if (col.gameObject.tag == "BreakableObject") {
+			
 			if (col.relativeVelocity.magnitude > 6) {
 				// Punch dat freaking object yo!
 				BreakableObject bo = col.gameObject.GetComponent<BreakableObject>();
@@ -112,15 +137,17 @@ public class BreakableObject : MonoBehaviour
 	}
 
 	public void GetPunched(Punch punch) {
+		
 		GetPunched(punch, transform.position);
+
 	}
 
 	/** Apply force, then deal damage. Force should be conserved in Break logic */
 	public void GetPunched(Punch punch, Vector3 hit_point) {
 
-			// spawn particles
-			// TODO: rotation
-			if (hit_particles) {
+		// spawn particles
+		// TODO: rotation
+		if (hit_particles) {
 					Instantiate(hit_particles, hit_point, new Quaternion());
 			}
 
@@ -149,6 +176,25 @@ public class BreakableObject : MonoBehaviour
 				hp -= damage;
 				if (hp <= 0) {
 					Break(force, hit_dir, hit_point);
+				} else
+				{
+					//Audio
+					destroyedSound = GetComponent<AudioSource>();
+					var audioRandom = Random.Range(1, audioX);
+					if (audioRandom == 1)
+					{
+						destroyedSound.clip = hitSoundEffect;
+					}
+					else if (audioRandom == 2)
+					{
+						destroyedSound.clip = hitSoundEffect2;
+					}
+					else if (audioRandom == 3)
+					{
+						destroyedSound.clip = hitSoundEffect3;
+					}
+					destroyedSound.pitch = (Random.Range(pitchLow, pitchHigh));
+					destroyedSound.Play();
 				}
 	}
 
@@ -178,8 +224,15 @@ public class BreakableObject : MonoBehaviour
 				crb.AddForce( (velocity+hit_dir).normalized * (velocity.magnitude + force));
 			}
 		}
-
-		Destroy(this.gameObject);
+		//Jacob Tantleff spaghetti code
+		destroyedSound.clip = destroyedSoundEffect;
+		destroyedSound.pitch = (Random.Range(pitchLow, pitchHigh));
+		destroyedSound.Play();
+		gameObject.GetComponent<MeshRenderer>().enabled = false;
+		gameObject.GetComponent<BoxCollider>().enabled = false;
+		gameObject.GetComponent<Rigidbody>().mass = 0;
+		Destroy(this.gameObject, 5f);
 
 	}
+
 }
