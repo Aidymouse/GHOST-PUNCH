@@ -32,12 +32,9 @@ public class BreakableObject : MonoBehaviour
 	[Header("Audio")]
 	public AudioSource destroyedSound;
 	public AudioClip hitSoundEffect;
-	public AudioClip hitSoundEffect2;
-	public AudioClip hitSoundEffect3;
 	public AudioClip destroyedSoundEffect;
 	public float pitchLow;
 	public float pitchHigh;
-	int audioX = 3;
 
 	[Header("Custom Hit Attributes")]
 	[Tooltip("How much poise damage to deal when hitting the ghost")]
@@ -77,19 +74,8 @@ public class BreakableObject : MonoBehaviour
 			ghost_damage = attrs.VERY_HEAVY_GHOST_DAMAGE;
 			force = attrs.VERY_HEAVY_FORCE;
 		}
-
-		//Audio Initialization
-		if(hitSoundEffect3 == null)
-        {
-			audioX = audioX - 1;
-        }
-		if(hitSoundEffect2 == null)
-        {
-			audioX = audioX - 1;
-        }
-		
-
-
+		destroyedSound = GetComponent<AudioSource>();
+		destroyedSound.clip = hitSoundEffect;
 	}
 
 	// Update is called once per frame
@@ -145,6 +131,11 @@ public class BreakableObject : MonoBehaviour
 	/** Apply force, then deal damage. Force should be conserved in Break logic */
 	public void GetPunched(Punch punch, Vector3 hit_point) {
 
+		
+		//Audio
+		destroyedSound.pitch = (Random.Range(pitchLow, pitchHigh));
+		destroyedSound.Play();
+
 		// spawn particles
 		// TODO: rotation
 		if (hit_particles) {
@@ -176,26 +167,8 @@ public class BreakableObject : MonoBehaviour
 				hp -= damage;
 				if (hp <= 0) {
 					Break(force, hit_dir, hit_point);
-				} else
-				{
-					//Audio
-					destroyedSound = GetComponent<AudioSource>();
-					var audioRandom = Random.Range(1, audioX);
-					if (audioRandom == 1)
-					{
-						destroyedSound.clip = hitSoundEffect;
-					}
-					else if (audioRandom == 2)
-					{
-						destroyedSound.clip = hitSoundEffect2;
-					}
-					else if (audioRandom == 3)
-					{
-						destroyedSound.clip = hitSoundEffect3;
-					}
-					destroyedSound.pitch = (Random.Range(pitchLow, pitchHigh));
-					destroyedSound.Play();
-				}
+				} 
+
 	}
 
 	/** Spawn broken object (which may comprise of many smaller objects) and conserve the force I'm experiencing to them **/
