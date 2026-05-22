@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Playables;
 using Unity.Properties;
+using UnityEngine.InputSystem;
 
 using UnityEditor;
 
@@ -42,6 +44,16 @@ public class Ghost : MonoBehaviour
 
 
 	public GhostAction cur_action;
+
+	// jumpscare sequence
+	public bool jumpscareReady = false;
+	public float jumpscareDistance = 2.0f;
+	public Transform player;
+	public GhostPuncher playerController;
+	public Transform jumpscareAlignPoint;
+	public Transform jumpscareTarget;
+	public PlayableDirector jumpscareTimeline;
+	public bool inJumpscare = false;
 
 	public ParticleSystem ectoplasm_particles;
 
@@ -121,7 +133,11 @@ public class Ghost : MonoBehaviour
 	// Update is called once per frame
 	public void Update()
 	{
-
+		if (inJumpscare)
+		{
+		    return; // freeze everything during jumpscare, she should still be punchable so idk we'll need to come back to this
+		}
+		
 		/* Rotate towards ghost puncher */
 		// TODO: when we flee we should look that direction instead
 		if (!SpinDisabled()) {
@@ -176,8 +192,28 @@ public class Ghost : MonoBehaviour
 
 		}
 
+		CheckJumpscareTrigger();
+
+	    // manual jumpscare trigger
+		if (Keyboard.current != null && Keyboard.current.jKey.wasPressedThisFrame)
+		{
+		    TriggerJumpscare();
+		}
+
 		tick_timers();
 
+	}
+
+	/* Jumpscare trigger check */
+	void CheckJumpscareTrigger()
+	{
+		if (!jumpscareReady) return;
+			float dist = Vector3.Distance(transform.position, player.position);
+
+		if (dist <= jumpscareDistance)
+		{
+   			TriggerJumpscare();
+		}
 	}
 
 	void ExitAction() {
@@ -282,6 +318,11 @@ public class Ghost : MonoBehaviour
 			nav_destination = null;
 			EnterAction(GhostAction.CHARGING_ESCAPE);
 		}
+		// jumpscare sequence triggers at random for now
+		if (Random.value < 0.01f)
+		{
+			jumpscareReady = true;
+		}
 	}
 
 	void state_ChargingEscape() {
@@ -364,6 +405,39 @@ public class Ghost : MonoBehaviour
 		if (cur_action != GhostAction.HIT_STUN) {
 			ti_restore_poise.tick(Time.deltaTime);
 		}
+	}
+
+	/* Jumpscare sequence */
+	public void TriggerJumpscare()
+	{
+	    if (inJumpscare) return;
+	    inJumpscare = true;
+		Debug.Log("JUMPSCARED");
+
+	    // Freeze AI
+        nav_agent.isStopped = true;
+
+	    // align point to target, this doesn't fucking work.
+        Vector3 offset = transform.position - jumpscareAlignPoint.position;
+        transform.position = jumpscareTarget.position + offset;
+        transform.rotation = jumpscareTarget.rotation;
+
+	    // Lock player movement
+        playerController.inCutscene = true;
+
+	    // Play timeline
+		jumpscareTimeline.time = 0;
+		jumpscareTimeline.Play();
+	}
+
+	public void EndJumpscare()
+	{
+	    inJumpscare = false;
+        nav_agent.enabled = true;
+        nav_agent.updatePosition = true;
+        nav_agent.updateRotation = true;
+        anim.enabled = true;
+        playerController.inCutscene = false;
 	}
 
 	/** EVENTS **/
