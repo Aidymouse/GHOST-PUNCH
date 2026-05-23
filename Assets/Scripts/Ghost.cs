@@ -20,18 +20,21 @@ public class Ghost : MonoBehaviour
 
 	// Hit points
 	[HideInInspector]
-	public	float hp;
+	public float hp;
 
-	public GameObject ghostPuncher;
+	public GameObject ghostPuncher_obj;
+	[HideInInspector]
+	public GhostPuncher ghostPuncher;
 
 	/** Used to find colliders and rigidbodies for switching between ragdoll and animator */
 	public GameObject rig;
 
-	GameObject nav_destination;
+	[HideInInspector]
+	public GameObject nav_destination;
 	ParticleSystem charge_particles;
 	Animator anim;
 
-	public enum GhostAction {
+	public enum GhostActions {
 		CHARGING_ESCAPE,
 		STARTLED,
 		MOVING_ROOM,
@@ -43,13 +46,12 @@ public class Ghost : MonoBehaviour
 	};
 
 
-	public GhostAction cur_action;
+	public GhostActions cur_action;
+	public GhostAction[] actions;
 
 	// jumpscare sequence
 	public bool jumpscareReady = false;
 	public float jumpscareDistance = 2.0f;
-	public Transform player;
-	public GhostPuncher playerController;
 	public Transform jumpscareAlignPoint;
 	public Transform jumpscareTarget;
 	public PlayableDirector jumpscareTimeline;
@@ -86,6 +88,14 @@ public class Ghost : MonoBehaviour
 
 	void Start()
 	{
+
+		ghostPuncher = ghostPuncher_obj.GetComponent<GhostPuncher>();
+
+		/* Init Actions */
+		actions = new GhostAction[7];
+		actions[(int)GhostActions.CHARGING_ESCAPE] = new GhostAction_ChargingEscape(this);
+		actions[(int)GhostActions.MOVING_ROOM] = new GhostAction_MovingRoom(this);
+		
 
 		rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
 		rig_colliders = rig.GetComponentsInChildren<Collider>();
@@ -126,7 +136,7 @@ public class Ghost : MonoBehaviour
 		powers[1] = new GhostPower_Slap(this, power_attribs);
 		powers[2] = new GhostPower_Scream(this, power_attribs);
 
-		EnterAction(GhostAction.MOVING_ROOM);
+		EnterAction(GhostActions.MOVING_ROOM);
 
 	}
 
@@ -150,7 +160,9 @@ public class Ghost : MonoBehaviour
 
 
 		/* Rotate nav agent always towards its next target (infinite turn speed) */
-		Vector3 to_target = nav_agent.steeringTarget - transform.position;
+		Vector3 to_target = 
+				nav_agent.steeringTarget 
+				- transform.position;
 		if (to_target.magnitude > 0) {
 			to_target.y = 0;
 			Quaternion target_angle = Quaternion.LookRotation(to_target);
@@ -164,27 +176,27 @@ public class Ghost : MonoBehaviour
 
 		/* Actions */
 		switch (cur_action) {
-			case GhostAction.CHARGING_ESCAPE: 
+			case GhostActions.CHARGING_ESCAPE: 
 				state_ChargingEscape();
 				break;
 
-			case GhostAction.MOVING_ROOM: 
+			case GhostActions.MOVING_ROOM: 
 				state_MovingRoom();
 				break;
 
-			case GhostAction.HIT_STUN: 
+			case GhostActions.HIT_STUN: 
 				state_HitStun();
 				break;
 
-			case GhostAction.RAGDOLL: 
+			case GhostActions.RAGDOLL: 
 				state_Ragdoll();
 				break;
 
-			case GhostAction.RECOVERY: 
+			case GhostActions.RECOVERY: 
 				state_Recovery();
 				break;
 
-			case GhostAction.USING_POWER: 
+			case GhostActions.USING_POWER: 
 				//state_HitStun();
 				state_UsingPower();
 				break;
@@ -208,7 +220,7 @@ public class Ghost : MonoBehaviour
 	void CheckJumpscareTrigger()
 	{
 		if (!jumpscareReady) return;
-			float dist = Vector3.Distance(transform.position, player.position);
+			float dist = Vector3.Distance(transform.position, ghostPuncher.transform.position);
 
 		if (dist <= jumpscareDistance)
 		{
@@ -219,11 +231,11 @@ public class Ghost : MonoBehaviour
 	void ExitAction() {
 		// Logic based on what state we're leaving
 		switch (cur_action) {
-			case GhostAction.CHARGING_ESCAPE: 
+			case GhostActions.CHARGING_ESCAPE: 
 				charge_particles.Stop();
 				break;
 
-			case GhostAction.RAGDOLL:
+			case GhostActions.RAGDOLL:
 
 				Vector3 ragdoll_offset = transform.position - rig_core.transform.position;
 				ragdoll_offset.y = 0;
@@ -238,14 +250,14 @@ public class Ghost : MonoBehaviour
 		};
 	}
 
-	void EnterAction(GhostAction action) {
+	public void EnterAction(GhostActions action) {
 
 		ExitAction();
 
 
 		// Enter New State Logic
 		switch (action) {
-			case GhostAction.CHARGING_ESCAPE: 
+			case GhostActions.CHARGING_ESCAPE: 
 				// TODO: If we can see the player (i.e. they kept pace with us well), skip straight to choosing a power.
 				charge_particles.Play();
 				cur_action = action;
@@ -253,7 +265,7 @@ public class Ghost : MonoBehaviour
 				break;
 
 
-			case GhostAction.MOVING_ROOM: 
+			case GhostActions.MOVING_ROOM: 
 				if (nav_destination == null) {
 					GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
 					int dest_idx = Random.Range(0, destinations.Length);
@@ -272,7 +284,7 @@ public class Ghost : MonoBehaviour
 				break;
 
 
-			case GhostAction.HIT_STUN: 
+			case GhostActions.HIT_STUN: 
 
 				ti_hit_stun.reset();
 
@@ -281,7 +293,7 @@ public class Ghost : MonoBehaviour
 				cur_action = action;
 				break;
 
-			case GhostAction.RAGDOLL:
+			case GhostActions.RAGDOLL:
 				cur_action = action;
 				ti_ragdoll.reset();
 				DisableAnimator();
@@ -290,7 +302,7 @@ public class Ghost : MonoBehaviour
 				vulnerable = false;
 				break;
 
-			case GhostAction.RECOVERY:
+			case GhostActions.RECOVERY:
 				ti_recovery.activate();
 				// TODO: if the ghost was attacking this should probably be 0...
 				ChangeAnimation("Idle", ti_recovery.time_remaining);
@@ -298,7 +310,7 @@ public class Ghost : MonoBehaviour
 				break;
 
 
-			case GhostAction.USING_POWER: 
+			case GhostActions.USING_POWER: 
 				cur_action = action;
 				PickRandomPower();
 				break;
@@ -314,27 +326,13 @@ public class Ghost : MonoBehaviour
 	/** STATES **/
 
 	void state_MovingRoom() {
-		if ((transform.position - nav_destination.transform.position).magnitude < 2) {
-			nav_destination = null;
-			EnterAction(GhostAction.CHARGING_ESCAPE);
-		}
-		// jumpscare sequence triggers at random for now
-		if (Random.value < 0.01f)
-		{
-			jumpscareReady = true;
-		}
+		actions[(int)GhostActions.MOVING_ROOM].Update();
 	}
 
 	void state_ChargingEscape() {
 		// TODO: be making wubwubwubwubwubwubwub sound
 
-		float old_escape = escape_meter;
-		bool prevEscaped = Escaped();
-		escape_meter += Time.deltaTime;
-
-		if (!prevEscaped && Escaped()) {
-			ghostPuncher.GetComponent<GhostPuncher>().EndRun();
-		}
+		actions[(int)GhostActions.CHARGING_ESCAPE].Update();
 
 		// Can I see the player? Have I seen them for some amount of timer? Startle!
 	}
@@ -344,7 +342,7 @@ public class Ghost : MonoBehaviour
 
 		if (ti_hit_stun.finished_this_frame()) {
 			ti_recovery.set(0);
-			EnterAction(GhostAction.RECOVERY);
+			EnterAction(GhostActions.RECOVERY);
 		}
 	}
 
@@ -353,7 +351,7 @@ public class Ghost : MonoBehaviour
 
 		if (ti_ragdoll.finished_this_frame()) {
 			ti_recovery.set(1);
-			EnterAction(GhostAction.RECOVERY);
+			EnterAction(GhostActions.RECOVERY);
 		}
 
 	}
@@ -365,11 +363,11 @@ public class Ghost : MonoBehaviour
 			RestorePoise();
 			nav_agent.isStopped = false;
 
-			EnterAction(GhostAction.USING_POWER);
+			EnterAction(GhostActions.USING_POWER);
 		/*
 			if (nav_destination == null) {
 			} else {
-				EnterAction(GhostAction.MOVING_ROOM);
+				EnterAction(GhostActions.MOVING_ROOM);
 			}
 		*/
 		}
@@ -397,12 +395,12 @@ public class Ghost : MonoBehaviour
 		if (Random.Range(1,4) == 3) {
 			PickRandomPower();
 		} else {
-			EnterAction(GhostAction.MOVING_ROOM);
+			EnterAction(GhostActions.MOVING_ROOM);
 		}
 	}
 
 	void tick_timers() {
-		if (cur_action != GhostAction.HIT_STUN) {
+		if (cur_action != GhostActions.HIT_STUN) {
 			ti_restore_poise.tick(Time.deltaTime);
 		}
 	}
@@ -412,18 +410,18 @@ public class Ghost : MonoBehaviour
 	{
 	    if (inJumpscare) return;
 	    inJumpscare = true;
-		Debug.Log("JUMPSCARED");
+			Debug.Log("JUMPSCARED");
 
 	    // Freeze AI
         nav_agent.isStopped = true;
 
 	    // align point to target, this doesn't fucking work.
-        Vector3 offset = transform.position - jumpscareAlignPoint.position;
-        transform.position = jumpscareTarget.position + offset;
-        transform.rotation = jumpscareTarget.rotation;
+       Vector3 offset = transform.position - jumpscareAlignPoint.position;
+       transform.position = jumpscareTarget.position + offset;
+       transform.rotation = jumpscareTarget.rotation;
 
 	    // Lock player movement
-        playerController.inCutscene = true;
+       ghostPuncher.inCutscene = true;
 
 	    // Play timeline
 		jumpscareTimeline.time = 0;
@@ -433,11 +431,11 @@ public class Ghost : MonoBehaviour
 	public void EndJumpscare()
 	{
 	    inJumpscare = false;
-        nav_agent.enabled = true;
-        nav_agent.updatePosition = true;
-        nav_agent.updateRotation = true;
-        anim.enabled = true;
-        playerController.inCutscene = false;
+      nav_agent.enabled = true;
+      nav_agent.updatePosition = true;
+      nav_agent.updateRotation = true;
+      anim.enabled = true;
+      ghostPuncher.GetComponent<GhostPuncher>().inCutscene = false;
 	}
 
 	/** EVENTS **/
@@ -469,7 +467,7 @@ public class Ghost : MonoBehaviour
 				Ragdoll(punch);
 			} else {
 				BecomeVulnerable();
-				EnterAction(GhostAction.HIT_STUN);
+				EnterAction(GhostActions.HIT_STUN);
 			}
 		} else {
 			ti_restore_poise.reset();
@@ -479,9 +477,9 @@ public class Ghost : MonoBehaviour
 			//PlayAnimation("Hurt"+hurt_num);
 			PlayAnimation("Hurt1");
 
-			if (cur_action == GhostAction.CHARGING_ESCAPE) {
+			if (cur_action == GhostActions.CHARGING_ESCAPE) {
 				// TODO: there should be a bit of buffer time here or powers come out super fast
-				EnterAction(GhostAction.USING_POWER);
+				EnterAction(GhostActions.USING_POWER);
 			}
 		}
 
@@ -510,19 +508,19 @@ public class Ghost : MonoBehaviour
 	}
 
 	void Ragdoll(Punch punch) {
-		EnterAction(GhostAction.RAGDOLL);
+		EnterAction(GhostActions.RAGDOLL);
 		rig_core.AddForce(punch.Direction * punch.Force * defaults.MAKE_HER_FLY_FACTOR);
 	}
 
 	/** STATUS **/
 	// If the ghost has hyper armor, she cannot have her poise break (it can go down though)
 	bool HasHyperArmor() {
-		return cur_action == GhostAction.HIT_STUN || cur_action == GhostAction.RAGDOLL || cur_action == GhostAction.RECOVERY;
+		return cur_action == GhostActions.HIT_STUN || cur_action == GhostActions.RAGDOLL || cur_action == GhostActions.RECOVERY;
 
 	}
 
 	bool SpinDisabled() {
-		return cur_action == GhostAction.RAGDOLL;
+		return cur_action == GhostActions.RAGDOLL;
 	}
 
 	public bool Escaped() {
