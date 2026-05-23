@@ -8,7 +8,7 @@ public class CutsceneCameraMatch : MonoBehaviour
     public Transform mainCamera;     // Main Camera (with CinemachineBrain)
 
     [Header("Optional")]
-    public FPSLook fpsLook;          // Reference to your look script
+    public CameraController cam_controller;          // Reference to your look script
 
     public void MatchCamera()
     {
@@ -31,9 +31,9 @@ public class CutsceneCameraMatch : MonoBehaviour
         cameraRoot.localRotation = Quaternion.Euler(-pitch, 0f, 0f);
 
         // sync with FPSLook so it doesn't snap back
-        if (fpsLook != null)
+        if (cam_controller != null)
         {
-            fpsLook.SetRotation(-pitch);
+            cam_controller.SetRotation(-pitch);
         }
     }
 }

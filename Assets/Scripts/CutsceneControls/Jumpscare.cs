@@ -49,26 +49,22 @@ public class GhostJumpscareController : MonoBehaviour
         Debug.Log("JUMPSCARE TRIGGERED");
 
         // 1. Freeze player
-        if (playerController != null)
-            playerController.inCutscene = true;
+        if (playerController != null) { playerController.inCutscene = true; }
 
         // 2. Freeze ghost AI completely
         NavMeshAgent agent = ghost.get_nav_agent();
-        if (agent != null)
-        {
+        if (agent != null) {
             agent.isStopped = true;
             agent.enabled = false;
         }
 
         // 3. Stop animation control
         Animator anim = ghost.GetComponentInChildren<Animator>();
-        if (anim != null)
-            anim.enabled = false;
+        if (anim != null) { anim.enabled = false; }
 
         // 4. Stop physics
         Rigidbody rb = ghost.rig_core;
-        if (rb != null)
-        {
+        if (rb != null) {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
@@ -120,6 +116,6 @@ public class GhostJumpscareController : MonoBehaviour
         if (anim != null)
             anim.enabled = true;
 
-        ghost.cur_action = Ghost.GhostAction.MOVING_ROOM;
+        ghost.cur_action = Ghost.GhostActions.MOVING_ROOM;
     }
 }

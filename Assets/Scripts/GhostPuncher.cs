@@ -121,10 +121,9 @@ public class GhostPuncher : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (inCutscene)	{
-			controller.Move(Vector3.zero);
-			return;
-		}
+
+		if (inCutscene)	{ return; }
+
 		// Timers
 		this.tick_timers();
 
@@ -230,15 +229,19 @@ public class GhostPuncher : MonoBehaviour
 
 	void DoPunch() {
 		ChangeAnimation("PUNCH_"+punch_with);
-		if (fovKick) fovKick.SmallKick();
-		if (screenShake) screenShake.Shake(0.05f);
+
+		fovKick.SmallKick();
+		screenShake.Shake(0.05f);
+
 		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_STAMINA, defaults.PUNCH_FEAR);
 	}
 
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
-		if (fovKick) fovKick.BigKick();
-		if (screenShake) screenShake.Shake(0.2f);
+		
+		fovKick.BigKick();
+		screenShake.Shake(0.2f);
+
 		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_GHOST_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1, defaults.MEGAPUNCH_STAMINA, defaults.MEGAPUNCH_FEAR);
 	}
 

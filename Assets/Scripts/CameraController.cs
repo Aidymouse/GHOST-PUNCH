@@ -11,14 +11,13 @@ public class CameraController : MonoBehaviour
 
 	float lookX;
 	float lookY;
-	[HideInInspector] public Vector2 lookDelta;
+	Vector2 lookDelta;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
 		action_look = InputSystem.actions.FindAction("Look");
 		Cursor.lockState = CursorLockMode.Locked;
-
 	}
 
 	// Update is called once per frame
@@ -33,7 +32,6 @@ public class CameraController : MonoBehaviour
 
 		lookX += look_value.x * sensitivity;
 
-
 		Quaternion player_rot = player_transform.rotation;
 		player_rot.eulerAngles = new Vector3(0, lookX, 0);
 		player_transform.rotation = player_rot;
@@ -44,4 +42,9 @@ public class CameraController : MonoBehaviour
 
 	}
 
+	/* Because only the cameras up and down rotation is controlled, when the camera is set back to the player vCam, is looks back towards the HeadTarget. So we need to set the rotation of the player capsule if we want the movement from a different vcam to stay applied */
+	public void SetRotation(float pitch) {
+			lookX = pitch;
+			this.transform.localRotation = Quaternion.Euler(lookX, 0f, 0f);
+	}
 }
