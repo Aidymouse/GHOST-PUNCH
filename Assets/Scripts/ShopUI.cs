@@ -2,30 +2,31 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public interface ShopUIEventHandler : IEventSystemHandler {
-	void ClickRight();
-	void ClickLeft();
+  void ClickRight();
+  void ClickLeft();
 }
 
 public class ShopUI : MonoBehaviour, ShopUIEventHandler
 {
 
-		public ShopCamera camera;
+  public Shop shop;
 
-    void Start()
-    {
-    }
+  void Start()
+  {
+  }
 
-    void Update()
-    {
-        
-    }
+  void Update()
+  {
 
-		public void ClickRight() {
-			Debug.Log("Clicking Right");
-			camera.turnGoal *= Quaternion.Euler(0, 90, 0);
-		}
+  }
 
-		public void ClickLeft() {
-			camera.turnGoal *= Quaternion.Euler(0, -90, 0);
-		}
+  public void ClickRight() {
+    Vector3 new_pos_dir = shop.camera_target.transform.TransformDirection(Vector3.right);
+    shop.camera_target.position = shop.shopCamera.transform.position + new_pos_dir * 10;
+  }
+
+  public void ClickLeft() {
+    Vector3 new_pos_dir = shop.camera_target.transform.TransformDirection(Vector3.left);
+    shop.camera_target.position = shop.shopCamera.transform.position + new_pos_dir * 10;
+  }
 }
