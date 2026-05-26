@@ -529,7 +529,7 @@ public class Ghost : MonoBehaviour
 		currentSound.clip = ragdollSound;
 		currentSound.PlayOneShot(ragdollSound);
 		currentSound.Play();
-		EnterAction(GhostAction.RAGDOLL);
+		EnterAction(GhostActions.RAGDOLL);
 		rig_core.AddForce(punch.Direction * punch.Force * defaults.MAKE_HER_FLY_FACTOR);
 	}
 
