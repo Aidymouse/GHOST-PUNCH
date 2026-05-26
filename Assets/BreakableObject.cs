@@ -74,8 +74,13 @@ public class BreakableObject : MonoBehaviour
 			ghost_damage = attrs.VERY_HEAVY_GHOST_DAMAGE;
 			force = attrs.VERY_HEAVY_FORCE;
 		}
-		destroyedSound = GetComponent<AudioSource>();
-		destroyedSound.clip = hitSoundEffect;
+
+		if(gameObject.GetComponent<AudioSource>() != null)
+        {
+			destroyedSound = GetComponent<AudioSource>();
+			destroyedSound.clip = hitSoundEffect;
+		}
+		
 	}
 
 	// Update is called once per frame
@@ -131,10 +136,14 @@ public class BreakableObject : MonoBehaviour
 	/** Apply force, then deal damage. Force should be conserved in Break logic */
 	public void GetPunched(Punch punch, Vector3 hit_point) {
 
-		
+
 		//Audio
-		destroyedSound.pitch = (Random.Range(pitchLow, pitchHigh));
-		destroyedSound.Play();
+		if (gameObject.GetComponent<AudioSource>() != null)
+        {
+			destroyedSound.pitch = (Random.Range(pitchLow, pitchHigh));
+			destroyedSound.Play();
+		}
+			
 
 		// spawn particles
 		// TODO: rotation
@@ -198,9 +207,13 @@ public class BreakableObject : MonoBehaviour
 			}
 		}
 		//Jacob Tantleff spaghetti code
-		destroyedSound.clip = destroyedSoundEffect;
-		destroyedSound.pitch = (Random.Range(pitchLow, pitchHigh));
-		destroyedSound.Play();
+		if (gameObject.GetComponent<AudioSource>() != null)
+        {
+			destroyedSound.clip = destroyedSoundEffect;
+			destroyedSound.pitch = (Random.Range(pitchLow, pitchHigh));
+			destroyedSound.Play();
+		}
+		//Turn the object invisible, then destroy it
 		gameObject.GetComponent<MeshRenderer>().enabled = false;
 		gameObject.GetComponent<BoxCollider>().enabled = false;
 		gameObject.GetComponent<Rigidbody>().mass = 0;

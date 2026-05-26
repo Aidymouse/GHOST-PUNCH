@@ -45,6 +45,17 @@ public class Ghost : MonoBehaviour
 		USING_POWER,
 	};
 
+	[Header("Sound Effects")]
+	public AudioSource currentSound;
+	public AudioClip takingDamageSound;
+	public AudioClip ragdollSound;
+	//Sounds temporarily stored on objects lol
+	public AudioClip energySound;
+	public AudioClip jumpscareSound;
+	public float pitchLow;
+	public float pitchHigh;
+
+
 
 	public GhostActions cur_action;
 	public GhostAction[] actions;
@@ -137,6 +148,9 @@ public class Ghost : MonoBehaviour
 		powers[2] = new GhostPower_Scream(this, power_attribs);
 
 		EnterAction(GhostActions.MOVING_ROOM);
+
+		currentSound = GetComponent<AudioSource>();
+		currentSound.clip = takingDamageSound;
 
 	}
 
@@ -444,20 +458,25 @@ public class Ghost : MonoBehaviour
 		hp -= punch.GhostDamage;
 		fear_meter += punch.Fear;
 
+		currentSound.clip = takingDamageSound;
+		currentSound.pitch = (Random.Range(pitchLow, pitchHigh));
+		currentSound.Play();
+
 
 		// 1 is mega punch and 3 is big object hit
 		if (vulnerable && (punch.HitClass == 1 || punch.HitClass == 3)) {
+			
 			Ragdoll(punch);
 			return;
 		}
-
+		
 
 		if (HasHyperArmor()) {
 			return;
 		}
 	
 		poise -= punch.PoiseDamage;
-
+		
 		if (ectoplasm_particles) {
 			Instantiate(ectoplasm_particles, transform.position, new Quaternion());
 		}
@@ -465,6 +484,7 @@ public class Ghost : MonoBehaviour
 		if (poise <= 0) {
 			if (punch.HitClass <= 1) {
 				Ragdoll(punch);
+				
 			} else {
 				BecomeVulnerable();
 				EnterAction(GhostActions.HIT_STUN);
@@ -482,8 +502,6 @@ public class Ghost : MonoBehaviour
 				EnterAction(GhostActions.USING_POWER);
 			}
 		}
-
-
 	}
 
 	void GainFear(int fear_gained) {
@@ -508,7 +526,10 @@ public class Ghost : MonoBehaviour
 	}
 
 	void Ragdoll(Punch punch) {
-		EnterAction(GhostActions.RAGDOLL);
+		currentSound.clip = ragdollSound;
+		currentSound.PlayOneShot(ragdollSound);
+		currentSound.Play();
+		EnterAction(GhostAction.RAGDOLL);
 		rig_core.AddForce(punch.Direction * punch.Force * defaults.MAKE_HER_FLY_FACTOR);
 	}
 

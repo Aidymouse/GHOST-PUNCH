@@ -12,6 +12,7 @@ public class WaveOrb : MonoBehaviour
 	public float object_damage;
 	public float object_force;
 
+
 	Timer life;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -19,6 +20,10 @@ public class WaveOrb : MonoBehaviour
 		life = new Timer(life_timer);
 
 		Instantiate(wave_particles, transform.position + particle_offset, transform.rotation);
+
+		
+
+	
 	}
 
 	// Update is called once per frame
@@ -34,7 +39,9 @@ public class WaveOrb : MonoBehaviour
 			Destroy(this.gameObject);
 		}
 
+
 	}
+
 
 	void OnTriggerEnter(Collider col) {
 
