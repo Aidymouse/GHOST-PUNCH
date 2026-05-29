@@ -54,6 +54,15 @@ public class GhostPuncher : MonoBehaviour
 	bool buffered_charge = false;
 	bool charging_punch = false;
 
+	public AudioSource footstepSound;
+	public AudioClip footSound1;
+	public AudioClip footSound2;
+	public float pitchLow;
+	public float pitchHigh;
+	public float stepCooldown;
+	private float stepRate;
+	private bool isMoving;
+
 	/* Other */
 	int ectoplasm = 0;
 
@@ -115,6 +124,10 @@ public class GhostPuncher : MonoBehaviour
 		ti_charge_up = new Timer(0, 0.5f);
 		ti_charge_up.deactivate();
 		ti_stamina_recharge = new Timer(0, defaults.STAMINA_RECHARGE_DELAY);
+
+		footstepSound = GetComponent<AudioSource>();
+		footstepSound.clip = footSound1;
+		stepRate = stepCooldown;
 
 	}
 
@@ -195,11 +208,15 @@ public class GhostPuncher : MonoBehaviour
 			if (!arm_animator.GetBool("Walking")) {
 				PlayAnimation("Walk", 1);
 				arm_animator.SetBool("Walking", true);
+				isMoving = true;
 			}
 		} else if (arm_animator.GetBool("Walking")) {
 			StopAnimation(1);
 			arm_animator.SetBool("Walking", false);
+			isMoving = false;
 		}
+
+		
 
 
 		/* Push */
@@ -225,6 +242,23 @@ public class GhostPuncher : MonoBehaviour
 
 		//controller.move(move_vec);
 
+		//Footsteps
+		if (isMoving == true && stepCooldown < 0f)
+		{
+			if (footstepSound.clip = footSound1)
+			{
+				footstepSound.clip = footSound2;
+			}
+			if (footstepSound.clip = footSound2)
+			{
+				footstepSound.clip = footSound1;
+			}
+			footstepSound.pitch = (Random.Range(pitchLow, pitchHigh));
+			footstepSound.Play();
+			stepCooldown = stepRate;
+		}
+		stepCooldown -= Time.deltaTime;
+		
 
 	}
 
