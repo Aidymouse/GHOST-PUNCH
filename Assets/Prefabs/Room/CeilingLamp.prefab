@@ -138,9 +138,16 @@ MonoBehaviour:
   broken_obj: {fileID: 0}
   hp: 1000
   rotation_offset: {x: 0, y: 0, z: 0}
+  weight: 0
+  attrs: {fileID: 0}
   hit_particles: {fileID: 1236530132058975547, guid: ea4c812773b5bfa47aba2a4211c5a8e6, type: 3}
   break_particles: {fileID: 0}
   break_self_particles: {fileID: 1780546180473290174, guid: 0cc26e7d35e1ebf4685ca0e471f4d6e5, type: 3}
+  destroyedSound: {fileID: 0}
+  hitSoundEffect: {fileID: 0}
+  destroyedSoundEffect: {fileID: 0}
+  pitchLow: 0
+  pitchHigh: 0
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
@@ -562,7 +569,7 @@ Light:
   m_InnerSpotAngle: 45.229538
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
-    m_Type: 1
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -601,7 +608,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 5.3001e-41, y: 1.1705267e-19, z: 1.2393039e+28, w: 0.00087519555}
+  m_BoundingSphereOverride: {x: 2.7115094e-20, y: 4.224538e-39, z: 1.2338e-41, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
@@ -623,7 +630,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
+  m_AdditionalLightsShadowResolutionTier: 0
   m_CustomShadowLayers: 0
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
