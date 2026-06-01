@@ -61,6 +61,8 @@ public class DebugUI : MonoBehaviour
 
   void Update() {
     SetDebug1("Ghost Action: "+ghost_action_strings[(int)ghost.cur_action]);
+    SetDebug2("Ragdoll timer: "+ghost.ti_ragdoll.time_remaining);
+
   }
 
   public void SetDebug1(string text){
