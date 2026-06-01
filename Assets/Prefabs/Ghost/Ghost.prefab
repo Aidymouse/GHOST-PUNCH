@@ -3804,16 +3804,24 @@ MonoBehaviour:
   escape_meter: 0
   escape_needed: 60
   hp: 0
+  ghostPuncher_obj: {fileID: 0}
   ghostPuncher: {fileID: 0}
   rig: {fileID: 1427564092133216371}
+  nav_destination: {fileID: 0}
   currentSound: {fileID: 0}
-  takingDamageSound: {fileID: 8300000, guid: 24f36ec5fa2976449a40d1729fe57da4, type: 3}
+  takingDamageSound: {fileID: 8300000, guid: 9b522224071408d4a98e2c67be63097e, type: 3}
   ragdollSound: {fileID: 0}
-  energySound: {fileID: 8300000, guid: d7ffa89ffacb094498c00ac4a2344409, type: 3}
-  jumpscareSound: {fileID: 8300000, guid: 56e45dfae79488b4784904d6b347f434, type: 3}
+  energySound: {fileID: 8300000, guid: 1899586bc4bf80440a03d5fed84e2712, type: 3}
+  jumpscareSound: {fileID: 8300000, guid: cf81402215d375f4f8b25283ba875485, type: 3}
   pitchLow: 0.8
   pitchHigh: 1.2
   cur_action: 0
+  jumpscareReady: 0
+  jumpscareDistance: 2
+  jumpscareAlignPoint: {fileID: 0}
+  jumpscareTarget: {fileID: 0}
+  jumpscareTimeline: {fileID: 0}
+  inJumpscare: 0
   ectoplasm_particles: {fileID: 198321120434662062, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
   fear_meter: 0
   wave_orb: {fileID: 8074112012794229111, guid: ae93a043bd81acdc487b5fe3fb284938, type: 3}
