@@ -54,8 +54,17 @@ public class GhostPuncher : MonoBehaviour
   bool buffered_charge = false;
   bool charging_punch = false;
 
-  /* Other */
-  int ectoplasm = 0;
+	public AudioSource footstepSound;
+	public AudioClip footSound1;
+	public AudioClip footSound2;
+	public float pitchLow;
+	public float pitchHigh;
+	public float stepCooldown;
+	private float stepRate;
+	private bool isMoving;
+
+	/* Other */
+	int ectoplasm = 0;
 
   LayerMask layer_punchable;
 
@@ -116,61 +125,10 @@ public class GhostPuncher : MonoBehaviour
     ti_charge_up.deactivate();
     ti_stamina_recharge = new Timer(0, defaults.STAMINA_RECHARGE_DELAY);
 
-  }
+		footstepSound = GetComponent<AudioSource>();
+		footstepSound.clip = footSound1;
+		stepRate = stepCooldown;
 
-  // Update is called once per frame
-  void Update()
-  {
-
-    if (inCutscene)	{ return; }
-
-    // Timers
-    this.tick_timers();
-
-    // Attacking
-    if (ti_punch_again.finished_this_frame()) {
-      punch_with = "RIGHT";
-    }
-
-    if ((action_chargePunch.WasPerformedThisFrame() && !buffered_punch) || (buffered_charge && ti_punch_cooldown.finished_this_frame())) {
-
-      buffered_charge = true;
-
-      if (ti_punch_cooldown.finished()) {
-	ti_charge_up.activate();
-	ti_charge_up.reset();
-	ChangeAnimation("ARM_CHARGE_WINDUP");
-	charging_punch = true;
-      }
-
-    }
-
-    if (action_attack.WasPerformedThisFrame() || (buffered_punch && ti_punch_cooldown.finished_this_frame())) {
-
-      buffered_charge = false;
-
-      if (ti_punch_cooldown.time_remaining < defaults.PUNCH_BUFFER_TIME) {
-	// This gets set even on successful punch, but doesn't matter cos it'll get unset when we punch
-	buffered_punch = true; 
-      }
-
-      if (ti_punch_cooldown.finished()) {
-
-	buffered_punch = false;
-
-	if (!ti_punch_again.finished()) {
-	  punch_with = punch_with == "RIGHT" ? "LEFT" : "RIGHT";
-	} 
-
-
-	if (ti_charge_up.finished() && stamina > 0) {
-	  // TODO: feebler animation if this happens
-	  DoMegaPunch();
-	  ti_punch_cooldown.set(GetMegaPunchCooldown());	
-	} else {
-	  DoPunch();
-	  ti_punch_cooldown.set(GetPunchCooldown());	
-	  ti_punch_again.reset();	
 	}
 
 	charging_punch = false;
@@ -222,7 +180,29 @@ public class GhostPuncher : MonoBehaviour
     /* Execute the move */
     controller.Move(move_vec * Time.deltaTime);
 
-    //controller.move(move_vec);
+		// Moving
+		Vector3 move_vec = controller.isGrounded ? new Vector3(0, 0, 0) : Physics.gravity;
+		Vector3 desired_control_vec = moveControls();
+
+		float speed_multiplier = 1 - GetSlowMultiplier();
+
+		desired_control_vec *= speed_multiplier;
+
+		move_vec += desired_control_vec;
+
+		if (desired_control_vec.magnitude > 0) {
+			if (!arm_animator.GetBool("Walking")) {
+				PlayAnimation("Walk", 1);
+				arm_animator.SetBool("Walking", true);
+				isMoving = true;
+			}
+		} else if (arm_animator.GetBool("Walking")) {
+			StopAnimation(1);
+			arm_animator.SetBool("Walking", false);
+			isMoving = false;
+		}
+
+		
 
 
   }
@@ -257,6 +237,23 @@ public class GhostPuncher : MonoBehaviour
     //Vector3 ray_dir = transform.TransformDirection(Vector3.forward);
     Vector3 ray_dir = cam.transform.TransformDirection(Vector3.forward);
 
+		//Footsteps
+		if (isMoving == true && stepCooldown < 0f)
+		{
+			if (footstepSound.clip = footSound1)
+			{
+				footstepSound.clip = footSound2;
+			}
+			if (footstepSound.clip = footSound2)
+			{
+				footstepSound.clip = footSound1;
+			}
+			footstepSound.pitch = (Random.Range(pitchLow, pitchHigh));
+			footstepSound.Play();
+			stepCooldown = stepRate;
+		}
+		stepCooldown -= Time.deltaTime;
+		
 
     if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, punch_range, layer_punchable)) {
       Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
