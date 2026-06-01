@@ -116,6 +116,6 @@ public class GhostJumpscareController : MonoBehaviour
         if (anim != null)
             anim.enabled = true;
 
-        ghost.cur_action = Ghost.GhostActions.MOVING_ROOM;
+        ghost.cur_action = GhostActions.MOVING_ROOM;
     }
 }
