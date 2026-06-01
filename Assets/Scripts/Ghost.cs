@@ -15,6 +15,8 @@ public enum GhostActions {
   RECOVERY,
 
   USING_POWER,
+
+	PEAK_AROUND_CORNER,
 };
 
 public class Ghost : MonoBehaviour
@@ -169,10 +171,6 @@ public class Ghost : MonoBehaviour
   // Update is called once per frame
   public void Update()
   {
-    if (inJumpscare)
-    {
-      return; // freeze everything during jumpscare, she should still be punchable so idk we'll need to come back to this
-    }
 
     /* Rotate towards ghost puncher */
     // TODO: when we flee we should look that direction instead
@@ -215,29 +213,10 @@ public class Ghost : MonoBehaviour
 
     }
 
-    CheckJumpscareTrigger();
-
-    // manual jumpscare trigger
-    if (Keyboard.current != null && Keyboard.current.jKey.wasPressedThisFrame)
-    {
-      TriggerJumpscare();
-    }
-
     tick_timers();
 
   }
 
-  /* Jumpscare trigger check */
-  void CheckJumpscareTrigger()
-  {
-    if (!jumpscareReady) return;
-    float dist = Vector3.Distance(transform.position, ghostPuncher.transform.position);
-
-		if (dist <= jumpscareDistance)
-		{
-			TriggerJumpscare();
-		}
-	}
 
 	void ExitAction() {
     // Logic based on what state we're leaving
@@ -278,10 +257,6 @@ public class Ghost : MonoBehaviour
 
   }
 
-
-
-
-
   /** STATES **/
 
   void state_UsingPower() {
@@ -316,38 +291,7 @@ public class Ghost : MonoBehaviour
     }
   }
 
-  /* Jumpscare sequence */
-  public void TriggerJumpscare()
-  {
-    if (inJumpscare) return;
-    inJumpscare = true;
-    Debug.Log("JUMPSCARED");
 
-    // Freeze AI
-    nav_agent.isStopped = true;
-
-    // align point to target, this doesn't fucking work.
-    Vector3 offset = transform.position - jumpscareAlignPoint.position;
-    transform.position = jumpscareTarget.position + offset;
-    transform.rotation = jumpscareTarget.rotation;
-
-    // Lock player movement
-    ghostPuncher.inCutscene = true;
-
-    // Play timeline
-    jumpscareTimeline.time = 0;
-    jumpscareTimeline.Play();
-  }
-
-  public void EndJumpscare()
-  {
-    inJumpscare = false;
-    nav_agent.enabled = true;
-    nav_agent.updatePosition = true;
-    nav_agent.updateRotation = true;
-    anim.enabled = true;
-    ghostPuncher.GetComponent<GhostPuncher>().inCutscene = false;
-  }
 
   /** EVENTS **/
   public void GetPunched(Punch punch) {
@@ -380,11 +324,11 @@ public class Ghost : MonoBehaviour
 
     if (poise <= 0) {
       if (punch.HitClass <= 1) {
-	Ragdoll(punch);
+				Ragdoll(punch);
 
       } else {
-	BecomeVulnerable();
-	EnterAction(GhostActions.HIT_STUN);
+				BecomeVulnerable();
+				EnterAction(GhostActions.HIT_STUN);
       }
     } else {
       ti_restore_poise.reset();
@@ -395,8 +339,8 @@ public class Ghost : MonoBehaviour
       PlayAnimation("Hurt1");
 
       if (cur_action == GhostActions.CHARGING_ESCAPE) {
-	// TODO: there should be a bit of buffer time here or powers come out super fast
-	EnterAction(GhostActions.USING_POWER);
+				// TODO: there should be a bit of buffer time here or powers come out super fast
+				EnterAction(GhostActions.USING_POWER);
       }
     }
   }
