@@ -21,12 +21,14 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
   }
 
   public void ClickRight() {
-    Vector3 new_pos_dir = shop.camera_target.transform.TransformDirection(Vector3.right);
-    shop.camera_target.position = shop.shopCamera.transform.position + new_pos_dir * 10;
+		Vector3 to_target = shop.camera_target.transform.position - shop.shopCamera.transform.position;
+		Vector3 rotate = Vector3.Normalize((Quaternion.AngleAxis(90, Vector3.up) * to_target));
+    shop.camera_target.position = shop.shopCamera.transform.position + rotate * 10;
   }
 
   public void ClickLeft() {
-    Vector3 new_pos_dir = shop.camera_target.transform.TransformDirection(Vector3.left);
-    shop.camera_target.position = shop.shopCamera.transform.position + new_pos_dir * 10;
+		Vector3 to_target = shop.camera_target.transform.position - shop.shopCamera.transform.position;
+		Vector3 rotate = Vector3.Normalize((Quaternion.AngleAxis(-90, Vector3.up) * to_target));
+    shop.camera_target.position = shop.shopCamera.transform.position + rotate * 10;
   }
 }
