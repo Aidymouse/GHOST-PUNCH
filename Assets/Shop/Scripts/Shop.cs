@@ -22,5 +22,9 @@ public class Shop : MonoBehaviour
 
   public void LookTowardsDoor() { }
 
+	/* Item Management */
+	public void BuyItem(ShopItem item) {
+		Debug.Log(item.item_id + " costs " + item.cost + " ectoplasm");
+	}
 
 }
