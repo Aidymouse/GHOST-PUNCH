@@ -107,7 +107,7 @@ public class GhostPuncher : MonoBehaviour
 		move_speed = defaults.MOVE_SPEED;
 		// TODO: handle via items
 		max_stamina = defaults.BASE_STAMINA;
-		stamina = max_stamina
+		stamina = max_stamina;
 		stamina_recharge_rate = defaults.STAMINA_RECHARGE_RATE;
 		punch_range = defaults.PUNCH_RANGE;
 
