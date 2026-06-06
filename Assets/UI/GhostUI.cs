@@ -80,7 +80,7 @@ public class GhostUI : MonoBehaviour
 					break;
 				case "StaminaBar":
 					stamina_bar = bar;
-					stamina_bar.SetMaxValue(ghost_puncher.defaults.MAX_STAMINA);
+					stamina_bar.SetMaxValue(ghost_puncher.defaults.BASE_STAMINA);
 					break;
 			}
 		}

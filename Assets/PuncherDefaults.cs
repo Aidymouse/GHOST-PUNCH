@@ -19,8 +19,8 @@ public class PuncherDefaults : ScriptableObject
 	public float PUNCH_FEAR;
 
 
-	[Tooltip("Maximum stamina to start with")]
-	public float MAX_STAMINA;
+	[Tooltip("Maximum stamina for ghost puncher with no items")]
+	public float BASE_STAMINA;
 	[Tooltip("How long to wait in between stamina usage and starting to recharge")]
 	public float STAMINA_RECHARGE_DELAY;
 	[Tooltip("Stamina per second regained")]
