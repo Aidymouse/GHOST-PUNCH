@@ -30,7 +30,7 @@ public class BreakableObject : MonoBehaviour
 	public ParticleSystem break_self_particles;
 
 	[Header("Audio")]
-	public AudioSource destroyedSound;
+	AudioSource audio_source;
 	public AudioClip hitSoundEffect;
 	public AudioClip destroyedSoundEffect;
 	public float pitchLow;
@@ -75,11 +75,17 @@ public class BreakableObject : MonoBehaviour
 			force = attrs.VERY_HEAVY_FORCE;
 		}
 
+		if (hitSoundEffect) {
+			audio_source = GetComponent<AudioSource>();
+			audio_source.clip = hitSoundEffect;
+		}
+		/*
 		if(gameObject.GetComponent<AudioSource>() != null)
         {
 			destroyedSound = GetComponent<AudioSource>();
 			destroyedSound.clip = hitSoundEffect;
 		}
+		*/
 		
 	}
 
@@ -138,10 +144,9 @@ public class BreakableObject : MonoBehaviour
 
 
 		//Audio
-		if (gameObject.GetComponent<AudioSource>() != null)
-        {
-			destroyedSound.pitch = (Random.Range(pitchLow, pitchHigh));
-			destroyedSound.Play();
+		if (audio_source) { 
+			audio_source.pitch = (Random.Range(pitchLow, pitchHigh));
+			audio_source.Play(); 
 		}
 			
 
@@ -206,18 +211,12 @@ public class BreakableObject : MonoBehaviour
 				crb.AddForce( (velocity+hit_dir).normalized * (velocity.magnitude + force));
 			}
 		}
-		//Jacob Tantleff spaghetti code
-		if (gameObject.GetComponent<AudioSource>() != null)
-        {
-			destroyedSound.clip = destroyedSoundEffect;
-			destroyedSound.pitch = (Random.Range(pitchLow, pitchHigh));
-			destroyedSound.Play();
+
+		if (destroyedSoundEffect) {
+			SoundEmitter.Create(destroyedSoundEffect);
 		}
-		//Turn the object invisible, then destroy it
-		gameObject.GetComponent<MeshRenderer>().enabled = false;
-		gameObject.GetComponent<BoxCollider>().enabled = false;
-		gameObject.GetComponent<Rigidbody>().mass = 0;
-		Destroy(this.gameObject, 5f);
+
+		Destroy(this.gameObject);
 
 	}
 

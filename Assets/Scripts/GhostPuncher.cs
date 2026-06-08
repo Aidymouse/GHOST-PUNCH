@@ -94,7 +94,6 @@ public class GhostPuncher : MonoBehaviour
 	[HideInInspector]
 	public bool uiFlag_slowed;
 
-
 	void Start()
 	{
 		action_chargePunch = InputSystem.actions.FindAction("ChargePunch");
@@ -106,15 +105,15 @@ public class GhostPuncher : MonoBehaviour
 
 		/* Load Defaults */
 		move_speed = defaults.MOVE_SPEED;
-		max_stamina = defaults.MAX_STAMINA;
-		stamina = defaults.MAX_STAMINA;
+		// TODO: handle via items
+		max_stamina = defaults.BASE_STAMINA;
+		stamina = max_stamina;
 		stamina_recharge_rate = defaults.STAMINA_RECHARGE_RATE;
 		punch_range = defaults.PUNCH_RANGE;
 
 		/* Camera effects */
 		fovKick = GetComponentInChildren<FOVKick>();
 		screenShake = GetComponentInChildren<ScreenShake>();
-
 
 		controller = GetComponent<CharacterController>();
 
