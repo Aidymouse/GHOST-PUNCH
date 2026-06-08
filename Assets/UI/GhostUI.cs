@@ -72,20 +72,20 @@ public class GhostUI : MonoBehaviour
 					break;
 				case "PoiseBar":
 					poise_bar = bar;
-					poise_bar.SetMaxValue(ghost.defaults.POISE);
+					//poise_bar.SetMaxValue(ghost.defaults.POISE);
 					break;
 				case "HealthBar":
 					ghost_health_bar = bar;
-					ghost_health_bar.SetMaxValue(ghost.defaults.HP);
+					//ghost_health_bar.SetMaxValue(ghost.defaults.HP);
 					break;
 				case "StaminaBar":
 					stamina_bar = bar;
-					stamina_bar.SetMaxValue(ghost_puncher.defaults.BASE_STAMINA);
+					//stamina_bar.SetMaxValue(ghost_puncher.defaults.BASE_STAMINA);
 					break;
 			}
 		}
 
-		escape_bar.SetValue(ghost.escape_meter);
+		//escape_bar.SetValue(ghost.escape_meter);
 
 		//ui_escape_meter = UnityEngine.GameObject.Find<TMP_Text>("EscapeMeter");
 	}

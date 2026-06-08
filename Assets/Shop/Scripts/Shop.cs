@@ -5,14 +5,13 @@ public class Shop : MonoBehaviour
   public float turnSpeed;
   public Quaternion turnGoal;
 
-  public Camera shopCamera;
-
+  public Transform camera_pos;
   public Transform camera_target;
 
 
   void Start()
   {
-    camera_target.position = shopCamera.transform.position + Vector3.forward * 10;
+    camera_target.position = camera_pos.position + Vector3.forward * 10;
 
   }
 
