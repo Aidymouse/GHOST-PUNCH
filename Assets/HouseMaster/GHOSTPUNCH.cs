@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Playables;
+using Unity.Cinemachine;
 
 /** Overall game manager script **/
 public class GHOSTPUNCH : MonoBehaviour
@@ -9,6 +10,14 @@ public class GHOSTPUNCH : MonoBehaviour
 
 		bool house_ready;
 		public PlayableDirector enter_house_timeline;
+
+		public CinemachineCamera VCam_MouseControlled;
+		public CinemachineCamera VCam_Shop;
+
+		/* House time stuff */
+		public GhostPuncher puncher_instance;
+		public Ghost ghost_instance;
+		public GhostUI ghost_ui;
 
     void Start()
     {
@@ -36,17 +45,25 @@ public class GHOSTPUNCH : MonoBehaviour
 				Debug.Log("House is ready!");
 
 				// Enable house scene
-				/*
 				GameObject ghost_container = GameObject.Find("SceneContainer");
 				ghost_container.GetComponent<SceneContainer>().Enable();
-				*/
 
-					enter_house_timeline.Play();
+				// SIGNAL: this cutscene triggers a signal
+				enter_house_timeline.Play();
+				
 
 
 			} else {
 				Debug.Log("House is not ready yet!!!");
 			}
+		}
+
+		public void Signaled_EndStartRunCutscene() {
+			Debug.Log("Signal received");
+			ghost_instance.gameObject.SetActive(true);
+			ghost_ui.gameObject.SetActive(true);
+			puncher_instance.GetComponentInChildren<CameraController>().enabled = true;
+			VCam_Shop.gameObject.SetActive(false);
 		}
 
 		public void EndRun() {

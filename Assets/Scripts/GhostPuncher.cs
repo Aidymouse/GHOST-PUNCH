@@ -70,7 +70,7 @@ public class GhostPuncher : MonoBehaviour
 
 	public Vector3 lose_point;
 
-	Animator arm_animator;
+	public Animator arm_animator;
 
 	/* Camera effects */
 	FOVKick fovKick;
@@ -100,7 +100,7 @@ public class GhostPuncher : MonoBehaviour
 		action_attack = InputSystem.actions.FindAction("Attack");
 		action_move = InputSystem.actions.FindAction("Move");
 
-		arm_animator = this.GetComponentInChildren<Animator>();
+		//arm_animator = this.GetComponentInChildren<Animator>();
 		layer_punchable = LayerMask.GetMask("Punchable");
 
 		/* Load Defaults */
@@ -134,7 +134,7 @@ public class GhostPuncher : MonoBehaviour
 	void Update()
 	{
 		if (inCutscene)	{
-			controller.Move(Vector3.zero);
+			//controller.Move(Vector3.zero);
 			return;
 		}
 		// Timers

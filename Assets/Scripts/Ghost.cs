@@ -183,7 +183,7 @@ public class Ghost : MonoBehaviour
     }
 
 
-    /* Rotate nav agent always towards its next target (infinite turn speed) */
+    /* Rotate nav agent always towards its next target (infinite turn speed ... doesn't work ?) */
     Vector3 to_target = nav_agent.steeringTarget - transform.position;
     if (to_target.magnitude > 0) {
       to_target.y = 0;
