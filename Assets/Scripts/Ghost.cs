@@ -440,6 +440,10 @@ public class Ghost : MonoBehaviour
   }
 
 
+	public void StartRun() {
+		gameObject.SetActive(true);
+	}
+
 
 
   /** GETTERS */

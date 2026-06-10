@@ -18,6 +18,7 @@ public class GHOSTPUNCH : MonoBehaviour
 		public GhostPuncher puncher_instance;
 		public Ghost ghost_instance;
 		public GhostUI ghost_ui;
+		public ShopDoor shop_door;
 
     void Start()
     {
@@ -48,6 +49,8 @@ public class GHOSTPUNCH : MonoBehaviour
 				GameObject ghost_container = GameObject.Find("SceneContainer");
 				ghost_container.GetComponent<SceneContainer>().Enable();
 
+				shop_door.StartRun();
+
 				// SIGNAL: this cutscene triggers a signal
 				enter_house_timeline.Play();
 				
@@ -60,10 +63,11 @@ public class GHOSTPUNCH : MonoBehaviour
 
 		public void Signaled_EndStartRunCutscene() {
 			Debug.Log("Signal received");
-			ghost_instance.gameObject.SetActive(true);
 			ghost_ui.gameObject.SetActive(true);
-			puncher_instance.GetComponentInChildren<CameraController>().enabled = true;
 			VCam_Shop.gameObject.SetActive(false);
+
+			ghost_instance.StartRun();
+			puncher_instance.StartRun();
 		}
 
 		public void EndRun() {

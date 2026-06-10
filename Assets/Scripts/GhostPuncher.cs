@@ -130,6 +130,8 @@ public class GhostPuncher : MonoBehaviour
 
 	}
 
+
+
 	// Update is called once per frame
 	void Update()
 	{
@@ -282,7 +284,7 @@ public class GhostPuncher : MonoBehaviour
 		// Cast a ray - jeff says should be a box
 		RaycastHit attack_hit;
 
-		Camera cam = this.GetComponentInChildren<Camera>();
+		CameraController cam = this.GetComponentInChildren<CameraController>();
 
 		//Vector3 ray_dir = transform.TransformDirection(Vector3.forward);
 		Vector3 ray_dir = cam.transform.TransformDirection(Vector3.forward);
@@ -403,7 +405,15 @@ public class GhostPuncher : MonoBehaviour
 		statuses.Add(new_status);
 	}
 
+	/* Update all the state needed when a run begins */
+	public void StartRun() {
+		GetComponentInChildren<CameraController>().enabled = true;
+		inCutscene = false;
+	}
+
 	public void EndRun() {
+		GetComponentInChildren<CameraController>().enabled = false;
+		inCutscene = true;
 		this.transform.position = lose_point;
 
 	}
