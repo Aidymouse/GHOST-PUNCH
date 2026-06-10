@@ -1,15 +1,8 @@
 using UnityEngine;
 
-public enum ShopItemIDs {
-	SALT_SHAKER,
-	PAINKILLERS,
-	GHOST_DETECTOR,
-};
-
 public class ShopItem : MonoBehaviour
 {
-
-	public ShopItemIDs item_id;
+	public ItemType item_id;
+	public int item_level;
 	public int cost;
-
 }
