@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public enum ItemType {
 	PROTEIN_POWDER,
@@ -7,15 +8,12 @@ public enum ItemType {
 	GHOST_DETECTOR,
 }
 
+[System.Serializable]
 public class Item {
 	
 	// Single use items only have one level
 	public ItemType item_type;
 	public int level;
-
-	bool applies_to_puncher;
-	bool applies_to_ghost;
-	bool applies_to_house;
 
 	public Item(ItemType new_type) {
 		item_type = new_type;
