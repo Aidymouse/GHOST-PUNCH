@@ -433,6 +433,17 @@ public class GhostPuncher : MonoBehaviour
 
 	}
 
+
+	public void ApplyItems(ItemRecord record) {
+		for (int i=0; i<record.items.Count; i++) {
+			Item item = record.items[i];
+			item.ApplyToGhostPuncher(this);
+		}
+	}
+
+
+
+	/** **/
 	float GetPunchCooldown() {
 		return defaults.PUNCH_COOLDOWN;
 	}
@@ -453,6 +464,7 @@ public class GhostPuncher : MonoBehaviour
 
 		return total_slow_multiplier;
 	}
+
 }
 
 

@@ -10,12 +10,13 @@ public class Shop : MonoBehaviour
 
 	Item[] item_instances;
 
-	ItemRecord bought;
+	[HideInInspector]
+	public ItemRecord bought_items;
 
   void Start()
   {
 
-		bought = new ItemRecord();
+		bought_items = new ItemRecord();
 
     camera_target.position = camera_pos.position + Vector3.forward * 10;
 
@@ -39,7 +40,7 @@ public class Shop : MonoBehaviour
 
 		Debug.Log(item.item_id + " costs " + item.cost + " ectoplasm");
 
-		bought.AddItem(instance);
+		bought_items.AddItem(instance);
 
 	}
 

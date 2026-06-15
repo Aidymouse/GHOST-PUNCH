@@ -20,6 +20,9 @@ public class GHOSTPUNCH : MonoBehaviour
 		public GhostUI ghost_ui;
 		public ShopDoor shop_door;
 
+		/* Also contains the data for what items are present */
+		public Shop shop;
+
     void Start()
     {
 			house_ready = false;
@@ -35,7 +38,6 @@ public class GHOSTPUNCH : MonoBehaviour
 
 			house_ready = true;
 
-			// I think ghost puncher can just be in this scene and we do some fancy cutscene to control stuff
 		}
 
 
@@ -50,6 +52,9 @@ public class GHOSTPUNCH : MonoBehaviour
 				ghost_container.GetComponent<SceneContainer>().Enable();
 
 				shop_door.StartRun();
+			
+				Debug.Log(shop.bought_items);
+				puncher_instance.ApplyItems(shop.bought_items);
 
 				// SIGNAL: this cutscene triggers a signal
 				enter_house_timeline.Play();
