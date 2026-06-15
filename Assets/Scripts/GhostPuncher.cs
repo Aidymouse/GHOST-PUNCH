@@ -27,6 +27,10 @@ public struct Punch {
 
 public class GhostPuncher : MonoBehaviour
 {
+
+	[Tooltip("If true, the puncher spawns in playable form, rather than being dormant like for the main game.")]
+	public bool start_active;	
+
 	InputAction action_attack;
 	InputAction action_move;
 	InputAction action_chargePunch;
@@ -127,6 +131,17 @@ public class GhostPuncher : MonoBehaviour
 		footstepSound = GetComponent<AudioSource>();
 		footstepSound.clip = footSound1;
 		stepRate = stepCooldown;
+
+		if (!start_active) {
+			Debug.Log("Ghost Puncher is going dormant.");
+			GetComponentInChildren<CameraController>().enabled = false;
+			Cursor.lockState = CursorLockMode.None;
+
+			if (inCutscene == false) {
+				Debug.LogWarning("Ghost puncher defying desired cutscene state because we started active");
+			}
+			inCutscene = true;
+		}
 
 	}
 
