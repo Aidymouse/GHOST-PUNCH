@@ -77,6 +77,10 @@ public class BreakableObject : MonoBehaviour
 
 		if (hitSoundEffect) {
 			audio_source = GetComponent<AudioSource>();
+			if (!audio_source) {
+				Debug.LogWarning("Breakable object missing an audio source component! Adding one manually...");
+				this.gameObject.AddComponent<AudioSource>();
+			}
 			audio_source.clip = hitSoundEffect;
 		}
 		/*
