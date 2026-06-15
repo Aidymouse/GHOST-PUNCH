@@ -1,7 +1,6 @@
 using UnityEngine;
 /* Maintains a record of which items have been purchased from the shop */
-public class ItemRecord : MonoBehaviour 
-{
+public class ItemRecord {
 	public Item[] items;
 
 	public void LoadFromFile() {
