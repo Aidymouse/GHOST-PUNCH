@@ -429,7 +429,7 @@ public class GhostPuncher : MonoBehaviour
 	public void EndRun() {
 		GetComponentInChildren<CameraController>().enabled = false;
 		inCutscene = true;
-		this.transform.position = lose_point;
+		//this.transform.position = lose_point;
 
 	}
 

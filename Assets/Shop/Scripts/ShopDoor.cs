@@ -41,4 +41,14 @@ public class ShopDoor : MonoBehaviour
 			black_bg.SetActive(false);
 		}
 
+		public void EndRun() {
+			inCutscene = false;
+
+			JointSpring spring = hinge.spring;
+			spring.targetPosition = 0.0f;
+			hinge.spring = spring;
+
+			black_bg.SetActive(true);
+		}
+
 }

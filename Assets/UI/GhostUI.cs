@@ -91,7 +91,7 @@ public class GhostUI : MonoBehaviour
 
 	public void InitUI(Ghost ghost, GhostPuncher puncher) {
 		escape_bar.SetMaxValue(ghost.escape_needed);
-		poise_bar.SetMaxValue(ghost.defaults.POISE);
+		poise_bar.SetMaxValue(ghost.max_poise);
 		ghost_health_bar.SetMaxValue(ghost.defaults.HP);
 		stamina_bar.SetMaxValue(puncher.max_stamina);
 

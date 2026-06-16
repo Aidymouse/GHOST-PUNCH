@@ -20,5 +20,7 @@ public class GhostDefaults : ScriptableObject
     public float RECOVERY_TIME;
     [Tooltip("Multiplier added to punch force when the ghost ragdolls")]
     public float MAKE_HER_FLY_FACTOR;
+		[Tooltip("How many seconds the ghost needs to charge to end the run")]
+		public float ESCAPE_NEEDED;
 
 }

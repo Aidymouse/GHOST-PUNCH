@@ -31,7 +31,9 @@ public class Ghost : MonoBehaviour
   // Forces are applied to the rig core to send the ghost flying
   public Rigidbody rig_core;
 
+	[HideInInspector]
   public float escape_meter;
+	[HideInInspector]
   public float escape_needed;
 
   // Hit points
@@ -101,6 +103,8 @@ public class Ghost : MonoBehaviour
   // When poise hit's 0, the ghost staggers, which makes her vulnerable.
   [HideInInspector]
   public float poise;
+  [HideInInspector]
+  public float max_poise;
   // If the ghost is vulnerable, a mega punch will send her flying
   [HideInInspector]
   public bool vulnerable;
@@ -111,10 +115,19 @@ public class Ghost : MonoBehaviour
 
   float turn_speed;
 
+	void Awake() {
+    ghostPuncher = ghostPuncher_obj.GetComponent<GhostPuncher>();
+
+		// Apply Defaults
+    poise = defaults.POISE;
+		max_poise = defaults.POISE;
+    hp = defaults.HP;
+		escape_needed = defaults.ESCAPE_NEEDED;
+		escape_meter = 0;
+	}
+
   void Start()
   {
-
-    ghostPuncher = ghostPuncher_obj.GetComponent<GhostPuncher>();
 
     /* Init Actions */
     actions = new GhostAction[7];
@@ -131,13 +144,12 @@ public class Ghost : MonoBehaviour
 
     DisableRagdoll();
 
-    poise = defaults.POISE;
     // needs to update on ghost slap somehow too		
 
     turn_speed = defaults.TURN_SPEED;
     fear_meter = 0;
 
-    hp = defaults.HP;
+
 
     /* Timers */
     ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
@@ -200,6 +212,8 @@ public class Ghost : MonoBehaviour
     }
 
     /* Actions */
+		bool escaped_yet = Escaped();
+
     switch (cur_action) {
       case GhostActions.CHARGING_ESCAPE: 
       case GhostActions.MOVING_ROOM: 
@@ -217,6 +231,10 @@ public class Ghost : MonoBehaviour
     }
 
     tick_timers();
+
+		if (!escaped_yet && Escaped()) {
+			CallEndRun();
+		}
 
   }
 
@@ -357,7 +375,7 @@ public class Ghost : MonoBehaviour
   }
 
   public void RestorePoise() {
-    poise = defaults.POISE;
+    poise = max_poise;
   }
 
   void BecomeVulnerable() {
@@ -447,8 +465,14 @@ public class Ghost : MonoBehaviour
 		gameObject.SetActive(true);
 	}
 
-	public void EndRun() {
+	/* Just pass through to game */
+	public void CallEndRun() {
 			game.EndRun();
+	}
+
+	// Called from GHOSTPUNCH
+	public void EndRun() {
+		// TODO:
 	}
 
 

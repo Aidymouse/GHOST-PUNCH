@@ -10,6 +10,7 @@ public class GHOSTPUNCH : MonoBehaviour
 
 		bool house_ready;
 		public PlayableDirector enter_house_timeline;
+		public PlayableDirector end_run_timeline;
 
 		public CinemachineCamera VCam_MouseControlled;
 		public CinemachineCamera VCam_Shop;
@@ -42,6 +43,7 @@ public class GHOSTPUNCH : MonoBehaviour
 
 
 		public void StartRun () {
+			Debug.Log("Start Run");
 			// Remove the black background from the door
 			// Start the timeline t
 			if (house_ready) {
@@ -67,7 +69,7 @@ public class GHOSTPUNCH : MonoBehaviour
 		}
 
 		public void Signaled_EndStartRunCutscene() {
-			Debug.Log("Signal received");
+			Debug.Log("Start Run - Signal received");
 			VCam_Shop.gameObject.SetActive(false);
 
 			ghost_instance.StartRun();
@@ -79,16 +81,22 @@ public class GHOSTPUNCH : MonoBehaviour
 		}
 
 		public void EndRun() {
-			// flash of white, teleport to shop scene (which I think will just never unload)
-			//
-			// Flash of white
-			// TODO: UI code
-			//
-			// Teleport to shop scene
-			// 1. Unload the player camera
-			// 2. Set player camera back to shop camera (or maybe to a 'kicked out' timeline)
-
+			Debug.Log("Ending Run!");
 			puncher_instance.GetComponent<GhostPuncher>().EndRun();
+			VCam_Shop.gameObject.SetActive(true);
+
+			// SIGNAL: triggers below Fn
+			end_run_timeline.Play();
+		}
+
+		public void Signaled_EndRunWhiteOpaque() {
+			Debug.Log("Ending Run - received signal");
+			ghost_ui.gameObject.SetActive(false);
+			shop_door.EndRun();
+
+			ghost_instance.EndRun();
+
+			Cursor.lockState = CursorLockMode.None;
 		}
 
 }

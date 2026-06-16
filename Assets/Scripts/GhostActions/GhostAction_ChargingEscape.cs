@@ -16,13 +16,8 @@ public class GhostAction_ChargingEscape : GhostAction {
 
 	public override void Update() {
 		// TODO: be making wubwubwubwubwubwubwub sound
-		float old_escape = ghost.escape_meter;
-		bool prevEscaped = ghost.Escaped();
 		ghost.escape_meter += Time.deltaTime;
 
-		if (!prevEscaped && ghost.Escaped()) {
-			ghost.EndRun();
-		}
 		// Can I see the player? Have I seen them for some amount of timer? Startle!
 	}
 	

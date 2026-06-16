@@ -20,6 +20,7 @@ public class UIBar : MonoBehaviour
 
 		public void SetMaxValue(float max)
 		{
+				Debug.Log("Setting UI Bar max value " + this.gameObject.name + ", " + max);
 				slider.maxValue = max;
 				slider.value = max;
 				if (useGradient) {
