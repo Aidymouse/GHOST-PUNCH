@@ -55,11 +55,11 @@ public class GHOSTPUNCH : MonoBehaviour
 			
 				Debug.Log(shop.bought_items);
 				puncher_instance.ApplyItems(shop.bought_items);
+				// TODO: // ghost_instance.ApplyUtems(shop.bought_items);
 
 				// SIGNAL: this cutscene triggers a signal
 				enter_house_timeline.Play();
 				
-
 
 			} else {
 				Debug.Log("House is not ready yet!!!");
@@ -68,11 +68,14 @@ public class GHOSTPUNCH : MonoBehaviour
 
 		public void Signaled_EndStartRunCutscene() {
 			Debug.Log("Signal received");
-			ghost_ui.gameObject.SetActive(true);
 			VCam_Shop.gameObject.SetActive(false);
 
 			ghost_instance.StartRun();
 			puncher_instance.StartRun();
+
+			ghost_ui.gameObject.SetActive(true);
+			ghost_ui.InitUI(ghost_instance, puncher_instance);
+
 		}
 
 		public void EndRun() {
@@ -84,6 +87,8 @@ public class GHOSTPUNCH : MonoBehaviour
 			// Teleport to shop scene
 			// 1. Unload the player camera
 			// 2. Set player camera back to shop camera (or maybe to a 'kicked out' timeline)
+
+			puncher_instance.GetComponent<GhostPuncher>().EndRun();
 		}
 
 }

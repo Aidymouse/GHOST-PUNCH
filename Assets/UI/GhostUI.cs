@@ -23,9 +23,28 @@ public class GhostUI : MonoBehaviour
 	UIBar stamina_bar;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Awake() {
+		UIBar[] bars = GetComponentsInChildren<UIBar>();
+		foreach (UIBar bar in bars) {
+			switch (bar.name) {
+				case "EscapeBar":
+					escape_bar = bar;
+					break;
+				case "PoiseBar":
+					poise_bar = bar;
+					break;
+				case "HealthBar":
+					ghost_health_bar = bar;
+					break;
+				case "StaminaBar":
+					stamina_bar = bar;
+					break;
+			}
+		}
+	}	
+
 	void Start()
 	{
-
 
 		ti_hurt_indicator = new Timer(0.0f, 0.6f);
 
@@ -63,31 +82,20 @@ public class GhostUI : MonoBehaviour
 			}
 		}
 
-		UIBar[] bars = GetComponentsInChildren<UIBar>();
-		foreach (UIBar bar in bars) {
-			switch (bar.name) {
-				case "EscapeBar":
-					escape_bar = bar;
-					escape_bar.SetMaxValue(ghost.escape_needed);
-					break;
-				case "PoiseBar":
-					poise_bar = bar;
-					poise_bar.SetMaxValue(ghost.defaults.POISE);
-					break;
-				case "HealthBar":
-					ghost_health_bar = bar;
-					ghost_health_bar.SetMaxValue(ghost.defaults.HP);
-					break;
-				case "StaminaBar":
-					stamina_bar = bar;
-					stamina_bar.SetMaxValue(ghost_puncher.defaults.BASE_STAMINA);
-					break;
-			}
-		}
+		Debug.Log("Init of UI bars");
 
-		escape_bar.SetValue(ghost.escape_meter);
+
 
 		//ui_escape_meter = UnityEngine.GameObject.Find<TMP_Text>("EscapeMeter");
+	}
+
+	public void InitUI(Ghost ghost, GhostPuncher puncher) {
+		escape_bar.SetMaxValue(ghost.escape_needed);
+		poise_bar.SetMaxValue(ghost.defaults.POISE);
+		ghost_health_bar.SetMaxValue(ghost.defaults.HP);
+		stamina_bar.SetMaxValue(puncher.max_stamina);
+
+		escape_bar.SetValue(0);
 	}
 
 	// Update is called once per frame

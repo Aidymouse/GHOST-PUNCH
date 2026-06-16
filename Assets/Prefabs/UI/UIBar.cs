@@ -11,7 +11,7 @@ public class UIBar : MonoBehaviour
 
 		Image fill;
 
-		public void Start() {
+		public void Awake() {
 			slider = this.GetComponent<Slider>();
 			if (useGradient) {
 				fill = this.GetComponentInChildren<Image>();
@@ -23,7 +23,7 @@ public class UIBar : MonoBehaviour
 				slider.maxValue = max;
 				slider.value = max;
 				if (useGradient) {
-					fill.color = gradient.Evaluate(1f);
+					fill.color = gradient.Evaluate(slider.normalizedValue);
 				}
 		}
 
