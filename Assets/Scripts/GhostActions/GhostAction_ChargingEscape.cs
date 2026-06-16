@@ -21,7 +21,7 @@ public class GhostAction_ChargingEscape : GhostAction {
 		ghost.escape_meter += Time.deltaTime;
 
 		if (!prevEscaped && ghost.Escaped()) {
-			ghost.ghostPuncher.GetComponent<GhostPuncher>().EndRun();
+			ghost.EndRun();
 		}
 		// Can I see the player? Have I seen them for some amount of timer? Startle!
 	}

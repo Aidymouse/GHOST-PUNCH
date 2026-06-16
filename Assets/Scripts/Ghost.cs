@@ -25,6 +25,9 @@ public class Ghost : MonoBehaviour
   public GhostDefaults defaults;
   public GhostPowerAttribs power_attribs;
 
+	// Elevated permissions on this one. We need to be able to end runs!
+	public GHOSTPUNCH game;
+
   // Forces are applied to the rig core to send the ghost flying
   public Rigidbody rig_core;
 
@@ -185,8 +188,8 @@ public class Ghost : MonoBehaviour
 
     /* Rotate nav agent always towards its next target (infinite turn speed ... doesn't work ?) */
     Vector3 to_target = nav_agent.steeringTarget - transform.position;
+    to_target.y = 0;
     if (to_target.magnitude > 0) {
-      to_target.y = 0;
       Quaternion target_angle = Quaternion.LookRotation(to_target);
       nav_agent.transform.rotation = target_angle;
     }
@@ -442,6 +445,10 @@ public class Ghost : MonoBehaviour
 
 	public void StartRun() {
 		gameObject.SetActive(true);
+	}
+
+	public void EndRun() {
+			game.EndRun();
 	}
 
 
