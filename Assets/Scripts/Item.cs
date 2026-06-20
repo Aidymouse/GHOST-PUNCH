@@ -6,6 +6,7 @@ public enum ItemType {
 	SALT_SHAKER,
 	PAINKILLERS,
 	GHOST_DETECTOR,
+	CIGARETTES,
 }
 
 [System.Serializable]
@@ -55,4 +56,11 @@ public class Painkillers : Item {
 
 public class GhostDetector : Item {
 	public GhostDetector() : base(ItemType.GHOST_DETECTOR) {}
+}
+
+public class Cigarettes : Item {
+	public Cigarettes() : base(ItemType.CIGARETTES) {}
+	public override void ApplyToGhost(Ghost ghost) {
+		ghost.escape_needed += this.level * 5;
+	}
 }

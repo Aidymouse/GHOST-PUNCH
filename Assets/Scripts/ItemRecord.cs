@@ -17,6 +17,7 @@ public class ItemRecord {
 			case ItemType.PAINKILLERS: AddItem(new Painkillers()); break;
 			case ItemType.GHOST_DETECTOR: AddItem(new GhostDetector()); break;
 			case ItemType.PROTEIN_POWDER: AddItem(new ProteinPowder()); break;
+			case ItemType.CIGARETTES: AddItem(new Cigarettes()); break;
 			default:
 				Debug.LogError("Attempted to add item type " + item_type + " but ItemRecord could not handle its instantiation.");
 				break;
