@@ -465,6 +465,13 @@ public class Ghost : MonoBehaviour
 		gameObject.SetActive(true);
 	}
 
+	public void ApplyItems(ItemRecord record) {
+		for (int i=0; i<record.items.Count; i++) {
+			Item item = record.items[i];
+			item.ApplyToGhost(this);
+		}
+	}
+
 	/* Just pass through to game */
 	public void CallEndRun() {
 			game.EndRun();

@@ -57,6 +57,7 @@ public class GHOSTPUNCH : MonoBehaviour
 			
 				Debug.Log(shop.bought_items);
 				puncher_instance.ApplyItems(shop.bought_items);
+				ghost_instance.ApplyItems(shop.bought_items);
 				// TODO: // ghost_instance.ApplyUtems(shop.bought_items);
 
 				// SIGNAL: this cutscene triggers a signal
