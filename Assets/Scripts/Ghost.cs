@@ -462,7 +462,9 @@ public class Ghost : MonoBehaviour
 
 
 	public void StartRun() {
+		escape_meter = 0;
 		gameObject.SetActive(true);
+		this.GetComponent<Ghost>().enabled = true;
 	}
 
 	public void ApplyItems(ItemRecord record) {
@@ -480,6 +482,7 @@ public class Ghost : MonoBehaviour
 	// Called from GHOSTPUNCH
 	public void EndRun() {
 		// TODO:
+		this.GetComponent<Ghost>().enabled = false;
 	}
 
 

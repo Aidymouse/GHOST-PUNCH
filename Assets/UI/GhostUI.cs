@@ -9,7 +9,6 @@ public class GhostUI : MonoBehaviour
 
 	TMP_Text ui_escape_meter;
 	TMP_Text ui_ectoplasm;
-	TMP_Text txt_youlose;
 	TMP_Text txt_fear_meter;
 
 	Image hurt_indicator;
@@ -41,6 +40,24 @@ public class GhostUI : MonoBehaviour
 					break;
 			}
 		}
+
+		TMP_Text[] texts = GetComponentsInChildren<TMP_Text>(true);
+		foreach (TMP_Text text in texts) {
+			switch (text.name) {
+				case "EscapeMeter": 
+					ui_escape_meter = text;
+					break;
+
+				case "Ectoplasm": 
+					ui_ectoplasm = text;
+					break;
+
+				case "FearMeter":
+					txt_fear_meter = text;
+					break;
+
+			}
+		}
 	}	
 
 	void Start()
@@ -57,33 +74,6 @@ public class GhostUI : MonoBehaviour
 				}
 			}
 		}
-
-		TMP_Text[] texts = GetComponentsInChildren<TMP_Text>();
-
-		foreach (TMP_Text text in texts) {
-			switch (text.name) {
-				case "EscapeMeter": 
-					ui_escape_meter = text;
-					break;
-
-				case "Ectoplasm": 
-					ui_ectoplasm = text;
-					break;
-
-				case "YouLose":
-					txt_youlose = text;
-					text.enabled = false;
-					break;
-
-				case "FearMeter":
-					txt_fear_meter = text;
-					break;
-
-			}
-		}
-
-		Debug.Log("Init of UI bars");
-
 
 
 		//ui_escape_meter = UnityEngine.GameObject.Find<TMP_Text>("EscapeMeter");
@@ -104,10 +94,6 @@ public class GhostUI : MonoBehaviour
 		TickTimers();
 
 		UpdateEscapeMeter(ghost.escape_meter);
-
-		if (ghost.Escaped()) {
-			EnableYouLose();
-		}
 
 		txt_fear_meter.SetText("Fear:\n" + Mathf.Floor(ghost.fear_meter));
 
@@ -158,7 +144,7 @@ public class GhostUI : MonoBehaviour
 		ti_hurt_indicator.reset();
 	}
 
-	public void EnableYouLose() {
-		txt_youlose.enabled = true;
+
+	public void EndRun() {
 	}
 }

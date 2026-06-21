@@ -90,6 +90,7 @@ public class GHOSTPUNCH : MonoBehaviour
 			end_run_timeline.Play();
 		}
 
+		// NOTE: the end run timeline will handle the enablement of the lose UI
 		public void Signaled_EndRunWhiteOpaque() {
 			Debug.Log("Ending Run - received signal");
 			ghost_ui.gameObject.SetActive(false);
@@ -98,6 +99,8 @@ public class GHOSTPUNCH : MonoBehaviour
 			ghost_instance.EndRun();
 
 			Cursor.lockState = CursorLockMode.None;
+
+			ghost_ui.EndRun();
 		}
 
 }
