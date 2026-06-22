@@ -38,6 +38,7 @@ public class ShopDoor : MonoBehaviour
 			spring.targetPosition = -90.0f;
 			hinge.spring = spring;
 
+			// TODO: make this fade
 			black_bg.SetActive(false);
 		}
 
