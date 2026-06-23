@@ -24,6 +24,7 @@ public class Ghost : MonoBehaviour
 
   public GhostDefaults defaults;
   public GhostPowerAttribs power_attribs;
+	public GPDebug debug;
 
 	// Elevated permissions on this one. We need to be able to end runs!
 	public GHOSTPUNCH game;
@@ -476,7 +477,8 @@ public class Ghost : MonoBehaviour
 
 	/* Just pass through to game */
 	public void CallEndRun() {
-			game.EndRun();
+		if (debug.dont_end_run == true) { return; }
+		game.EndRun();
 	}
 
 	// Called from GHOSTPUNCH

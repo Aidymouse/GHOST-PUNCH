@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour
 	public Transform player_transform;
 	InputAction action_look;
 
+	public GPSettings settings;
 	public float sensitivity;
 
 	float lookX;
@@ -18,6 +19,7 @@ public class CameraController : MonoBehaviour
 	{
 		action_look = InputSystem.actions.FindAction("Look");
 		Cursor.lockState = CursorLockMode.Locked;
+		sensitivity = settings.mouse_sensitivity;
 	}
 
 	// Update is called once per frame

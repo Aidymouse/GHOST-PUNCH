@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Playables;
 using Unity.Cinemachine;
 
-/** Overall game manager script **/
+/** Game state manager script **/
 public class GHOSTPUNCH : MonoBehaviour
 {
 

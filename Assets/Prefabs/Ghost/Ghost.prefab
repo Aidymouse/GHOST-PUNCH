@@ -3800,6 +3800,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Ghost
   defaults: {fileID: 11400000, guid: f65ac4378dccf01439f9d94d46eefaed, type: 2}
   power_attribs: {fileID: 11400000, guid: fc65ad9f8851a8a57b643e0d517af7a8, type: 2}
+  debug: {fileID: 11400000, guid: bc071c09bc0d398fb991b1c9154b44d0, type: 2}
+  game: {fileID: 0}
   rig_core: {fileID: 598405550337374266}
   escape_meter: 0
   escape_needed: 30
@@ -3808,6 +3810,7 @@ MonoBehaviour:
   ghostPuncher: {fileID: 0}
   rig: {fileID: 1427564092133216371}
   nav_destination: {fileID: 0}
+  charge_particles: {fileID: 0}
   currentSound: {fileID: 0}
   takingDamageSound: {fileID: 8300000, guid: 9b522224071408d4a98e2c67be63097e, type: 3}
   ragdollSound: {fileID: 8300000, guid: 3fbb174211a8e964a83e9fabd77e0dd5, type: 3}
@@ -3825,7 +3828,10 @@ MonoBehaviour:
   ectoplasm_particles: {fileID: 198321120434662062, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
   fear_meter: 0
   wave_orb: {fileID: 8074112012794229111, guid: ae93a043bd81acdc487b5fe3fb284938, type: 3}
+  nav_agent: {fileID: 0}
   poise: 0
+  max_poise: 0
+  vulnerable: 0
 --- !u!136 &5282436875883076793
 CapsuleCollider:
   m_ObjectHideFlags: 0
