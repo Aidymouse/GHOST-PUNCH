@@ -70,9 +70,9 @@ public class GhostPuncher : MonoBehaviour
 	/* Other */
 	int ectoplasm = 0;
 
-	LayerMask layer_punchable;
+	public LayerMask punchables_mask;
+	public BoxCollider punch_hitbox;
 
-	public Vector3 lose_point;
 
 	public Animator arm_animator;
 
@@ -105,7 +105,7 @@ public class GhostPuncher : MonoBehaviour
 		action_move = InputSystem.actions.FindAction("Move");
 
 		//arm_animator = this.GetComponentInChildren<Animator>();
-		layer_punchable = LayerMask.GetMask("Punchable");
+		//punchables_mask = LayerMask.GetMask("Punchable");
 
 		/* Load Defaults */
 		move_speed = defaults.MOVE_SPEED;
@@ -282,62 +282,62 @@ public class GhostPuncher : MonoBehaviour
 		ChangeAnimation("PUNCH_"+punch_with);
 		if (fovKick) fovKick.SmallKick();
 		if (screenShake) screenShake.Shake(0.05f);
-		ExecutePunch(defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_STAMINA, defaults.PUNCH_FEAR);
+		Punch normal_punch = new Punch(new Vector3(0,0,0), defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_FEAR);
+
+		ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
 	}
 
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
 		if (fovKick) fovKick.BigKick();
 		if (screenShake) screenShake.Shake(0.2f);
-		ExecutePunch(defaults.MEGAPUNCH_FORCE, defaults.MEGAPUNCH_OBJECT_DAMAGE, defaults.MEGAPUNCH_GHOST_DAMAGE, defaults.MEGAPUNCH_POISE_DAMAGE, 1, defaults.MEGAPUNCH_STAMINA, defaults.MEGAPUNCH_FEAR);
+		Punch mega_punch = new Punch(
+				new Vector3(0,0,0), // Gets updated per target
+				defaults.MEGAPUNCH_FORCE,
+				defaults.MEGAPUNCH_OBJECT_DAMAGE,
+				defaults.MEGAPUNCH_GHOST_DAMAGE,
+				defaults.MEGAPUNCH_POISE_DAMAGE,
+				1,
+				defaults.MEGAPUNCH_FEAR
+				);
+
+		ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
 	}
 
-	void ExecutePunch(float force, float object_damage, float ghost_damage, float poise_damage, int hitClass, float stamina_used, float fear) {
+	void ExecutePunch(Punch punch, float stamina_used) {
+
+		Collider[] punched = Physics.OverlapBox(punch_hitbox.transform.position, punch_hitbox.transform.localScale/2, punch_hitbox.transform.rotation, punchables_mask);		
 
 		SpendStamina(stamina_used);
 
-		// Cast a ray - jeff says should be a box
-		RaycastHit attack_hit;
+		foreach (Collider col in punched) {
+			ProcessPunchTarget(col.gameObject, punch);
+		}
+
+	}
+
+	void ProcessPunchTarget(GameObject target, Punch punch) {
 
 		CameraController cam = this.GetComponentInChildren<CameraController>();
 
-		//Vector3 ray_dir = transform.TransformDirection(Vector3.forward);
-		Vector3 ray_dir = cam.transform.TransformDirection(Vector3.forward);
+		Vector3 target_dir = target.transform.position - cam.transform.position;
+		target_dir.Normalize();
+		punch.Direction = target_dir;
+		
+		// May want to move this up later. Also, do we need to cast a ray to get the hit point for particles ??
+		//if (punch.HitClass-1 < punch_particles.Count && punch_particles[hitClass-1]) {
+			//Instantiate(punch_particles[punch.HitClass-1], attack_hit.point, this.transform.rotation);
+		//}
 
-
-		if (Physics.Raycast(cam.transform.position, ray_dir, out attack_hit, punch_range, layer_punchable)) {
-			Debug.DrawRay(transform.position, ray_dir, Color.red, 1, false);
-
-			Collider hit_col = attack_hit.collider;
-
-			if (hit_col == null) {
-				return;
-			}
-
-			Punch punch = new Punch(ray_dir, force, object_damage, ghost_damage, poise_damage, hitClass, fear);
-
-			// Spawn Punch Particles
-			if (hitClass-1 < punch_particles.Count && punch_particles[hitClass-1]) {
-				Instantiate(punch_particles[hitClass-1], attack_hit.point, this.transform.rotation);
-			}
-			
-			// Receiver handle punch
-			if (hit_col.CompareTag("BreakableObject")) {
-				BreakableObject bo = hit_col.gameObject.GetComponent<BreakableObject>();
-				bo.GetPunched(punch, attack_hit.point);
-
-			} else if (hit_col.CompareTag("Ghost") || hit_col.CompareTag("GhostBodyCollider")) {
-				Ghost g = hit_col.gameObject.GetComponent<Ghost>();
-				if (!g) {
-					g = hit_col.gameObject.GetComponentInParent<Ghost>();
-				}
-				g.GetPunched(punch);
-				ectoplasm += 5;
-			} 
-
-
+		if (target.GetComponent<BreakableObject>()) {
+			target.GetComponent<BreakableObject>().GetPunched(punch);
 		}
 
+		Ghost ghost = target.GetComponent<Ghost>();
+		if (!ghost) { ghost = target.GetComponentInParent<Ghost>(); }
+		if (ghost) {
+			ghost.GetPunched(punch);
+		}
 	}
 
 	Vector3 moveControls() {
@@ -429,7 +429,6 @@ public class GhostPuncher : MonoBehaviour
 	public void EndRun() {
 		GetComponentInChildren<CameraController>().enabled = false;
 		inCutscene = true;
-		//this.transform.position = lose_point;
 
 	}
 
