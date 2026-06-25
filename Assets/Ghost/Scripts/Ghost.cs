@@ -415,12 +415,12 @@ public class Ghost : MonoBehaviour
 
   // TODO: wrap these in actual state changes so she doesn't keep trying to move around when she's ragdolled
   public void EnableAnimator() {
-    DisableRagdoll();
-    anim.enabled = true;
+    //DisableRagdoll();
+    //anim.enabled = true;
   }
 
   public void DisableAnimator() {
-    anim.enabled = false;
+    //anim.enabled = false;
   }
 
   public void PlayAnimation(string new_anim) {
@@ -433,10 +433,11 @@ public class Ghost : MonoBehaviour
   }
 
   public void EnableRagdoll() {
-    DisableAnimator();
+    //DisableAnimator();
     /*foreach (Collider col in rig_colliders) {
       col.enabled = true;
       }*/
+		/*
     foreach (Rigidbody rb in rig_rbs) {
       rb.detectCollisions = true;
       rb.useGravity = true;
@@ -445,6 +446,7 @@ public class Ghost : MonoBehaviour
     foreach (CharacterJoint joint in rig_joints) {
       joint.enableCollision = true;
     }
+		*/
   }
 
   public void DisableRagdoll() {
