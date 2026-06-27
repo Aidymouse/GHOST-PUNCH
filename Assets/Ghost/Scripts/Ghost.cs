@@ -1,10 +1,10 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Playables;
 using Unity.Properties;
 using UnityEngine.InputSystem;
-
-using UnityEditor;
+using Hairibar.Ragdoll.Animation;
 
 public enum GhostActions {
   CHARGING_ESCAPE,
@@ -53,6 +53,8 @@ public class Ghost : MonoBehaviour
   [HideInInspector]
   public ParticleSystem charge_particles;
   Animator anim;
+
+	RagdollAnimator ragdoll_animator;
 
 
   [Header("Sound Effects")]
@@ -160,6 +162,7 @@ public class Ghost : MonoBehaviour
 
     /* Animator */
     anim = this.GetComponentInChildren<Animator>();
+		ragdoll_animator = GetComponentInChildren<RagdollAnimator>();
 
     /* Nav Settings */
     nav_agent = GetComponent<NavMeshAgent>();
@@ -392,7 +395,9 @@ public class Ghost : MonoBehaviour
     currentSound.clip = ragdollSound;
     currentSound.PlayOneShot(ragdollSound);
     currentSound.Play();
+
     EnterAction(GhostActions.RAGDOLL);
+
     rig_core.AddForce(punch.Direction * punch.Force * defaults.MAKE_HER_FLY_FACTOR);
   }
 
@@ -417,10 +422,12 @@ public class Ghost : MonoBehaviour
   public void EnableAnimator() {
     //DisableRagdoll();
     //anim.enabled = true;
+    ragdoll_animator.MasterAlpha = 1;
   }
 
   public void DisableAnimator() {
     //anim.enabled = false;
+    ragdoll_animator.MasterAlpha = 0;
   }
 
   public void PlayAnimation(string new_anim) {
