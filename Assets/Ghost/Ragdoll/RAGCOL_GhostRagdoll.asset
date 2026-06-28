@@ -14,20 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Hairibar.Ragdoll.Core::Hairibar.Ragdoll.RagdollCollisionProfile
   definition: {fileID: 11400000, guid: 1f65e92393c462dae95797c88ecc4f81, type: 2}
   _isValid: 1
-  bonePairs: []
-  disabled:
-  - name: DEF-spine
-  - name: DEF-spine.003
-  - name: DEF-upper_arm.L
-  - name: DEF-forearm.L
-  - name: DEF-hand.L
-  - name: DEF-upper_arm.R
-  - name: DEF-forearm.R
-  - name: DEF-hand.R
-  - name: DEF-thigh.L
-  - name: DEF-shin.L
-  - name: DEF-foot.L
-  - name: DEF-thigh.R
-  - name: DEF-shin.R
-  - name: DEF-foot.R
-  - name: DEF-head
+  bonePairs:
+  - boneA:
+      name: DEF-hand.R
+    boneB:
+      name: DEF-hand.L
+  disabled: []
