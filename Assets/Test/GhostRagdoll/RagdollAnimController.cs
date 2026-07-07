@@ -2,6 +2,7 @@ using UnityEngine;
 using Hairibar.Ragdoll.Animation;
 
 
+/* Script used to control ghost behaviour in ragdoll test scene */
 public class RagdollAnimController : MonoBehaviour {
 	
 	public Animator anim;
@@ -21,7 +22,7 @@ public class RagdollAnimController : MonoBehaviour {
   }
 
 	public void PlayAnimation(string animation) {
-		Unragdoll();
+		//Unragdoll();
 		Debug.Log("Playing " + animation);
 		ChangeAnimation(animation);
 	}
@@ -37,6 +38,10 @@ public class RagdollAnimController : MonoBehaviour {
 	public void PickNewSpot() {
 		ghost.nav_destination = null;
 		ghost.EnterAction(GhostActions.MOVING_ROOM);
+	}
+
+	public void GetUp(string dir) {
+		ghost.EnterAction(GhostActions.GET_UP);
 	}
 
 }

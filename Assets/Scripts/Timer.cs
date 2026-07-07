@@ -23,6 +23,15 @@ public class Timer
     time_remaining = default_time;
     fin_this_frame = false;
   }
+	
+	/* Gets the percentage of the way through the timer. E.g. 0.0 = just started, 1.0 = ended. Returns -1 if the timer doesn't have a default time set */
+	public float getPercentage() {
+		if (default_time == -1) { return -1.0f; }
+		float percentage = 1.0f - (time_remaining / default_time);
+		
+		Debug.Log(percentage);
+		return percentage;
+	}
 
 
   /** Assumed to be called every update frame, at the beginning of the frame */

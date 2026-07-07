@@ -13,6 +13,8 @@ public enum GhostActions {
   HIT_STUN,
   RAGDOLL,
   RECOVERY,
+	// The state of the ghost rising from the ground
+	GET_UP,
 
   USING_POWER,
 
@@ -54,7 +56,8 @@ public class Ghost : MonoBehaviour
   public ParticleSystem charge_particles;
   Animator anim;
 
-	RagdollAnimator ragdoll_animator;
+  [HideInInspector]
+	public RagdollAnimator ragdoll_animator;
 
 
   [Header("Sound Effects")]
@@ -131,15 +134,16 @@ public class Ghost : MonoBehaviour
 
   void Start()
   {
+		ragdoll_animator = GetComponentInChildren<RagdollAnimator>();
 
     /* Init Actions */
-    actions = new GhostAction[7];
+    actions = new GhostAction[20];
     actions[(int)GhostActions.CHARGING_ESCAPE] = new GhostAction_ChargingEscape(this);
     actions[(int)GhostActions.MOVING_ROOM] = new GhostAction_MovingRoom(this);
     actions[(int)GhostActions.HIT_STUN] = new GhostAction_HitStun(this);
     actions[(int)GhostActions.RAGDOLL] = new GhostAction_Ragdoll(this);
     actions[(int)GhostActions.RECOVERY] = new GhostAction_Recovery(this);
-
+    actions[(int)GhostActions.GET_UP] = new GhostAction_GetUp(this, ragdoll_animator.MasterAlpha);
 
     rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
     rig_colliders = rig.GetComponentsInChildren<Collider>();
@@ -162,7 +166,6 @@ public class Ghost : MonoBehaviour
 
     /* Animator */
     anim = this.GetComponentInChildren<Animator>();
-		ragdoll_animator = GetComponentInChildren<RagdollAnimator>();
 
     /* Nav Settings */
     nav_agent = GetComponent<NavMeshAgent>();
@@ -219,17 +222,14 @@ public class Ghost : MonoBehaviour
 		bool escaped_yet = Escaped();
 
     switch (cur_action) {
-      case GhostActions.CHARGING_ESCAPE: 
-      case GhostActions.MOVING_ROOM: 
-      case GhostActions.HIT_STUN: 
-      case GhostActions.RAGDOLL: 
-      case GhostActions.RECOVERY: 
-				actions[(int)cur_action].Update(); 
-				break;
 
       case GhostActions.USING_POWER: 
 				// TODO: i'm not sure how to refactor this.
 				state_UsingPower();
+				break;
+
+			default:
+				actions[(int)cur_action].Update(); 
 				break;
 
     }
@@ -264,18 +264,15 @@ public class Ghost : MonoBehaviour
 
     // Enter New State Logic
     switch (action) {
-      case GhostActions.CHARGING_ESCAPE: 
-      case GhostActions.MOVING_ROOM: 
-      case GhostActions.HIT_STUN: 
-      case GhostActions.RAGDOLL:
-      case GhostActions.RECOVERY:
-				actions[(int)action].Enter();
-				cur_action = action;
-				break;
 
       case GhostActions.USING_POWER: 
 				cur_action = action;
 				PickRandomPower();
+				break;
+
+			default:
+				actions[(int)action].Enter();
+				cur_action = action;
 				break;
 
     }
@@ -460,6 +457,7 @@ public class Ghost : MonoBehaviour
     /*foreach (Collider col in rig_colliders) {
       col.enabled = false;
       }*/
+		/*
     foreach (Rigidbody rb in rig_rbs) {
       //rb.detectCollisions = false;
       rb.useGravity = false;
@@ -468,6 +466,7 @@ public class Ghost : MonoBehaviour
     foreach (CharacterJoint joint in rig_joints) {
       joint.enableCollision = false;
     }
+		*/
   }
 
 
