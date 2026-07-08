@@ -5,6 +5,7 @@ using UnityEngine.Playables;
 using Unity.Properties;
 using UnityEngine.InputSystem;
 using Hairibar.Ragdoll.Animation;
+using Hairibar.Ragdoll;
 
 public enum GhostActions {
   CHARGING_ESCAPE,
@@ -56,8 +57,14 @@ public class Ghost : MonoBehaviour
   public ParticleSystem charge_particles;
   Animator anim;
 
+	[Header("Ragdoll")]
   [HideInInspector]
 	public RagdollAnimator ragdoll_animator;
+	public RagdollSettings ragdoll_settings;
+	public RagdollPowerProfile ragprof_animated;
+	public RagdollPowerProfile ragprof_doll;
+	// The ragdoll object itself, moved when the ghost is getting up
+	public GameObject ragdoll;
 
 
   [Header("Sound Effects")]

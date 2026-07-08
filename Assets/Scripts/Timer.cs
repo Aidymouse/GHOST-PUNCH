@@ -29,7 +29,6 @@ public class Timer
 		if (default_time == -1) { return -1.0f; }
 		float percentage = 1.0f - (time_remaining / default_time);
 		
-		Debug.Log(percentage);
 		return percentage;
 	}
 

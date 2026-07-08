@@ -28,12 +28,10 @@ public class RagdollAnimController : MonoBehaviour {
 	}
 
 	public void Ragdoll() {
-		rag.MasterAlpha = 0;
+		ghost.EnterAction(GhostActions.RAGDOLL);
+		//rag.MasterAlpha = 0;
 	}
 
-	public void Unragdoll() {
-		rag.MasterAlpha = master_alpha;
-	}
 
 	public void PickNewSpot() {
 		ghost.nav_destination = null;
@@ -42,6 +40,10 @@ public class RagdollAnimController : MonoBehaviour {
 
 	public void GetUp(string dir) {
 		ghost.EnterAction(GhostActions.GET_UP);
+	}
+
+	public void MoveRigCore() {
+		ghost.rig_core.transform.position += new Vector3(10.0f, 0.0f, 10.0f);
 	}
 
 }

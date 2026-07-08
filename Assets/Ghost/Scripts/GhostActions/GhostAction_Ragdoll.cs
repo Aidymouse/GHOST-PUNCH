@@ -17,6 +17,9 @@ public class GhostAction_Ragdoll : GhostAction {
 		ghost.nav_agent.isStopped = true;
 		ghost.vulnerable = false;
 		ghost.ragdoll_animator.MasterAlpha = 0;
+
+		ghost.ragdoll_settings.PowerProfile = ghost.ragprof_doll;
+
 	}
 
 	public override void Exit() {
@@ -32,14 +35,16 @@ public class GhostAction_Ragdoll : GhostAction {
 	}
 
 	public override void Update() {
-		Debug.Log("Ragdoll Update");
 		ghost.ti_ragdoll.tick(Time.deltaTime);
 
 		// TODO: somewhere nearing the right track, but maybe too much
 		// I need some way of telling the ragdoll to teleport to a new position...
+		/*
 		Vector3 ragdoll_offset = ghost.transform.position - ghost.rig_core.transform.position;
 		ragdoll_offset.y = 0;
 		ghost.transform.position -= ragdoll_offset;
+		*/
+		Debug.Log("Ragdoll timer: " + ghost.ti_ragdoll.time_remaining);
 
 		if (ghost.ti_ragdoll.finished_this_frame()) {
 			ghost.ti_recovery.set(1);
