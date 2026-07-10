@@ -42,8 +42,32 @@ MonoBehaviour:
   Path: Assets/Music/Ghostpunch/Build/Desktop/New Bank.bank
   Name: New Bank
   StudioPath: bank:/New Bank
-  lastModified: 639156838310957225
+  lastModified: 639192352968695062
   FileSizes: []
+  Exists: 1
+--- !u!114 &-2622315844640685799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Porch/Location
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: Location
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 1484969091
+    data2: 2474338833
+  Type: 0
+  IsGlobal: 0
+  Labels: []
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -63,16 +87,47 @@ MonoBehaviour:
   - {fileID: -3217583614057925483}
   EditorEvents:
   - {fileID: -5016749736603019719}
+  - {fileID: 1699264690052461494}
   EditorParameters: []
   MasterBanks:
   - {fileID: 4637811619406534959}
   StringsBanks:
   - {fileID: 3035180467459683968}
   cacheVersion: 131859
-  cacheTime: 639156838310957225
+  cacheTime: 639192377563765341
   SerializableEventsDict:
   - key: event:/Battle Theme
     index: 0
+  - key: event:/Porch
+    index: 1
+--- !u!114 &1699264690052461494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Porch
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Porch
+  Guid:
+    Data1: -178384412
+    Data2: 1086452405
+    Data3: -1329516645
+    Data4: 1502237590
+  Banks:
+  - {fileID: 4637811619406534959}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -2622315844640685799}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 33645
 --- !u!114 &3035180467459683968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,10 +143,10 @@ MonoBehaviour:
   Path: Assets/Music/Ghostpunch/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639150596740228176
+  lastModified: 639192377563765341
   FileSizes:
   - Name: 
-    Value: 874
+    Value: 922
   Exists: 1
 --- !u!114 &4290975442035117888
 MonoBehaviour:
@@ -128,7 +183,7 @@ MonoBehaviour:
   Path: Assets/Music/Ghostpunch/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639117219876129349
+  lastModified: 639192377563754981
   FileSizes: []
   Exists: 1
 --- !u!114 &7160838666212041049

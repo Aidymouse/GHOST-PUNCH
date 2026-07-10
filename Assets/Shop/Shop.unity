@@ -12558,6 +12558,8 @@ GameObject:
   - component: {fileID: 2096129654}
   - component: {fileID: 2096129653}
   - component: {fileID: 2096129652}
+  - component: {fileID: 2096129656}
+  - component: {fileID: 2096129657}
   m_Layer: 0
   m_Name: ShopCam
   m_TagString: MainCamera
@@ -12777,6 +12779,52 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_MaxRayIntersections: 0
+--- !u!114 &2096129656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096129646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91126156b575ce244af9f2f11761d8d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  targetCamera: {fileID: 2096129648}
+  emitter: {fileID: 2096129657}
+  parameterName: Location
+--- !u!114 &2096129657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096129646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -178384412
+      Data2: 1086452405
+      Data3: -1329516645
+      Data4: 1502237590
+    Path: event:/Porch
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!95 &741744617532387156 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 2874365101512259535, guid: 40317c87c5366cb488d98dfd7518a2dc, type: 3}
