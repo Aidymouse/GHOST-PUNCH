@@ -17,14 +17,16 @@ public class CameraAngleFMOD : MonoBehaviour
 
     void Start()
     {
-        if (targetCamera == null)
+        if (targetCamera == null) {
             targetCamera = Camera.main;
+				}
     }
 
     void Update()
     {
-        if (targetCamera == null || emitter == null)
+        if (targetCamera == null || emitter == null) {
             return;
+				}
 
         // Current Y rotation (0-360)
         float yRotation = targetCamera.transform.eulerAngles.y;
