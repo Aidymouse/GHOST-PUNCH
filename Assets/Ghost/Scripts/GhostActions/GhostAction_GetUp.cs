@@ -30,7 +30,9 @@ public class GhostAction_GetUp : GhostAction {
 		ghost.rig_core.transform.position += ragdoll_offset;
 		ghost.ragdoll_settings.PowerProfile = ghost.ragprof_animated;
 
-		// TODO: play an actual get up animation to fade into as well
+
+		// TODO: could track how she facing 
+		ghost.ChangeAnimation("GetUpFaceup");
 
 	}
 
