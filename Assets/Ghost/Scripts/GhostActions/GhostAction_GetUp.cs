@@ -1,10 +1,12 @@
 
 using UnityEngine;
 
+/*
 public enum GetUpDirection {
 	FACEDOWN,
 	FACEUP,
 }
+*/
 
 public class GhostAction_GetUp : GhostAction {
 
@@ -14,7 +16,7 @@ public class GhostAction_GetUp : GhostAction {
 
 	public GhostAction_GetUp(Ghost g, float init_max_alpha) : base(g) {
 		// It would be nice if this eased...
-		ti_alpha_fade = new Timer(1f, 1f);
+		ti_alpha_fade = new Timer(1.0f, 1.0f);
 		max_alpha = init_max_alpha;
 	}
 
@@ -37,6 +39,7 @@ public class GhostAction_GetUp : GhostAction {
 	}
 
 	public override void Exit() {
+		Debug.Log("Exit get up");
 	}
 
 	public override void Update() {
@@ -49,6 +52,7 @@ public class GhostAction_GetUp : GhostAction {
 		ghost.ragdoll_animator.MasterAlpha = 0.2f * ti_alpha_fade.getPercentage();
 	
 		if (ti_alpha_fade.finished()) {
+			Debug.Log("Get Up should end now");
 			ghost.ragdoll_animator.MasterAlpha = max_alpha;
 			ghost.EnterAction(GhostActions.MOVING_ROOM);
 		}
