@@ -310,13 +310,15 @@ public class GhostPuncher : MonoBehaviour
 
 		SpendStamina(stamina_used);
 
+		List<int> punched_ids = new List<int>();
+
 		foreach (Collider col in punched) {
-			ProcessPunchTarget(col.gameObject, punch);
+			ProcessPunchTarget(col.gameObject, punch, punched_ids);
 		}
 
 	}
 
-	void ProcessPunchTarget(GameObject target, Punch punch) {
+	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids) {
 
 		CameraController cam = this.GetComponentInChildren<CameraController>();
 
@@ -330,13 +332,22 @@ public class GhostPuncher : MonoBehaviour
 		//}
 
 		if (target.GetComponent<BreakableObject>()) {
-			target.GetComponent<BreakableObject>().GetPunched(punch);
+			BreakableObject bo = target.GetComponent<BreakableObject>();
+			int bo_id = bo.GetInstanceID();
+
+			if (punched_ids.Contains(bo_id)) { return; }
+
+			bo.GetPunched(punch);
+			punched_ids.Add(bo_id);
 		}
 
 		Ghost ghost = target.GetComponent<Ghost>();
 		if (!ghost) { ghost = target.GetComponentInParent<Ghost>(); }
 		if (ghost) {
+			int ghost_id = ghost.GetInstanceID();
+			if (punched_ids.Contains(ghost_id)) { return; }
 			ghost.GetPunched(punch);
+			punched_ids.Add(ghost_id);
 		}
 	}
 
