@@ -252,13 +252,22 @@ public class Ghost : MonoBehaviour
 
 	void ExitAction() {
     // Logic based on what state we're leaving
-		actions[(int)cur_action].Exit();
+    switch (cur_action) {
+      case GhostActions.USING_POWER: 
+				break;
+
+			default:
+				actions[(int)cur_action].Exit();
+				break;
+		}
   }
 
   public void EnterAction(GhostActions action) {
 
     ExitAction();
 
+
+		Debug.Log("Entering action: " + action);
 
     // Enter New State Logic
     switch (action) {
