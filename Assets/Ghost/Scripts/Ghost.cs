@@ -252,16 +252,7 @@ public class Ghost : MonoBehaviour
 
 	void ExitAction() {
     // Logic based on what state we're leaving
-		switch (cur_action) {
-			case GhostActions.CHARGING_ESCAPE: 
-				actions[(int)GhostActions.CHARGING_ESCAPE].Exit();
-				break;
-
-			case GhostActions.RAGDOLL:
-				actions[(int)GhostActions.RAGDOLL].Exit();
-				break;
-
-    };
+		actions[(int)cur_action].Exit();
   }
 
   public void EnterAction(GhostActions action) {
