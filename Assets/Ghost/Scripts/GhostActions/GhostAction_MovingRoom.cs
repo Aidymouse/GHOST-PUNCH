@@ -10,9 +10,12 @@ public class GhostAction_MovingRoom : GhostAction {
 
 	public override void Enter() {
 
+		ghost.nav_agent.isStopped = false;
+
 		if (debug) {
-			Debug.Log("Entering moving room. Nav agent active: " + ghost.nav_agent.isStopped + "; Nav destination: " + ghost.nav_destination);
+			Debug.Log("Entering moving room. Nav agent active: " + !ghost.nav_agent.isStopped + "; Nav destination: " + ghost.nav_destination);
 		}
+
 
 		if (ghost.nav_destination == null) {
 			GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
@@ -22,9 +25,11 @@ public class GhostAction_MovingRoom : GhostAction {
 			// If we've selected the area we're already at, the state fn will catch it
 
 			ghost.nav_agent.destination = dest_obj.transform.position;
+			if (debug) { Debug.Log("[MovingRoom] new dest"+dest_obj.transform.position); }
 			ghost.nav_destination = dest_obj;
 
 		} else {
+			if (debug) { Debug.Log("[MovingRoom] using old dest"+ghost.nav_destination.transform.position); }
 			ghost.nav_agent.destination = ghost.nav_destination.transform.position;
 		}
 	}
