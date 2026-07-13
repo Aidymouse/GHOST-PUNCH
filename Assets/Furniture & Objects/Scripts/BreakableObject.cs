@@ -104,11 +104,23 @@ public class BreakableObject : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+
+		int MIN_SPEED = 6;
+
+		Rigidbody rb = this.GetComponent<Rigidbody>();
+		if (rb) {
+			if (rb.linearVelocity.magnitude > MIN_SPEED && this.gameObject.layer != LayerMask.NameToLayer("FlyingObject")) {
+				this.gameObject.layer = LayerMask.NameToLayer("FlyingObject");
+			} else if (this.gameObject.layer != LayerMask.NameToLayer("Punchable")) {
+				this.gameObject.layer = LayerMask.NameToLayer("Punchable");
+			}
+		}
 		
 	}
 
 	public void OnCollisionEnter(Collision col) {
 
+		// TODO: on touch floor, become normal grounded object. Might not be needed
 
 		// If the thing we are colliding with is a breakable object, deal some damage!
 		// We don't need to worry about taking damage from incoming objects because their breakable object scripts will take care of it
@@ -234,6 +246,9 @@ public class BreakableObject : MonoBehaviour
 
 		Destroy(this.gameObject);
 
+	}
+
+	public void OnCollisionEnter(Collider col) {
 	}
 
 }
