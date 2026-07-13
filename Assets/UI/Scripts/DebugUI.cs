@@ -3,15 +3,7 @@ using TMPro;
 
 public class DebugUI : MonoBehaviour
 {
-  string[] ghost_action_strings = {
-    "Charging Escape",
-    "Startled",
-    "Moving Room" ,
-    "Hit Stun" ,
-    "Ragdoll",
-    "Recovery",
-    "Using Power"
-  };
+  string[] ghost_action_strings;
 
   public Ghost ghost;
   public GhostPuncher ghost_puncher;
@@ -26,34 +18,40 @@ public class DebugUI : MonoBehaviour
 
   void Start()
   {
+
+		ghost_action_strings = new string[20];
+		ghost_action_strings[(int)GhostActions.MOVING_ROOM] = "Moving Room";
+		ghost_action_strings[(int)GhostActions.STARTLED] = "Startled";
+		ghost_action_strings[(int)GhostActions.CHARGING_ESCAPE] = "Charging Escape";
+
     TMP_Text[] texts = GetComponentsInChildren<TMP_Text>();
 
     foreach (TMP_Text text in texts) {
       switch (text.name) {
-	case "Debug1": 
-	  ui_debug1 = text;
-	  break;
+				case "Debug1": 
+					ui_debug1 = text;
+					break;
 
-	case "Debug2": 
-	  ui_debug2 = text;
-	  break;
+				case "Debug2": 
+					ui_debug2 = text;
+					break;
 
-	case "Debug3": 
-	  ui_debug3 = text;
-	  break;
+				case "Debug3": 
+					ui_debug3 = text;
+					break;
 
 
-	case "DebugGhostState": 
-	  ghost_state = text;
-	  break;
+				case "DebugGhostState": 
+					ghost_state = text;
+					break;
 
-	case "DebugGhostPower": 
-	  ghost_power = text;
-	  break;
+				case "DebugGhostPower": 
+					ghost_power = text;
+					break;
 
-	case "DebugGhostPowerTimer": 
-	  ghost_power_timer = text;
-	  break;
+				case "DebugGhostPowerTimer": 
+					ghost_power_timer = text;
+					break;
 
       }
     }
