@@ -4,13 +4,15 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Playables;
 using Unity.Cinemachine;
 
-/** Game state manager script **/
-public class GHOSTPUNCH : MonoBehaviour
+/** Game state manager script, lives in the shop. But handles the transition to and from the house scene **/
+public class ShopMaster : MonoBehaviour
 {
 
 		bool house_ready;
 		public PlayableDirector enter_house_timeline;
 		public PlayableDirector end_run_timeline;
+		[Tooltip("The name of the scene loaded for the house. Make sure this scene has been enabled to be loaded")]
+		public string house_scene;
 
 		public CinemachineCamera VCam_MouseControlled;
 		public CinemachineCamera VCam_Shop;
@@ -32,7 +34,7 @@ public class GHOSTPUNCH : MonoBehaviour
 
 		IEnumerator LoadHouseScene() {
 			// TODO make this load the house scene and let it generate
-			AsyncOperation l = SceneManager.LoadSceneAsync("LoadTestGhost", LoadSceneMode.Additive);
+			AsyncOperation l = SceneManager.LoadSceneAsync(house_scene, LoadSceneMode.Additive);
 			while (!l.isDone) {
 				yield return null;
 			}

@@ -30,7 +30,7 @@ public class Ghost : MonoBehaviour
 	public GPDebug debug;
 
 	// Elevated permissions on this one. We need to be able to end runs!
-	public GHOSTPUNCH game;
+	public ShopMaster game;
 
   // Forces are applied to the rig core to send the ghost flying
   public Rigidbody rig_core;
