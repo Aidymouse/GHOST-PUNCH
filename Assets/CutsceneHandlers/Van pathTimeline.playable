@@ -285,7 +285,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 2.783333333333336
     m_DisplayName: Scene
   - m_Version: 1
-    m_Start: 7.816666666666673
+    m_Start: 15.335784231660275
     m_ClipIn: 0
     m_Asset: {fileID: 5958696682437039811}
     m_Duration: 0.20833333333333334
@@ -383,7 +383,7 @@ MonoBehaviour:
     m_Recordable: 0
     m_PostExtrapolationMode: 1
     m_PreExtrapolationMode: 1
-    m_PostExtrapolationTime: 0.42500000000000604
+    m_PostExtrapolationTime: 7.944117564993609
     m_PreExtrapolationTime: 0
     m_DisplayName: VanWindowAnim
   m_Markers:
@@ -406,6 +406,114 @@ MonoBehaviour:
   m_OpenClipOffsetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
   m_ApplyOffsets: 0
+--- !u!114 &-7281132531432293356
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b22792c3b570444eb18cb78c2af3a74, type: 3}
+  m_Name: Audio Track (3)
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.AudioTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 5.983333333333333
+    m_ClipIn: 0
+    m_Asset: {fileID: -4455715585260757931}
+    m_Duration: 10.577301587301587
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -7281132531432293356}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: -1
+    m_BlendOutDuration: -1
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: jeff voice 1 test
+  m_Markers:
+    m_Objects: []
+  m_TrackProperties:
+    volume: 1
+    stereoPan: 0
+    spatialBlend: 0
+--- !u!114 &-6566558046178505827
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fde0d25a170598d46a0b9dc16b4527a5, type: 3}
+  m_Name: ActivationPlayableAsset
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.ActivationPlayableAsset
 --- !u!114 &-5933791929424178490
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -768,6 +876,23 @@ MonoBehaviour:
   m_Loop: 0
   m_Version: 1
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!114 &-4455715585260757931
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f10dd60657c6004587f237a7e90f8e4, type: 3}
+  m_Name: AudioPlayableAsset
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.AudioPlayableAsset
+  m_Clip: {fileID: 8300000, guid: 4101cb9606e5e5445a9d0dff7bb277a3, type: 3}
+  m_Loop: 0
+  m_bufferingTime: 0.1
+  m_ClipProperties:
+    volume: 1
 --- !u!114 &-3753879713981645560
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -872,13 +997,13 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 5.983333333333333
-    m_ClipIn: 0
+    m_Start: 15.05
+    m_ClipIn: 1.5475491016730656
     m_Asset: {fileID: -1721765804122548252}
-    m_Duration: 2.811
+    m_Duration: 1.2634508983269344
     m_TimeScale: 1
     m_ParentTrack: {fileID: -1660984689182031428}
-    m_EaseInDuration: 0
+    m_EaseInDuration: 0.09983831644058228
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
     m_BlendOutDuration: -1
@@ -941,13 +1066,13 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: car door slide test
   - m_Version: 1
-    m_Start: 0.31666666666666665
+    m_Start: 0.8833333333333379
     m_ClipIn: 0.4
     m_Asset: {fileID: 8059594165357486037}
-    m_Duration: 4.666666666666666
+    m_Duration: 3.966666666666662
     m_TimeScale: 1
     m_ParentTrack: {fileID: -1660984689182031428}
-    m_EaseInDuration: 0
+    m_EaseInDuration: 0.15061426162719727
     m_EaseOutDuration: 0.3631633520126343
     m_BlendInDuration: -1
     m_BlendOutDuration: -1
@@ -1052,6 +1177,8 @@ MonoBehaviour:
   - {fileID: 1481151372603517570}
   - {fileID: -1660984689182031428}
   - {fileID: 3793582320147786446}
+  - {fileID: -7281132531432293356}
+  - {fileID: 6634619121625826090}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
@@ -1133,7 +1260,7 @@ MonoBehaviour:
     m_Start: 0.18333333333333332
     m_ClipIn: 0
     m_Asset: {fileID: 1115362815811127444}
-    m_Duration: 12.191666666666666
+    m_Duration: 20.883333333333333
     m_TimeScale: 1
     m_ParentTrack: {fileID: 1374725313601613680}
     m_EaseInDuration: 0
@@ -1226,7 +1353,7 @@ MonoBehaviour:
     m_Start: 4.050000000000001
     m_ClipIn: 0
     m_Asset: {fileID: 3774705121343160375}
-    m_Duration: 8.325
+    m_Duration: 12.077301587301587
     m_TimeScale: 1
     m_ParentTrack: {fileID: 1481151372603517570}
     m_EaseInDuration: 0
@@ -1355,13 +1482,13 @@ MonoBehaviour:
     m_Start: 5.465
     m_ClipIn: 0
     m_Asset: {fileID: -5685748399293409727}
-    m_Duration: 2.0850000000000017
+    m_Duration: 1.3849999999999998
     m_TimeScale: 1
     m_ParentTrack: {fileID: 3793582320147786446}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: -1
-    m_BlendOutDuration: 0.9158824350064014
+    m_BlendOutDuration: 0.583333333333333
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -1421,15 +1548,15 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: car window roll test
   - m_Version: 1
-    m_Start: 6.6341175649936
-    m_ClipIn: 3.716666666666665
+    m_Start: 6.266666666666667
+    m_ClipIn: 3.4833333333333316
     m_Asset: {fileID: 8762802637728447874}
-    m_Duration: 1.2183333333333346
+    m_Duration: 1.451666666666668
     m_TimeScale: 1
     m_ParentTrack: {fileID: 3793582320147786446}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.9158824350064014
+    m_BlendInDuration: 0.583333333333333
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -1842,6 +1969,99 @@ MonoBehaviour:
   m_Retroactive: 0
   m_EmitOnce: 0
   m_Asset: {fileID: 11400000, guid: 9687b3b4620dee1479ba84f6bce6b028, type: 2}
+--- !u!114 &6634619121625826090
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21bf7f712d84d26478ebe6a299f21738, type: 3}
+  m_Name: Activation Track
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.ActivationTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 8.366666666666667
+    m_ClipIn: 0
+    m_Asset: {fileID: -6566558046178505827}
+    m_Duration: 12.7
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 6634619121625826090}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0
+    m_BlendOutDuration: 0
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: Active
+  m_Markers:
+    m_Objects: []
+  m_PostPlaybackState: 3
 --- !u!114 &6838580649020175795
 MonoBehaviour:
   m_ObjectHideFlags: 1

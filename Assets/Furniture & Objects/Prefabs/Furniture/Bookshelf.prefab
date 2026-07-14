@@ -19,6 +19,9 @@ GameObject:
   - component: {fileID: 2568372239204696797}
   - component: {fileID: 8351745891526104782}
   - component: {fileID: 2079107702848591293}
+  - component: {fileID: 316052007555831319}
+  - component: {fileID: 7034870912673210531}
+  - component: {fileID: 3253060159627215954}
   m_Layer: 6
   m_Name: Shelf
   m_TagString: BreakableObject
@@ -354,8 +357,71 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.010882356, y: 0.004299999, z: 0.00039923197}
-  m_Center: {x: 0.000013622045, y: 0.0000500001, z: 0.018661676}
+  m_Size: {x: 0.010882356, y: 0.004299999, z: 0.0005096973}
+  m_Center: {x: 0.000013622045, y: 0.000050000235, z: 0.01973326}
+--- !u!65 &316052007555831319
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892429620228062881}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.00042585132, y: 0.004299999, z: 0.019541662}
+  m_Center: {x: 0.0052691065, y: 0.000050000563, z: 0.010255339}
+--- !u!65 &7034870912673210531
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892429620228062881}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.00042585132, y: 0.004299999, z: 0.019541662}
+  m_Center: {x: -0.005269106, y: 0.000050000563, z: 0.010255339}
+--- !u!65 &3253060159627215954
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892429620228062881}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.010936844, y: 0.0004314316, z: 0.020036696}
+  m_Center: {x: 0.000013619661, y: 0.0018119531, z: 0.010018361}
 --- !u!1 &4107347285437029449
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,9 +434,9 @@ GameObject:
   - component: {fileID: 2194225631842263749}
   - component: {fileID: 459976350930870784}
   - component: {fileID: 6846221405477371639}
-  - component: {fileID: 8683506728007761646}
   - component: {fileID: 7891945299323771374}
   - component: {fileID: 9122510929055314336}
+  - component: {fileID: 9016676128867060315}
   m_Layer: 6
   m_Name: Books 1
   m_TagString: BreakableObject
@@ -477,27 +543,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &8683506728007761646
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4107347285437029449}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.004814031, y: 0.0027904445, z: 0.0025334875}
-  m_Center: {x: 0.0020341373, y: 0.00020359243, z: 0.0060667424}
 --- !u!114 &7891945299323771374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,6 +669,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &9016676128867060315
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4107347285437029449}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.004814031, y: 0.0027904445, z: 0.002533487}
+  m_Center: {x: 0.0000000037252903, y: 0, z: -2.9103825e-10}
 --- !u!1 &5070295932656093716
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,9 +702,9 @@ GameObject:
   - component: {fileID: 3710647147325104698}
   - component: {fileID: 224146503573960080}
   - component: {fileID: 8574844461977774988}
-  - component: {fileID: 3581691751479332216}
   - component: {fileID: 6094841956942831138}
   - component: {fileID: 6608571531391782}
+  - component: {fileID: 2419001082308119953}
   m_Layer: 6
   m_Name: Books 3
   m_TagString: BreakableObject
@@ -745,27 +811,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &3581691751479332216
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5070295932656093716}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.0036008835, y: 0.0027904445, z: 0.0025334884}
-  m_Center: {x: -0.0029149223, y: 0.00020359243, z: 0.01656674}
 --- !u!114 &6094841956942831138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -892,6 +937,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &2419001082308119953
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5070295932656093716}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0036008833, y: 0.0027904445, z: 0.0025334877}
+  m_Center: {x: -0.0000000037252903, y: 0, z: -0.000000001164153}
 --- !u!1 &5727117405097049719
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,9 +1006,9 @@ GameObject:
   - component: {fileID: 3601034945577897367}
   - component: {fileID: 6898827972545154541}
   - component: {fileID: 3749174987524395307}
-  - component: {fileID: 4025761444489488839}
   - component: {fileID: 6393533467715585125}
   - component: {fileID: 871787463270976545}
+  - component: {fileID: 5111214057321045320}
   m_Layer: 6
   m_Name: Books 2
   m_TagString: BreakableObject
@@ -1049,27 +1115,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &4025761444489488839
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5868671286801292095}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.0068953633, y: 0.0027904445, z: 0.0025334875}
-  m_Center: {x: -0.0004097739, y: 0.00020359243, z: 0.00956674}
 --- !u!114 &6393533467715585125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1196,6 +1241,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &5111214057321045320
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5868671286801292095}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0068953633, y: 0.0027904445, z: 0.002533487}
+  m_Center: {x: 0, y: 0, z: -0.0000000012223609}
 --- !u!1 &6437015918417014016
 GameObject:
   m_ObjectHideFlags: 0
@@ -1208,10 +1274,9 @@ GameObject:
   - component: {fileID: 8928013873538724033}
   - component: {fileID: 6352156728855366921}
   - component: {fileID: 813661513745810309}
-  - component: {fileID: 1538720193541281338}
   - component: {fileID: 5624262442051740491}
   - component: {fileID: 3708101279956764412}
-  - component: {fileID: 4649535597455543062}
+  - component: {fileID: 4165317900508461317}
   m_Layer: 6
   m_Name: Books 4
   m_TagString: BreakableObject
@@ -1318,27 +1383,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &1538720193541281338
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6437015918417014016}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.008927353, y: 0.0027904445, z: 0.0025334875}
-  m_Center: {x: 0.00023396453, y: 0.00020359243, z: 0.013066742}
 --- !u!114 &5624262442051740491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1465,7 +1509,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!65 &4649535597455543062
+--- !u!65 &4165317900508461317
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1484,5 +1528,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.010882356, y: 0.004299999, z: 0.00035587914}
-  m_Center: {x: 0.000013622045, y: 0.0000500001, z: 0.008078802}
+  m_Size: {x: 0.008927353, y: 0.0027904445, z: 0.0025334877}
+  m_Center: {x: 0.0000000037252903, y: 0, z: 0.0000000030267981}
