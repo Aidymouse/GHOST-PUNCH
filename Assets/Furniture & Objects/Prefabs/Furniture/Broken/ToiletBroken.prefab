@@ -155,23 +155,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   hitSoundEffect: {fileID: 8300000, guid: 565b205405f494445a65aaec31174582, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   pitchLow: 1
   pitchHigh: 1
+  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!82 &6610916289297531756
 AudioSource:
   m_ObjectHideFlags: 0
@@ -424,23 +424,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   hitSoundEffect: {fileID: 8300000, guid: 565b205405f494445a65aaec31174582, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   pitchLow: 1
   pitchHigh: 1
+  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!82 &1447350477993642080
 AudioSource:
   m_ObjectHideFlags: 0
@@ -609,7 +609,6 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 53a53b08442267146a69d72be56e5126, type: 2}
   - {fileID: 2100000, guid: 197ced85528ff1144bea0b3a77c5f3a0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -667,23 +666,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: -1
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   hitSoundEffect: {fileID: 8300000, guid: 565b205405f494445a65aaec31174582, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   pitchLow: 1
   pitchHigh: 1
+  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!82 &3487063424720509193
 AudioSource:
   m_ObjectHideFlags: 0
@@ -936,23 +935,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   hitSoundEffect: {fileID: 8300000, guid: 565b205405f494445a65aaec31174582, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   pitchLow: 1
   pitchHigh: 1
+  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!82 &8149927437461537561
 AudioSource:
   m_ObjectHideFlags: 0
@@ -11279,23 +11278,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   hitSoundEffect: {fileID: 8300000, guid: 565b205405f494445a65aaec31174582, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   pitchLow: 1
   pitchHigh: 1
+  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!82 &237806775697311782
 AudioSource:
   m_ObjectHideFlags: 0
@@ -11548,23 +11547,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   hitSoundEffect: {fileID: 8300000, guid: 565b205405f494445a65aaec31174582, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   pitchLow: 1
   pitchHigh: 1
+  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!82 &5952535037868706062
 AudioSource:
   m_ObjectHideFlags: 0
@@ -11859,23 +11858,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   hitSoundEffect: {fileID: 8300000, guid: 565b205405f494445a65aaec31174582, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   pitchLow: 1
   pitchHigh: 1
+  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!82 &5158009296661515673
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12128,23 +12127,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   hitSoundEffect: {fileID: 8300000, guid: 565b205405f494445a65aaec31174582, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   pitchLow: 1
   pitchHigh: 1
+  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!82 &6536735263196194844
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12397,23 +12396,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   hitSoundEffect: {fileID: 8300000, guid: 565b205405f494445a65aaec31174582, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   pitchLow: 1
   pitchHigh: 1
+  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!82 &7314977664158563106
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12666,23 +12665,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   hitSoundEffect: {fileID: 8300000, guid: 565b205405f494445a65aaec31174582, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   pitchLow: 1
   pitchHigh: 1
+  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!82 &2329623252557442303
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12935,23 +12934,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 36877cb91519d6946992080748e906af, type: 3}
   hitSoundEffect: {fileID: 8300000, guid: 565b205405f494445a65aaec31174582, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   pitchLow: 1
   pitchHigh: 1
+  destroyedSoundEffect: {fileID: 8300000, guid: ad4ee622d7a730c4ca3a0db41c6e3f8f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!82 &3224660561946759934
 AudioSource:
   m_ObjectHideFlags: 0
