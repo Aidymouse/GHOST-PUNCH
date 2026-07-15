@@ -6,37 +6,42 @@ public class ShopDoor : MonoBehaviour
 
 		bool inCutscene = false;
 	
-		HingeJoint hinge;
 		public GameObject black_bg;
 
+		public HingeJoint hinge_left;
+		public HingeJoint hinge_right;
+
     void Start() { 
- 			hinge = GetComponentInChildren<HingeJoint>();
 		}
 
     void Update() { }
+	
+		// For some fucking reason you have to re-assign the object? Idk.
+		void SetSpringAngle(HingeJoint joint, float new_angle) {
+			JointSpring spring = joint.spring;
+			spring.targetPosition = new_angle;
+			joint.spring = spring;
+		}
 
 		public void MouseOver() {
 			if (inCutscene) { return; }
 
-			JointSpring spring = hinge.spring;
-			spring.targetPosition = -20.0f;
-			// For some fucking reason you have to re-assign the object? Idk.
-			hinge.spring = spring;
+			SetSpringAngle(hinge_right, -15.0f);
+			SetSpringAngle(hinge_left, -15.0f);
+
 	 	}
 
 		public void MouseOut() {
 			if (inCutscene) { return; }
-			JointSpring spring = hinge.spring;
-			spring.targetPosition = 0.0f;
-			hinge.spring = spring;
+			SetSpringAngle(hinge_right, 0.0f);
+			SetSpringAngle(hinge_left, 0.0f);
 	 	}
 
 		public void StartRun() {
 			inCutscene = true;
 
-			JointSpring spring = hinge.spring;
-			spring.targetPosition = -90.0f;
-			hinge.spring = spring;
+			SetSpringAngle(hinge_right, -90.0f);
+			SetSpringAngle(hinge_left, -90.0f);
 
 			// TODO: make this fade
 			black_bg.SetActive(false);
@@ -45,9 +50,8 @@ public class ShopDoor : MonoBehaviour
 		public void EndRun() {
 			inCutscene = false;
 
-			JointSpring spring = hinge.spring;
-			spring.targetPosition = 0.0f;
-			hinge.spring = spring;
+			SetSpringAngle(hinge_right, 0.0f);
+			SetSpringAngle(hinge_left, 0.0f);
 
 			black_bg.SetActive(true);
 		}

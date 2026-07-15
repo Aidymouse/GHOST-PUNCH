@@ -8,14 +8,13 @@ using Unity.Cinemachine;
 public class ShopMaster : MonoBehaviour
 {
 
-		bool house_ready;
 		public PlayableDirector enter_house_timeline;
 		public PlayableDirector end_run_timeline;
-		[Tooltip("The name of the scene loaded for the house. Make sure this scene has been enabled to be loaded")]
-		public string house_scene;
 
 		public CinemachineCamera VCam_MouseControlled;
 		public CinemachineCamera VCam_Shop;
+
+		GPSceneManager scene_manager;
 
 		/* House time stuff */
 		public GhostPuncher puncher_instance;
@@ -28,10 +27,11 @@ public class ShopMaster : MonoBehaviour
 
     void Start()
     {
-			house_ready = false;
-			StartCoroutine(LoadHouseScene());
+			GameObject scene_manager_root = GameObject.Find("SceneManager");
+			scene_manager = scene_manager_root.GetComponent<GPSceneManager>();
     }
 
+		/*
 		IEnumerator LoadHouseScene() {
 			// TODO make this load the house scene and let it generate
 			AsyncOperation l = SceneManager.LoadSceneAsync(house_scene, LoadSceneMode.Additive);
@@ -42,36 +42,30 @@ public class ShopMaster : MonoBehaviour
 			house_ready = true;
 
 		}
+		*/
 
 
 		public void StartRun () {
 			Debug.Log("Start Run");
-			// Remove the black background from the door
-			// Start the timeline t
-			if (house_ready) {
-				Debug.Log("House is ready!");
 
-				// Enable house scene
-				GameObject ghost_container = GameObject.Find("SceneContainer");
-				ghost_container.GetComponent<SceneContainer>().Enable();
+			shop_door.StartRun();
+		
+			Debug.Log(shop.bought_items);
+			puncher_instance.ApplyItems(shop.bought_items);
+			ghost_instance.ApplyItems(shop.bought_items);
+			// TODO: // ghost_instance.ApplyUtems(shop.bought_items);
 
-				shop_door.StartRun();
-			
-				Debug.Log(shop.bought_items);
-				puncher_instance.ApplyItems(shop.bought_items);
-				ghost_instance.ApplyItems(shop.bought_items);
-				// TODO: // ghost_instance.ApplyUtems(shop.bought_items);
-
-				// SIGNAL: this cutscene triggers a signal
-				enter_house_timeline.Play();
+			// SIGNAL: this cutscene triggers a signal
+			enter_house_timeline.Play();
 				
 
-			} else {
-				Debug.Log("House is not ready yet!!!");
-			}
 		}
 
-		public void Signaled_EndStartRunCutscene() {
+		public void Signaled_CurryEndStartRunCutscene() {
+			scene_manager.Signaled_EndStartRunCutscene();
+		}
+
+		public void SceneManaged_EndStartRunCutscene() {
 			Debug.Log("Start Run - Signal received");
 			VCam_Shop.gameObject.SetActive(false);
 

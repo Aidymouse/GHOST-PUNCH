@@ -8,8 +8,13 @@ public class GPLoader : MonoBehaviour
 {
 
 		public GPSettings settings;
+		public GPSceneManager scene_manager;
+	
+		public bool load_shop;
+		public bool load_house;
 
-		public string init_scene;
+		HouseMaster house_master;
+		ShopMaster shop_master;
 
 		void InitPref(string key, float p) {
 			Debug.Log("Setting pref for '" + key + "': "+p);
@@ -31,19 +36,20 @@ public class GPLoader : MonoBehaviour
     void Start()
     {
 
+			// Load preferences
 			if (!PlayerPrefs.HasKey("first_load") || settings.force_reload_settings == true) {
 				Debug.Log("Setting prefs!");
 				InitPrefs();
 			}
 			LoadPrefs();
-			
-        
 
-			if (init_scene != "") {
-				SceneManager.LoadScene(init_scene);
-			} else {
-				Debug.LogWarning("You're not going to load a scene?");
-			}
+			// Init scene load
+			// TODO: this will have to be the menu some day
+			if (load_shop) { SceneManager.LoadScene("Shop"); }
+			if (load_house) { SceneManager.LoadScene("House"); }
+
+			// Init the scene manager so it can do it's stitching
+			scene_manager.Init();
 
 
 
