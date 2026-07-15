@@ -2,6 +2,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
+public enum HitClass {
+	MEGA_PUNCH=0,
+	LARGE_ITEM=1,
+	PUNCH=2,
+	ITEM=3,
+}
+
 public struct Punch {
 	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass, float fear) {
 		Direction = direction;
@@ -110,6 +117,7 @@ public class GhostPuncher : MonoBehaviour
 		/* Load Defaults */
 		move_speed = defaults.MOVE_SPEED;
 		// TODO: handle via items
+		Debug.Log("Setting max stamina to "+defaults.BASE_STAMINA);
 		max_stamina = defaults.BASE_STAMINA;
 		stamina = max_stamina;
 		stamina_recharge_rate = defaults.STAMINA_RECHARGE_RATE;
@@ -280,8 +288,8 @@ public class GhostPuncher : MonoBehaviour
 
 	void DoPunch() {
 		ChangeAnimation("PUNCH_"+punch_with);
-		if (fovKick) fovKick.SmallKick();
-		if (screenShake) screenShake.Shake(0.05f);
+		if (fovKick) { fovKick.SmallKick(); }
+		if (screenShake) { screenShake.Shake(0.05f); }
 		Punch normal_punch = new Punch(new Vector3(0,0,0), defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_FEAR);
 
 		ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
@@ -310,13 +318,15 @@ public class GhostPuncher : MonoBehaviour
 
 		SpendStamina(stamina_used);
 
+		List<int> punched_ids = new List<int>();
+
 		foreach (Collider col in punched) {
-			ProcessPunchTarget(col.gameObject, punch);
+			ProcessPunchTarget(col.gameObject, punch, punched_ids);
 		}
 
 	}
 
-	void ProcessPunchTarget(GameObject target, Punch punch) {
+	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids) {
 
 		CameraController cam = this.GetComponentInChildren<CameraController>();
 
@@ -330,13 +340,22 @@ public class GhostPuncher : MonoBehaviour
 		//}
 
 		if (target.GetComponent<BreakableObject>()) {
-			target.GetComponent<BreakableObject>().GetPunched(punch);
+			BreakableObject bo = target.GetComponent<BreakableObject>();
+			int bo_id = bo.GetInstanceID();
+
+			if (punched_ids.Contains(bo_id)) { return; }
+
+			bo.GetPunched(punch);
+			punched_ids.Add(bo_id);
 		}
 
 		Ghost ghost = target.GetComponent<Ghost>();
 		if (!ghost) { ghost = target.GetComponentInParent<Ghost>(); }
 		if (ghost) {
+			int ghost_id = ghost.GetInstanceID();
+			if (punched_ids.Contains(ghost_id)) { return; }
 			ghost.GetPunched(punch);
+			punched_ids.Add(ghost_id);
 		}
 	}
 

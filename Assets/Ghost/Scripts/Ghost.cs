@@ -30,7 +30,7 @@ public class Ghost : MonoBehaviour
 	public GPDebug debug;
 
 	// Elevated permissions on this one. We need to be able to end runs!
-	public GHOSTPUNCH game;
+	public ShopMaster game;
 
   // Forces are applied to the rig core to send the ghost flying
   public Rigidbody rig_core;
@@ -334,7 +334,7 @@ public class Ghost : MonoBehaviour
 
 
     // 1 is mega punch and 3 is big object hit
-    if (vulnerable && (punch.HitClass == 1 || punch.HitClass == 3)) {
+    if (vulnerable && (punch.HitClass <= (int)HitClass.LARGE_ITEM)) {
 
       Ragdoll(punch);
       return;
@@ -342,8 +342,14 @@ public class Ghost : MonoBehaviour
 
 
     if (HasHyperArmor()) {
+			// TODO: some minor jolts, but no damage
       return;
     }
+
+		if (cur_action == GhostActions.RAGDOLL) {
+			// TODO: special punch case when down
+			return;
+		}
 
     poise -= punch.PoiseDamage;
 
@@ -352,7 +358,7 @@ public class Ghost : MonoBehaviour
     }
 
     if (poise <= 0) {
-      if (punch.HitClass <= 1) {
+      if (punch.HitClass <= (int)HitClass.MEGA_PUNCH) {
 				Ragdoll(punch);
 
       } else {
@@ -365,7 +371,7 @@ public class Ghost : MonoBehaviour
       // TODO: play a random hit animation
       //int hurt_num = Random.Range(1,3);
       //PlayAnimation("Hurt"+hurt_num);
-      PlayAnimation("Hurt1");
+      //PlayAnimation("Hurt1");
 
       if (cur_action == GhostActions.CHARGING_ESCAPE) {
 				// TODO: there should be a bit of buffer time here or powers come out super fast
@@ -408,7 +414,7 @@ public class Ghost : MonoBehaviour
   /** STATUS **/
   // If the ghost has hyper armor, she cannot have her poise break (it can go down though)
   bool HasHyperArmor() {
-    return cur_action == GhostActions.HIT_STUN || cur_action == GhostActions.RAGDOLL || cur_action == GhostActions.RECOVERY;
+    return cur_action == GhostActions.HIT_STUN || cur_action == GhostActions.RECOVERY;
 
   }
 

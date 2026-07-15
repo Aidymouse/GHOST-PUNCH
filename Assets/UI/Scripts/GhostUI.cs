@@ -21,6 +21,9 @@ public class GhostUI : MonoBehaviour
 	UIBar escape_bar;
 	UIBar stamina_bar;
 
+	[Tooltip("If true, we'll init as soon as we start. Should be false except when testing")]
+	public bool init_on_start;
+
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Awake() {
 		UIBar[] bars = GetComponentsInChildren<UIBar>();
@@ -77,6 +80,9 @@ public class GhostUI : MonoBehaviour
 
 
 		//ui_escape_meter = UnityEngine.GameObject.Find<TMP_Text>("EscapeMeter");
+		if (init_on_start) {
+			InitUI(ghost, ghost_puncher);
+		}
 	}
 
 	public void InitUI(Ghost ghost, GhostPuncher puncher) {
@@ -120,7 +126,7 @@ public class GhostUI : MonoBehaviour
 			ghost_puncher.uiFlag_slapped_this_frame = false;
 		}
 
-		/** Slowed Indicator **/
+		/** TODO: Slowed Indicator **/
 
 	}
 

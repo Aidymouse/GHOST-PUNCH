@@ -3,12 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PuncherDefaults", menuName = "Scriptable Objects/PuncherDefaults")]
 public class PuncherDefaults : ScriptableObject
 {
+	[Header("Movement")]
 	[Tooltip("Movement speed")]
 	public float MOVE_SPEED;
-	[Tooltip("Time after clicking punch that you can't punch again")]
-	public float PUNCH_COOLDOWN;
-	[Tooltip("Time after a megapunch that you can't punch (or use any abilities?)")]
-	public float MEGAPUNCH_COOLDOWN;
+
 	[Tooltip("Starts after PUNCH_COOLDOWN. If punching during this duration, the punch chain continues rather than starting again")]
 	public float PUNCH_AGAIN;
 	[Tooltip("If punch is clicked while cooldown has this time or less left, the punch input is buffered")]
@@ -19,6 +17,7 @@ public class PuncherDefaults : ScriptableObject
 	public float PUNCH_FEAR;
 
 
+	[Header("Stamina")]
 	[Tooltip("Maximum stamina for ghost puncher with no items")]
 	public float BASE_STAMINA;
 	[Tooltip("How long to wait in between stamina usage and starting to recharge")]
@@ -26,6 +25,9 @@ public class PuncherDefaults : ScriptableObject
 	[Tooltip("Stamina per second regained")]
 	public float STAMINA_RECHARGE_RATE;
 
+	[Header("Punch")]
+	[Tooltip("Time after clicking punch that you can't punch again")]
+	public float PUNCH_COOLDOWN;
 	[Tooltip("Physics force applied in direction of punch to objects")]
 	public float PUNCH_FORCE;
 	[Tooltip("Amount of damage objects take from default punch")]
@@ -34,13 +36,19 @@ public class PuncherDefaults : ScriptableObject
 	public float PUNCH_GHOST_DAMAGE;
 	[Tooltip("Poise damage the ghost takes from a default punch")]
 	public float PUNCH_POISE_DAMAGE;
+	[Tooltip("Stamina used on a punch")]
 	public float PUNCH_STAMINA;
 
+
+	[Header("Mega punch")]
+	[Tooltip("Time after a megapunch that you can't punch (or use any abilities?)")]
+	public float MEGAPUNCH_COOLDOWN;
 	public float MEGAPUNCH_FORCE;
 	public float MEGAPUNCH_OBJECT_DAMAGE;
 	[Tooltip("Damage the ghost takes from a mega punch")]
 	public float MEGAPUNCH_GHOST_DAMAGE;
 	public float MEGAPUNCH_POISE_DAMAGE;
+	[Tooltip("Stamina used on a mega punch")]
 	public float MEGAPUNCH_STAMINA;
 	public float MEGAPUNCH_FEAR;
     

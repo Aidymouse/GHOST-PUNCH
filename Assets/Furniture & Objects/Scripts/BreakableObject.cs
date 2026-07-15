@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 
 public enum ObjectWeight {
 	CUSTOM,
@@ -11,32 +12,42 @@ public enum ObjectWeight {
 public class BreakableObject : MonoBehaviour
 {
 
-	public GameObject broken_obj;
+	[Header("Attributes")]
+	[Tooltip("Amount of HP this object has")]
 	public float hp;
-	/* When the broken object spawns, apply this rotation. */
-	public Vector3 rotation_offset;
-	// TODO: damage reduction modifier ?
-
 	[Tooltip("If you set weight to anything other than custom, hit attributes will be informed by the ObjectAttributes scriptable object")]
-	public ObjectWeight weight;
 	public ObjectAttributes attrs;
+	public ObjectWeight weight;
+	[Tooltip("When I hit something, they'll use this to figure out what I am. (3) heavy object; (4) light object")]
+	public int hit_class = 4;
+
+
+	[Header("Broken Child")]
+	public GameObject broken_obj;
+	[Tooltip("Rotation offset to apply to spawned child object (on top of rotation match to parent)")]
+	public Vector3 rotation_offset;
+	[Tooltip("Particles spawned for each child object when breaking into pieces")]
+	public ParticleSystem break_particles;
 
 	[Header("Particles")]
 	[Tooltip("Particles spawned at hit location when hit")]
 	public ParticleSystem hit_particles;
-	[Tooltip("Particles spawned for each child object when breaking into pieces")]
-	public ParticleSystem break_particles;
 	[Tooltip("Particles this object spawns for itself when it breaks")]
 	public ParticleSystem break_self_particles;
 
-	[Header("Audio")]
-	AudioSource audio_source;
+	[Header("Sound")]
+	[Tooltip("The sound that plays when the object is hit (punched or hit by another object")]
 	public AudioClip hitSoundEffect;
-	public AudioClip destroyedSoundEffect;
+	[Tooltip("Low bound on pitch adjustment when hit sound plays")]
 	public float pitchLow;
+	[Tooltip("High bound on pitch adjustment when hit sound plays")]
 	public float pitchHigh;
+	[Tooltip("The sound that plays when this object is destroyed")]
+	public AudioClip destroyedSoundEffect;
 
-	[Header("Custom Hit Attributes")]
+	AudioSource audio_source;
+
+	[Header("Custom Attributes")]
 	[Tooltip("How much poise damage to deal when hitting the ghost")]
 	public float poise_damage = 0;
 	[Tooltip("How much HP damage to deal when hitting the ghost")]
@@ -45,11 +56,8 @@ public class BreakableObject : MonoBehaviour
 	public float object_damage = 0;
 	[Tooltip("How much physics force to apply when hitting an object (this is in addition to normal physics engine force so usually can be 0)")]
 	public float force = 0;
-	[Tooltip("(3) heavy object; (4) light object")]
-	public int hit_class = 4;
 
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{
 
@@ -96,12 +104,26 @@ public class BreakableObject : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+
+		int MIN_SPEED = 6;
+
+		Rigidbody rb = this.GetComponent<Rigidbody>();
+		if (rb) {
+			if (rb.linearVelocity.magnitude > MIN_SPEED && this.gameObject.layer != LayerMask.NameToLayer("FlyingObject")) {
+				this.gameObject.layer = LayerMask.NameToLayer("FlyingObject");
+			} else if (this.gameObject.layer != LayerMask.NameToLayer("Punchable")) {
+				this.gameObject.layer = LayerMask.NameToLayer("Punchable");
+			}
+		}
 		
 	}
 
 	public void OnCollisionEnter(Collision col) {
 
-		// We don't need to worry about dealing damage from incoming objects because their breakable object scripts will take care of it
+		// TODO: on touch floor, become normal grounded object. Might not be needed
+
+		// If the thing we are colliding with is a breakable object, deal some damage!
+		// We don't need to worry about taking damage from incoming objects because their breakable object scripts will take care of it
 		if (col.gameObject.tag == "BreakableObject") {
 			
 			if (col.relativeVelocity.magnitude > 6) {
@@ -114,6 +136,8 @@ public class BreakableObject : MonoBehaviour
 					bo.GetPunched(objectPunch, col.contacts[0].point);
 				}
 			}
+
+		// If the thing we just hit is a ghost, deal some damage to it, and also take some damage (WIP)
 		} else if (col.gameObject.tag == "GhostBodyCollider") {
 			if (col.relativeVelocity.magnitude > 6) {
 				Ghost ghost = col.gameObject.GetComponentInParent<Ghost>();
@@ -121,7 +145,6 @@ public class BreakableObject : MonoBehaviour
 					Debug.Log("Object collision with '" + col.gameObject.tag + "' at " + col.relativeVelocity.magnitude);
 					Punch objectPunch = new Punch(GetComponent<Rigidbody>().linearVelocity.normalized, force, object_damage, ghost_damage, poise_damage, hit_class, 0);
 					ghost.GetPunched(objectPunch);
-
 				} 			
 
 				// TODO: I should probably also take some damage - a ghost just flew into me!
@@ -130,7 +153,7 @@ public class BreakableObject : MonoBehaviour
 
 		} else {
 			if (col.relativeVelocity.magnitude > 6) {
-					// This thing won't be damaging me, so I should take damage.
+					// This thing won't handle damaging me, so I should take damage.
 					TakeDamage(200);
 			}
 		}
@@ -182,10 +205,10 @@ public class BreakableObject : MonoBehaviour
 			// Negative HP = infinite HP
 			if (hp < 0) { return; }
 
-				hp -= damage;
-				if (hp <= 0) {
-					Break(force, hit_dir, hit_point);
-				} 
+			hp -= damage;
+			if (hp <= 0) {
+				Break(force, hit_dir, hit_point);
+			} 
 
 	}
 
@@ -212,6 +235,7 @@ public class BreakableObject : MonoBehaviour
 					Instantiate(break_particles, crb.transform.position, new Quaternion());
 				}
 				crb.isKinematic = false;
+				// TODO: some actual conservation of momentum here?
 				crb.AddForce( (velocity+hit_dir).normalized * (velocity.magnitude + force));
 			}
 		}
@@ -224,4 +248,8 @@ public class BreakableObject : MonoBehaviour
 
 	}
 
+	public void OnCollisionEnter(Collider col) {
+	}
+
 }
+

@@ -44,7 +44,6 @@ public class GhostAction_Ragdoll : GhostAction {
 		ragdoll_offset.y = 0;
 		ghost.transform.position -= ragdoll_offset;
 		*/
-		Debug.Log("Ragdoll timer: " + ghost.ti_ragdoll.time_remaining);
 
 		if (ghost.ti_ragdoll.finished_this_frame()) {
 			ghost.ti_recovery.set(1);
