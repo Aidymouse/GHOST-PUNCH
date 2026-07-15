@@ -30,7 +30,7 @@ public class Ghost : MonoBehaviour
 	public GPDebug debug;
 
 	// Elevated permissions on this one. We need to be able to end runs!
-	public ShopMaster game;
+	public ShopMaster shop_master;
 
   // Forces are applied to the rig core to send the ghost flying
   public Rigidbody rig_core;
@@ -496,10 +496,10 @@ public class Ghost : MonoBehaviour
 		}
 	}
 
-	/* Just pass through to game */
+	/* Just pass through to shop master */
 	public void CallEndRun() {
 		if (debug.dont_end_run == true) { return; }
-		game.EndRun();
+		shop_master.EndRun();
 	}
 
 	// Called from GHOSTPUNCH

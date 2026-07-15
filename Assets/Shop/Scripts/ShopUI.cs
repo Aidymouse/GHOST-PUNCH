@@ -41,6 +41,14 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 		shop_door.MouseOut();
 	}
 
+
+	public void StartRun() {
+		this.gameObject.SetActive(false);
+	}
+
+	public void EndRun() {
+		this.gameObject.SetActive(true);
+	}
 }
 
 

@@ -9,6 +9,8 @@ public class HouseMaster : MonoBehaviour
 			enabled_on_run_start.SetActive(true);
 		}
 
-		public void EndRun() {
+		public void SceneManaged_EndRun() {
+			// TODO: at some point i'll need to make sure this only happens when we can't see it
+			enabled_on_run_start.SetActive(false);
 		}
 }

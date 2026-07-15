@@ -20,6 +20,7 @@ public class ShopMaster : MonoBehaviour
 		public GhostPuncher puncher_instance;
 		public Ghost ghost_instance;
 		public GhostUI ghost_ui;
+		public ShopUI shop_ui;
 		public ShopDoor shop_door;
 
 		/* Also contains the data for what items are present */
@@ -49,6 +50,8 @@ public class ShopMaster : MonoBehaviour
 			Debug.Log("Start Run");
 
 			shop_door.StartRun();
+
+			shop_ui.StartRun();
 		
 			Debug.Log(shop.bought_items);
 			puncher_instance.ApplyItems(shop.bought_items);
@@ -78,9 +81,15 @@ public class ShopMaster : MonoBehaviour
 		}
 
 		public void EndRun() {
+			scene_manager.EndRun();
+		}
+
+		public void SceneManaged_EndRun() {
 			Debug.Log("Ending Run!");
+
 			puncher_instance.GetComponent<GhostPuncher>().EndRun();
 			VCam_Shop.gameObject.SetActive(true);
+
 
 			// SIGNAL: triggers below Fn
 			end_run_timeline.Play();
@@ -90,7 +99,9 @@ public class ShopMaster : MonoBehaviour
 		public void Signaled_EndRunWhiteOpaque() {
 			Debug.Log("Ending Run - received signal");
 			ghost_ui.gameObject.SetActive(false);
+
 			shop_door.EndRun();
+			shop_ui.EndRun();
 
 			ghost_instance.EndRun();
 
