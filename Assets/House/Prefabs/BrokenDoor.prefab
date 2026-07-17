@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2513158651009147031}
   - component: {fileID: 1455395600940505239}
   - component: {fileID: 4705760762113400490}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: Door_cell
   m_TagString: BreakableObject
   m_Icon: {fileID: 0}
@@ -154,19 +154,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 9011703309655826440, guid: 63f33839d0472da41975ddfd7051ad89, type: 3}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 3
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  weight: 3
+  hit_class: 3
+  broken_obj: {fileID: 9011703309655826440, guid: 63f33839d0472da41975ddfd7051ad89, type: 3}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 6dd91f76c247bb145a0ee4ff3e39b6e6, type: 3}
+  hitSoundEffect: {fileID: 0}
+  pitchLow: 0
+  pitchHigh: 0
+  destroyedSoundEffect: {fileID: 0}
   poise_damage: 200
   ghost_damage: 0
   object_damage: 50
   force: 0
-  hit_class: 3
 --- !u!1 &2232732130300345096
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,7 +185,7 @@ GameObject:
   - component: {fileID: 3275813115558139477}
   - component: {fileID: 5006062724810948353}
   - component: {fileID: 5181958215044300995}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: Door_cell.005_cell.001
   m_TagString: BreakableObject
   m_Icon: {fileID: 0}
@@ -321,19 +325,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 400
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 3
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  weight: 3
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  hitSoundEffect: {fileID: 0}
+  pitchLow: 0
+  pitchHigh: 0
+  destroyedSoundEffect: {fileID: 0}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!1 &5068264972661416926
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,9 +356,9 @@ GameObject:
   - component: {fileID: 5458478617959852579}
   - component: {fileID: 5144706545266941607}
   - component: {fileID: 6415441101145447728}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Door.002
-  m_TagString: Untagged
+  m_TagString: BreakableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -460,19 +468,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 200
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 3
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 0}
+  weight: 3
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 0}
   break_self_particles: {fileID: 0}
+  hitSoundEffect: {fileID: 0}
+  pitchLow: 0
+  pitchHigh: 0
+  destroyedSoundEffect: {fileID: 0}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!54 &6415441101145447728
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -514,7 +526,7 @@ GameObject:
   - component: {fileID: 485855431681354276}
   - component: {fileID: 9166350328717152284}
   - component: {fileID: 6807858382623788829}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: Door_cell.001
   m_TagString: BreakableObject
   m_Icon: {fileID: 0}
@@ -654,19 +666,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 400
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 3
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  weight: 3
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  hitSoundEffect: {fileID: 0}
+  pitchLow: 0
+  pitchHigh: 0
+  destroyedSoundEffect: {fileID: 0}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!1 &7646795216201682423
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,7 +697,7 @@ GameObject:
   - component: {fileID: 3284294361748498766}
   - component: {fileID: 7791051548739401205}
   - component: {fileID: 1245710014089409253}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: Door_cell.002_cell.001
   m_TagString: BreakableObject
   m_Icon: {fileID: 0}
@@ -821,19 +837,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 400
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 3
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  weight: 3
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  hitSoundEffect: {fileID: 0}
+  pitchLow: 0
+  pitchHigh: 0
+  destroyedSoundEffect: {fileID: 0}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!1 &8291566019866678801
 GameObject:
   m_ObjectHideFlags: 0
@@ -848,7 +868,7 @@ GameObject:
   - component: {fileID: 2603355147411946611}
   - component: {fileID: 6509763021465828962}
   - component: {fileID: 7997806681238461480}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: Door_cell.004
   m_TagString: BreakableObject
   m_Icon: {fileID: 0}
@@ -988,19 +1008,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 9011703309655826440, guid: 63f33839d0472da41975ddfd7051ad89, type: 3}
   hp: 1000
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 3
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  weight: 3
+  hit_class: 3
+  broken_obj: {fileID: 9011703309655826440, guid: 63f33839d0472da41975ddfd7051ad89, type: 3}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: 6dd91f76c247bb145a0ee4ff3e39b6e6, type: 3}
+  hitSoundEffect: {fileID: 0}
+  pitchLow: 0
+  pitchHigh: 0
+  destroyedSoundEffect: {fileID: 0}
   poise_damage: 200
   ghost_damage: 0
   object_damage: 50
   force: 0
-  hit_class: 3
 --- !u!1 &8437144117242782725
 GameObject:
   m_ObjectHideFlags: 0
@@ -1054,9 +1078,9 @@ GameObject:
   - component: {fileID: 9120914935796435749}
   - component: {fileID: 6273539425778656065}
   - component: {fileID: 3318637270209315825}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Door.001
-  m_TagString: Untagged
+  m_TagString: BreakableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1166,19 +1190,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 200
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 3
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 0}
+  weight: 3
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 0}
   break_self_particles: {fileID: 0}
+  hitSoundEffect: {fileID: 0}
+  pitchLow: 0
+  pitchHigh: 0
+  destroyedSoundEffect: {fileID: 0}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!54 &3318637270209315825
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1220,7 +1248,7 @@ GameObject:
   - component: {fileID: 5118988826606030937}
   - component: {fileID: 9051746102434730267}
   - component: {fileID: 3879370902814597645}
-  m_Layer: 6
+  m_Layer: 11
   m_Name: Door_cell.002_cell
   m_TagString: BreakableObject
   m_Icon: {fileID: 0}
@@ -1360,16 +1388,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 0}
   hp: 400
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 3
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  weight: 3
+  hit_class: 4
+  broken_obj: {fileID: 0}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  hitSoundEffect: {fileID: 0}
+  pitchLow: 0
+  pitchHigh: 0
+  destroyedSoundEffect: {fileID: 0}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
