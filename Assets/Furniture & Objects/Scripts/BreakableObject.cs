@@ -57,9 +57,12 @@ public class BreakableObject : MonoBehaviour
 	[Tooltip("How much physics force to apply when hitting an object (this is in addition to normal physics engine force so usually can be 0)")]
 	public float force = 0;
 
+	// If we get changed to the flying object layer, we'll return to this one when we should exit it
+	int? preserved_layer;
 
 	void Start()
 	{
+		this.preserved_layer = null;
 
 		if (weight == ObjectWeight.LIGHT) {
 			poise_damage = attrs.LIGHT_POISE_DAMAGE;
@@ -110,9 +113,11 @@ public class BreakableObject : MonoBehaviour
 		Rigidbody rb = this.GetComponent<Rigidbody>();
 		if (rb) {
 			if (rb.linearVelocity.magnitude > MIN_SPEED && this.gameObject.layer != LayerMask.NameToLayer("FlyingObject")) {
+				this.preserved_layer = this.gameObject.layer;
 				this.gameObject.layer = LayerMask.NameToLayer("FlyingObject");
-			} else if (this.gameObject.layer != LayerMask.NameToLayer("Punchable")) {
-				this.gameObject.layer = LayerMask.NameToLayer("Punchable");
+			} else if (this.preserved_layer != null) {
+				this.gameObject.layer = this.preserved_layer.Value;
+				this.preserved_layer = null;
 			}
 		}
 		
@@ -224,6 +229,7 @@ public class BreakableObject : MonoBehaviour
 		// Spawn broken object
 		if (broken_obj) {
 			GameObject broken = Instantiate(broken_obj, this.transform.position, initRotation.rotation);
+			broken.layer = LayerMask.NameToLayer("WalkThrough");
 
 			Rigidbody my_rb = this.GetComponent<Rigidbody>();
 			Vector3 velocity = my_rb.linearVelocity;
