@@ -498,7 +498,7 @@ public class Ghost : MonoBehaviour
 
 	/* Just pass through to shop master */
 	public void CallEndRun() {
-		if (debug.dont_end_run == true) { return; }
+		if (debug.dont_end_run == true || !shop_master) { return; }
 		shop_master.EndRun();
 	}
 
