@@ -25,4 +25,8 @@ public class ObjectAttributes : ScriptableObject
 	public float VERY_HEAVY_GHOST_DAMAGE;
 	public float VERY_HEAVY_OBJECT_DAMAGE;
 	public float VERY_HEAVY_FORCE;
+
+	[Header("Global Object Config")]
+	[Tooltip("Height at which an object becomes walkthroughable")]
+	public float WALKTHROUGH_HEIGHT;
 }
