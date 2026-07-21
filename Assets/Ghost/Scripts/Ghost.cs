@@ -74,6 +74,8 @@ public class Ghost : MonoBehaviour
   //Sounds temporarily stored on objects lol
   public AudioClip energySound;
   public AudioClip jumpscareSound;
+	public AudioClip sfx_charging_escape;
+
   public float pitchLow;
   public float pitchHigh;
 
@@ -508,6 +510,22 @@ public class Ghost : MonoBehaviour
 		this.GetComponent<Ghost>().enabled = false;
 	}
 
+
+	public void PlaySound(string clip_name) {
+		currentSound.loop = false;	
+
+		switch (clip_name) {
+			case "charging_escape": {
+				currentSound.clip = sfx_charging_escape;
+				currentSound.loop = true;	
+				break;
+			}
+			default: {
+				Debug.Log("Cannot play ghost sound: "+clip_name);
+				break;
+			}
+		}
+	}
 
 
   /** GETTERS */
