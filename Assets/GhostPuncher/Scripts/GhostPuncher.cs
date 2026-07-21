@@ -256,10 +256,12 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 		/* Stamina */
+		/*
 		if (ti_stamina_recharge.finished() && !charging_punch) {
 			stamina += stamina_recharge_rate * Time.deltaTime;
 			if (stamina > max_stamina) { stamina = max_stamina; }
 		}
+		*/
 
 		/* Execute the move */
 		controller.Move(move_vec * Time.deltaTime);
@@ -292,7 +294,10 @@ public class GhostPuncher : MonoBehaviour
 		if (screenShake) { screenShake.Shake(0.05f); }
 		Punch normal_punch = new Punch(new Vector3(0,0,0), defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_FEAR);
 
-		ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
+		bool hit_something = ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
+		if (hit_something) {
+			stamina += defaults.STAMINA_GAINED_ON_HIT;
+		}
 	}
 
 	void DoMegaPunch() {
@@ -312,7 +317,8 @@ public class GhostPuncher : MonoBehaviour
 		ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
 	}
 
-	void ExecutePunch(Punch punch, float stamina_used) {
+	/** returns true if we hit something */
+	bool ExecutePunch(Punch punch, float stamina_used) {
 
 		Collider[] punched = Physics.OverlapBox(punch_hitbox.transform.position, punch_hitbox.transform.localScale/2, punch_hitbox.transform.rotation, punchables_mask);		
 
@@ -323,6 +329,12 @@ public class GhostPuncher : MonoBehaviour
 		foreach (Collider col in punched) {
 			ProcessPunchTarget(col.gameObject, punch, punched_ids);
 		}
+
+		if (punched.Length > 0) {
+			return true;
+		}
+
+		return false;
 
 	}
 
