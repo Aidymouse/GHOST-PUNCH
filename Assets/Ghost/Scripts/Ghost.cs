@@ -6,6 +6,7 @@ using Unity.Properties;
 using UnityEngine.InputSystem;
 using Hairibar.Ragdoll.Animation;
 using Hairibar.Ragdoll;
+using System.Collections.Generic;
 
 public enum GhostActions {
   CHARGING_ESCAPE,
@@ -75,6 +76,9 @@ public class Ghost : MonoBehaviour
   public AudioClip energySound;
   public AudioClip jumpscareSound;
 	public AudioClip sfx_charging_escape;
+
+	[SerializeField]
+	public Dictionary<string, AudioClip> sfx;
 
   public float pitchLow;
   public float pitchHigh;
@@ -512,12 +516,12 @@ public class Ghost : MonoBehaviour
 
 
 	public void PlaySound(string clip_name) {
-		currentSound.loop = false;	
+		//currentSound.loop = false;	
 
 		switch (clip_name) {
 			case "charging_escape": {
 				currentSound.clip = sfx_charging_escape;
-				currentSound.loop = true;	
+				//currentSound.loop = true;	
 				break;
 			}
 			default: {
