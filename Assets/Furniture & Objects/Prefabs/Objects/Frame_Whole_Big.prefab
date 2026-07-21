@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6852540311682604517}
   - component: {fileID: -5035693394850825482}
   - component: {fileID: 4723299126209728563}
+  - component: {fileID: 6511244669768855276}
   m_Layer: 6
   m_Name: Frame_Whole_Big
   m_TagString: BreakableObject
@@ -126,16 +127,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 5729631795207084184, guid: 8aa269fb8ad17b248a1fe853303ee505, type: 3}
   hp: 200
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 1
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1236530132058975547, guid: ea4c812773b5bfa47aba2a4211c5a8e6, type: 3}
+  weight: 1
+  hit_class: 4
+  broken_obj: {fileID: 5729631795207084184, guid: 8aa269fb8ad17b248a1fe853303ee505, type: 3}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 1780546180473290174, guid: 0cc26e7d35e1ebf4685ca0e471f4d6e5, type: 3}
-  break_self_particles: {fileID: 0}
+  hit_particles: {fileID: 1236530132058975547, guid: ea4c812773b5bfa47aba2a4211c5a8e6, type: 3}
+  break_self_particles: {fileID: 1780546180473290174, guid: 0cc26e7d35e1ebf4685ca0e471f4d6e5, type: 3}
+  hitSoundEffect: {fileID: 8300000, guid: fcc0d59010541e34db0ab1548fb18e7f, type: 3}
+  pitchLow: 0
+  pitchHigh: 0
+  destroyedSoundEffect: {fileID: 8300000, guid: 05bc8e047f3fc634eaf3c24fb15425ce, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
+--- !u!54 &6511244669768855276
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5729631795207084184}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 14
+  m_CollisionDetection: 0
