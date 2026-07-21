@@ -106,24 +106,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 3522781913087288194, guid: 4686ae073212fa14fab21afd16fe1ada, type: 3}
   hp: 50
-  rotation_offset: {x: 0, y: 0, z: 0}
+  attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   weight: 0
-  attrs: {fileID: 0}
-  hit_particles: {fileID: 0}
+  hit_class: 4
+  broken_obj: {fileID: 3522781913087288194, guid: 4686ae073212fa14fab21afd16fe1ada, type: 3}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 0}
+  hit_particles: {fileID: 0}
   break_self_particles: {fileID: 0}
-  destroyedSound: {fileID: 0}
   hitSoundEffect: {fileID: 8300000, guid: e83da122b78bfe146b14d81ea45c512f, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: e83da122b78bfe146b14d81ea45c512f, type: 3}
   pitchLow: 1.5
   pitchHigh: 1.8
+  destroyedSoundEffect: {fileID: 8300000, guid: e83da122b78bfe146b14d81ea45c512f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!65 &2933976133254987878
 BoxCollider:
   m_ObjectHideFlags: 0
