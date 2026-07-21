@@ -30,6 +30,13 @@ public struct Punch {
 	public int HitClass;
 };
 
+/* The hit record is passed around as we execute punches, then taken by the ghost puncher and assessed to see what kind of bonuses we get */
+public struct PunchRecord {
+	public int items_hit;
+	public int items_broken;
+	public bool hit_ghost;
+	public bool ragdolled_ghost;
+}
 
 
 public class GhostPuncher : MonoBehaviour
@@ -256,10 +263,12 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 		/* Stamina */
+		/*
 		if (ti_stamina_recharge.finished() && !charging_punch) {
 			stamina += stamina_recharge_rate * Time.deltaTime;
 			if (stamina > max_stamina) { stamina = max_stamina; }
 		}
+		*/
 
 		/* Execute the move */
 		controller.Move(move_vec * Time.deltaTime);
@@ -292,7 +301,9 @@ public class GhostPuncher : MonoBehaviour
 		if (screenShake) { screenShake.Shake(0.05f); }
 		Punch normal_punch = new Punch(new Vector3(0,0,0), defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_FEAR);
 
-		ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
+		PunchRecord record = ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
+
+		AssessPunchRecord(record);
 	}
 
 	void DoMegaPunch() {
@@ -312,8 +323,10 @@ public class GhostPuncher : MonoBehaviour
 		ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
 	}
 
-	void ExecutePunch(Punch punch, float stamina_used) {
+	/** returns true if we hit something */
+	PunchRecord ExecutePunch(Punch punch, float stamina_used) {
 
+		PunchRecord record = new PunchRecord();
 		Collider[] punched = Physics.OverlapBox(punch_hitbox.transform.position, punch_hitbox.transform.localScale/2, punch_hitbox.transform.rotation, punchables_mask);		
 
 		SpendStamina(stamina_used);
@@ -321,12 +334,14 @@ public class GhostPuncher : MonoBehaviour
 		List<int> punched_ids = new List<int>();
 
 		foreach (Collider col in punched) {
-			ProcessPunchTarget(col.gameObject, punch, punched_ids);
+			ProcessPunchTarget(col.gameObject, punch, punched_ids, ref record);
 		}
+
+		return record;
 
 	}
 
-	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids) {
+	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids, ref PunchRecord record) {
 
 		CameraController cam = this.GetComponentInChildren<CameraController>();
 
@@ -347,6 +362,8 @@ public class GhostPuncher : MonoBehaviour
 
 			bo.GetPunched(punch);
 			punched_ids.Add(bo_id);
+
+			record.items_hit += 1;
 		}
 
 		Ghost ghost = target.GetComponent<Ghost>();
@@ -356,6 +373,15 @@ public class GhostPuncher : MonoBehaviour
 			if (punched_ids.Contains(ghost_id)) { return; }
 			ghost.GetPunched(punch);
 			punched_ids.Add(ghost_id);
+
+			record.hit_ghost = true;
+		}
+	}
+
+	// After a punch is executed, assess the record to see what bonuses we get
+	void AssessPunchRecord(PunchRecord record) {
+		if (record.items_hit > 0) {
+			stamina += defaults.STAMINA_GAINED_ON_HIT;
 		}
 	}
 
