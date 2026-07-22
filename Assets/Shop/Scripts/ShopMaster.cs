@@ -52,6 +52,8 @@ public class ShopMaster : MonoBehaviour
 			shop_door.StartRun();
 
 			shop_ui.StartRun();
+
+			shop.PlaySound(ShopSFX.MWAHAHA);
 		
 			Debug.Log(shop.bought_items);
 			puncher_instance.ApplyItems(shop.bought_items);
