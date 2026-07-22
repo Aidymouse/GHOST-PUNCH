@@ -263,12 +263,10 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 		/* Stamina */
-		/*
 		if (ti_stamina_recharge.finished() && !charging_punch) {
 			stamina += stamina_recharge_rate * Time.deltaTime;
 			if (stamina > max_stamina) { stamina = max_stamina; }
 		}
-		*/
 
 		/* Execute the move */
 		controller.Move(move_vec * Time.deltaTime);
