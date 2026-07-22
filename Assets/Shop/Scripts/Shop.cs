@@ -2,6 +2,10 @@ using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 
+public enum ShopSFX {
+	MWAHAHA
+}
+
 public class Shop : MonoBehaviour
 {
   public float turnSpeed;
@@ -9,6 +13,10 @@ public class Shop : MonoBehaviour
 
   public Transform camera_pos;
   public Transform camera_target;
+
+	[Header("Sound")]
+	public AudioSource shop_sound;
+	public AudioClip sfx_start_run;
 
 	[HideInInspector]
 	public ItemRecord bought_items;
@@ -43,6 +51,19 @@ public class Shop : MonoBehaviour
 	}
 
 	public void PopulateShop() {
+		/** load item prefabs into shop slots **/
+		// Position item correctly
+		// Link up clicking item to the right method (my BuyItem method)
 	}
 
+	public void PlaySound(ShopSFX sfx) {
+		switch (sfx) {
+			case (ShopSFX.MWAHAHA): {
+				shop_sound.clip = sfx_start_run;
+				shop_sound.Play();
+				break;
+			}
+		}
+	}
 }
+

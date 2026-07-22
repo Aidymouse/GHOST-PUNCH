@@ -67,7 +67,7 @@ public class GhostPuncher : MonoBehaviour
 	Timer ti_punch_again;
 	Timer ti_charge_up;
 	float punch_range;
-	string punch_with = "RIGHT";
+	string punch_with = "Right";
 	bool buffered_punch = false;
 	bool buffered_charge = false;
 	bool charging_punch = false;
@@ -174,7 +174,7 @@ public class GhostPuncher : MonoBehaviour
 
 		// Attacking
 		if (ti_punch_again.finished_this_frame()) {
-			punch_with = "RIGHT";
+			punch_with = "Right";
 		}
 
 		if ((action_chargePunch.WasPerformedThisFrame() && !buffered_punch) || (buffered_charge && ti_punch_cooldown.finished_this_frame())) {
@@ -204,7 +204,7 @@ public class GhostPuncher : MonoBehaviour
 				buffered_punch = false;
 
 				if (!ti_punch_again.finished()) {
-					punch_with = punch_with == "RIGHT" ? "LEFT" : "RIGHT";
+					punch_with = punch_with == "Right" ? "Left" : "Right";
 				} 
 
 
@@ -263,12 +263,10 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 		/* Stamina */
-		/*
 		if (ti_stamina_recharge.finished() && !charging_punch) {
 			stamina += stamina_recharge_rate * Time.deltaTime;
 			if (stamina > max_stamina) { stamina = max_stamina; }
 		}
-		*/
 
 		/* Execute the move */
 		controller.Move(move_vec * Time.deltaTime);
@@ -296,7 +294,9 @@ public class GhostPuncher : MonoBehaviour
 	}
 
 	void DoPunch() {
-		ChangeAnimation("PUNCH_"+punch_with);
+		int punch_num = Random.Range(1,5);
+		ChangeAnimation("Jab"+punch_with+punch_num);
+
 		if (fovKick) { fovKick.SmallKick(); }
 		if (screenShake) { screenShake.Shake(0.05f); }
 		Punch normal_punch = new Punch(new Vector3(0,0,0), defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_FEAR);
@@ -468,11 +468,14 @@ public class GhostPuncher : MonoBehaviour
 	/* Update all the state needed when a run begins */
 	public void StartRun() {
 		GetComponentInChildren<CameraController>().enabled = true;
+		arm_animator.gameObject.SetActive(true);
 		inCutscene = false;
 	}
 
 	public void EndRun() {
 		GetComponentInChildren<CameraController>().enabled = false;
+		// TODO: make this a 'put arms away' animation
+		arm_animator.gameObject.SetActive(false);
 		inCutscene = true;
 
 	}
