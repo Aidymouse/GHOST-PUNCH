@@ -22,6 +22,10 @@ public class PuncherDefaults : ScriptableObject
 	public float BASE_STAMINA;
 	[Tooltip("How much stamina you gain if you hit something with a punch")]
 	public float STAMINA_GAINED_ON_HIT;
+	[Tooltip("How long to wait in between stamina usage and starting to recharge")]
+	public float STAMINA_RECHARGE_DELAY;
+	[Tooltip("Stamina per second regained")]
+	public float STAMINA_RECHARGE_RATE;
 
 	[Header("Punch")]
 	[Tooltip("Time after clicking punch that you can't punch again")]
@@ -49,12 +53,5 @@ public class PuncherDefaults : ScriptableObject
 	[Tooltip("Stamina used on a mega punch")]
 	public float MEGAPUNCH_STAMINA;
 	public float MEGAPUNCH_FEAR;
-    
-
-	[Header("Deprecated")]
-	[Tooltip("How long to wait in between stamina usage and starting to recharge")]
-	public float STAMINA_RECHARGE_DELAY;
-	[Tooltip("Stamina per second regained")]
-	public float STAMINA_RECHARGE_RATE;
 
 }
