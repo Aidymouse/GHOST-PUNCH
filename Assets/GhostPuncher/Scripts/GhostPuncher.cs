@@ -169,6 +169,12 @@ public class GhostPuncher : MonoBehaviour
 			//controller.Move(Vector3.zero);
 			return;
 		}
+
+		/*
+		Vector3 look_dir = punch_hitbox.transform.TransformDirection(Vector3.forward);
+		Vector3 look_start = punch_hitbox.transform.position - look_dir * punch_hitbox.transform.localScale.z/2;
+		*/
+
 		// Timers
 		this.tick_timers();
 
@@ -299,7 +305,15 @@ public class GhostPuncher : MonoBehaviour
 
 		if (fovKick) { fovKick.SmallKick(); }
 		if (screenShake) { screenShake.Shake(0.05f); }
-		Punch normal_punch = new Punch(new Vector3(0,0,0), defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_FEAR);
+		Punch normal_punch = new Punch(
+			punch_hitbox.transform.TransformDirection(Vector3.forward),
+ 			defaults.PUNCH_FORCE,
+			defaults.PUNCH_OBJECT_DAMAGE,
+			defaults.PUNCH_GHOST_DAMAGE,
+			defaults.PUNCH_POISE_DAMAGE,
+			2,
+			defaults.PUNCH_FEAR
+		);
 
 		PunchRecord record = ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
 
@@ -311,14 +325,14 @@ public class GhostPuncher : MonoBehaviour
 		if (fovKick) fovKick.BigKick();
 		if (screenShake) screenShake.Shake(0.2f);
 		Punch mega_punch = new Punch(
-				new Vector3(0,0,0), // Gets updated per target
-				defaults.MEGAPUNCH_FORCE,
-				defaults.MEGAPUNCH_OBJECT_DAMAGE,
-				defaults.MEGAPUNCH_GHOST_DAMAGE,
-				defaults.MEGAPUNCH_POISE_DAMAGE,
-				1,
-				defaults.MEGAPUNCH_FEAR
-				);
+			punch_hitbox.transform.TransformDirection(Vector3.forward),
+			defaults.MEGAPUNCH_FORCE,
+			defaults.MEGAPUNCH_OBJECT_DAMAGE,
+			defaults.MEGAPUNCH_GHOST_DAMAGE,
+			defaults.MEGAPUNCH_POISE_DAMAGE,
+			1,
+			defaults.MEGAPUNCH_FEAR
+		);
 
 		ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
 	}
@@ -333,22 +347,26 @@ public class GhostPuncher : MonoBehaviour
 
 		List<int> punched_ids = new List<int>();
 
+		Vector3 look_dir = punch_hitbox.transform.TransformDirection(Vector3.forward);
+		Vector3 look_start = punch_hitbox.transform.position - look_dir * punch_hitbox.transform.localScale.z/2;
+
+		// cast a ray from look dir toward target
+		//RaycastHit[] hits = Physics.RaycastAll(new Ray(look_start, look_dir), punch_hitbox.transform.localScale.z, punchables_mask);
+
 		foreach (Collider col in punched) {
-			ProcessPunchTarget(col.gameObject, punch, punched_ids, ref record);
+			RaycastHit? relevant_hit = null;
+
+			//Punch punch_copy = punch; // copy?
+			
+			ProcessPunchTarget(col.gameObject, punch, punched_ids, ref record, relevant_hit);
 		}
 
 		return record;
 
 	}
 
-	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids, ref PunchRecord record) {
+	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids, ref PunchRecord record, RaycastHit? relevant_hit) {
 
-		CameraController cam = this.GetComponentInChildren<CameraController>();
-
-		Vector3 target_dir = target.transform.position - cam.transform.position;
-		target_dir.Normalize();
-		punch.Direction = target_dir;
-		
 		// May want to move this up later. Also, do we need to cast a ray to get the hit point for particles ??
 		//if (punch.HitClass-1 < punch_particles.Count && punch_particles[hitClass-1]) {
 			//Instantiate(punch_particles[punch.HitClass-1], attack_hit.point, this.transform.rotation);
