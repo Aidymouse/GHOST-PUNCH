@@ -468,11 +468,14 @@ public class GhostPuncher : MonoBehaviour
 	/* Update all the state needed when a run begins */
 	public void StartRun() {
 		GetComponentInChildren<CameraController>().enabled = true;
+		arm_animator.gameObject.SetActive(true);
 		inCutscene = false;
 	}
 
 	public void EndRun() {
 		GetComponentInChildren<CameraController>().enabled = false;
+		// TODO: make this a 'put arms away' animation
+		arm_animator.gameObject.SetActive(false);
 		inCutscene = true;
 
 	}
