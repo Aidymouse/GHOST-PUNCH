@@ -59,12 +59,12 @@ public class BreakableObject : MonoBehaviour
 
 	// If we get changed to the flying object layer, we'll return to this one when we should exit it
 	int? preserved_layer;
-	Collider collider;
+	Collider[] colliders;
 
 	void Start()
 	{
 		this.preserved_layer = null;
-		collider = GetComponent<Collider>();
+		colliders = GetComponents<Collider>();
 
 		if (weight == ObjectWeight.LIGHT) {
 			poise_damage = attrs.LIGHT_POISE_DAMAGE;
@@ -110,27 +110,43 @@ public class BreakableObject : MonoBehaviour
 	void Update()
 	{
 
+		// Min speed before we become a flying object
 	  int MIN_SPEED = 6;
 
+		// Find total height for walkthrough check
+		float total_height = 100;
+		
+		if (colliders.Length > 0) {
+			float lowest_min = 99999;
+			float highest_max = -99999;
+
+			foreach (Collider c in colliders) {
+				float min = c.bounds.min.y;
+				if (min < lowest_min) { lowest_min = min; }
+				float max = c.bounds.max.y;
+				if (max > highest_max) { highest_max = max; }
+			}
+
+			total_height = highest_max - lowest_min;
+		}
+
 	  Rigidbody rb = this.GetComponent<Rigidbody>();
-	  if (rb) {
-	    if (rb.linearVelocity.magnitude > MIN_SPEED) {
-				if (this.gameObject.layer != LayerMask.NameToLayer("FlyingObject")) {
-					this.preserved_layer = this.preserved_layer ?? this.gameObject.layer;
-					this.gameObject.layer = LayerMask.NameToLayer("FlyingObject");
-				}
+		if (rb && rb.linearVelocity.magnitude > MIN_SPEED) {
+			if (this.gameObject.layer != LayerMask.NameToLayer("FlyingObject")) {
+				this.preserved_layer = this.preserved_layer ?? this.gameObject.layer;
+				this.gameObject.layer = LayerMask.NameToLayer("FlyingObject");
+			}
 
-	    } else if (collider && collider.bounds.max.y - collider.bounds.min.y <= attrs.WALKTHROUGH_HEIGHT) {
-				if (this.gameObject.layer != LayerMask.NameToLayer("WalkThrough")) {
-					this.preserved_layer = this.preserved_layer ?? this.gameObject.layer;
-					this.gameObject.layer = LayerMask.NameToLayer("WalkThrough");
-				}
+		} else if (total_height <= attrs.WALKTHROUGH_HEIGHT) {
+			if (this.gameObject.layer != LayerMask.NameToLayer("WalkThrough")) {
+				this.preserved_layer = this.preserved_layer ?? this.gameObject.layer;
+				this.gameObject.layer = LayerMask.NameToLayer("WalkThrough");
+			}
 
-	    } else if (this.preserved_layer != null) {
-	      this.gameObject.layer = this.preserved_layer.Value;
-	      this.preserved_layer = null;
-	    }
-	  }
+		} else if (this.preserved_layer != null) {
+			this.gameObject.layer = this.preserved_layer.Value;
+			this.preserved_layer = null;
+		}
 		
 	}
 
