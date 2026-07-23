@@ -533,6 +533,18 @@ public class Ghost : MonoBehaviour
 
 
   /** GETTERS */
-
   public NavMeshAgent get_nav_agent() { return nav_agent; }
+
+	/** SETTERS */
+	public void SetLayerInChildren(int layer, bool self_too = true) {
+
+		if (self_too) {
+			this.gameObject.layer = layer;
+		}
+		
+		Transform[] children = GetComponentsInChildren<Transform>(includeInactive: true);
+		foreach (Transform t in children) {
+			t.gameObject.layer = layer;
+		}
+	}
 }

@@ -10,6 +10,8 @@ public class GhostAction_Ragdoll : GhostAction {
 		Debug.Log("Entering Ragdoll State");
 		ghost.ti_ragdoll.reset();
 
+		ghost.SetLayerInChildren(LayerMask.NameToLayer("Punchable"));
+
 		/*
 		ghost.DisableAnimator();
 		ghost.EnableRagdoll();
@@ -30,6 +32,7 @@ public class GhostAction_Ragdoll : GhostAction {
 		//ghost.rig_core.position += ragdoll_offset;
 		//Debug.Log(ragdoll_offset);
 
+		ghost.SetLayerInChildren(LayerMask.NameToLayer("Ghost"));
 		ghost.DisableRagdoll();
 		ghost.EnableAnimator();
 	}
