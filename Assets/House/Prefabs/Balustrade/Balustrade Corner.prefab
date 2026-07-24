@@ -67,7 +67,7 @@ MeshRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 3
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: c932fa5e2c3291d42a91bc75b362f0f6, type: 2}
@@ -106,24 +106,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069f9782abfb11ff3a6aae0dd336cabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  broken_obj: {fileID: 6568445311738665204, guid: 3081a370165fa89498913bfff64a6a70, type: 3}
   hp: 10
-  rotation_offset: {x: 0, y: 0, z: 0}
-  weight: 2
   attrs: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
-  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  weight: 2
+  hit_class: 4
+  broken_obj: {fileID: 6568445311738665204, guid: 3081a370165fa89498913bfff64a6a70, type: 3}
+  rotation_offset: {x: 0, y: 0, z: 0}
   break_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  hit_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
   break_self_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
-  destroyedSound: {fileID: 0}
   hitSoundEffect: {fileID: 8300000, guid: 1d97454fae71c8a4186463f7b621a0b8, type: 3}
-  destroyedSoundEffect: {fileID: 8300000, guid: bdd3f4fa63cfa9f45aa2c9a26a4d2132, type: 3}
   pitchLow: 0.9
   pitchHigh: 1.1
+  destroyedSoundEffect: {fileID: 8300000, guid: bdd3f4fa63cfa9f45aa2c9a26a4d2132, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
-  hit_class: 4
 --- !u!65 &8932473983005276166
 BoxCollider:
   m_ObjectHideFlags: 0
