@@ -19,7 +19,7 @@ public class Shop : MonoBehaviour
 	public AudioClip sfx_start_run;
 
 	[HideInInspector]
-	public ItemRecord bought_items;
+	public ItemRecord bought_items; // Loads from file
 
   void Start()
   {
@@ -48,6 +48,11 @@ public class Shop : MonoBehaviour
 		// Parse the JSON
 		// List<Item> saved_items = JsonUtility.FromJson(saved_str);
 		// foreach (Item item of saved_items) { bought_items.AddItemByType(item.item_type, item.level); }
+	}
+
+	public void SaveItemsToFile() {
+		string item_json = JsonUtility.ToJson(bought_items);
+		Debug.Log("Item JSON: "+item_json);
 	}
 
 	public void PopulateShop() {
