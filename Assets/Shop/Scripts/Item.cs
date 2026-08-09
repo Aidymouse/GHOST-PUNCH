@@ -2,11 +2,11 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public enum ItemType {
-	PROTEIN_POWDER,
-	SALT_SHAKER,
-	PAINKILLERS,
-	GHOST_DETECTOR,
-	CIGARETTES,
+	PROTEIN_POWDER=0,
+	SALT_SHAKER=1,
+	PAINKILLERS=2,
+	GHOST_DETECTOR=3,
+	CIGARETTES=4,
 }
 
 [System.Serializable]
@@ -34,33 +34,7 @@ public class Item {
 	
 }
 
-/* */
-public class ProteinPowder : Item {
 
-	public ProteinPowder() : base(ItemType.PROTEIN_POWDER) {}
 
-	public override void ApplyToGhostPuncher(GhostPuncher ghost_puncher) {
-		Debug.Log("Applying protein powder!");
-		ghost_puncher.max_stamina = ghost_puncher.defaults.BASE_STAMINA * 1 + (0.2f * this.level);
-	}
-	
-}
 
-public class SaltShaker : Item {
-	public SaltShaker() : base(ItemType.SALT_SHAKER) {}
-}
 
-public class Painkillers : Item {
-	public Painkillers() : base(ItemType.PAINKILLERS) {}
-}
-
-public class GhostDetector : Item {
-	public GhostDetector() : base(ItemType.GHOST_DETECTOR) {}
-}
-
-public class Cigarettes : Item {
-	public Cigarettes() : base(ItemType.CIGARETTES) {}
-	public override void ApplyToGhost(Ghost ghost) {
-		ghost.escape_needed += this.level * 5;
-	}
-}
