@@ -8,6 +8,8 @@ public enum ShopSFX {
 
 public class Shop : MonoBehaviour
 {
+	const string SAVE_PREFIX = "GPSaveData_";
+
   public float turnSpeed;
   public Quaternion turnGoal;
 
@@ -50,9 +52,13 @@ public class Shop : MonoBehaviour
 		// foreach (Item item of saved_items) { bought_items.AddItemByType(item.item_type, item.level); }
 	}
 
-	public void SaveItemsToFile() {
+	public void SaveItemsToFile(string profile_name) {
 		string item_json = JsonUtility.ToJson(bought_items);
 		Debug.Log("Item JSON: "+item_json);
+		string save_filename = Application.persistentDataPath + "/" + SAVE_PREFIX + profile_name+".gpdata";
+		Debug.Log("Item save file: "+save_filename);
+
+		File.WriteAllText(save_filename, item_json);
 	}
 
 	public void PopulateShop() {
