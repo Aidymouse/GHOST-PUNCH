@@ -1,14 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 
-public enum ObjectWeight {
-	CUSTOM,
-	LIGHT,
-	MEDIUM,
-	HEAVY,
-	VERY_HEAVY,
-}
-
 public class BreakableObject : MonoBehaviour
 {
 
@@ -18,6 +10,7 @@ public class BreakableObject : MonoBehaviour
 	[Tooltip("If you set weight to anything other than custom, hit attributes will be informed by the ObjectAttributes scriptable object")]
 	public ObjectConfig config;
 	public ObjectAttributes attrs;
+	public ObjectMaterial material;
 	[Tooltip("When I hit something, they'll use this to figure out what I am. (3) heavy object; (4) light object")]
 	public int hit_class = 4;
 
