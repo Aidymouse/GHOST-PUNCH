@@ -16,8 +16,8 @@ public class BreakableObject : MonoBehaviour
 	[Tooltip("Amount of HP this object has")]
 	public float hp;
 	[Tooltip("If you set weight to anything other than custom, hit attributes will be informed by the ObjectAttributes scriptable object")]
+	public ObjectConfig config;
 	public ObjectAttributes attrs;
-	public ObjectWeight weight;
 	[Tooltip("When I hit something, they'll use this to figure out what I am. (3) heavy object; (4) light object")]
 	public int hit_class = 4;
 
@@ -66,27 +66,10 @@ public class BreakableObject : MonoBehaviour
 		this.preserved_layer = null;
 		colliders = GetComponents<Collider>();
 
-		if (weight == ObjectWeight.LIGHT) {
-			poise_damage = attrs.LIGHT_POISE_DAMAGE;
-			object_damage = attrs.LIGHT_OBJECT_DAMAGE;
-			ghost_damage = attrs.LIGHT_GHOST_DAMAGE;
-			force = attrs.LIGHT_FORCE;
-		} else if (weight == ObjectWeight.MEDIUM) {
-			poise_damage = attrs.MEDIUM_POISE_DAMAGE;
-			object_damage = attrs.MEDIUM_OBJECT_DAMAGE;
-			ghost_damage = attrs.MEDIUM_GHOST_DAMAGE;
-			force = attrs.MEDIUM_FORCE;
-		} else if (weight == ObjectWeight.HEAVY) {
-			poise_damage = attrs.HEAVY_POISE_DAMAGE;
-			object_damage = attrs.HEAVY_OBJECT_DAMAGE;
-			ghost_damage = attrs.HEAVY_GHOST_DAMAGE;
-			force = attrs.HEAVY_FORCE;
-		} else if (weight == ObjectWeight.VERY_HEAVY) {
-			poise_damage = attrs.VERY_HEAVY_POISE_DAMAGE;
-			object_damage = attrs.VERY_HEAVY_OBJECT_DAMAGE;
-			ghost_damage = attrs.VERY_HEAVY_GHOST_DAMAGE;
-			force = attrs.VERY_HEAVY_FORCE;
-		}
+		poise_damage = attrs.POISE_DAMAGE;
+		object_damage = attrs.OBJECT_DAMAGE;
+		ghost_damage = attrs.GHOST_DAMAGE;
+		force = attrs.FORCE;
 
 		if (hitSoundEffect) {
 			audio_source = GetComponent<AudioSource>();
@@ -96,6 +79,7 @@ public class BreakableObject : MonoBehaviour
 			}
 			audio_source.clip = hitSoundEffect;
 		}
+
 		/*
 		if(gameObject.GetComponent<AudioSource>() != null)
         {
@@ -137,7 +121,7 @@ public class BreakableObject : MonoBehaviour
 				this.gameObject.layer = LayerMask.NameToLayer("FlyingObject");
 			}
 
-		} else if (total_height <= attrs.WALKTHROUGH_HEIGHT) {
+		} else if (total_height <= config.WALKTHROUGH_HEIGHT) {
 			if (this.gameObject.layer != LayerMask.NameToLayer("WalkThrough")) {
 				this.preserved_layer = this.preserved_layer ?? this.gameObject.layer;
 				this.gameObject.layer = LayerMask.NameToLayer("WalkThrough");
