@@ -63,6 +63,15 @@ public class BreakableObject : MonoBehaviour
 
 	void Start()
 	{
+
+		if (!this.attrs) {
+			Debug.LogError("No object attrs");
+		}
+		
+		if (!this.config) {
+			Debug.LogError("No object config");
+		}
+
 		this.preserved_layer = null;
 		colliders = GetComponents<Collider>();
 
