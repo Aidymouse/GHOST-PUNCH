@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using Cinemachine;
 
 public enum ShopSFX {
 	MWAHAHA
@@ -10,11 +11,7 @@ public class Shop : MonoBehaviour
 {
 	const string SAVE_PREFIX = "GPSaveData_";
 
-  public float turnSpeed;
-  public Quaternion turnGoal;
-
-  public Transform camera_pos;
-  public Transform camera_target;
+	public List<CinemachineCamera> cams;
 
 	[Header("Sound")]
 	public AudioSource shop_sound;
