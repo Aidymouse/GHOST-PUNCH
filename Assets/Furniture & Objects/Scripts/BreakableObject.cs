@@ -33,6 +33,15 @@ public class BreakableObject : MonoBehaviour
 
 	AudioSource audio_source;
 
+	[Header("Old stuff")]
+	public ParticleSystem hit_particles;
+	public ParticleSystem break_particles;
+	public ParticleSystem break_self_particles;
+	public float pitchLow;
+	public float pitchHigh;
+	public AudioClip hitSoundEffect;
+	public AudioClip destroyedSoundEffect;
+
 	// If we get changed to the flying object layer, we'll return to this one when we should exit it
 	int? preserved_layer;
 	Collider[] colliders;
@@ -46,6 +55,10 @@ public class BreakableObject : MonoBehaviour
 		
 		if (!this.config) {
 			Debug.LogError("No object config");
+		}
+
+		if (!this.material) {
+			Debug.LogWarning("BreakalbeObject has no material selected");
 		}
 
 		this.preserved_layer = null;
