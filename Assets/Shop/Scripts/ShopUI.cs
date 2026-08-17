@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public interface ShopUIEventHandler : IEventSystemHandler {
   void ClickRight();
@@ -12,7 +13,12 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
   public Shop shop;
 	public ShopDoor shop_door;
 
-  void Start() { }
+	public TMP_Text item_board_title;
+	public TMP_Text item_board_description;
+
+  void Start() { 
+
+	}
   void Update() { }
 
   public void ClickRight() {
@@ -22,6 +28,22 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
   public void ClickLeft() {
 		shop.LookLeft();
   }
+
+	/* Items */
+	public void MouseOverItem(ShopItem item) {
+		item_board_title.SetText(item.name);
+		item_board_description.SetText(item.description);
+	}
+
+	public void MouseOutItem(ShopItem item) {
+	}
+
+	public void MouseDownItem(ShopItem item) {
+
+		// TODO: spawn particles
+		shop.BuyItem(item);
+
+	}
 
 	/* Door */
 	public void ClickDoor() {
