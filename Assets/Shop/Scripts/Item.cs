@@ -7,6 +7,7 @@ public enum ItemType {
 	PAINKILLERS=2,
 	GHOST_DETECTOR=3,
 	CIGARETTES=4,
+	BEER=5,
 }
 
 [System.Serializable]
