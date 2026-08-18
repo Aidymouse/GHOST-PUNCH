@@ -31,11 +31,15 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 
 	/* Items */
 	public void MouseOverItem(ShopItem item) {
+		item.StartSpinning();
 		item_board_title.SetText(item.name);
 		item_board_description.SetText(item.description);
 	}
 
 	public void MouseOutItem(ShopItem item) {
+		item.StopSpinning();
+		item_board_title.SetText("");
+		item_board_description.SetText("");
 	}
 
 	public void MouseDownItem(ShopItem item) {
