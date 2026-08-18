@@ -81,6 +81,10 @@ public class GhostPuncher : MonoBehaviour
 	private float stepRate;
 	private bool isMoving;
 
+	/* Abilities */
+	PuncherAbility[] abilities;
+	PuncherAbility active_ability;
+
 	/* Other */
 	int ectoplasm = 0;
 
