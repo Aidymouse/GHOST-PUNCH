@@ -7131,6 +7131,81 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5945453821438538283, guid: 26a207495eab47d4abaaa7a3b33f36a7, type: 3}
   m_PrefabInstance: {fileID: 3335965006147273173}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &778983961
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 778983962}
+  - component: {fileID: 778983963}
+  m_Layer: 0
+  m_Name: VCam_Haha
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &778983962
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 778983961}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.5580909, y: -0.2558994, z: -0.07650369, w: 0.7856191}
+  m_LocalPosition: {x: 13.71, y: -0.95, z: 15.72}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1109313462}
+  m_LocalEulerAnglesHint: {x: -66.355, y: -52.149, z: 24.359}
+--- !u!114 &778983963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 778983961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 0
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 60.000004
+    OrthographicSize: 5
+    NearClipPlane: 0.3
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
 --- !u!95 &816248470 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 1956429303975317283, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
@@ -7610,7 +7685,7 @@ MonoBehaviour:
           m_CallState: 2
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 934951086}
           m_TargetAssemblyTypeName: GHOSTPUNCH, Assembly-CSharp
           m_MethodName: 
           m_Mode: 1
@@ -7789,7 +7864,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &964883140
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8103,6 +8178,7 @@ Transform:
   m_Children:
   - {fileID: 886309019}
   - {fileID: 1488249185}
+  - {fileID: 778983962}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1109313463
@@ -15367,7 +15443,7 @@ PrefabInstance:
       objectReference: {fileID: 5730899852506326635}
     - target: {fileID: 1850265057759434709, guid: 40317c87c5366cb488d98dfd7518a2dc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3347303933769177105, guid: 40317c87c5366cb488d98dfd7518a2dc, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
