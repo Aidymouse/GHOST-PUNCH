@@ -49,7 +49,7 @@ public class WaveOrb : MonoBehaviour
 		if (col.gameObject.CompareTag("BreakableObject")) {
 			Vector3 dir = (col.transform.position - transform.position).normalized;
 			dir.y = 0;
-			Punch wave_punch = new Punch(dir, object_force, object_damage, 0, 0, 5, 0);
+			Punch wave_punch = new Punch(dir, object_force, object_damage, 0, 0, 5);
 			BreakableObject bo = col.gameObject.GetComponent<BreakableObject>();
 			if (bo) {
 				bo.GetPunched(wave_punch);
@@ -63,5 +63,5 @@ public class WaveOrb : MonoBehaviour
 						gp.GetPushed(dir, attrs.WAVE_POWER);
 				}
 		}
-	}
+}
 }

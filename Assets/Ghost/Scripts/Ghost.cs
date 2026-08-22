@@ -332,7 +332,6 @@ public class Ghost : MonoBehaviour
   public void GetPunched(Punch punch) {
 
     hp -= punch.GhostDamage;
-    fear_meter += punch.Fear;
 
     currentSound.clip = takingDamageSound;
     currentSound.pitch = (Random.Range(pitchLow, pitchHigh));

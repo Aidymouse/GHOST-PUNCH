@@ -10,22 +10,19 @@ public enum HitClass {
 }
 
 public struct Punch {
-	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass, float fear) {
+	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
 		Direction = direction;
 		Force = force;
 		ObjectDamage = object_damage;
 		GhostDamage = ghost_damage;
 		PoiseDamage = poise_damage;
 		HitClass = hitClass;
-		Fear = fear;
 	}
 	public Vector3 Direction;
 	public float Force;
 	public float ObjectDamage;
 	public float PoiseDamage;
 	public float GhostDamage;
-	// Only used by the ghost
-	public float Fear;
 	// 1st class punch is the strongest, 2nd class is a normal punch, 3 is big object, 4 is light object
 	public int HitClass;
 };
@@ -72,12 +69,20 @@ public class GhostPuncher : MonoBehaviour
 	bool buffered_charge = false;
 	bool charging_punch = false;
 
+	/* Fear Meter */
+	float fear_multiplier;
+	float fear_meter;
+
 	public AudioSource footstepSound;
-	public AudioClip footSound1;
-	public AudioClip footSound2;
 	public float pitchLow;
 	public float pitchHigh;
+
+	[Header("Footsteps")]
+	public AudioClip footSound1;
+	public AudioClip footSound2;
 	public float stepCooldown;
+	Timer ti_step_sound;
+
 	private float stepRate;
 	private bool isMoving;
 
@@ -284,21 +289,7 @@ public class GhostPuncher : MonoBehaviour
 		//controller.move(move_vec);
 
 		//Footsteps
-		if (isMoving == true && stepCooldown < 0f)
-		{
-			if (footstepSound.clip = footSound1)
-			{
-				footstepSound.clip = footSound2;
-			}
-			if (footstepSound.clip = footSound2)
-			{
-				footstepSound.clip = footSound1;
-			}
-			footstepSound.pitch = (Random.Range(pitchLow, pitchHigh));
-			footstepSound.Play();
-			stepCooldown = stepRate;
-		}
-		stepCooldown -= Time.deltaTime;
+		HandleStepSounds();
 		
 
 	}
@@ -315,8 +306,7 @@ public class GhostPuncher : MonoBehaviour
 			defaults.PUNCH_OBJECT_DAMAGE,
 			defaults.PUNCH_GHOST_DAMAGE,
 			defaults.PUNCH_POISE_DAMAGE,
-			2,
-			defaults.PUNCH_FEAR
+			2
 		);
 
 		PunchRecord record = ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
@@ -334,11 +324,11 @@ public class GhostPuncher : MonoBehaviour
 			defaults.MEGAPUNCH_OBJECT_DAMAGE,
 			defaults.MEGAPUNCH_GHOST_DAMAGE,
 			defaults.MEGAPUNCH_POISE_DAMAGE,
-			1,
-			defaults.MEGAPUNCH_FEAR
+			1
 		);
 
-		ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
+		PunchRecord mega_record = ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
+		AssessPunchRecord(mega_record);
 	}
 
 	/** returns true if we hit something */
@@ -405,7 +395,12 @@ public class GhostPuncher : MonoBehaviour
 		if (record.items_hit > 0) {
 			stamina += defaults.STAMINA_GAINED_ON_HIT;
 		}
+
+		if (record.hit_ghost) {
+			fear_meter += defaults.PUNCH_FEAR;
+		}
 	}
+
 
 	Vector3 moveControls() {
 
@@ -509,10 +504,23 @@ public class GhostPuncher : MonoBehaviour
 			item.ApplyToGhostPuncher(this);
 		}
 	}
+	
+
+	/** Update FNs */
+	void HandleStepSounds() {
+		if (isMoving == true && stepCooldown < 0f) {
+			if (footstepSound.clip = footSound1) { footstepSound.clip = footSound2; }
+			if (footstepSound.clip = footSound2) { footstepSound.clip = footSound1; }
+			footstepSound.pitch = (Random.Range(pitchLow, pitchHigh));
+			footstepSound.Play();
+			stepCooldown = stepRate;
+		}
+		stepCooldown -= Time.deltaTime;
+	}
 
 
 
-	/** **/
+	/** Variable Data **/
 	float GetPunchCooldown() {
 		return defaults.PUNCH_COOLDOWN;
 	}
