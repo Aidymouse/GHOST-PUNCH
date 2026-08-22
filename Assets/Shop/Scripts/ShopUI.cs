@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public interface ShopUIEventHandler : IEventSystemHandler {
   void ClickRight();
@@ -12,20 +13,41 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
   public Shop shop;
 	public ShopDoor shop_door;
 
-  void Start() { }
+	public TMP_Text item_board_title;
+	public TMP_Text item_board_description;
+
+  void Start() { 
+
+	}
   void Update() { }
 
   public void ClickRight() {
-		Vector3 to_target = shop.camera_target.transform.position - shop.camera_pos.transform.position;
-		Vector3 rotate = Vector3.Normalize((Quaternion.AngleAxis(90, Vector3.up) * to_target));
-    shop.camera_target.position = shop.camera_pos.position + rotate * 10;
+		shop.LookRight();
   }
 
   public void ClickLeft() {
-		Vector3 to_target = shop.camera_target.transform.position - shop.camera_pos.position;
-		Vector3 rotate = Vector3.Normalize((Quaternion.AngleAxis(-90, Vector3.up) * to_target));
-    shop.camera_target.position = shop.camera_pos.position + rotate * 10;
+		shop.LookLeft();
   }
+
+	/* Items */
+	public void MouseOverItem(ShopItem item) {
+		item.StartSpinning();
+		item_board_title.SetText(item.name);
+		item_board_description.SetText(item.description);
+	}
+
+	public void MouseOutItem(ShopItem item) {
+		item.StopSpinning();
+		item_board_title.SetText("");
+		item_board_description.SetText("");
+	}
+
+	public void MouseDownItem(ShopItem item) {
+
+		// TODO: spawn particles
+		shop.BuyItem(item);
+
+	}
 
 	/* Door */
 	public void ClickDoor() {

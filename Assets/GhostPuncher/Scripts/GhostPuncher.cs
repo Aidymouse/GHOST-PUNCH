@@ -30,6 +30,13 @@ public struct Punch {
 	public int HitClass;
 };
 
+/* The hit record is passed around as we execute punches, then taken by the ghost puncher and assessed to see what kind of bonuses we get */
+public struct PunchRecord {
+	public int items_hit;
+	public int items_broken;
+	public bool hit_ghost;
+	public bool ragdolled_ghost;
+}
 
 
 public class GhostPuncher : MonoBehaviour
@@ -60,7 +67,7 @@ public class GhostPuncher : MonoBehaviour
 	Timer ti_punch_again;
 	Timer ti_charge_up;
 	float punch_range;
-	string punch_with = "RIGHT";
+	string punch_with = "Right";
 	bool buffered_punch = false;
 	bool buffered_charge = false;
 	bool charging_punch = false;
@@ -162,12 +169,18 @@ public class GhostPuncher : MonoBehaviour
 			//controller.Move(Vector3.zero);
 			return;
 		}
+
+		/*
+		Vector3 look_dir = punch_hitbox.transform.TransformDirection(Vector3.forward);
+		Vector3 look_start = punch_hitbox.transform.position - look_dir * punch_hitbox.transform.localScale.z/2;
+		*/
+
 		// Timers
 		this.tick_timers();
 
 		// Attacking
 		if (ti_punch_again.finished_this_frame()) {
-			punch_with = "RIGHT";
+			punch_with = "Right";
 		}
 
 		if ((action_chargePunch.WasPerformedThisFrame() && !buffered_punch) || (buffered_charge && ti_punch_cooldown.finished_this_frame())) {
@@ -197,7 +210,7 @@ public class GhostPuncher : MonoBehaviour
 				buffered_punch = false;
 
 				if (!ti_punch_again.finished()) {
-					punch_with = punch_with == "RIGHT" ? "LEFT" : "RIGHT";
+					punch_with = punch_with == "Right" ? "Left" : "Right";
 				} 
 
 
@@ -287,12 +300,24 @@ public class GhostPuncher : MonoBehaviour
 	}
 
 	void DoPunch() {
-		ChangeAnimation("PUNCH_"+punch_with);
+		int punch_num = Random.Range(1,5);
+		ChangeAnimation("Jab"+punch_with+punch_num);
+
 		if (fovKick) { fovKick.SmallKick(); }
 		if (screenShake) { screenShake.Shake(0.05f); }
-		Punch normal_punch = new Punch(new Vector3(0,0,0), defaults.PUNCH_FORCE, defaults.PUNCH_OBJECT_DAMAGE, defaults.PUNCH_GHOST_DAMAGE, defaults.PUNCH_POISE_DAMAGE, 2, defaults.PUNCH_FEAR);
+		Punch normal_punch = new Punch(
+			punch_hitbox.transform.TransformDirection(Vector3.forward),
+ 			defaults.PUNCH_FORCE,
+			defaults.PUNCH_OBJECT_DAMAGE,
+			defaults.PUNCH_GHOST_DAMAGE,
+			defaults.PUNCH_POISE_DAMAGE,
+			2,
+			defaults.PUNCH_FEAR
+		);
 
-		ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
+		PunchRecord record = ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
+
+		AssessPunchRecord(record);
 	}
 
 	void DoMegaPunch() {
@@ -300,40 +325,48 @@ public class GhostPuncher : MonoBehaviour
 		if (fovKick) fovKick.BigKick();
 		if (screenShake) screenShake.Shake(0.2f);
 		Punch mega_punch = new Punch(
-				new Vector3(0,0,0), // Gets updated per target
-				defaults.MEGAPUNCH_FORCE,
-				defaults.MEGAPUNCH_OBJECT_DAMAGE,
-				defaults.MEGAPUNCH_GHOST_DAMAGE,
-				defaults.MEGAPUNCH_POISE_DAMAGE,
-				1,
-				defaults.MEGAPUNCH_FEAR
-				);
+			punch_hitbox.transform.TransformDirection(Vector3.forward),
+			defaults.MEGAPUNCH_FORCE,
+			defaults.MEGAPUNCH_OBJECT_DAMAGE,
+			defaults.MEGAPUNCH_GHOST_DAMAGE,
+			defaults.MEGAPUNCH_POISE_DAMAGE,
+			1,
+			defaults.MEGAPUNCH_FEAR
+		);
 
 		ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
 	}
 
-	void ExecutePunch(Punch punch, float stamina_used) {
+	/** returns true if we hit something */
+	PunchRecord ExecutePunch(Punch punch, float stamina_used) {
 
+		PunchRecord record = new PunchRecord();
 		Collider[] punched = Physics.OverlapBox(punch_hitbox.transform.position, punch_hitbox.transform.localScale/2, punch_hitbox.transform.rotation, punchables_mask);		
 
 		SpendStamina(stamina_used);
 
 		List<int> punched_ids = new List<int>();
 
+		Vector3 look_dir = punch_hitbox.transform.TransformDirection(Vector3.forward);
+		Vector3 look_start = punch_hitbox.transform.position - look_dir * punch_hitbox.transform.localScale.z/2;
+
+		// cast a ray from look dir toward target
+		//RaycastHit[] hits = Physics.RaycastAll(new Ray(look_start, look_dir), punch_hitbox.transform.localScale.z, punchables_mask);
+
 		foreach (Collider col in punched) {
-			ProcessPunchTarget(col.gameObject, punch, punched_ids);
+			RaycastHit? relevant_hit = null;
+
+			//Punch punch_copy = punch; // copy?
+			
+			ProcessPunchTarget(col.gameObject, punch, punched_ids, ref record, relevant_hit);
 		}
+
+		return record;
 
 	}
 
-	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids) {
+	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids, ref PunchRecord record, RaycastHit? relevant_hit) {
 
-		CameraController cam = this.GetComponentInChildren<CameraController>();
-
-		Vector3 target_dir = target.transform.position - cam.transform.position;
-		target_dir.Normalize();
-		punch.Direction = target_dir;
-		
 		// May want to move this up later. Also, do we need to cast a ray to get the hit point for particles ??
 		//if (punch.HitClass-1 < punch_particles.Count && punch_particles[hitClass-1]) {
 			//Instantiate(punch_particles[punch.HitClass-1], attack_hit.point, this.transform.rotation);
@@ -347,6 +380,8 @@ public class GhostPuncher : MonoBehaviour
 
 			bo.GetPunched(punch);
 			punched_ids.Add(bo_id);
+
+			record.items_hit += 1;
 		}
 
 		Ghost ghost = target.GetComponent<Ghost>();
@@ -356,6 +391,15 @@ public class GhostPuncher : MonoBehaviour
 			if (punched_ids.Contains(ghost_id)) { return; }
 			ghost.GetPunched(punch);
 			punched_ids.Add(ghost_id);
+
+			record.hit_ghost = true;
+		}
+	}
+
+	// After a punch is executed, assess the record to see what bonuses we get
+	void AssessPunchRecord(PunchRecord record) {
+		if (record.items_hit > 0) {
+			stamina += defaults.STAMINA_GAINED_ON_HIT;
 		}
 	}
 
@@ -442,11 +486,14 @@ public class GhostPuncher : MonoBehaviour
 	/* Update all the state needed when a run begins */
 	public void StartRun() {
 		GetComponentInChildren<CameraController>().enabled = true;
+		arm_animator.gameObject.SetActive(true);
 		inCutscene = false;
 	}
 
 	public void EndRun() {
 		GetComponentInChildren<CameraController>().enabled = false;
+		// TODO: make this a 'put arms away' animation
+		arm_animator.gameObject.SetActive(true);
 		inCutscene = true;
 
 	}

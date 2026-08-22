@@ -1,23 +1,18 @@
 using UnityEngine;
 using UnityEditor;
 
-public enum ObjectWeight {
-	CUSTOM,
-	LIGHT,
-	MEDIUM,
-	HEAVY,
-	VERY_HEAVY,
-}
-
 public class BreakableObject : MonoBehaviour
 {
 
 	[Header("Attributes")]
 	[Tooltip("Amount of HP this object has")]
 	public float hp;
-	[Tooltip("If you set weight to anything other than custom, hit attributes will be informed by the ObjectAttributes scriptable object")]
+	[Tooltip("Controls various misc object configs. Probably standard across all objects.")]
+	public ObjectConfig config;
+	[Tooltip("Attributes contains damage and force attributes for an object")]
 	public ObjectAttributes attrs;
-	public ObjectWeight weight;
+	[Tooltip("Material controls things like particles and sound effects")]
+	public ObjectMaterial material;
 	[Tooltip("When I hit something, they'll use this to figure out what I am. (3) heavy object; (4) light object")]
 	public int hit_class = 4;
 
@@ -26,78 +21,62 @@ public class BreakableObject : MonoBehaviour
 	public GameObject broken_obj;
 	[Tooltip("Rotation offset to apply to spawned child object (on top of rotation match to parent)")]
 	public Vector3 rotation_offset;
-	[Tooltip("Particles spawned for each child object when breaking into pieces")]
-	public ParticleSystem break_particles;
-
-	[Header("Particles")]
-	[Tooltip("Particles spawned at hit location when hit")]
-	public ParticleSystem hit_particles;
-	[Tooltip("Particles this object spawns for itself when it breaks")]
-	public ParticleSystem break_self_particles;
-
-	[Header("Sound")]
-	[Tooltip("The sound that plays when the object is hit (punched or hit by another object")]
-	public AudioClip hitSoundEffect;
-	[Tooltip("Low bound on pitch adjustment when hit sound plays")]
-	public float pitchLow;
-	[Tooltip("High bound on pitch adjustment when hit sound plays")]
-	public float pitchHigh;
-	[Tooltip("The sound that plays when this object is destroyed")]
-	public AudioClip destroyedSoundEffect;
+	
+	[HideInInspector]
+	public float poise_damage;
+	[HideInInspector]
+	public float ghost_damage;
+	[HideInInspector]
+	public float object_damage;
+	[HideInInspector]
+	public float force;
 
 	AudioSource audio_source;
 
-	[Header("Custom Attributes")]
-	[Tooltip("How much poise damage to deal when hitting the ghost")]
-	public float poise_damage = 0;
-	[Tooltip("How much HP damage to deal when hitting the ghost")]
-	public float ghost_damage = 0;
-	[Tooltip("How much object damage to deal when smashing into another object")]
-	public float object_damage = 0;
-	[Tooltip("How much physics force to apply when hitting an object (this is in addition to normal physics engine force so usually can be 0)")]
-	public float force = 0;
+	[Header("Old stuff")]
+	public ParticleSystem hit_particles;
+	public ParticleSystem break_particles;
+	public ParticleSystem break_self_particles;
+	public float pitchLow;
+	public float pitchHigh;
+	public AudioClip hitSoundEffect;
+	public AudioClip destroyedSoundEffect;
 
+	// If we get changed to the flying object layer, we'll return to this one when we should exit it
+	int? preserved_layer;
+	Collider[] colliders;
 
 	void Start()
 	{
 
-		if (weight == ObjectWeight.LIGHT) {
-			poise_damage = attrs.LIGHT_POISE_DAMAGE;
-			object_damage = attrs.LIGHT_OBJECT_DAMAGE;
-			ghost_damage = attrs.LIGHT_GHOST_DAMAGE;
-			force = attrs.LIGHT_FORCE;
-		} else if (weight == ObjectWeight.MEDIUM) {
-			poise_damage = attrs.MEDIUM_POISE_DAMAGE;
-			object_damage = attrs.MEDIUM_OBJECT_DAMAGE;
-			ghost_damage = attrs.MEDIUM_GHOST_DAMAGE;
-			force = attrs.MEDIUM_FORCE;
-		} else if (weight == ObjectWeight.HEAVY) {
-			poise_damage = attrs.HEAVY_POISE_DAMAGE;
-			object_damage = attrs.HEAVY_OBJECT_DAMAGE;
-			ghost_damage = attrs.HEAVY_GHOST_DAMAGE;
-			force = attrs.HEAVY_FORCE;
-		} else if (weight == ObjectWeight.VERY_HEAVY) {
-			poise_damage = attrs.VERY_HEAVY_POISE_DAMAGE;
-			object_damage = attrs.VERY_HEAVY_OBJECT_DAMAGE;
-			ghost_damage = attrs.VERY_HEAVY_GHOST_DAMAGE;
-			force = attrs.VERY_HEAVY_FORCE;
+		if (!this.attrs) {
+			Debug.LogError("No object attrs");
+		}
+		
+		if (!this.config) {
+			Debug.LogError("No object config");
 		}
 
-		if (hitSoundEffect) {
+		if (!this.material) {
+			Debug.LogWarning("BreakalbeObject has no material selected");
+		}
+
+		this.preserved_layer = null;
+		colliders = GetComponents<Collider>();
+
+		poise_damage = attrs.POISE_DAMAGE;
+		object_damage = attrs.OBJECT_DAMAGE;
+		ghost_damage = attrs.GHOST_DAMAGE;
+		force = attrs.FORCE;
+
+		if (material && material.hit_sound) {
 			audio_source = GetComponent<AudioSource>();
 			if (!audio_source) {
 				Debug.LogWarning("Breakable object missing an audio source component! Adding one manually...");
 				this.gameObject.AddComponent<AudioSource>();
 			}
-			audio_source.clip = hitSoundEffect;
+			audio_source.clip = material.hit_sound;
 		}
-		/*
-		if(gameObject.GetComponent<AudioSource>() != null)
-        {
-			destroyedSound = GetComponent<AudioSource>();
-			destroyedSound.clip = hitSoundEffect;
-		}
-		*/
 		
 	}
 
@@ -105,18 +84,46 @@ public class BreakableObject : MonoBehaviour
 	void Update()
 	{
 
-		int MIN_SPEED = 6;
+		// Min speed before we become a flying object
+	  int MIN_SPEED = 6;
 
-		Rigidbody rb = this.GetComponent<Rigidbody>();
-		if (rb) {
-			if (rb.linearVelocity.magnitude > MIN_SPEED && this.gameObject.layer != LayerMask.NameToLayer("FlyingObject")) {
-				this.gameObject.layer = LayerMask.NameToLayer("FlyingObject");
-			} else if (this.gameObject.layer != LayerMask.NameToLayer("Punchable")) {
-				this.gameObject.layer = LayerMask.NameToLayer("Punchable");
+		// Find total height for walkthrough check
+		float total_height = 100;
+		
+		if (colliders.Length > 0) {
+			float lowest_min = 99999;
+			float highest_max = -99999;
+
+			foreach (Collider c in colliders) {
+				float min = c.bounds.min.y;
+				if (min < lowest_min) { lowest_min = min; }
+				float max = c.bounds.max.y;
+				if (max > highest_max) { highest_max = max; }
 			}
+
+			total_height = highest_max - lowest_min;
+		}
+
+	  Rigidbody rb = this.GetComponent<Rigidbody>();
+		if (rb && rb.linearVelocity.magnitude > MIN_SPEED) {
+			if (this.gameObject.layer != LayerMask.NameToLayer("FlyingObject")) {
+				this.preserved_layer = this.preserved_layer ?? this.gameObject.layer;
+				this.gameObject.layer = LayerMask.NameToLayer("FlyingObject");
+			}
+
+		} else if (total_height <= config.WALKTHROUGH_HEIGHT) {
+			if (this.gameObject.layer != LayerMask.NameToLayer("WalkThrough")) {
+				this.preserved_layer = this.preserved_layer ?? this.gameObject.layer;
+				this.gameObject.layer = LayerMask.NameToLayer("WalkThrough");
+			}
+
+		} else if (this.preserved_layer != null) {
+			this.gameObject.layer = this.preserved_layer.Value;
+			this.preserved_layer = null;
 		}
 		
 	}
+
 
 	public void OnCollisionEnter(Collision col) {
 
@@ -171,16 +178,17 @@ public class BreakableObject : MonoBehaviour
 
 
 		//Audio
+		// A breakable object only makes one sound, when it's hit, so we don't need to assign the sound, just play it.
 		if (audio_source) { 
-			audio_source.pitch = (Random.Range(pitchLow, pitchHigh));
+			audio_source.pitch = (Random.Range(material.pitch_low, material.pitch_high));
 			audio_source.Play(); 
 		}
 			
 
 		// spawn particles
 		// TODO: rotation
-		if (hit_particles) {
-					Instantiate(hit_particles, hit_point, new Quaternion());
+		if (material && material.hit_particles) {
+					Instantiate(material.hit_particles, hit_point, new Quaternion());
 			}
 
 			Rigidbody rb = this.GetComponent<Rigidbody>();
@@ -217,13 +225,14 @@ public class BreakableObject : MonoBehaviour
 		Transform initRotation = this.transform;
 		initRotation.Rotate(this.rotation_offset); // Local space ??
 
-		if (break_self_particles) {
-				Instantiate(break_self_particles, hit_point, new Quaternion());
+		if (material && material.break_particles) {
+				Instantiate(material.break_particles, hit_point, new Quaternion());
 		}
 
 		// Spawn broken object
 		if (broken_obj) {
 			GameObject broken = Instantiate(broken_obj, this.transform.position, initRotation.rotation);
+			broken.layer = LayerMask.NameToLayer("WalkThrough");
 
 			Rigidbody my_rb = this.GetComponent<Rigidbody>();
 			Vector3 velocity = my_rb.linearVelocity;
@@ -231,17 +240,21 @@ public class BreakableObject : MonoBehaviour
 			Rigidbody[] rbs = broken.GetComponentsInChildren<Rigidbody>();
 
 			foreach (Rigidbody crb in rbs) {
-				if (break_particles) {
+				// TODO: use child breakable object material spawn particles
+				/*
+				if (material.spawn_) {
 					Instantiate(break_particles, crb.transform.position, new Quaternion());
 				}
+				*/
+
 				crb.isKinematic = false;
 				// TODO: some actual conservation of momentum here?
 				crb.AddForce( (velocity+hit_dir).normalized * (velocity.magnitude + force));
 			}
 		}
 
-		if (destroyedSoundEffect) {
-			SoundEmitter.Create(destroyedSoundEffect);
+		if (material && material.break_sound) {
+			SoundEmitter.Create(material.break_sound);
 		}
 
 		Destroy(this.gameObject);

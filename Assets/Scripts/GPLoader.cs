@@ -15,6 +15,11 @@ public class GPLoader : MonoBehaviour
 
 		HouseMaster house_master;
 		ShopMaster shop_master;
+		MenuMaster menu_master;
+
+		void InitData() {
+			// Set up profile metadata
+		}
 
 		void InitPref(string key, float p) {
 			Debug.Log("Setting pref for '" + key + "': "+p);

@@ -8,6 +8,7 @@ public class GhostAction_ChargingEscape : GhostAction {
 				// TODO: If we can see the player (i.e. they kept pace with us well), skip straight to choosing a power.
 				ghost.charge_particles.Play();
 				ghost.ChangeAnimation("ChargeEscape");
+				ghost.PlaySound("charging_escape");
 	}
 
 	public override void Exit() {

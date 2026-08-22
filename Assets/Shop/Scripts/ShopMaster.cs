@@ -52,6 +52,8 @@ public class ShopMaster : MonoBehaviour
 			shop_door.StartRun();
 
 			shop_ui.StartRun();
+
+			shop.PlaySound(ShopSFX.MWAHAHA);
 		
 			Debug.Log(shop.bought_items);
 			puncher_instance.ApplyItems(shop.bought_items);
@@ -70,7 +72,7 @@ public class ShopMaster : MonoBehaviour
 
 		public void SceneManaged_EndStartRunCutscene() {
 			Debug.Log("Start Run - Signal received");
-			VCam_Shop.gameObject.SetActive(false);
+			shop.DisableCameras();
 
 			ghost_instance.StartRun();
 			puncher_instance.StartRun();
@@ -88,7 +90,7 @@ public class ShopMaster : MonoBehaviour
 			Debug.Log("Ending Run!");
 
 			puncher_instance.GetComponent<GhostPuncher>().EndRun();
-			VCam_Shop.gameObject.SetActive(true);
+			shop.EnableCameras();
 
 
 			// SIGNAL: triggers below Fn

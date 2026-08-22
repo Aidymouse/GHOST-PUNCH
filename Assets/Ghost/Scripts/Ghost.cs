@@ -6,6 +6,7 @@ using Unity.Properties;
 using UnityEngine.InputSystem;
 using Hairibar.Ragdoll.Animation;
 using Hairibar.Ragdoll;
+using System.Collections.Generic;
 
 public enum GhostActions {
   CHARGING_ESCAPE,
@@ -74,6 +75,11 @@ public class Ghost : MonoBehaviour
   //Sounds temporarily stored on objects lol
   public AudioClip energySound;
   public AudioClip jumpscareSound;
+	public AudioClip sfx_charging_escape;
+
+	[SerializeField]
+	public Dictionary<string, AudioClip> sfx;
+
   public float pitchLow;
   public float pitchHigh;
 
@@ -498,7 +504,7 @@ public class Ghost : MonoBehaviour
 
 	/* Just pass through to shop master */
 	public void CallEndRun() {
-		if (debug.dont_end_run == true) { return; }
+		if (debug.dont_end_run == true || !shop_master) { return; }
 		shop_master.EndRun();
 	}
 
@@ -509,8 +515,36 @@ public class Ghost : MonoBehaviour
 	}
 
 
+	public void PlaySound(string clip_name) {
+		//currentSound.loop = false;	
+
+		switch (clip_name) {
+			case "charging_escape": {
+				currentSound.clip = sfx_charging_escape;
+				//currentSound.loop = true;	
+				break;
+			}
+			default: {
+				Debug.Log("Cannot play ghost sound: "+clip_name);
+				break;
+			}
+		}
+	}
+
 
   /** GETTERS */
-
   public NavMeshAgent get_nav_agent() { return nav_agent; }
+
+	/** SETTERS */
+	public void SetLayerInChildren(int layer, bool self_too = true) {
+
+		if (self_too) {
+			this.gameObject.layer = layer;
+		}
+		
+		Transform[] children = GetComponentsInChildren<Transform>(includeInactive: true);
+		foreach (Transform t in children) {
+			t.gameObject.layer = layer;
+		}
+	}
 }
