@@ -72,6 +72,7 @@ public class GhostPuncher : MonoBehaviour
 	/* Fear Meter */
 	float fear_multiplier;
 	float fear_meter;
+	Timer ti_fear_reset;
 
 	public AudioSource footstepSound;
 	public float pitchLow;
@@ -151,6 +152,7 @@ public class GhostPuncher : MonoBehaviour
 		ti_charge_up = new Timer(0, 0.5f);
 		ti_charge_up.deactivate();
 		ti_stamina_recharge = new Timer(0, defaults.STAMINA_RECHARGE_DELAY);
+		ti_fear_reset = new Timer(0); // this is a variable timer...
 
 		footstepSound = GetComponent<AudioSource>();
 		footstepSound.clip = footSound1;
@@ -291,6 +293,9 @@ public class GhostPuncher : MonoBehaviour
 		//Footsteps
 		HandleStepSounds();
 		
+
+		/* Fear Meter */
+		UpdateFearMeter();
 
 	}
 
