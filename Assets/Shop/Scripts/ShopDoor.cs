@@ -26,8 +26,8 @@ public class ShopDoor : MonoBehaviour
 		public void MouseOver() {
 			if (inCutscene) { return; }
 
-			SetSpringAngle(hinge_right, -15.0f);
-			SetSpringAngle(hinge_left, -15.0f);
+			SetSpringAngle(hinge_right, 15.0f);
+			SetSpringAngle(hinge_left, 15.0f);
 
 	 	}
 
@@ -40,8 +40,8 @@ public class ShopDoor : MonoBehaviour
 		public void StartRun() {
 			inCutscene = true;
 
-			SetSpringAngle(hinge_right, -90.0f);
-			SetSpringAngle(hinge_left, -90.0f);
+			SetSpringAngle(hinge_right, 90.0f);
+			SetSpringAngle(hinge_left, 90.0f);
 
 			// TODO: make this fade
 			black_bg.SetActive(false);

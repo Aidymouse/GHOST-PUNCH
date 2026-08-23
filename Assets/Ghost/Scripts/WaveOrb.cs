@@ -20,9 +20,6 @@ public class WaveOrb : MonoBehaviour
 		life = new Timer(life_timer);
 
 		Instantiate(wave_particles, transform.position + particle_offset, transform.rotation);
-
-		
-
 	
 	}
 
@@ -34,8 +31,8 @@ public class WaveOrb : MonoBehaviour
 
 		transform.localScale += new Vector3(expansion, expansion, expansion);
 
-		life.tick(Time.deltaTime);
-		if (life.finished()) {
+		life.Tick(Time.deltaTime);
+		if (life.Finished()) {
 			Destroy(this.gameObject);
 		}
 
@@ -49,7 +46,7 @@ public class WaveOrb : MonoBehaviour
 		if (col.gameObject.CompareTag("BreakableObject")) {
 			Vector3 dir = (col.transform.position - transform.position).normalized;
 			dir.y = 0;
-			Punch wave_punch = new Punch(dir, object_force, object_damage, 0, 0, 5, 0);
+			Punch wave_punch = new Punch(dir, object_force, object_damage, 0, 0, 5);
 			BreakableObject bo = col.gameObject.GetComponent<BreakableObject>();
 			if (bo) {
 				bo.GetPunched(wave_punch);
@@ -63,5 +60,5 @@ public class WaveOrb : MonoBehaviour
 						gp.GetPushed(dir, attrs.WAVE_POWER);
 				}
 		}
-	}
+}
 }

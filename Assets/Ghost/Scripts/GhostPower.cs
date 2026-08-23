@@ -31,31 +31,31 @@ class GhostPower {
     this.ti_active = new Timer(active_timer, active_timer);
     this.ti_hang = new Timer(hang_timer, hang_timer);
 
-    this.ti_charge.deactivate();
-    this.ti_active_delay.deactivate();
-    this.ti_active.deactivate();
-    this.ti_hang.deactivate();
+    this.ti_charge.Deactivate();
+    this.ti_active_delay.Deactivate();
+    this.ti_active.Deactivate();
+    this.ti_hang.Deactivate();
 
     this.phase = GhostPowerPhase.PRE_CHARGE;
 
   }
 
   public virtual void Start() {
-    ti_charge.activate();
+    ti_charge.Activate();
     OnStartCharge();
     phase = GhostPowerPhase.CHARGING;
   }
 
 	/* Power objects get instantiated once and re-used. The reset method puts a power back into its first state */
   public virtual void Reset() {
-		ti_charge.deactivate();
-		ti_active_delay.deactivate();
-		ti_active.deactivate();
-		ti_hang.deactivate();
-		ti_charge.reset();
-		ti_active_delay.reset();
-		ti_active.reset();
-		ti_hang.reset();
+		ti_charge.Deactivate();
+		ti_active_delay.Deactivate();
+		ti_active.Deactivate();
+		ti_hang.Deactivate();
+		ti_charge.Reset();
+		ti_active_delay.Reset();
+		ti_active.Reset();
+		ti_hang.Reset();
 		this.phase = GhostPowerPhase.PRE_CHARGE;
   }
 
@@ -70,54 +70,54 @@ class GhostPower {
 
   public void UpdateTimers() {
     // Tick timers
-    ti_charge.tick(Time.deltaTime);
-    ti_active_delay.tick(Time.deltaTime);
-    ti_active.tick(Time.deltaTime);
-    ti_hang.tick(Time.deltaTime);
+    ti_charge.Tick(Time.deltaTime);
+    ti_active_delay.Tick(Time.deltaTime);
+    ti_active.Tick(Time.deltaTime);
+    ti_hang.Tick(Time.deltaTime);
   }
 
   public void HandleEvents() {
 
-    if (ti_charge.finished()) {
+    if (ti_charge.Finished()) {
       OnEndCharge();
-      ti_charge.deactivate();
+      ti_charge.Deactivate();
 
-      ti_active_delay.activate();
+      ti_active_delay.Activate();
       OnStartActiveDelay();
       phase = GhostPowerPhase.ACTIVE_DELAY;
-    } else if (ti_charge.is_active()) {
+    } else if (ti_charge.IsActive()) {
       OnUpdateCharge();
     }
 
-    if (ti_active_delay.finished()) {
+    if (ti_active_delay.Finished()) {
       OnEndActiveDelay();
-      ti_active_delay.deactivate();
+      ti_active_delay.Deactivate();
 
-      ti_active.activate();
+      ti_active.Activate();
       OnStartActive();
       phase = GhostPowerPhase.ACTIVE;
-    } else if (ti_active_delay.is_active()) {
+    } else if (ti_active_delay.IsActive()) {
       OnUpdateActiveDelay();
     }
 
-    if (ti_active.finished()) {
+    if (ti_active.Finished()) {
       OnEndActive();
-      ti_active.deactivate();
+      ti_active.Deactivate();
 
-      ti_hang.activate();
+      ti_hang.Activate();
       OnStartHang();
       phase = GhostPowerPhase.HANG;
-    } else if (ti_active.is_active()) {
+    } else if (ti_active.IsActive()) {
       OnUpdateActive();
     }
 
-    if (ti_hang.finished()) {
+    if (ti_hang.Finished()) {
       phase = GhostPowerPhase.POST_HANG;
 
       OnEndHang();
-      ti_hang.deactivate();
+      ti_hang.Deactivate();
 
-    } else if (ti_hang.is_active()) {
+    } else if (ti_hang.IsActive()) {
       OnUpdateHang();
     }
 

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6667653577159785068}
   - component: {fileID: -1766827064533389683}
   m_Layer: 6
-  m_Name: FrameBigBroken
+  m_Name: FrameBroken2
   m_TagString: BreakableObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,7 +43,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5729631795207084184}
-  m_Mesh: {fileID: 8800458755327459748, guid: 1c5edaa5a62d3d043919513729ca9723, type: 3}
+  m_Mesh: {fileID: 688869202058415641, guid: 1c5edaa5a62d3d043919513729ca9723, type: 3}
 --- !u!23 &6852540311682604517
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -70,7 +70,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 4edb0250ba72c2642ac376120a6593dd, type: 2}
-  - {fileID: 2100000, guid: 4a1ee632dafb54b499a80ec456f17b01, type: 2}
+  - {fileID: 2100000, guid: ffd142e49cf0c4844a7eadbf2a990f3a, type: 2}
   - {fileID: 2100000, guid: b861836d0c3095c4e9bbcf5c7dac4b0d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -114,8 +114,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.0049211187, y: 0.000322847, z: 0.007115958}
-  m_Center: {x: 0, y: -0.00014750558, z: 0.003557979}
+  m_Size: {x: 0.0049211187, y: 0.00032284702, z: 0.00392588}
+  m_Center: {x: 0, y: -0.00014750594, z: -0.00196294}
 --- !u!54 &6667653577159785068
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -158,17 +158,18 @@ MonoBehaviour:
   hp: 600
   config: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   attrs: {fileID: 11400000, guid: 8dec18908abd20733a25d03637aa53d4, type: 2}
+  material: {fileID: 11400000, guid: 9809c9d3ba33afc9f99ca179ef6095a8, type: 2}
   hit_class: 4
   broken_obj: {fileID: 0}
   rotation_offset: {x: 0, y: 0, z: 0}
-  break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
-  hit_particles: {fileID: 1236530132058975547, guid: ea4c812773b5bfa47aba2a4211c5a8e6, type: 3}
-  break_self_particles: {fileID: 1780546180473290174, guid: 0cc26e7d35e1ebf4685ca0e471f4d6e5, type: 3}
-  hitSoundEffect: {fileID: 0}
-  pitchLow: 0
-  pitchHigh: 0
-  destroyedSoundEffect: {fileID: 0}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
+  hit_particles: {fileID: 1236530132058975547, guid: ea4c812773b5bfa47aba2a4211c5a8e6, type: 3}
+  break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
+  break_self_particles: {fileID: 1780546180473290174, guid: 0cc26e7d35e1ebf4685ca0e471f4d6e5, type: 3}
+  pitchLow: 0
+  pitchHigh: 0
+  hitSoundEffect: {fileID: 0}
+  destroyedSoundEffect: {fileID: 0}

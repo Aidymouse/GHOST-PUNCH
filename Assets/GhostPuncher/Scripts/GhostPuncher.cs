@@ -10,22 +10,19 @@ public enum HitClass {
 }
 
 public struct Punch {
-	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass, float fear) {
+	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
 		Direction = direction;
 		Force = force;
 		ObjectDamage = object_damage;
 		GhostDamage = ghost_damage;
 		PoiseDamage = poise_damage;
 		HitClass = hitClass;
-		Fear = fear;
 	}
 	public Vector3 Direction;
 	public float Force;
 	public float ObjectDamage;
 	public float PoiseDamage;
 	public float GhostDamage;
-	// Only used by the ghost
-	public float Fear;
 	// 1st class punch is the strongest, 2nd class is a normal punch, 3 is big object, 4 is light object
 	public int HitClass;
 };
@@ -72,14 +69,30 @@ public class GhostPuncher : MonoBehaviour
 	bool buffered_charge = false;
 	bool charging_punch = false;
 
+	/* Fear Meter */
+	// Indexes into the fear_multipliers and fear_required lists of defaults
+	[HideInInspector] public int fear_index;
+	[HideInInspector] public int max_fear_index;
+	[HideInInspector] public float fear_multiplier;
+	[HideInInspector] public float fear_meter;
+	public Timer ti_fear_reset;
+
 	public AudioSource footstepSound;
-	public AudioClip footSound1;
-	public AudioClip footSound2;
 	public float pitchLow;
 	public float pitchHigh;
+
+	[Header("Footsteps")]
+	public AudioClip footSound1;
+	public AudioClip footSound2;
 	public float stepCooldown;
+	Timer ti_step_sound;
+
 	private float stepRate;
 	private bool isMoving;
+
+	/* Abilities */
+	PuncherAbility[] abilities;
+	PuncherAbility active_ability;
 
 	/* Other */
 	int ectoplasm = 0;
@@ -140,7 +153,7 @@ public class GhostPuncher : MonoBehaviour
 		ti_punch_cooldown = new Timer(0, defaults.PUNCH_COOLDOWN);
 		ti_punch_again = new Timer(0, defaults.PUNCH_COOLDOWN + defaults.PUNCH_AGAIN);
 		ti_charge_up = new Timer(0, 0.5f);
-		ti_charge_up.deactivate();
+		ti_charge_up.Deactivate();
 		ti_stamina_recharge = new Timer(0, defaults.STAMINA_RECHARGE_DELAY);
 
 		footstepSound = GetComponent<AudioSource>();
@@ -157,6 +170,11 @@ public class GhostPuncher : MonoBehaviour
 			}
 			inCutscene = true;
 		}
+
+		// fear
+		ti_fear_reset = new Timer(0, defaults.FEAR_RESET_TIMERS[0]); // this is a variable timer...
+		fear_index = 0;
+		max_fear_index = 3;
 
 	}
 
@@ -179,57 +197,10 @@ public class GhostPuncher : MonoBehaviour
 		this.tick_timers();
 
 		// Attacking
-		if (ti_punch_again.finished_this_frame()) {
-			punch_with = "Right";
-		}
+		UpdatePunch();
 
-		if ((action_chargePunch.WasPerformedThisFrame() && !buffered_punch) || (buffered_charge && ti_punch_cooldown.finished_this_frame())) {
-
-			buffered_charge = true;
-
-			if (ti_punch_cooldown.finished()) {
-				ti_charge_up.activate();
-				ti_charge_up.reset();
-				ChangeAnimation("ARM_CHARGE_WINDUP");
-				charging_punch = true;
-			}
-
-		}
-
-		if (action_attack.WasPerformedThisFrame() || (buffered_punch && ti_punch_cooldown.finished_this_frame())) {
-
-			buffered_charge = false;
-
-			if (ti_punch_cooldown.time_remaining < defaults.PUNCH_BUFFER_TIME) {
-				// This gets set even on successful punch, but doesn't matter cos it'll get unset when we punch
-				buffered_punch = true; 
-			}
-
-			if (ti_punch_cooldown.finished()) {
-
-				buffered_punch = false;
-
-				if (!ti_punch_again.finished()) {
-					punch_with = punch_with == "Right" ? "Left" : "Right";
-				} 
-
-
-				if (ti_charge_up.finished() && stamina > 0) {
-					// TODO: feebler animation if this happens
-					DoMegaPunch();
-					ti_punch_cooldown.set(GetMegaPunchCooldown());	
-				} else {
-					DoPunch();
-					ti_punch_cooldown.set(GetPunchCooldown());	
-					ti_punch_again.reset();	
-				}
-
-				charging_punch = false;
-
-				ti_charge_up.deactivate();
-				ti_charge_up.reset();
-			}
-		}
+		// Fear
+		UpdateFearMeter();
 
 		// Moving
 		Vector3 move_vec = controller.isGrounded ? new Vector3(0, 0, 0) : Physics.gravity;
@@ -269,7 +240,7 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 		/* Stamina */
-		if (ti_stamina_recharge.finished() && !charging_punch) {
+		if (ti_stamina_recharge.Finished() && !charging_punch) {
 			stamina += stamina_recharge_rate * Time.deltaTime;
 			if (stamina > max_stamina) { stamina = max_stamina; }
 		}
@@ -280,23 +251,62 @@ public class GhostPuncher : MonoBehaviour
 		//controller.move(move_vec);
 
 		//Footsteps
-		if (isMoving == true && stepCooldown < 0f)
-		{
-			if (footstepSound.clip = footSound1)
-			{
-				footstepSound.clip = footSound2;
-			}
-			if (footstepSound.clip = footSound2)
-			{
-				footstepSound.clip = footSound1;
-			}
-			footstepSound.pitch = (Random.Range(pitchLow, pitchHigh));
-			footstepSound.Play();
-			stepCooldown = stepRate;
-		}
-		stepCooldown -= Time.deltaTime;
-		
+		HandleStepSounds();
 
+	}
+
+	void UpdatePunch() {
+		if (ti_punch_again.FinishedThisFrame()) {
+			punch_with = "Right";
+		}
+
+		if ((action_chargePunch.WasPerformedThisFrame() && !buffered_punch) || (buffered_charge && ti_punch_cooldown.FinishedThisFrame())) {
+
+			buffered_charge = true;
+
+			if (ti_punch_cooldown.Finished()) {
+				ti_charge_up.Activate();
+				ti_charge_up.Reset();
+				ChangeAnimation("ARM_CHARGE_WINDUP");
+				charging_punch = true;
+			}
+
+		}
+
+		if (action_attack.WasPerformedThisFrame() || (buffered_punch && ti_punch_cooldown.FinishedThisFrame())) {
+
+			buffered_charge = false;
+
+			if (ti_punch_cooldown.time_remaining < defaults.PUNCH_BUFFER_TIME) {
+				// This gets set even on successful punch, but doesn't matter cos it'll get unset when we punch
+				buffered_punch = true; 
+			}
+
+			if (ti_punch_cooldown.Finished()) {
+
+				buffered_punch = false;
+
+				if (!ti_punch_again.Finished()) {
+					punch_with = punch_with == "Right" ? "Left" : "Right";
+				} 
+
+
+				if (ti_charge_up.Finished() && stamina > 0) {
+					// TODO: feebler animation if this happens
+					DoMegaPunch();
+					ti_punch_cooldown.Set(GetMegaPunchCooldown());	
+				} else {
+					DoPunch();
+					ti_punch_cooldown.Set(GetPunchCooldown());	
+					ti_punch_again.Reset();	
+				}
+
+				charging_punch = false;
+
+				ti_charge_up.Deactivate();
+				ti_charge_up.Reset();
+			}
+		}
 	}
 
 	void DoPunch() {
@@ -311,8 +321,7 @@ public class GhostPuncher : MonoBehaviour
 			defaults.PUNCH_OBJECT_DAMAGE,
 			defaults.PUNCH_GHOST_DAMAGE,
 			defaults.PUNCH_POISE_DAMAGE,
-			2,
-			defaults.PUNCH_FEAR
+			2
 		);
 
 		PunchRecord record = ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
@@ -330,11 +339,11 @@ public class GhostPuncher : MonoBehaviour
 			defaults.MEGAPUNCH_OBJECT_DAMAGE,
 			defaults.MEGAPUNCH_GHOST_DAMAGE,
 			defaults.MEGAPUNCH_POISE_DAMAGE,
-			1,
-			defaults.MEGAPUNCH_FEAR
+			1
 		);
 
-		ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
+		PunchRecord mega_record = ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
+		AssessPunchRecord(mega_record);
 	}
 
 	/** returns true if we hit something */
@@ -400,9 +409,21 @@ public class GhostPuncher : MonoBehaviour
 	void AssessPunchRecord(PunchRecord record) {
 		if (record.items_hit > 0) {
 			stamina += defaults.STAMINA_GAINED_ON_HIT;
+			if (this.fear_meter > 0 || this.fear_index != 0) {
+				ti_fear_reset.Reset();
+			}
+		}
+
+		if (record.hit_ghost) {
+			if (this.fear_index < this.max_fear_index) {
+				this.fear_meter += defaults.PUNCH_FEAR;
+			}
+			ti_fear_reset.Reset();
 		}
 	}
 
+
+	/** MOVEMENT **/
 	Vector3 moveControls() {
 
 		Vector2 move_value = action_move.ReadValue<Vector2>();
@@ -433,19 +454,52 @@ public class GhostPuncher : MonoBehaviour
 	}
 
 	void tick_timers() {
-		ti_punch_cooldown.tick(Time.deltaTime);
-		ti_punch_again.tick(Time.deltaTime);
-		ti_charge_up.tick(Time.deltaTime);
-		ti_stamina_recharge.tick(Time.deltaTime);
+		ti_punch_cooldown.Tick(Time.deltaTime);
+		ti_punch_again.Tick(Time.deltaTime);
+		ti_charge_up.Tick(Time.deltaTime);
+		ti_stamina_recharge.Tick(Time.deltaTime);
 
 
 		for (int i=statuses.Count-1; i>=0; i--) {
-			statuses[i].Duration.tick(Time.deltaTime);
-			if (statuses[i].Duration.finished()) {
+			statuses[i].Duration.Tick(Time.deltaTime);
+			if (statuses[i].Duration.Finished()) {
 				statuses.RemoveAt(i);
 			}
 		}
 	}
+
+	void UpdateFearMeter() {
+		ti_fear_reset.Tick(Time.deltaTime);
+		if (ti_fear_reset.Finished()) {
+			this.fear_multiplier = 1;
+			this.fear_meter = 0;
+			this.fear_index = 0;
+			this.ti_fear_reset.SetTime(0, defaults.FEAR_RESET_TIMERS[0]);
+		}
+
+
+		if (this.fear_meter >= GetFearRequired() && this.fear_index < this.max_fear_index) {
+			this.fear_index += 1;
+			this.ti_fear_reset.SetTime(defaults.FEAR_RESET_TIMERS[this.fear_index], defaults.FEAR_RESET_TIMERS[this.fear_index]);
+			this.fear_meter = 0;
+		}
+
+	}
+
+	
+	// Get's the fear required for the next fear tier
+	public float GetFearRequired() {
+		if (this.fear_index < this.max_fear_index) {
+			return defaults.FEAR_REQUIRED[this.fear_index+1];
+		}
+		return -1;
+	}
+ 	
+	public float GetFearMultiplier() {
+		return defaults.FEAR_MULTIPLIERS[this.fear_index];
+	}
+
+	/** ANIMATION **/
 
 	void ChangeAnimation(string name, float fade=0) {
 		arm_animator.CrossFade(name, fade);
@@ -464,7 +518,7 @@ public class GhostPuncher : MonoBehaviour
 	/** EVENTS **/
 	public void SpendStamina(float stamina_used) {
 		if (stamina_used == 0) { return; }
-		ti_stamina_recharge.reset();
+		ti_stamina_recharge.Reset();
 		stamina -= stamina_used;
 		if (stamina < 0) { stamina = 0; }
 	}
@@ -505,10 +559,23 @@ public class GhostPuncher : MonoBehaviour
 			item.ApplyToGhostPuncher(this);
 		}
 	}
+	
+
+	/** Update FNs */
+	void HandleStepSounds() {
+		if (isMoving == true && stepCooldown < 0f) {
+			if (footstepSound.clip = footSound1) { footstepSound.clip = footSound2; }
+			if (footstepSound.clip = footSound2) { footstepSound.clip = footSound1; }
+			footstepSound.pitch = (Random.Range(pitchLow, pitchHigh));
+			footstepSound.Play();
+			stepCooldown = stepRate;
+		}
+		stepCooldown -= Time.deltaTime;
+	}
 
 
 
-	/** **/
+	/** Variable Data **/
 	float GetPunchCooldown() {
 		return defaults.PUNCH_COOLDOWN;
 	}

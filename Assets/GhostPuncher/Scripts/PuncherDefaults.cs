@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "PuncherDefaults", menuName = "Scriptable Objects/PuncherDefaults")]
 public class PuncherDefaults : ScriptableObject
@@ -13,8 +14,6 @@ public class PuncherDefaults : ScriptableObject
 	public float PUNCH_BUFFER_TIME;
 	[Tooltip("Range of the punch in default unity units")]
 	public float PUNCH_RANGE;
-	[Tooltip("How much this contributes to the fear meter")]
-	public float PUNCH_FEAR;
 
 
 	[Header("Stamina")]
@@ -40,6 +39,8 @@ public class PuncherDefaults : ScriptableObject
 	public float PUNCH_POISE_DAMAGE;
 	[Tooltip("Stamina used on a punch")]
 	public float PUNCH_STAMINA;
+	[Tooltip("How much this contributes to the fear meter")]
+	public float PUNCH_FEAR;
 
 
 	[Header("Mega punch")]
@@ -53,5 +54,13 @@ public class PuncherDefaults : ScriptableObject
 	[Tooltip("Stamina used on a mega punch")]
 	public float MEGAPUNCH_STAMINA;
 	public float MEGAPUNCH_FEAR;
+
+	[Header("Fear Meter")]
+	[Tooltip("The multipliers applied to damage. multipliers[n] required fear_required[n] fear to be attained")]
+	public List<float> FEAR_MULTIPLIERS;
+	[Tooltip("Fear required to attain the multiplier at N. Fear starts from 0 at each stage")]
+	public List<float> FEAR_REQUIRED;
+	[Tooltip("(seconds) Time that a combo remains, resets when hitting ghost or furniture")]
+	public List<float> FEAR_RESET_TIMERS;
 
 }

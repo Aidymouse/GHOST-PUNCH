@@ -47,11 +47,11 @@ public class GhostAction_GetUp : GhostAction {
 		//ghost.rig_core.AddForce(-ghost.rig_core.linearVelocity);
 
 
-		ti_alpha_fade.tick(Time.deltaTime);
+		ti_alpha_fade.Tick(Time.deltaTime);
 		
-		ghost.ragdoll_animator.MasterAlpha = 0.2f * ti_alpha_fade.getPercentage();
+		ghost.ragdoll_animator.MasterAlpha = 0.2f * ti_alpha_fade.GetPercentage();
 	
-		if (ti_alpha_fade.finished()) {
+		if (ti_alpha_fade.Finished()) {
 			Debug.Log("Get Up should end now");
 			ghost.ragdoll_animator.MasterAlpha = max_alpha;
 			ghost.EnterAction(GhostActions.MOVING_ROOM);
