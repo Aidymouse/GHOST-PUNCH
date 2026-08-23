@@ -31,7 +31,7 @@ class GhostPower_Slap : GhostPower {
 
 			if (nav_agent.remainingDistance <= attrs.SLAP_DISTANCE) {
 				nav_agent.isStopped = true;
-				ti_charge.activate();
+				ti_charge.Activate();
 				OnStartCharge();
 			}
 		}

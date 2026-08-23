@@ -110,14 +110,10 @@ public class Ghost : MonoBehaviour
   [HideInInspector]
   public NavMeshAgent nav_agent;
 
-  [HideInInspector]
-  public Timer ti_hit_stun;
-  [HideInInspector]
-  public Timer ti_ragdoll;
-  [HideInInspector]
-  public Timer ti_restore_poise;
-  [HideInInspector]
-  public Timer ti_recovery;
+  [HideInInspector] public Timer ti_hit_stun;
+  [HideInInspector] public Timer ti_ragdoll;
+  [HideInInspector] public Timer ti_restore_poise;
+  [HideInInspector] public Timer ti_recovery;
 
   // When poise hit's 0, the ghost staggers, which makes her vulnerable.
   [HideInInspector]
@@ -227,7 +223,7 @@ public class Ghost : MonoBehaviour
     }
     //transform.TurnTowards(ghostPuncher.transform);
 
-    if (ti_restore_poise.finished_this_frame()) {
+    if (ti_restore_poise.FinishedThisFrame()) {
       RestorePoise();
     }
 
@@ -322,7 +318,7 @@ public class Ghost : MonoBehaviour
 
   void tick_timers() {
     if (cur_action != GhostActions.HIT_STUN) {
-      ti_restore_poise.tick(Time.deltaTime);
+      ti_restore_poise.Tick(Time.deltaTime);
     }
   }
 
@@ -332,7 +328,6 @@ public class Ghost : MonoBehaviour
   public void GetPunched(Punch punch) {
 
     hp -= punch.GhostDamage;
-    fear_meter += punch.Fear;
 
     currentSound.clip = takingDamageSound;
     currentSound.pitch = (Random.Range(pitchLow, pitchHigh));
@@ -372,7 +367,7 @@ public class Ghost : MonoBehaviour
 				EnterAction(GhostActions.HIT_STUN);
       }
     } else {
-      ti_restore_poise.reset();
+      ti_restore_poise.Reset();
 
       // TODO: play a random hit animation
       //int hurt_num = Random.Range(1,3);

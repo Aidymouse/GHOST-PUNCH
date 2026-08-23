@@ -112,4 +112,7 @@ public class ShopMaster : MonoBehaviour
 			ghost_ui.EndRun();
 		}
 
+	public void Signaled_EndRunCutsceneEnd() {
+	}
+
 }
