@@ -409,13 +409,15 @@ public class GhostPuncher : MonoBehaviour
 	void AssessPunchRecord(PunchRecord record) {
 		if (record.items_hit > 0) {
 			stamina += defaults.STAMINA_GAINED_ON_HIT;
-			if (this.fear_meter > 0) {
+			if (this.fear_meter > 0 || this.fear_index != 0) {
 				ti_fear_reset.Reset();
 			}
 		}
 
 		if (record.hit_ghost) {
-			this.fear_meter += defaults.PUNCH_FEAR;
+			if (this.fear_index < this.max_fear_index) {
+				this.fear_meter += defaults.PUNCH_FEAR;
+			}
 			ti_fear_reset.Reset();
 		}
 	}
@@ -476,7 +478,7 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 
-		if (this.fear_meter >= GetFearRequired()) {
+		if (this.fear_meter >= GetFearRequired() && this.fear_index < this.max_fear_index) {
 			this.fear_index += 1;
 			this.ti_fear_reset.SetTime(defaults.FEAR_RESET_TIMERS[this.fear_index], defaults.FEAR_RESET_TIMERS[this.fear_index]);
 			this.fear_meter = 0;
