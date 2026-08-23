@@ -20,6 +20,8 @@ public class GhostUI : MonoBehaviour
 	UIBar poise_bar;
 	UIBar escape_bar;
 	UIBar stamina_bar;
+	UIBar fear_bar;
+	UIBar fear_reset_bar;
 
 	[Tooltip("If true, we'll init as soon as we start. Should be false except when testing")]
 	public bool init_on_start;
@@ -41,6 +43,12 @@ public class GhostUI : MonoBehaviour
 				case "StaminaBar":
 					stamina_bar = bar;
 					break;
+				case "FearBar":
+					fear_bar = bar;
+					break;
+				case "FearResetBar":
+					fear_reset_bar = bar;
+					break;
 			}
 		}
 
@@ -55,7 +63,7 @@ public class GhostUI : MonoBehaviour
 					ui_ectoplasm = text;
 					break;
 
-				case "FearMeter":
+				case "TMP_FearMeter":
 					txt_fear_meter = text;
 					break;
 
@@ -90,8 +98,9 @@ public class GhostUI : MonoBehaviour
 		poise_bar.SetMaxValue(ghost.max_poise);
 		ghost_health_bar.SetMaxValue(ghost.defaults.HP);
 		stamina_bar.SetMaxValue(puncher.max_stamina);
-
 		escape_bar.SetValue(0);
+		fear_bar.SetValue(0);
+		fear_reset_bar.SetValue(0);
 	}
 
 	// Update is called once per frame
@@ -101,12 +110,24 @@ public class GhostUI : MonoBehaviour
 
 		UpdateEscapeMeter(ghost.escape_meter);
 
-		txt_fear_meter.SetText("Fear:\n" + Mathf.Floor(ghost.fear_meter));
-
 		escape_bar.SetValue(ghost.escape_meter);
 		ghost_health_bar.SetValue(ghost.hp);
 		poise_bar.SetValue(ghost.poise);
 		stamina_bar.SetValue(ghost_puncher.stamina);
+
+		/** Fear Bar **/
+		// The goal for the fear bar changes based on punchers current multiplier
+		float fear_required = ghost_puncher.GetFearRequired();
+		if (fear_required > 0) {
+			float fear_meter = ghost_puncher.fear_meter;
+			float fear_portion = fear_meter / fear_required;
+			Debug.Log("Fear meter: " + fear_meter + ", required: " + fear_required);
+			fear_bar.SetValue(fear_portion);
+		}
+
+		fear_reset_bar.SetValue(ghost_puncher.ti_fear_reset.PercentComplete());
+
+		txt_fear_meter.SetText("x"+ghost_puncher.GetFearMultiplier());
 
 		/** Hurt Indicator **/
 		if (!ti_hurt_indicator.Finished()) {
