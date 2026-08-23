@@ -409,7 +409,9 @@ public class GhostPuncher : MonoBehaviour
 	void AssessPunchRecord(PunchRecord record) {
 		if (record.items_hit > 0) {
 			stamina += defaults.STAMINA_GAINED_ON_HIT;
-			ti_fear_reset.Reset();
+			if (this.fear_meter > 0) {
+				ti_fear_reset.Reset();
+			}
 		}
 
 		if (record.hit_ghost) {
@@ -485,7 +487,7 @@ public class GhostPuncher : MonoBehaviour
 	
 	// Get's the fear required for the next fear tier
 	public float GetFearRequired() {
-		if (this.fear_index != this.max_fear_index) {
+		if (this.fear_index < this.max_fear_index) {
 			return defaults.FEAR_REQUIRED[this.fear_index+1];
 		}
 		return -1;

@@ -121,8 +121,9 @@ public class GhostUI : MonoBehaviour
 		if (fear_required > 0) {
 			float fear_meter = ghost_puncher.fear_meter;
 			float fear_portion = fear_meter / fear_required;
-			Debug.Log("Fear meter: " + fear_meter + ", required: " + fear_required);
 			fear_bar.SetValue(fear_portion);
+		} else {
+			fear_bar.SetValue(1);
 		}
 
 		fear_reset_bar.SetValue(ghost_puncher.ti_fear_reset.PercentComplete());
