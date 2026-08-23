@@ -109,13 +109,13 @@ public class GhostUI : MonoBehaviour
 		stamina_bar.SetValue(ghost_puncher.stamina);
 
 		/** Hurt Indicator **/
-		if (!ti_hurt_indicator.finished()) {
+		if (!ti_hurt_indicator.Finished()) {
 			Color hurt_color = hurt_indicator.color;
-			hurt_color.a = ti_hurt_indicator.percent_complete();
+			hurt_color.a = ti_hurt_indicator.PercentComplete();
 			hurt_indicator.color = hurt_color;
 		} 
 
-		if (ti_hurt_indicator.finished_this_frame()) {
+		if (ti_hurt_indicator.FinishedThisFrame()) {
 			Color hurt_color = hurt_indicator.color;
 			hurt_color.a = 0.0f;
 			hurt_indicator.color = hurt_color;
@@ -131,7 +131,7 @@ public class GhostUI : MonoBehaviour
 	}
 
 	void TickTimers() {
-		ti_hurt_indicator.tick(Time.deltaTime);
+		ti_hurt_indicator.Tick(Time.deltaTime);
 	}
 
 	public void UpdateEscapeMeter(float value) {
@@ -147,7 +147,7 @@ public class GhostUI : MonoBehaviour
 		hurt_color.a = 0.6f;
 		hurt_indicator.color = hurt_color;
 		//hurt_indicator.color.a = 1;
-		ti_hurt_indicator.reset();
+		ti_hurt_indicator.Reset();
 	}
 
 

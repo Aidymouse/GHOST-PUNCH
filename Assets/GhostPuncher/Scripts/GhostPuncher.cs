@@ -70,8 +70,8 @@ public class GhostPuncher : MonoBehaviour
 	bool charging_punch = false;
 
 	/* Fear Meter */
-	float fear_multiplier;
-	float fear_meter;
+	[HideInInspector] public float fear_multiplier;
+	[HideInInspector] public float fear_meter;
 	Timer ti_fear_reset;
 
 	public AudioSource footstepSound;
@@ -150,7 +150,7 @@ public class GhostPuncher : MonoBehaviour
 		ti_punch_cooldown = new Timer(0, defaults.PUNCH_COOLDOWN);
 		ti_punch_again = new Timer(0, defaults.PUNCH_COOLDOWN + defaults.PUNCH_AGAIN);
 		ti_charge_up = new Timer(0, 0.5f);
-		ti_charge_up.deactivate();
+		ti_charge_up.Deactivate();
 		ti_stamina_recharge = new Timer(0, defaults.STAMINA_RECHARGE_DELAY);
 		ti_fear_reset = new Timer(0); // this is a variable timer...
 
@@ -190,24 +190,24 @@ public class GhostPuncher : MonoBehaviour
 		this.tick_timers();
 
 		// Attacking
-		if (ti_punch_again.finished_this_frame()) {
+		if (ti_punch_again.FinishedThisFrame()) {
 			punch_with = "Right";
 		}
 
-		if ((action_chargePunch.WasPerformedThisFrame() && !buffered_punch) || (buffered_charge && ti_punch_cooldown.finished_this_frame())) {
+		if ((action_chargePunch.WasPerformedThisFrame() && !buffered_punch) || (buffered_charge && ti_punch_cooldown.FinishedThisFrame())) {
 
 			buffered_charge = true;
 
-			if (ti_punch_cooldown.finished()) {
-				ti_charge_up.activate();
-				ti_charge_up.reset();
+			if (ti_punch_cooldown.Finished()) {
+				ti_charge_up.Activate();
+				ti_charge_up.Reset();
 				ChangeAnimation("ARM_CHARGE_WINDUP");
 				charging_punch = true;
 			}
 
 		}
 
-		if (action_attack.WasPerformedThisFrame() || (buffered_punch && ti_punch_cooldown.finished_this_frame())) {
+		if (action_attack.WasPerformedThisFrame() || (buffered_punch && ti_punch_cooldown.FinishedThisFrame())) {
 
 			buffered_charge = false;
 
@@ -216,29 +216,29 @@ public class GhostPuncher : MonoBehaviour
 				buffered_punch = true; 
 			}
 
-			if (ti_punch_cooldown.finished()) {
+			if (ti_punch_cooldown.Finished()) {
 
 				buffered_punch = false;
 
-				if (!ti_punch_again.finished()) {
+				if (!ti_punch_again.Finished()) {
 					punch_with = punch_with == "Right" ? "Left" : "Right";
 				} 
 
 
-				if (ti_charge_up.finished() && stamina > 0) {
+				if (ti_charge_up.Finished() && stamina > 0) {
 					// TODO: feebler animation if this happens
 					DoMegaPunch();
-					ti_punch_cooldown.set(GetMegaPunchCooldown());	
+					ti_punch_cooldown.Set(GetMegaPunchCooldown());	
 				} else {
 					DoPunch();
-					ti_punch_cooldown.set(GetPunchCooldown());	
-					ti_punch_again.reset();	
+					ti_punch_cooldown.Set(GetPunchCooldown());	
+					ti_punch_again.Reset();	
 				}
 
 				charging_punch = false;
 
-				ti_charge_up.deactivate();
-				ti_charge_up.reset();
+				ti_charge_up.Deactivate();
+				ti_charge_up.Reset();
 			}
 		}
 
@@ -280,7 +280,7 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 		/* Stamina */
-		if (ti_stamina_recharge.finished() && !charging_punch) {
+		if (ti_stamina_recharge.Finished() && !charging_punch) {
 			stamina += stamina_recharge_rate * Time.deltaTime;
 			if (stamina > max_stamina) { stamina = max_stamina; }
 		}
@@ -292,10 +292,6 @@ public class GhostPuncher : MonoBehaviour
 
 		//Footsteps
 		HandleStepSounds();
-		
-
-		/* Fear Meter */
-		UpdateFearMeter();
 
 	}
 
@@ -437,19 +433,29 @@ public class GhostPuncher : MonoBehaviour
 	}
 
 	void tick_timers() {
-		ti_punch_cooldown.tick(Time.deltaTime);
-		ti_punch_again.tick(Time.deltaTime);
-		ti_charge_up.tick(Time.deltaTime);
-		ti_stamina_recharge.tick(Time.deltaTime);
+		ti_punch_cooldown.Tick(Time.deltaTime);
+		ti_punch_again.Tick(Time.deltaTime);
+		ti_charge_up.Tick(Time.deltaTime);
+		ti_stamina_recharge.Tick(Time.deltaTime);
 
 
 		for (int i=statuses.Count-1; i>=0; i--) {
-			statuses[i].Duration.tick(Time.deltaTime);
-			if (statuses[i].Duration.finished()) {
+			statuses[i].Duration.Tick(Time.deltaTime);
+			if (statuses[i].Duration.Finished()) {
 				statuses.RemoveAt(i);
 			}
 		}
 	}
+
+	void UpdateFearMeter() {
+		ti_fear_reset.Tick(Time.deltaTime);
+		if (ti_fear_reset.Finished()) {
+			this.fear_multiplier = 1;
+			this.fear_meter = 0;
+		}
+	}
+
+	/** ANIMATION **/
 
 	void ChangeAnimation(string name, float fade=0) {
 		arm_animator.CrossFade(name, fade);
@@ -468,7 +474,7 @@ public class GhostPuncher : MonoBehaviour
 	/** EVENTS **/
 	public void SpendStamina(float stamina_used) {
 		if (stamina_used == 0) { return; }
-		ti_stamina_recharge.reset();
+		ti_stamina_recharge.Reset();
 		stamina -= stamina_used;
 		if (stamina < 0) { stamina = 0; }
 	}

@@ -20,9 +20,6 @@ public class WaveOrb : MonoBehaviour
 		life = new Timer(life_timer);
 
 		Instantiate(wave_particles, transform.position + particle_offset, transform.rotation);
-
-		
-
 	
 	}
 
@@ -34,8 +31,8 @@ public class WaveOrb : MonoBehaviour
 
 		transform.localScale += new Vector3(expansion, expansion, expansion);
 
-		life.tick(Time.deltaTime);
-		if (life.finished()) {
+		life.Tick(Time.deltaTime);
+		if (life.Finished()) {
 			Destroy(this.gameObject);
 		}
 

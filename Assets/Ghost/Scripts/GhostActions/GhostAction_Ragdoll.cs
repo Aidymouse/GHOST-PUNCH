@@ -8,7 +8,7 @@ public class GhostAction_Ragdoll : GhostAction {
 	public override void Enter() {
 
 		Debug.Log("Entering Ragdoll State");
-		ghost.ti_ragdoll.reset();
+		ghost.ti_ragdoll.Reset();
 
 		ghost.SetLayerInChildren(LayerMask.NameToLayer("Punchable"));
 
@@ -38,7 +38,7 @@ public class GhostAction_Ragdoll : GhostAction {
 	}
 
 	public override void Update() {
-		ghost.ti_ragdoll.tick(Time.deltaTime);
+		ghost.ti_ragdoll.Tick(Time.deltaTime);
 
 		// TODO: somewhere nearing the right track, but maybe too much
 		// I need some way of telling the ragdoll to teleport to a new position...
@@ -48,8 +48,8 @@ public class GhostAction_Ragdoll : GhostAction {
 		ghost.transform.position -= ragdoll_offset;
 		*/
 
-		if (ghost.ti_ragdoll.finished_this_frame()) {
-			ghost.ti_recovery.set(1);
+		if (ghost.ti_ragdoll.FinishedThisFrame()) {
+			ghost.ti_recovery.Set(1);
 			ghost.EnterAction(GhostActions.GET_UP);
 		}
 	}
