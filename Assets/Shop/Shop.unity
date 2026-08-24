@@ -13124,6 +13124,77 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!1001 &1183993792
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2124962996823033773}
+    m_Modifications:
+    - target: {fileID: 1240250018707908, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: m_Name
+      value: GoopSpray
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396671266920006, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396671266920006, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396671266920006, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396671266920006, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396671266920006, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396671266920006, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396671266920006, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396671266920006, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396671266920006, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396671266920006, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198321120434662062, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+      propertyPath: stopAction
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+--- !u!4 &1183993793 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4396671266920006, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+  m_PrefabInstance: {fileID: 1183993792}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1183993796 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198321120434662062, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
+  m_PrefabInstance: {fileID: 1183993792}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1213047494 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8176063031421511124, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
@@ -15128,6 +15199,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2124962996823033773}
+  - component: {fileID: 2124962996823033774}
+  - component: {fileID: 2124962996823033776}
+  - component: {fileID: 2124962996823033775}
   m_Layer: 0
   m_Name: TipJar
   m_TagString: Untagged
@@ -15277,10 +15351,76 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1183993793}
   - {fileID: 1565918224129351869}
   - {fileID: 6821138816179385535}
   m_Father: {fileID: 549830403}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &2124962996823033774
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600662683257724183}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Height: 0.8
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.21, z: 0}
+--- !u!114 &2124962996823033775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600662683257724183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe84b5adc05eb41379d77594f142e1b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShopTipJar
+  particles: {fileID: 1183993796}
+--- !u!114 &2124962996823033776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600662683257724183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventTrigger
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2124962996823033775}
+          m_TargetAssemblyTypeName: ShopTipJar, Assembly-CSharp
+          m_MethodName: OnClick
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &2155680148952373392
 MonoBehaviour:
   m_ObjectHideFlags: 0
