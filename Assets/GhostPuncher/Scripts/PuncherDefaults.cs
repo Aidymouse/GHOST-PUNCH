@@ -63,4 +63,18 @@ public class PuncherDefaults : ScriptableObject
 	[Tooltip("(seconds) Time that a combo remains, resets when hitting ghost or furniture")]
 	public List<float> FEAR_RESET_TIMERS;
 
+	[Header("Football Charge")]
+	[Tooltip("The init speed of the charge")]
+	public float CHARGE_START_SPEED;
+	[Tooltip("The desired speed of the charge")]
+	public float CHARGE_MAX_SPEED;
+	[Tooltip("Charge accelerates at this rate at the start of the charge")]
+	public float CHARGE_ACCELERATION;
+	[Tooltip("Multiplier on moving left/right while charge active")]
+	public float CHARGE_MOVE_LEFT_RIGHT_DAMPING;
+	[Tooltip("Multiplier on looking left/right while charge active")]
+	public float CHARGE_LOOK_LEFT_RIGHT_DAMPING;
+	[Tooltip("Multiplier on looking up/down while charge active")]
+	public float CHARGE_LOOK_UP_DOWN_DAMPING;
+
 }
