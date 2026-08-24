@@ -59,6 +59,8 @@ public class GhostPuncher : MonoBehaviour
 	public PuncherDefaults defaults; 
 	public GhostPowerAttribs power_attribs;
 
+	float fall_velocity;
+
 	/* Stamina */
 	[HideInInspector]
 	public float max_stamina;
@@ -158,6 +160,8 @@ public class GhostPuncher : MonoBehaviour
 		action_ability1 = InputSystem.actions.FindAction("Ability1");
 		action_ability2 = InputSystem.actions.FindAction("Ability2");
 		action_ability3 = InputSystem.actions.FindAction("Ability3");
+
+		fall_velocity = 0;
 
 		//arm_animator = this.GetComponentInChildren<Animator>();
 		//punchables_mask = LayerMask.GetMask("Punchable");
@@ -288,7 +292,14 @@ public class GhostPuncher : MonoBehaviour
 
 	/** MOVEMENT METHODS **/
 	void HandleMove(Vector3 desired_control_vec) {
-		Vector3 move_vec = controller.isGrounded ? new Vector3(0, 0, 0) : Physics.gravity;
+
+		if (controller.isGrounded) {
+			fall_velocity = 0;
+		} else {
+			fall_velocity += Physics.gravity.y * Time.deltaTime;
+		}
+
+		Vector3 move_vec = new Vector3(0, fall_velocity, 0);
 
 		float speed_multiplier = 1 - GetSlowMultiplier();
 		desired_control_vec *= speed_multiplier;
