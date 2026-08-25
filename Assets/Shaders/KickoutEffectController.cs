@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MagicScreenEffectController : MonoBehaviour
+public class KickoutEffectController : MonoBehaviour
 {
     [Range(0f, 1f)]
     public float effectStrength = 0f;
