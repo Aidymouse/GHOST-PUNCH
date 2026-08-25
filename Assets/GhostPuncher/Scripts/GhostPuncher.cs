@@ -656,6 +656,10 @@ public class GhostPuncher : MonoBehaviour
 		stepCooldown -= Time.deltaTime;
 	}
 
+	public Vector3 GetFacingDirection() {
+			Vector3 look_dir = punch_hitbox.transform.TransformDirection(Vector3.forward);
+			return look_dir;
+	}
 
 
 	/** Variable Data **/

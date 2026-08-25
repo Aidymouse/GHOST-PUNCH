@@ -62,7 +62,7 @@ public class FootballCharge : PuncherAbility {
 
 	public override Vector3 GetDesiredControlVec(Vector3 desired_vec) { 
 		if (ti_charge.Finished()) {
-			Vector3 look_dir = puncher.punch_hitbox.transform.TransformDirection(Vector3.forward);
+			Vector3 look_dir = puncher.GetFacingDirection();
 			look_dir.y = 0;
 			return desired_vec + look_dir * charge_speed;
 		} else {
