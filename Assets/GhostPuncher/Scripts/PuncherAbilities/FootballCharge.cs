@@ -7,10 +7,16 @@ public class FootballCharge : PuncherAbility {
 	Timer ti_temp;
 	float charge_speed;
 
+	//GameObject charge_object;
+	FootballCollider charge_object;
+
 	public FootballCharge(GhostPuncher p) : base(p) {
 		ti_charge = new Timer(1, 1);
 		ti_temp = new Timer(2, 2);
 		charge_speed = puncher.defaults.CHARGE_START_SPEED;
+
+		charge_object = puncher.GetComponentInChildren<FootballCollider>(true);
+		
 	}
 
 	public override void EnterAbility() {
@@ -33,6 +39,8 @@ public class FootballCharge : PuncherAbility {
 				puncher.move_damping_right = puncher.defaults.CHARGE_MOVE_LEFT_RIGHT_DAMPING;
 				puncher.move_damping_forward = 0;
 				puncher.move_damping_back = 0;
+
+				charge_object.gameObject.SetActive(true);
 			}
 
 			if (ti_charge.Finished()) {
@@ -41,6 +49,7 @@ public class FootballCharge : PuncherAbility {
 			}
 
 			if (ti_temp.Finished()) {
+				charge_object.gameObject.SetActive(false);
 				puncher.ExitAbility();
 			}
 
@@ -74,4 +83,5 @@ public class FootballCharge : PuncherAbility {
 		puncher.move_damping_forward = 1;
 		puncher.move_damping_back = 1;
 	}
+
 }
