@@ -1182,6 +1182,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 560582448712780742, guid: f2030ea18dfd960278f839469591acf2, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 991094059715461095, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: ghost
       value: 
@@ -1192,7 +1196,7 @@ PrefabInstance:
       objectReference: {fileID: 2080810798}
     - target: {fileID: 2274462583745824434, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4176073419624409734, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_IsActive
@@ -1208,19 +1212,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6766530575651329275, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6766530575651329275, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6768439575628011011, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6768439575628011011, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7078587113666760135, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_Name
@@ -1240,11 +1244,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8195454416652179128, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8195454416652179128, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8303374088412648035, guid: f2030ea18dfd960278f839469591acf2, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8303374088412648035, guid: f2030ea18dfd960278f839469591acf2, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8708211375682209202, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_Pivot.x
@@ -7023,6 +7035,8 @@ GameObject:
   m_Component:
   - component: {fileID: 702033992}
   - component: {fileID: 702033991}
+  - component: {fileID: 702033994}
+  - component: {fileID: 702033995}
   m_Layer: 0
   m_Name: EndRunTimeline
   m_TagString: Untagged
@@ -7059,6 +7073,8 @@ PlayableDirector:
     value: {fileID: 816248470}
   - key: {fileID: 1724566569455607979, guid: 9a343dae23807646286e38f3e2c81ba6, type: 2}
     value: {fileID: 1213047494}
+  - key: {fileID: 7470226342178701391, guid: 9a343dae23807646286e38f3e2c81ba6, type: 2}
+    value: {fileID: 702033994}
   m_ExposedReferences:
     m_References:
     - 42808af2b9b4bc808b607084d324b64c: {fileID: 0}
@@ -7078,6 +7094,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &702033994
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702033990}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &702033995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702033990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c39a5a44ece3b64f8be92db38af0821, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MagicScreenEffectController
+  effectStrength: 0
 --- !u!4 &727024859 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5945453821438538283, guid: 26a207495eab47d4abaaa7a3b33f36a7, type: 3}
