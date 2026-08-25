@@ -10,6 +10,9 @@ public class CameraController : MonoBehaviour
 	public GPSettings settings;
 	public float sensitivity;
 
+	// For mouse damping
+	public GhostPuncher puncher;
+
 	float lookX;
 	float lookY;
 	Vector2 lookDelta;
@@ -29,9 +32,25 @@ public class CameraController : MonoBehaviour
 		lookDelta = action_look.ReadValue<Vector2>();
 		Vector2 look_value = lookDelta;
 
+		if (puncher) {
+			if (look_value.y < 0) {
+				look_value.y *= puncher.look_damping_down;
+			} else if (look_value.y > 0) {
+				look_value.y *= puncher.look_damping_up;
+			}
+		}
+
 		lookY -= look_value.y * sensitivity;
 		lookY = Mathf.Clamp(lookY, -90f, 90f);
 
+		// left right
+		if (puncher) {
+			if (look_value.x < 0) {
+				look_value.x *= puncher.look_damping_left;
+			} else if (look_value.x > 0) {
+				look_value.x *= puncher.look_damping_right;
+			}
+		}
 		lookX += look_value.x * sensitivity;
 
 		Quaternion player_rot = player_transform.rotation;
@@ -48,5 +67,9 @@ public class CameraController : MonoBehaviour
 	public void SetRotation(float pitch) {
 			lookX = pitch;
 			this.transform.localRotation = Quaternion.Euler(lookX, 0f, 0f);
+	}
+
+	public Vector3 GetLookDirection() {
+		return this.transform.rotation.eulerAngles;
 	}
 }

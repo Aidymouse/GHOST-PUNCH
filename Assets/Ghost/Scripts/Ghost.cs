@@ -217,7 +217,10 @@ public class Ghost : MonoBehaviour
     /* Rotate nav agent always towards its next target (infinite turn speed ... doesn't work ?) */
     Vector3 to_target = nav_agent.steeringTarget - transform.position;
     to_target.y = 0;
-    if (to_target.magnitude > 0) {
+	
+
+		//Debug.Log(to_target.magnitude);
+    if (to_target.x != 0 && to_target.y != 0 && to_target.z != 0) {
       Quaternion target_angle = Quaternion.LookRotation(to_target);
       nav_agent.transform.rotation = target_angle;
     }
