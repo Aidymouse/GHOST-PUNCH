@@ -7,7 +7,7 @@ public class FootballCollider : MonoBehaviour {
 		p = GetComponentInParent<GhostPuncher>();
 	}
 
-	public void OnCollisionEnter(Collision col) {
+	public void OnTriggerEnter(Collider col) {
 
 		BreakableObject bo = col.gameObject.GetComponent<BreakableObject>();
 		if (bo) {

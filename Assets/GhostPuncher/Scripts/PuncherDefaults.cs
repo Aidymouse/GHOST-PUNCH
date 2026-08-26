@@ -76,5 +76,7 @@ public class PuncherDefaults : ScriptableObject
 	public float CHARGE_LOOK_LEFT_RIGHT_DAMPING;
 	[Tooltip("Multiplier on looking up/down while charge active")]
 	public float CHARGE_LOOK_UP_DOWN_DAMPING;
+	[Tooltip("Stamina drain per second while charging")]
+	public float CHARGE_STAMINA_DRAIN;
 
 }

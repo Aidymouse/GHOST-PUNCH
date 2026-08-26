@@ -20,6 +20,11 @@ public class FootballCharge : PuncherAbility {
 	}
 
 	public override void EnterAbility() {
+		if (puncher.stamina <= 0) {
+			// TODO: play an animation or something
+			return;
+		}
+
 		ti_charge.Reset();
 		ti_temp.Reset();
 		puncher.ChangeAnimation("ARM_TACKLE_START");
@@ -44,18 +49,24 @@ public class FootballCharge : PuncherAbility {
 			}
 
 			if (ti_charge.Finished()) {
-
 				ti_temp.Tick(Time.deltaTime);
+				puncher.SpendStamina(puncher.defaults.CHARGE_STAMINA_DRAIN * Time.deltaTime);
 			}
 
 			if (ti_temp.Finished()) {
-				charge_object.gameObject.SetActive(false);
 				puncher.ExitAbility();
+				return;
 			}
 
 			// Acceleration needs an FOV effect
 			charge_speed += puncher.defaults.CHARGE_ACCELERATION * Time.deltaTime;
 			if (charge_speed >= puncher.defaults.CHARGE_MAX_SPEED) { charge_speed = puncher.defaults.CHARGE_MAX_SPEED; }
+
+			// Stamina drain while charging
+			if (puncher.stamina <= 0) {
+				puncher.ExitAbility();
+				return;
+			}
 
 			
  	}
@@ -71,6 +82,8 @@ public class FootballCharge : PuncherAbility {
 	}
 
 	public override void ExitAbility() {
+		charge_object.gameObject.SetActive(false);
+
 		puncher.ChangeAnimation("ARM_TACKLE_END");
 
 		puncher.look_damping_left = 1;
