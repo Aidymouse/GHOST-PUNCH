@@ -3,6 +3,7 @@ using UnityEngine;
 public class FootballCollider : MonoBehaviour {
 
 	GhostPuncher p;
+	public bool end_charge;
 	public void Awake() {
 		p = GetComponentInParent<GhostPuncher>();
 	}
@@ -22,8 +23,12 @@ public class FootballCollider : MonoBehaviour {
 				(int)HitClass.PUNCH
 			);
 
-			if (football_punch.object_damage < bo.hp || false) {
+			//if (football_punch.object_damage < bo.hp || 
+			// Maybe it should be based on weight???
+			if (bo.GetBoundingBoxHeight() > p.defaults.CHARGE_MAX_HEIGHT) {
 				// Stop the charge, with a big hit!
+				Debug.Log("Hit something of height " + bo.GetBoundingBoxHeight());
+				end_charge = true;
 			} else {
 				bo.GetPunched(football_punch);
 			} 

@@ -28,6 +28,7 @@ public class FootballCharge : PuncherAbility {
 		ti_charge.Reset();
 		ti_temp.Reset();
 		puncher.ChangeAnimation("ARM_TACKLE_START");
+		charge_object.end_charge = false;
 	
 	}
 
@@ -64,6 +65,11 @@ public class FootballCharge : PuncherAbility {
 
 			// Stamina drain while charging
 			if (puncher.stamina <= 0) {
+				puncher.ExitAbility();
+				return;
+			}
+
+			if (charge_object.end_charge) {
 				puncher.ExitAbility();
 				return;
 			}

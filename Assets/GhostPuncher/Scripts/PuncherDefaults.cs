@@ -78,5 +78,7 @@ public class PuncherDefaults : ScriptableObject
 	public float CHARGE_LOOK_UP_DOWN_DAMPING;
 	[Tooltip("Stamina drain per second while charging")]
 	public float CHARGE_STAMINA_DRAIN;
+	[Tooltip("Maximum object height we can hit before stopping")]
+	public float CHARGE_MAX_HEIGHT;
 
 }
