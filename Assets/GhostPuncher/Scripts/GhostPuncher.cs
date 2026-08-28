@@ -14,21 +14,21 @@ public enum PuncherAbilites {
 }
 
 public struct Punch {
-	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
-		Direction = direction;
-		Force = force;
-		ObjectDamage = object_damage;
-		GhostDamage = ghost_damage;
-		PoiseDamage = poise_damage;
-		HitClass = hitClass;
+	public Punch(Vector3 dir, float f, float o_dmg, float g_dmg, float p_dmg, int hc) {
+		direction = dir;
+		force = f;
+		object_damage = o_dmg;
+		ghost_damage = g_dmg;
+		poise_damage = p_dmg;
+		hit_class = hc;
 	}
-	public Vector3 Direction;
-	public float Force;
-	public float ObjectDamage;
-	public float PoiseDamage;
-	public float GhostDamage;
+	public Vector3 direction;
+	public float force;
+	public float object_damage;
+	public float poise_damage;
+	public float ghost_damage;
 	// 1st class punch is the strongest, 2nd class is a normal punch, 3 is big object, 4 is light object
-	public int HitClass;
+	public int hit_class;
 };
 
 /* The hit record is passed around as we execute punches, then taken by the ghost puncher and assessed to see what kind of bonuses we get */

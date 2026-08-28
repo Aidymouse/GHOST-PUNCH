@@ -58,7 +58,7 @@ public class BreakableObject : MonoBehaviour
 		}
 
 		if (!this.material) {
-			Debug.LogWarning("BreakalbeObject has no material selected");
+			Debug.LogWarning("BreakableObject has no material selected");
 		}
 
 		this.preserved_layer = null;
@@ -72,8 +72,8 @@ public class BreakableObject : MonoBehaviour
 		if (material && material.hit_sound) {
 			audio_source = GetComponent<AudioSource>();
 			if (!audio_source) {
-				Debug.LogWarning("Breakable object missing an audio source component! Adding one manually...");
-				this.gameObject.AddComponent<AudioSource>();
+				Debug.LogError("Breakable object missing an audio source component! Adding one manually...");
+				audio_source = this.gameObject.AddComponent<AudioSource>();
 			}
 			audio_source.clip = material.hit_sound;
 		}
@@ -88,21 +88,7 @@ public class BreakableObject : MonoBehaviour
 	  int MIN_SPEED = 6;
 
 		// Find total height for walkthrough check
-		float total_height = 100;
-		
-		if (colliders.Length > 0) {
-			float lowest_min = 99999;
-			float highest_max = -99999;
-
-			foreach (Collider c in colliders) {
-				float min = c.bounds.min.y;
-				if (min < lowest_min) { lowest_min = min; }
-				float max = c.bounds.max.y;
-				if (max > highest_max) { highest_max = max; }
-			}
-
-			total_height = highest_max - lowest_min;
-		}
+		float total_height = GetBoundingBoxHeight();
 
 	  Rigidbody rb = this.GetComponent<Rigidbody>();
 		if (rb && rb.linearVelocity.magnitude > MIN_SPEED) {
@@ -193,10 +179,10 @@ public class BreakableObject : MonoBehaviour
 
 			Rigidbody rb = this.GetComponent<Rigidbody>();
 			if (rb) {
-					rb.AddForce(punch.Direction.normalized * punch.Force);
+					rb.AddForce(punch.direction.normalized * punch.force);
 			}
 
-			TakeDamage(punch.ObjectDamage, punch.Force, punch.Direction, hit_point);
+			TakeDamage(punch.object_damage, punch.force, punch.direction, hit_point);
 
 	}
 
@@ -262,6 +248,26 @@ public class BreakableObject : MonoBehaviour
 	}
 
 	public void OnCollisionEnter(Collider col) {
+	}
+
+	public float GetBoundingBoxHeight() {
+		float total_height = 100;
+		
+		if (colliders.Length > 0) {
+			float lowest_min = 99999;
+			float highest_max = -99999;
+
+			foreach (Collider c in colliders) {
+				float min = c.bounds.min.y;
+				if (min < lowest_min) { lowest_min = min; }
+				float max = c.bounds.max.y;
+				if (max > highest_max) { highest_max = max; }
+			}
+
+			total_height = highest_max - lowest_min;
+		}
+
+		return total_height;
 	}
 
 }

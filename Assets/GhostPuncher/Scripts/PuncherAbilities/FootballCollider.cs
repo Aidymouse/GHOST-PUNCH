@@ -22,7 +22,16 @@ public class FootballCollider : MonoBehaviour {
 				(int)HitClass.PUNCH
 			);
 
-			bo.GetPunched(football_punch);
+			if (football_punch.object_damage < bo.hp || false) {
+				// Stop the charge, with a big hit!
+			} else {
+				bo.GetPunched(football_punch);
+			} 
+		}
+
+		Ghost ghost = col.gameObject.GetComponent<Ghost>();
+		if (ghost) {
+			// TODO: hit the ghost
 		}
 	
 	}

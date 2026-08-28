@@ -330,7 +330,7 @@ public class Ghost : MonoBehaviour
   /** EVENTS **/
   public void GetPunched(Punch punch) {
 
-    hp -= punch.GhostDamage;
+    hp -= punch.ghost_damage;
 
     currentSound.clip = takingDamageSound;
     currentSound.pitch = (Random.Range(pitchLow, pitchHigh));
@@ -338,7 +338,7 @@ public class Ghost : MonoBehaviour
 
 
     // 1 is mega punch and 3 is big object hit
-    if (vulnerable && (punch.HitClass <= (int)HitClass.LARGE_ITEM)) {
+    if (vulnerable && (punch.hit_class <= (int)HitClass.LARGE_ITEM)) {
 
       Ragdoll(punch);
       return;
@@ -355,14 +355,14 @@ public class Ghost : MonoBehaviour
 			return;
 		}
 
-    poise -= punch.PoiseDamage;
+    poise -= punch.poise_damage;
 
     if (ectoplasm_particles) {
       Instantiate(ectoplasm_particles, transform.position, new Quaternion());
     }
 
     if (poise <= 0) {
-      if (punch.HitClass <= (int)HitClass.MEGA_PUNCH) {
+      if (punch.hit_class <= (int)HitClass.MEGA_PUNCH) {
 				Ragdoll(punch);
 
       } else {
@@ -412,7 +412,7 @@ public class Ghost : MonoBehaviour
 
     EnterAction(GhostActions.RAGDOLL);
 
-    rig_core.AddForce(punch.Direction * punch.Force * defaults.MAKE_HER_FLY_FACTOR);
+    rig_core.AddForce(punch.direction * punch.force * defaults.MAKE_HER_FLY_FACTOR);
   }
 
   /** STATUS **/
