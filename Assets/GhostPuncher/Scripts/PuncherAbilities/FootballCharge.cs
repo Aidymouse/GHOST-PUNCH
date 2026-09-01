@@ -31,7 +31,7 @@ public class FootballCharge : PuncherAbility {
 		ti_charge = new Timer(puncher.defaults.CHARGE_CHARGE_TIME, puncher.defaults.CHARGE_CHARGE_TIME);
 		ti_stop = new Timer(puncher.defaults.CHARGE_STOP_TIME, puncher.defaults.CHARGE_STOP_TIME);
 		ti_punch_delay = new Timer(puncher.defaults.CHARGE_PUNCH_DELAY, puncher.defaults.CHARGE_PUNCH_DELAY);
-		ti_punch_stop = new Timer(puncher.defaults.CHARGE_PUNCH_STOP, puncher.defaults.CHARGE_PUNCH_STOP);
+		ti_punch_stop = new Timer(puncher.defaults.CHARGE_PUNCH_STOP_TIME, puncher.defaults.CHARGE_PUNCH_STOP_TIME);
 		charge_speed = puncher.defaults.CHARGE_START_SPEED;
 
 		charge_collider = puncher.GetComponentInChildren<FootballCollider>(true);

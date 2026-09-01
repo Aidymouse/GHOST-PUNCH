@@ -13,23 +13,6 @@ public enum PuncherAbilites {
 	FOOTBALL_CHARGE=0,
 }
 
-public struct Punch {
-	public Punch(Vector3 dir, float f, float o_dmg, float g_dmg, float p_dmg, int hc) {
-		direction = dir;
-		force = f;
-		object_damage = o_dmg;
-		ghost_damage = g_dmg;
-		poise_damage = p_dmg;
-		hit_class = hc;
-	}
-	public Vector3 direction;
-	public float force;
-	public float object_damage;
-	public float poise_damage;
-	public float ghost_damage;
-	// 1st class punch is the strongest, 2nd class is a normal punch, 3 is big object, 4 is light object
-	public int hit_class;
-};
 
 /* The hit record is passed around as we execute punches, then taken by the ghost puncher and assessed to see what kind of bonuses we get */
 public struct PunchRecord {
@@ -399,13 +382,9 @@ public class GhostPuncher : MonoBehaviour
 	void NormalPunch() {
 		int punch_num = Random.Range(1,5);
 		ChangeAnimation("Jab"+punch_with+punch_num);
-		Punch normal_punch = new Punch(
+		Punch normal_punch = Punch.FromData(
 			punch_hitbox.transform.TransformDirection(Vector3.forward),
- 			defaults.PUNCH_FORCE,
-			defaults.PUNCH_OBJECT_DAMAGE,
-			defaults.PUNCH_GHOST_DAMAGE,
-			defaults.PUNCH_POISE_DAMAGE,
-			2
+			defaults.NORMAL_PUNCH_DATA
 		);
 
 		LaunchPunch(normal_punch, defaults.PUNCH_STAMINA);
@@ -415,14 +394,7 @@ public class GhostPuncher : MonoBehaviour
 		ChangeAnimation("CHARGE_PUNCH");
 		if (fovKick) fovKick.BigKick();
 		if (screenShake) screenShake.Shake(0.2f);
-		Punch mega_punch = new Punch(
-			punch_hitbox.transform.TransformDirection(Vector3.forward),
-			defaults.MEGAPUNCH_FORCE,
-			defaults.MEGAPUNCH_OBJECT_DAMAGE,
-			defaults.MEGAPUNCH_GHOST_DAMAGE,
-			defaults.MEGAPUNCH_POISE_DAMAGE,
-			1
-		);
+		Punch mega_punch = Punch.FromData(punch_hitbox.transform.TransformDirection(Vector3.forward), defaults.MEGAPUNCH_DATA);
 
 		LaunchPunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
 	}
