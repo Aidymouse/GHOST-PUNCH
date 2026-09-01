@@ -13,23 +13,6 @@ public enum PuncherAbilites {
 	FOOTBALL_CHARGE=0,
 }
 
-public struct Punch {
-	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
-		Direction = direction;
-		Force = force;
-		ObjectDamage = object_damage;
-		GhostDamage = ghost_damage;
-		PoiseDamage = poise_damage;
-		HitClass = hitClass;
-	}
-	public Vector3 Direction;
-	public float Force;
-	public float ObjectDamage;
-	public float PoiseDamage;
-	public float GhostDamage;
-	// 1st class punch is the strongest, 2nd class is a normal punch, 3 is big object, 4 is light object
-	public int HitClass;
-};
 
 /* The hit record is passed around as we execute punches, then taken by the ghost puncher and assessed to see what kind of bonuses we get */
 public struct PunchRecord {
@@ -46,9 +29,9 @@ public class GhostPuncher : MonoBehaviour
 	[Tooltip("If true, the puncher spawns in playable form, rather than being dormant like for the main game.")]
 	public bool start_active;	
 
-	InputAction action_attack;
-	InputAction action_move;
-	InputAction action_chargePunch;
+	[HideInInspector] public InputAction action_attack;
+	[HideInInspector] public InputAction action_move;
+	[HideInInspector] public InputAction action_chargePunch;
 	InputAction action_ability1;
 	InputAction action_ability2;
 	InputAction action_ability3;
@@ -241,7 +224,10 @@ public class GhostPuncher : MonoBehaviour
 		// Timers
 		this.tick_timers();
 
-		UpdatePunch();
+		
+		if (active_ability is null || active_ability.lock_punch == false) {
+			UpdatePunch();
+		}
 
 		UpdateFearMeter();
 
@@ -379,7 +365,7 @@ public class GhostPuncher : MonoBehaviour
 					DoMegaPunch();
 					ti_punch_cooldown.Set(GetMegaPunchCooldown());	
 				} else {
-					DoPunch();
+					NormalPunch();
 					ti_punch_cooldown.Set(GetPunchCooldown());	
 					ti_punch_again.Reset();	
 				}
@@ -392,41 +378,34 @@ public class GhostPuncher : MonoBehaviour
 		}
 	}
 
-	void DoPunch() {
+
+	void NormalPunch() {
 		int punch_num = Random.Range(1,5);
 		ChangeAnimation("Jab"+punch_with+punch_num);
-
-		if (fovKick) { fovKick.SmallKick(); }
-		if (screenShake) { screenShake.Shake(0.05f); }
-		Punch normal_punch = new Punch(
+		Punch normal_punch = Punch.FromData(
 			punch_hitbox.transform.TransformDirection(Vector3.forward),
- 			defaults.PUNCH_FORCE,
-			defaults.PUNCH_OBJECT_DAMAGE,
-			defaults.PUNCH_GHOST_DAMAGE,
-			defaults.PUNCH_POISE_DAMAGE,
-			2
+			defaults.NORMAL_PUNCH_DATA
 		);
 
-		PunchRecord record = ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
-
-		AssessPunchRecord(record);
+		LaunchPunch(normal_punch, defaults.PUNCH_STAMINA);
 	}
 
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
 		if (fovKick) fovKick.BigKick();
 		if (screenShake) screenShake.Shake(0.2f);
-		Punch mega_punch = new Punch(
-			punch_hitbox.transform.TransformDirection(Vector3.forward),
-			defaults.MEGAPUNCH_FORCE,
-			defaults.MEGAPUNCH_OBJECT_DAMAGE,
-			defaults.MEGAPUNCH_GHOST_DAMAGE,
-			defaults.MEGAPUNCH_POISE_DAMAGE,
-			1
-		);
+		Punch mega_punch = Punch.FromData(punch_hitbox.transform.TransformDirection(Vector3.forward), defaults.MEGAPUNCH_DATA);
 
-		PunchRecord mega_record = ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
-		AssessPunchRecord(mega_record);
+		LaunchPunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
+	}
+
+	public void LaunchPunch(Punch punch, float stamina_used) {
+		if (fovKick) { fovKick.SmallKick(); }
+		if (screenShake) { screenShake.Shake(0.05f); }
+
+		PunchRecord record = ExecutePunch(punch, stamina_used);
+
+		AssessPunchRecord(record);
 	}
 
 	/** returns true if we hit something */
