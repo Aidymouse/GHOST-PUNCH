@@ -17,6 +17,10 @@ public class CameraController : MonoBehaviour
 	float lookY;
 	Vector2 lookDelta;
 
+	void Awake() {
+		puncher = GetComponentInParent<GhostPuncher>();
+	}
+
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
 	{

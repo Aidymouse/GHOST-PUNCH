@@ -19,7 +19,9 @@ public class FootballCharge : PuncherAbility {
 	Timer ti_punch_stop;
 	float charge_speed;
 	ChargePhase phase;
-	FootballCollider charge_object;
+	GameObject charge_object;
+	FootballCollider charge_collider;
+	FootballWallCollider wall_collider;
 
 	public FootballCharge(GhostPuncher p) : base(p) {
 		lock_punch = true;
@@ -32,7 +34,10 @@ public class FootballCharge : PuncherAbility {
 		ti_punch_stop = new Timer(puncher.defaults.CHARGE_PUNCH_STOP, puncher.defaults.CHARGE_PUNCH_STOP);
 		charge_speed = puncher.defaults.CHARGE_START_SPEED;
 
-		charge_object = puncher.GetComponentInChildren<FootballCollider>(true);
+		charge_collider = puncher.GetComponentInChildren<FootballCollider>(true);
+		wall_collider = puncher.GetComponentInChildren<FootballWallCollider>(true);
+
+		charge_object = charge_collider.transform.parent.gameObject;
 		
 
 	}
@@ -51,7 +56,10 @@ public class FootballCharge : PuncherAbility {
 		charge_speed = puncher.defaults.CHARGE_START_SPEED;
 
 		puncher.ChangeAnimation("ARM_TACKLE_START");
-		charge_object.end_charge = false;
+
+		charge_collider.end_charge = false;
+		wall_collider.end_charge = false;
+
 		phase = ChargePhase.STARTING;
 
 	}
@@ -78,12 +86,13 @@ public class FootballCharge : PuncherAbility {
 			puncher.look_damping_right = puncher.defaults.CHARGE_LOOK_LEFT_RIGHT_DAMPING;
 			puncher.look_damping_down = puncher.defaults.CHARGE_LOOK_UP_DOWN_DAMPING;
 			puncher.look_damping_up = puncher.defaults.CHARGE_LOOK_UP_DOWN_DAMPING;
+
 			puncher.move_damping_left = puncher.defaults.CHARGE_MOVE_LEFT_RIGHT_DAMPING;
 			puncher.move_damping_right = puncher.defaults.CHARGE_MOVE_LEFT_RIGHT_DAMPING;
 			puncher.move_damping_forward = 0;
 			puncher.move_damping_back = 0;
 
-			charge_object.gameObject.SetActive(true);
+			charge_object.SetActive(true);
 			phase = ChargePhase.CHARGING;
 		}
 	}
@@ -121,7 +130,7 @@ public class FootballCharge : PuncherAbility {
 		}
 
 		// Query charge object to see if we hit something that stops the charge
-		if (charge_object.end_charge) {
+		if (charge_collider.end_charge || wall_collider.end_charge) {
 			SlamToAStop();
 			return;
 		}
@@ -148,7 +157,16 @@ public class FootballCharge : PuncherAbility {
 
 		if (ti_punch_delay.FinishedThisFrame() || ti_punch_delay.default_time == 0) {
 			puncher.ChangeAnimation("CHARGE_PUNCH");
-			// TODO: launch a punch
+			
+			Punch football_charge_punch = new Punch(
+				puncher.GetFacingDirection(),
+				5000,
+				1000,
+				450,
+				650,
+				(int)HitClass.PUNCH
+			);
+			puncher.LaunchPunch(football_charge_punch, 0);
 		}
 
 		if (!ti_punch_delay.Finished()) {
@@ -176,7 +194,7 @@ public class FootballCharge : PuncherAbility {
 	}
 
 	public override void ExitAbility() {
-		charge_object.gameObject.SetActive(false);
+		charge_object.SetActive(false);
 
 		// Reset damping
 		puncher.look_damping_left = 1;

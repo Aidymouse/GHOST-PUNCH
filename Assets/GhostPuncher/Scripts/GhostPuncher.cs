@@ -382,7 +382,7 @@ public class GhostPuncher : MonoBehaviour
 					DoMegaPunch();
 					ti_punch_cooldown.Set(GetMegaPunchCooldown());	
 				} else {
-					DoPunch();
+					NormalPunch();
 					ti_punch_cooldown.Set(GetPunchCooldown());	
 					ti_punch_again.Reset();	
 				}
@@ -395,12 +395,10 @@ public class GhostPuncher : MonoBehaviour
 		}
 	}
 
-	void DoPunch() {
+
+	void NormalPunch() {
 		int punch_num = Random.Range(1,5);
 		ChangeAnimation("Jab"+punch_with+punch_num);
-
-		if (fovKick) { fovKick.SmallKick(); }
-		if (screenShake) { screenShake.Shake(0.05f); }
 		Punch normal_punch = new Punch(
 			punch_hitbox.transform.TransformDirection(Vector3.forward),
  			defaults.PUNCH_FORCE,
@@ -410,9 +408,7 @@ public class GhostPuncher : MonoBehaviour
 			2
 		);
 
-		PunchRecord record = ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
-
-		AssessPunchRecord(record);
+		LaunchPunch(normal_punch, defaults.PUNCH_STAMINA);
 	}
 
 	void DoMegaPunch() {
@@ -428,8 +424,16 @@ public class GhostPuncher : MonoBehaviour
 			1
 		);
 
-		PunchRecord mega_record = ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
-		AssessPunchRecord(mega_record);
+		LaunchPunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
+	}
+
+	public void LaunchPunch(Punch punch, float stamina_used) {
+		if (fovKick) { fovKick.SmallKick(); }
+		if (screenShake) { screenShake.Shake(0.05f); }
+
+		PunchRecord record = ExecutePunch(punch, stamina_used);
+
+		AssessPunchRecord(record);
 	}
 
 	/** returns true if we hit something */

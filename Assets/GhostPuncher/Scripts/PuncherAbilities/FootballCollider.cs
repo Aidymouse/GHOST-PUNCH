@@ -25,8 +25,17 @@ public class FootballCollider : MonoBehaviour {
 
 			//if (football_punch.object_damage < bo.hp || 
 			// Maybe it should be based on weight???
+			// it should... this doesn't let you break through doors....
 			if (bo.GetBoundingBoxHeight() > p.defaults.CHARGE_MAX_HEIGHT) {
-				// Stop the charge, with a big hit!
+				Punch stopped_punch = new Punch(
+					p.GetFacingDirection(),
+					5000,
+					500,
+					300,
+					500,
+					(int)HitClass.PUNCH
+				);
+				bo.GetPunched(stopped_punch);
 				Debug.Log("Hit something of height " + bo.GetBoundingBoxHeight());
 				end_charge = true;
 			} else {
@@ -36,9 +45,20 @@ public class FootballCollider : MonoBehaviour {
 
 		Ghost ghost = col.gameObject.GetComponent<Ghost>();
 		if (ghost) {
-			// TODO: hit the ghost
+			Debug.Log("Hitting ghost wow!");
+			Punch stopped_punch = new Punch(
+				p.GetFacingDirection(),
+				5000,
+				500,
+				300,
+				500,
+				(int)HitClass.PUNCH
+			);
+			ghost.GetPunched(stopped_punch);
+			end_charge = true;
 		}
 	
 	}
 
 }
+
