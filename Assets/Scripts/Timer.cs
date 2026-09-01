@@ -1,5 +1,11 @@
 using UnityEngine;
 
+public enum LerpTypes {
+	EASE_IN,
+	EASE_OUT,
+	LINEAR
+}
+
 public class Timer
 {
   public float time_remaining;
@@ -40,7 +46,25 @@ public class Timer
 	}
 
 	public float PercentComplete() {
+		if (this.default_time == 0) { return 1; }
 		return this.time_remaining / this.default_time;
+	}
+
+	/**
+ 	* Lerps between timer start and end. 1.0 at start, 0.0 at timer end.
+ 	* @param lerp_type - Used to change type
+ 	* @param backwards - Makes it 0 at start, 1.0 at end
+ 	*/
+	public float GetLerped(LerpTypes lerp_type=LerpTypes.LINEAR, bool backwards=false) {
+		// TODO:
+		if (lerp_type == LerpTypes.EASE_OUT) {
+			return Lerp.EaseOutCubic(PercentComplete());
+		} else if (lerp_type == LerpTypes.EASE_IN) {
+			return Lerp.EaseInCubic(PercentComplete());
+		}
+
+		return PercentComplete();
+
 	}
 
 

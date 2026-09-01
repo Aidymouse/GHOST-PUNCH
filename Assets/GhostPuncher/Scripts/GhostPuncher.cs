@@ -9,23 +9,10 @@ public enum HitClass {
 	ITEM=3,
 }
 
-public struct Punch {
-	public Punch(Vector3 direction, float force, float object_damage, float ghost_damage, float poise_damage, int hitClass) {
-		Direction = direction;
-		Force = force;
-		ObjectDamage = object_damage;
-		GhostDamage = ghost_damage;
-		PoiseDamage = poise_damage;
-		HitClass = hitClass;
-	}
-	public Vector3 Direction;
-	public float Force;
-	public float ObjectDamage;
-	public float PoiseDamage;
-	public float GhostDamage;
-	// 1st class punch is the strongest, 2nd class is a normal punch, 3 is big object, 4 is light object
-	public int HitClass;
-};
+public enum PuncherAbilites {
+	FOOTBALL_CHARGE=0,
+}
+
 
 /* The hit record is passed around as we execute punches, then taken by the ghost puncher and assessed to see what kind of bonuses we get */
 public struct PunchRecord {
@@ -42,15 +29,20 @@ public class GhostPuncher : MonoBehaviour
 	[Tooltip("If true, the puncher spawns in playable form, rather than being dormant like for the main game.")]
 	public bool start_active;	
 
-	InputAction action_attack;
-	InputAction action_move;
-	InputAction action_chargePunch;
+	[HideInInspector] public InputAction action_attack;
+	[HideInInspector] public InputAction action_move;
+	[HideInInspector] public InputAction action_chargePunch;
+	InputAction action_ability1;
+	InputAction action_ability2;
+	InputAction action_ability3;
 
 	CharacterController controller;
 	float move_speed;
 
 	public PuncherDefaults defaults; 
 	public GhostPowerAttribs power_attribs;
+
+	float fall_velocity;
 
 	/* Stamina */
 	[HideInInspector]
@@ -91,21 +83,35 @@ public class GhostPuncher : MonoBehaviour
 	private bool isMoving;
 
 	/* Abilities */
-	PuncherAbility[] abilities;
-	PuncherAbility active_ability;
+	PuncherAbility?[] equipped_abilities;
+	PuncherAbility? active_ability = null;
 
 	/* Other */
 	int ectoplasm = 0;
 
+	// layers that are punchable.
 	public LayerMask punchables_mask;
+	// prefab box used as collider for punches
 	public BoxCollider punch_hitbox;
 
 
 	public Animator arm_animator;
 
-	/* Camera effects */
+	/** Camera effects **/
+	// ??
 	FOVKick fovKick;
+	// ??
 	ScreenShake screenShake;
+	// Multipliers on looking around, applied in CameraController
+	[HideInInspector] public float look_damping_left;
+	[HideInInspector] public float look_damping_right;
+	[HideInInspector] public float look_damping_up;
+	[HideInInspector] public float look_damping_down;
+	// Multipliers on moving around
+	[HideInInspector] public float move_damping_left;
+	[HideInInspector] public float move_damping_right;
+	[HideInInspector] public float move_damping_forward;
+	[HideInInspector] public float move_damping_back;
 
 	/* Cutscene control toggle */
 	public bool inCutscene = false;
@@ -125,11 +131,20 @@ public class GhostPuncher : MonoBehaviour
 	[HideInInspector]
 	public bool uiFlag_slowed;
 
+	/** Locks - control so external states can manipulate ghost punchers abilities **/
+	// Stops the directional move controls, but not looking around
+	public bool lock_move_controls;
+
 	void Start()
 	{
 		action_chargePunch = InputSystem.actions.FindAction("ChargePunch");
 		action_attack = InputSystem.actions.FindAction("Attack");
 		action_move = InputSystem.actions.FindAction("Move");
+		action_ability1 = InputSystem.actions.FindAction("Ability1");
+		action_ability2 = InputSystem.actions.FindAction("Ability2");
+		action_ability3 = InputSystem.actions.FindAction("Ability3");
+
+		fall_velocity = 0;
 
 		//arm_animator = this.GetComponentInChildren<Animator>();
 		//punchables_mask = LayerMask.GetMask("Punchable");
@@ -171,10 +186,29 @@ public class GhostPuncher : MonoBehaviour
 			inCutscene = true;
 		}
 
-		// fear
+		// Init Fear
 		ti_fear_reset = new Timer(0, defaults.FEAR_RESET_TIMERS[0]); // this is a variable timer...
 		fear_index = 0;
 		max_fear_index = 3;
+
+		// Init mouse damping
+		look_damping_left = 1;
+		look_damping_right = 1;
+		look_damping_up = 1;
+		look_damping_down = 1;
+		move_damping_left = 1;
+		move_damping_right = 1;
+		move_damping_forward = 1;
+		move_damping_back = 1;
+
+		// Init Locks
+		lock_move_controls = false;
+
+		// Init abilities
+		equipped_abilities = new PuncherAbility?[3];
+		equipped_abilities[0] = new FootballCharge(this);
+		equipped_abilities[1] = null;
+		equipped_abilities[2] = null;
 
 	}
 
@@ -184,32 +218,77 @@ public class GhostPuncher : MonoBehaviour
 	void Update()
 	{
 		if (inCutscene)	{
-			//controller.Move(Vector3.zero);
 			return;
 		}
-
-		/*
-		Vector3 look_dir = punch_hitbox.transform.TransformDirection(Vector3.forward);
-		Vector3 look_start = punch_hitbox.transform.position - look_dir * punch_hitbox.transform.localScale.z/2;
-		*/
 
 		// Timers
 		this.tick_timers();
 
-		// Attacking
-		UpdatePunch();
+		
+		if (active_ability is null || active_ability.lock_punch == false) {
+			UpdatePunch();
+		}
 
-		// Fear
 		UpdateFearMeter();
 
+		// Abilites
+		if (action_ability1.WasPerformedThisFrame() && equipped_abilities[0] is not null) {
+			
+			active_ability = equipped_abilities[0];
+			active_ability.EnterAbility();
+
+		}
+
+		if (active_ability is not null) {
+			active_ability.Update();
+		}
+		
+
 		// Moving
-		Vector3 move_vec = controller.isGrounded ? new Vector3(0, 0, 0) : Physics.gravity;
-		Vector3 desired_control_vec = moveControls();
+		Vector3 desired_control_vec = new Vector3(0, 0, 0); 
+		if (lock_move_controls == false) {
+			desired_control_vec = moveControls();
+		}
+		if (active_ability is not null) {
+			desired_control_vec = active_ability.GetDesiredControlVec(desired_control_vec);
+		}
+
+		HandleMove(desired_control_vec);
+
+
+		// Stamina
+		if (ti_stamina_recharge.Finished() && !charging_punch) {
+			stamina += stamina_recharge_rate * Time.deltaTime;
+			if (stamina > max_stamina) { stamina = max_stamina; }
+		}
+
+		//Footsteps
+		HandleStepSounds();
+
+	}
+
+	public void ExitAbility() {
+		if (active_ability is null) { return; }
+		active_ability.ExitAbility();
+		active_ability = null;
+	}
+
+
+
+
+	/** MOVEMENT METHODS **/
+	void HandleMove(Vector3 desired_control_vec) {
+
+		if (controller.isGrounded) {
+			fall_velocity = 0;
+		} else {
+			fall_velocity += Physics.gravity.y * Time.deltaTime;
+		}
+
+		Vector3 move_vec = new Vector3(0, fall_velocity, 0);
 
 		float speed_multiplier = 1 - GetSlowMultiplier();
-
 		desired_control_vec *= speed_multiplier;
-
 		move_vec += desired_control_vec;
 
 		if (desired_control_vec.magnitude > 0) {
@@ -224,10 +303,7 @@ public class GhostPuncher : MonoBehaviour
 			isMoving = false;
 		}
 
-		
-
-
-		/* Push */
+		// Push
 		if (push_power > 0) {
 			move_vec += push_dir * push_power;
 			// There is probably a better way of making the push ease out
@@ -239,22 +315,15 @@ public class GhostPuncher : MonoBehaviour
 			if (push_power < power_attribs.WAVE_POWER_THRESHOLD) { push_power = 0; }
 		}
 
-		/* Stamina */
-		if (ti_stamina_recharge.Finished() && !charging_punch) {
-			stamina += stamina_recharge_rate * Time.deltaTime;
-			if (stamina > max_stamina) { stamina = max_stamina; }
-		}
-
-		/* Execute the move */
+		// Execute the move
 		controller.Move(move_vec * Time.deltaTime);
-
-		//controller.move(move_vec);
-
-		//Footsteps
-		HandleStepSounds();
-
 	}
 
+
+
+
+
+	/** PUNCH METHODS **/
 	void UpdatePunch() {
 		if (ti_punch_again.FinishedThisFrame()) {
 			punch_with = "Right";
@@ -296,7 +365,7 @@ public class GhostPuncher : MonoBehaviour
 					DoMegaPunch();
 					ti_punch_cooldown.Set(GetMegaPunchCooldown());	
 				} else {
-					DoPunch();
+					NormalPunch();
 					ti_punch_cooldown.Set(GetPunchCooldown());	
 					ti_punch_again.Reset();	
 				}
@@ -309,41 +378,34 @@ public class GhostPuncher : MonoBehaviour
 		}
 	}
 
-	void DoPunch() {
+
+	void NormalPunch() {
 		int punch_num = Random.Range(1,5);
 		ChangeAnimation("Jab"+punch_with+punch_num);
-
-		if (fovKick) { fovKick.SmallKick(); }
-		if (screenShake) { screenShake.Shake(0.05f); }
-		Punch normal_punch = new Punch(
+		Punch normal_punch = Punch.FromData(
 			punch_hitbox.transform.TransformDirection(Vector3.forward),
- 			defaults.PUNCH_FORCE,
-			defaults.PUNCH_OBJECT_DAMAGE,
-			defaults.PUNCH_GHOST_DAMAGE,
-			defaults.PUNCH_POISE_DAMAGE,
-			2
+			defaults.NORMAL_PUNCH_DATA
 		);
 
-		PunchRecord record = ExecutePunch(normal_punch, defaults.PUNCH_STAMINA);
-
-		AssessPunchRecord(record);
+		LaunchPunch(normal_punch, defaults.PUNCH_STAMINA);
 	}
 
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
 		if (fovKick) fovKick.BigKick();
 		if (screenShake) screenShake.Shake(0.2f);
-		Punch mega_punch = new Punch(
-			punch_hitbox.transform.TransformDirection(Vector3.forward),
-			defaults.MEGAPUNCH_FORCE,
-			defaults.MEGAPUNCH_OBJECT_DAMAGE,
-			defaults.MEGAPUNCH_GHOST_DAMAGE,
-			defaults.MEGAPUNCH_POISE_DAMAGE,
-			1
-		);
+		Punch mega_punch = Punch.FromData(punch_hitbox.transform.TransformDirection(Vector3.forward), defaults.MEGAPUNCH_DATA);
 
-		PunchRecord mega_record = ExecutePunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
-		AssessPunchRecord(mega_record);
+		LaunchPunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
+	}
+
+	public void LaunchPunch(Punch punch, float stamina_used) {
+		if (fovKick) { fovKick.SmallKick(); }
+		if (screenShake) { screenShake.Shake(0.05f); }
+
+		PunchRecord record = ExecutePunch(punch, stamina_used);
+
+		AssessPunchRecord(record);
 	}
 
 	/** returns true if we hit something */
@@ -433,15 +495,15 @@ public class GhostPuncher : MonoBehaviour
 		Vector3 movement_horiz = new Vector3(0, 0, 0);
 
 		if (move_value.x > 0) {
-			movement_horiz = transform.TransformDirection(Vector3.right);
+			movement_horiz = transform.TransformDirection(Vector3.right) * move_damping_right;
 		} else if (move_value.x < 0) {
-			movement_horiz = transform.TransformDirection(Vector3.left);
+			movement_horiz = transform.TransformDirection(Vector3.left) * move_damping_left;
 		}
 
 		if (move_value.y > 0) {
-			movement_frontback = transform.TransformDirection(Vector3.forward);
+			movement_frontback = transform.TransformDirection(Vector3.forward) * move_damping_forward;
 		} else if (move_value.y < 0) {
-			movement_frontback = transform.TransformDirection(Vector3.back);
+			movement_frontback = transform.TransformDirection(Vector3.back) * move_damping_back;
 		}
 
 		Vector3 movement = movement_frontback + movement_horiz;
@@ -501,7 +563,7 @@ public class GhostPuncher : MonoBehaviour
 
 	/** ANIMATION **/
 
-	void ChangeAnimation(string name, float fade=0) {
+	public void ChangeAnimation(string name, float fade=0) {
 		arm_animator.CrossFade(name, fade);
 	}
 
@@ -573,6 +635,10 @@ public class GhostPuncher : MonoBehaviour
 		stepCooldown -= Time.deltaTime;
 	}
 
+	public Vector3 GetFacingDirection() {
+			Vector3 look_dir = punch_hitbox.transform.TransformDirection(Vector3.forward);
+			return look_dir;
+	}
 
 
 	/** Variable Data **/
