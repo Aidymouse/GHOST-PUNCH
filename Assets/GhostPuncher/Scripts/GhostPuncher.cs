@@ -46,9 +46,9 @@ public class GhostPuncher : MonoBehaviour
 	[Tooltip("If true, the puncher spawns in playable form, rather than being dormant like for the main game.")]
 	public bool start_active;	
 
-	InputAction action_attack;
-	InputAction action_move;
-	InputAction action_chargePunch;
+	[HideInInspector] public InputAction action_attack;
+	[HideInInspector] public InputAction action_move;
+	[HideInInspector] public InputAction action_chargePunch;
 	InputAction action_ability1;
 	InputAction action_ability2;
 	InputAction action_ability3;
@@ -241,7 +241,10 @@ public class GhostPuncher : MonoBehaviour
 		// Timers
 		this.tick_timers();
 
-		UpdatePunch();
+		
+		if (active_ability is null || active_ability.lock_punch == false) {
+			UpdatePunch();
+		}
 
 		UpdateFearMeter();
 

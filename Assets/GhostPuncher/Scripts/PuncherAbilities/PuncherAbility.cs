@@ -4,6 +4,10 @@ public class PuncherAbility {
 
 	protected GhostPuncher puncher;
 
+	/* Control vars for ghost punchers behaviour */
+	public bool lock_punch = false;
+	public bool lock_movement = false;
+
 	public PuncherAbility(GhostPuncher p) {
 		puncher = p;
 	}

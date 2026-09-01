@@ -80,5 +80,13 @@ public class PuncherDefaults : ScriptableObject
 	public float CHARGE_STAMINA_DRAIN;
 	[Tooltip("Maximum object height we can hit before stopping")]
 	public float CHARGE_MAX_HEIGHT;
+	[Tooltip("Time spent charging up before we start running")]
+	public float CHARGE_CHARGE_TIME;
+	[Tooltip("Time it takes to slide to a stop")]
+	public float CHARGE_STOP_TIME;
+	[Tooltip("Time after clicking punch that it actually goes through")]
+	public float CHARGE_PUNCH_DELAY;
+	[Tooltip("Time after charge punching it takes to stop (very quick I imagine)")]
+	public float CHARGE_PUNCH_STOP;
 
 }
