@@ -17,6 +17,7 @@ public class FootballCharge : PuncherAbility {
 	Timer ti_stop;
 	Timer ti_punch_delay;
 	Timer ti_punch_stop;
+	//Timer ti_fov;
 	float charge_speed;
 	ChargePhase phase;
 	GameObject charge_object;
@@ -32,6 +33,7 @@ public class FootballCharge : PuncherAbility {
 		ti_stop = new Timer(puncher.defaults.CHARGE_STOP_TIME, puncher.defaults.CHARGE_STOP_TIME);
 		ti_punch_delay = new Timer(puncher.defaults.CHARGE_PUNCH_DELAY, puncher.defaults.CHARGE_PUNCH_DELAY);
 		ti_punch_stop = new Timer(puncher.defaults.CHARGE_PUNCH_STOP_TIME, puncher.defaults.CHARGE_PUNCH_STOP_TIME);
+		//ti_fov = new Timer(0.3, 0.3);
 		charge_speed = puncher.defaults.CHARGE_START_SPEED;
 
 		charge_collider = puncher.GetComponentInChildren<FootballCollider>(true);
@@ -52,6 +54,8 @@ public class FootballCharge : PuncherAbility {
 		ti_stop.Reset();
 		ti_punch_delay.Reset();
 		ti_punch_stop.Reset();
+		//ti_fov.Reset();
+
 
 		charge_speed = puncher.defaults.CHARGE_START_SPEED;
 
@@ -104,7 +108,7 @@ public class FootballCharge : PuncherAbility {
 		Vector2 move_value = puncher.action_move.ReadValue<Vector2>();
 		if (move_value.y < 0) {
 			// We tried to move backwards, so cancel the charge
-			phase = ChargePhase.STOPPING;
+			StartStopping();
 			return;
 		}
 
@@ -120,12 +124,23 @@ public class FootballCharge : PuncherAbility {
 		}
 
 		// Acceleration needs an FOV effect
+		//ti_fov.Tick(Time.deltaTime);
+		//puncher.fov_controller.SetTargetAndFOVOffset(puncher.defaults.CHARGE_FOV_OFFSET*ti_fov.PercentComplete());
+		puncher.fov_controller.SetFOVSpeed(puncher.defaults.CHARGE_FOV_SPEED);
+		puncher.fov_controller.SetTargetFOVOffset(puncher.defaults.CHARGE_FOV_OFFSET);
+
+		/*
 		charge_speed += puncher.defaults.CHARGE_ACCELERATION * Time.deltaTime;
 		if (charge_speed >= puncher.defaults.CHARGE_MAX_SPEED) { charge_speed = puncher.defaults.CHARGE_MAX_SPEED; }
 
+		float total_speed_gain = puncher.defaults.CHARGE_MAX_SPEED - puncher.defaults.CHARGE_START_SPEED;
+		float speed_gain_prop = (charge_speed - puncher.defaults.CHARGE_START_SPEED) / total_speed_gain;
+		puncher.fov_controller.SetTargetAndFOVOffset();
+		*/
+
 		// Stamina drain while charging
 		if (puncher.stamina <= 0) {
-			phase = ChargePhase.STOPPING;
+			StartStopping();
 			return;
 		}
 
@@ -137,16 +152,28 @@ public class FootballCharge : PuncherAbility {
 	}
 
 	void SlamToAStop() {
+		puncher.fov_controller.GetToZeroIn(0.05f);
 		puncher.ChangeAnimation("ARM_TACKLE_END");
 		puncher.ExitAbility();
 	}
 
+	void StartStopping() {
+		phase = ChargePhase.STOPPING;
+		puncher.fov_controller.GetToZeroIn(puncher.defaults.CHARGE_STOP_TIME);
+	}
+
 	void Update_Stopping() {
+
 		ti_stop.Tick(Time.deltaTime);
+
+		//Debug.Log("Stop Timer: " + ti_stop.time_remaining + ", fov: " + puncher.fov_controller.vcam.Lens.FieldOfView);
+
 		// This might cause a little bump up in speed as we stop, but I think I'm okay with that
 		charge_speed = (puncher.defaults.CHARGE_MAX_SPEED*0.8f) * ti_stop.GetLerped(LerpTypes.EASE_OUT);
 
 		if (ti_stop.Finished()) {
+			puncher.fov_controller.SetTargetAndFOVOffset(0);
+
 			puncher.ChangeAnimation("ArmIdle");
 			puncher.ExitAbility();
 		}
@@ -167,6 +194,9 @@ public class FootballCharge : PuncherAbility {
 				(int)HitClass.PUNCH
 			);
 			puncher.LaunchPunch(football_charge_punch, 0);
+
+			puncher.fov_controller.GetToZeroIn(ti_punch_stop.time_remaining/2);
+
 		}
 
 		if (!ti_punch_delay.Finished()) {
@@ -195,6 +225,9 @@ public class FootballCharge : PuncherAbility {
 
 	public override void ExitAbility() {
 		charge_object.SetActive(false);
+
+		//puncher.fov_controller.SetFOVSpeed(puncher.defaults.CHARGE_FOV_SPEED);
+		//puncher.fov_controller.SetTargetFOVOffset(0);
 
 		// Reset damping
 		puncher.look_damping_left = 1;

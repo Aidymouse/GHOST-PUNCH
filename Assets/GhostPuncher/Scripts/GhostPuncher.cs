@@ -38,6 +38,7 @@ public class GhostPuncher : MonoBehaviour
 
 	CharacterController controller;
 	float move_speed;
+	[HideInInspector] public FOVController fov_controller;
 
 	public PuncherDefaults defaults; 
 	public GhostPowerAttribs power_attribs;
@@ -163,6 +164,7 @@ public class GhostPuncher : MonoBehaviour
 		screenShake = GetComponentInChildren<ScreenShake>();
 
 		controller = GetComponent<CharacterController>();
+		fov_controller = GetComponentInChildren<FOVController>();
 
 		// Init Timers
 		ti_punch_cooldown = new Timer(0, defaults.PUNCH_COOLDOWN);
@@ -382,6 +384,7 @@ public class GhostPuncher : MonoBehaviour
 	void NormalPunch() {
 		int punch_num = Random.Range(1,5);
 		ChangeAnimation("Jab"+punch_with+punch_num);
+
 		Punch normal_punch = Punch.FromData(
 			punch_hitbox.transform.TransformDirection(Vector3.forward),
 			defaults.NORMAL_PUNCH_DATA

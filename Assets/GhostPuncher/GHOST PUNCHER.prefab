@@ -806,6 +806,7 @@ GameObject:
   - component: {fileID: 4491580367555778636}
   - component: {fileID: 5662548338971404069}
   - component: {fileID: 8069172892509685237}
+  - component: {fileID: 1408746278112599586}
   m_Layer: 0
   m_Name: VCam_MouseControlled
   m_TagString: Untagged
@@ -900,6 +901,22 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!114 &1408746278112599586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6355377180221356344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fefdac4e6fb6c640822e15f83b3b588, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FOVController
+  vcam: {fileID: 5662548338971404069}
+  fov_orig: 0
+  fov_target_offset: 0
+  fov_speed: 0
 --- !u!1 &8849794547230206958
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,6 +1055,7 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  fov_controller: {fileID: 0}
   defaults: {fileID: 11400000, guid: 48a8d901d4900a847b4f4760c956c68b, type: 2}
   power_attribs: {fileID: 11400000, guid: fc65ad9f8851a8a57b643e0d517af7a8, type: 2}
   max_stamina: 0

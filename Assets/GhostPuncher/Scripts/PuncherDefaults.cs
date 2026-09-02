@@ -68,5 +68,7 @@ public class PuncherDefaults : ScriptableObject
 	[Tooltip("Punch stats for when we hit an object we're gonna smash through on the charge")] public PunchData CHARGE_PUNCH_TRAMPLE;
 	[Tooltip("Punch stats for when we hit an object thats gonna stop us")] public PunchData CHARGE_PUNCH_STOP;
 	[Tooltip("Punch stats for when the player launches a punch while charging")] public PunchData CHARGE_PUNCH_LAUNCHED;
+	[Tooltip("FOV offset from normal at full charge speed")] public float CHARGE_FOV_OFFSET;
+	[Tooltip("Speed of FOV change")] public float CHARGE_FOV_SPEED;
 
 }
