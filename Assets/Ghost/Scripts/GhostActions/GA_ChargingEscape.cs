@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class GhostAction_ChargingEscape : GhostAction {
+public class GA_ChargingEscape : GhostAction {
 
-	public GhostAction_ChargingEscape(Ghost g) : base(g) {}
+	public GA_ChargingEscape(Ghost g) : base(g) {}
 
 	public override void Enter() {
 				// TODO: If we can see the player (i.e. they kept pace with us well), skip straight to choosing a power.

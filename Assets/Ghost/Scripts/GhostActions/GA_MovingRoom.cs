@@ -3,10 +3,10 @@
 using UnityEngine;
 
 
-public class GhostAction_MovingRoom : GhostAction {
+public class GA_MovingRoom : GhostAction {
 
 	bool debug = false;
-	public GhostAction_MovingRoom(Ghost g) : base(g) {}
+	public GA_MovingRoom(Ghost g) : base(g) {}
 
 	public override void Enter() {
 

@@ -1,9 +1,9 @@
 
 using UnityEngine;
 
-public class GhostAction_Ragdoll : GhostAction {
+public class GA_Ragdoll : GhostAction {
 
-	public GhostAction_Ragdoll(Ghost g) : base(g) {}
+	public GA_Ragdoll(Ghost g) : base(g) {}
 
 	public override void Enter() {
 

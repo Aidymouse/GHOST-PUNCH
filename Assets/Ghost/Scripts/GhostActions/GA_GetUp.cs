@@ -8,13 +8,13 @@ public enum GetUpDirection {
 }
 */
 
-public class GhostAction_GetUp : GhostAction {
+public class GA_GetUp : GhostAction {
 
 	// For the ragdoll animator
 	Timer ti_alpha_fade;
 	float max_alpha;
 
-	public GhostAction_GetUp(Ghost g, float init_max_alpha) : base(g) {
+	public GA_GetUp(Ghost g, float init_max_alpha) : base(g) {
 		// It would be nice if this eased...
 		ti_alpha_fade = new Timer(1.0f, 1.0f);
 		max_alpha = init_max_alpha;
