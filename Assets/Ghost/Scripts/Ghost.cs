@@ -9,24 +9,27 @@ using Hairibar.Ragdoll;
 using System.Collections.Generic;
 
 public enum GhostActions {
-	CHARGING_ESCAPE,
 	STARTLED, // TODO
+	// TODO: I think moving room can be folded into charging escape - it will be the start of that action
 	MOVING_ROOM,
 	
 	RAGDOLL,
 	RECOVERY,
-	// The state of the ghost rising from the ground
+	// The state of the ghost rising from the ground - could be wrapped into ragdoll?
 	GET_UP,
 
-	// TODO: refactor
-	USING_POWER,
-
-	PEAK_AROUND_CORNER,
 
 	STAGGER_MINOR,
 	STAGGER_MEDIUM,
 	STAGGER_LARGE,
+
+	POW_SCREAM,
+	POW_BLAST,
+	POW_JUMPSCARE
+	POW_CHARGING_ESCAPE,
+	POW_PEAK_AROUND_CORNER,
 };
+
 
 public class Ghost : MonoBehaviour
 {
@@ -91,6 +94,8 @@ public class Ghost : MonoBehaviour
 
 
   public GhostActions cur_action;
+	// Interrupt action takes precdence, allowing staggers to interrupt actions
+	public GhostActions? interrupt_action = null;
   public GhostAction[] actions;
 
   // jumpscare sequence
@@ -239,20 +244,12 @@ public class Ghost : MonoBehaviour
     /* Actions */
 		bool escaped_yet = Escaped();
 
-    switch (cur_action) {
+		if (interrupt_action is not null) {
+		} else {
+			actions[(int)cur_action].Update(); 
+		}
 
-      case GhostActions.USING_POWER: 
-				// TODO: i'm not sure how to refactor this.
-				state_UsingPower();
-				break;
-
-			default:
-				actions[(int)cur_action].Update(); 
-				break;
-
-    }
-
-    tick_timers();
+    TickTimers();
 
 		if (!escaped_yet && Escaped()) {
 			CallEndRun();
@@ -261,53 +258,18 @@ public class Ghost : MonoBehaviour
   }
 
 
-	void ExitAction() {
-    // Logic based on what state we're leaving
-    switch (cur_action) {
-      case GhostActions.USING_POWER: 
-				break;
-
-			default:
-				actions[(int)cur_action].Exit();
-				break;
-		}
+	public void ExitAction() {
+		actions[(int)cur_action].Exit();
   }
 
   public void EnterAction(GhostActions action) {
-
     ExitAction();
-
-
-		Debug.Log("Entering action: " + action);
-
-    // Enter New State Logic
-    switch (action) {
-
-      case GhostActions.USING_POWER: 
-				cur_action = action;
-				PickRandomPower();
-				break;
-
-			default:
-				actions[(int)action].Enter();
-				cur_action = action;
-				break;
-
-    }
-
+		//Debug.Log("Entering action: " + action);
+		cur_action = action;
+		actions[(int)cur_action].Enter();
   }
 
-  /** STATES **/
-
-  void state_UsingPower() {
-    active_power.Update();
-
-    if (active_power.phase == GhostPower.GhostPowerPhase.DONE) {
-      LeavePower();
-    }
-  }
-
-  /**** POWERS ****/
+	// TODO:
   void PickRandomPower() {
     int power_index = power_attribs.OVERRIDE_POWER_IDX == -1 ? Random.Range(0, powers.Length) : power_attribs.OVERRIDE_POWER_IDX; 
     active_power = powers[power_index];
@@ -315,17 +277,7 @@ public class Ghost : MonoBehaviour
     active_power.Start();
   }
 
-  void LeavePower() {
-    active_power.End();
-
-    if (Random.Range(1,4) == 3) {
-      PickRandomPower();
-    } else {
-      EnterAction(GhostActions.MOVING_ROOM);
-    }
-  }
-
-  void tick_timers() {
+  void TickTimers() {
     if (cur_action != GhostActions.STAGGER_LARGE) {
       ti_restore_poise.Tick(Time.deltaTime);
     }
@@ -404,12 +356,27 @@ public class Ghost : MonoBehaviour
 
   void BecomeVulnerable() {
     vulnerable = true;
-    fear_meter += 5;
+		GainFear(5); // needed?
   }
 
   void StopBeingVulnerable() {
     vulnerable = false;
   }
+
+	public void Stagger(GhostActions stagger_action, Punch punch) {
+		int stagger_level = (int)stagger;
+		if (vulnerable) { stagger_level += 1; }
+		
+		if (stagger_level == (int)GhostActions.STAGGER_MINOR) {
+			// TODO:
+		} else if (stagger_level == (int)GhostActions.STAGGER_MEDIUM) {
+			// TODO:
+		} else if (stagger_level === (int)GhostActions.STAGGER_LARGE) {
+			// TODO:
+		} else if (stagger_level > (int)GhostActions.STAGGER_LARGE) {
+			Ragdoll(punch);
+		}
+	}
 
   void Ragdoll(Punch punch) {
     currentSound.clip = ragdollSound;
@@ -440,16 +407,17 @@ public class Ghost : MonoBehaviour
 
   // TODO: wrap these in actual state changes so she doesn't keep trying to move around when she's ragdolled
   public void EnableAnimator() {
-    //DisableRagdoll();
-    //anim.enabled = true;
     ragdoll_animator.MasterAlpha = 1;
   }
 
   public void DisableAnimator() {
-    //anim.enabled = false;
     ragdoll_animator.MasterAlpha = 0;
   }
 
+  public void EnableRagdoll() { }
+  public void DisableRagdoll() { }
+
+	/** ANIMATION **/
   public void PlayAnimation(string new_anim) {
     //anim.Rewind(new_anim);
     anim.Play(new_anim, -1, 0.0f);
@@ -459,40 +427,7 @@ public class Ghost : MonoBehaviour
     anim.CrossFade(new_anim, fade_time);
   }
 
-  public void EnableRagdoll() {
-    //DisableAnimator();
-    /*foreach (Collider col in rig_colliders) {
-      col.enabled = true;
-      }*/
-		/*
-    foreach (Rigidbody rb in rig_rbs) {
-      rb.detectCollisions = true;
-      rb.useGravity = true;
-      rb.isKinematic = false;
-    }
-    foreach (CharacterJoint joint in rig_joints) {
-      joint.enableCollision = true;
-    }
-		*/
-  }
-
-  public void DisableRagdoll() {
-    /*foreach (Collider col in rig_colliders) {
-      col.enabled = false;
-      }*/
-		/*
-    foreach (Rigidbody rb in rig_rbs) {
-      //rb.detectCollisions = false;
-      rb.useGravity = false;
-      rb.isKinematic = true;
-    }
-    foreach (CharacterJoint joint in rig_joints) {
-      joint.enableCollision = false;
-    }
-		*/
-  }
-
-
+	/** CONTROL FNS **/
 	public void StartRun() {
 		escape_meter = 0;
 		gameObject.SetActive(true);
@@ -517,7 +452,6 @@ public class Ghost : MonoBehaviour
 		// TODO:
 		this.GetComponent<Ghost>().enabled = false;
 	}
-
 
 	public void PlaySound(string clip_name) {
 		//currentSound.loop = false;	
