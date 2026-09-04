@@ -7,7 +7,7 @@ public class WaveOrb : MonoBehaviour
 	public Vector3 particle_offset;
 	public float life_timer;
 
-	public GhostPowerAttribs attrs;
+	public GAD_Blast attrs;
 
 	public float object_damage;
 	public float object_force;
@@ -57,7 +57,7 @@ public class WaveOrb : MonoBehaviour
 				if (gp) {
 						Vector3 dir = (col.transform.position - transform.position).normalized;
 						dir.y = 0;
-						gp.GetPushed(dir, attrs.WAVE_POWER);
+						gp.GetPushed(dir, attrs.POWER);
 				}
 		}
 }

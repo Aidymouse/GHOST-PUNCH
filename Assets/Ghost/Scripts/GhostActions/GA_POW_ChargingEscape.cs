@@ -11,7 +11,7 @@ public class GA_POW_ChargingEscape : GhostAction {
 
 	Transform move_target;
 
-	public GA_ChargingEscape(Ghost g) : base(g) {}
+	public GA_POW_ChargingEscape(Ghost g) : base(g) {}
 
 	public override void Enter() {
 		phase = ChargingEscapePhase.MOVE;
@@ -38,14 +38,14 @@ public class GA_POW_ChargingEscape : GhostAction {
 	}
 	
 	// Charge
-	public Enter_Charge() {
+	public void Enter_Charge() {
 				// TODO: If we can see the player (i.e. they kept pace with us well), skip straight to choosing a power.
 				ghost.charge_particles.Play();
 				ghost.ChangeAnimation("ChargeEscape");
 				ghost.PlaySound("charging_escape");
 	}
 
-	public Update_Charge() {
+	public void Update_Charge() {
 		// TODO: be making wubwubwubwubwubwubwub sound
 		ghost.escape_meter += Time.deltaTime;
 

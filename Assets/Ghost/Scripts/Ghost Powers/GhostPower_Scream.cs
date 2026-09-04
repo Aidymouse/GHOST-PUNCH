@@ -1,7 +1,8 @@
+/*
 using UnityEngine;
 
 class GhostPower_Scream : GhostPower {
-	public GhostPower_Scream(Ghost myghost, GhostPowerAttribs attrs) : base(myghost, attrs, attrs.SCREAM_CHARGE_TIME, attrs.SCREAM_ACTIVE_DELAY_TIME, attrs.SCREAM_ACTIVE_TIME, attrs.SCREAM_HANG_TIME) {
+	public GhostPower_Scream(Ghost myghost) : base(myghost, attrs.SCREAM_CHARGE_TIME, attrs.SCREAM_ACTIVE_DELAY_TIME, attrs.SCREAM_ACTIVE_TIME, attrs.SCREAM_HANG_TIME) {
 	}
 
 	public override void OnEndCharge() {
@@ -20,3 +21,4 @@ class GhostPower_Scream : GhostPower {
 	}
 
 }
+*/

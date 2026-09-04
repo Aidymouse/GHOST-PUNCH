@@ -25,7 +25,7 @@ public enum GhostActions {
 
 	POW_SCREAM,
 	POW_BLAST,
-	POW_JUMPSCARE
+	POW_JUMPSCARE,
 	POW_CHARGING_ESCAPE,
 	POW_PEAK_AROUND_CORNER,
 };
@@ -35,7 +35,6 @@ public class Ghost : MonoBehaviour
 {
 
   public GhostDefaults defaults;
-  public GhostPowerAttribs power_attribs;
 	public GPDebug debug;
 
 	// Elevated permissions on this one. We need to be able to end runs!
@@ -97,6 +96,7 @@ public class Ghost : MonoBehaviour
 	// Interrupt action takes precdence, allowing staggers to interrupt actions
 	public GhostActions? interrupt_action = null;
   public GhostAction[] actions;
+	GhostActions[] powers;
 
   // jumpscare sequence
   [Header("Jumpscare")]
@@ -110,9 +110,6 @@ public class Ghost : MonoBehaviour
   public ParticleSystem ectoplasm_particles;
 
   public float fear_meter;
-
-  GhostPower[] powers;
-  GhostPower active_power;
 
   // Spawns when the ghost uses her wave power
   public GameObject wave_orb;
@@ -158,12 +155,20 @@ public class Ghost : MonoBehaviour
 
     /* Init Actions */
     actions = new GhostAction[20];
-    actions[(int)GhostActions.CHARGING_ESCAPE] = new GA_ChargingEscape(this);
     actions[(int)GhostActions.MOVING_ROOM] = new GA_MovingRoom(this);
     actions[(int)GhostActions.STAGGER_LARGE] = new GA_StaggerLarge(this);
     actions[(int)GhostActions.RAGDOLL] = new GA_Ragdoll(this);
     actions[(int)GhostActions.RECOVERY] = new GA_Recovery(this);
     actions[(int)GhostActions.GET_UP] = new GA_GetUp(this, ragdoll_animator.MasterAlpha);
+
+		GhostActions[] powers = {
+			GhostActions.POW_CHARGING_ESCAPE,
+			//GhostActions.POW_SCREAM,
+			//GhostActions.POW_,
+		};
+
+		// Power Actions
+    actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
 
     rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
     rig_colliders = rig.GetComponentsInChildren<Collider>();
@@ -198,10 +203,6 @@ public class Ghost : MonoBehaviour
 
     /* Powers */
     // Set up last so any objects retrieved in constructors are present
-    powers = new GhostPower[3];
-    powers[0] = new GhostPower_Wave(this, power_attribs);
-    powers[1] = new GhostPower_Slap(this, power_attribs);
-    powers[2] = new GhostPower_Scream(this, power_attribs);
 
     EnterAction(GhostActions.MOVING_ROOM);
 
@@ -271,10 +272,8 @@ public class Ghost : MonoBehaviour
 
 	// TODO:
   void PickRandomPower() {
-    int power_index = power_attribs.OVERRIDE_POWER_IDX == -1 ? Random.Range(0, powers.Length) : power_attribs.OVERRIDE_POWER_IDX; 
-    active_power = powers[power_index];
-    active_power.Reset();
-    active_power.Start();
+    int power_index = debug.use_power_override ? (int)debug.power_override : Random.Range(0, powers.Length); 
+		EnterAction(powers[power_index]);
   }
 
   void TickTimers() {
@@ -329,16 +328,7 @@ public class Ghost : MonoBehaviour
       }
     } else {
       ti_restore_poise.Reset();
-
-      // TODO: play a random hit animation
-      //int hurt_num = Random.Range(1,3);
-      //PlayAnimation("Hurt"+hurt_num);
-      //PlayAnimation("Hurt1");
-
-      if (cur_action == GhostActions.CHARGING_ESCAPE) {
-				// TODO: there should be a bit of buffer time here or powers come out super fast
-				EnterAction(GhostActions.USING_POWER);
-      }
+			// TODO: minor stagger
     }
   }
 
@@ -364,14 +354,14 @@ public class Ghost : MonoBehaviour
   }
 
 	public void Stagger(GhostActions stagger_action, Punch punch) {
-		int stagger_level = (int)stagger;
+		int stagger_level = (int)stagger_action;
 		if (vulnerable) { stagger_level += 1; }
 		
 		if (stagger_level == (int)GhostActions.STAGGER_MINOR) {
 			// TODO:
 		} else if (stagger_level == (int)GhostActions.STAGGER_MEDIUM) {
 			// TODO:
-		} else if (stagger_level === (int)GhostActions.STAGGER_LARGE) {
+		} else if (stagger_level == (int)GhostActions.STAGGER_LARGE) {
 			// TODO:
 		} else if (stagger_level > (int)GhostActions.STAGGER_LARGE) {
 			Ragdoll(punch);
@@ -387,6 +377,10 @@ public class Ghost : MonoBehaviour
 
     rig_core.AddForce(punch.direction * punch.force * defaults.MAKE_HER_FLY_FACTOR);
   }
+
+	/* Enter a special power designated action */
+	void PickPower() {
+	}
 
   /** STATUS **/
   // If the ghost has hyper armor, she cannot have her poise break (it can go down though)

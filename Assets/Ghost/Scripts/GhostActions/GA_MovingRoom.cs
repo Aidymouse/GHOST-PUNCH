@@ -37,7 +37,7 @@ public class GA_MovingRoom : GhostAction {
 	public override void Update() {
 		if ((ghost.transform.position - ghost.nav_destination.transform.position).magnitude < 2) {
 			ghost.nav_destination = null;
-			ghost.EnterAction(GhostActions.CHARGING_ESCAPE);
+			ghost.EnterAction(GhostActions.POW_CHARGING_ESCAPE);
 		}
 		// jumpscare sequence triggers at random for now - 1 in one hundred change each frame that the ghost becomes jumpscare enabled, then you have to get close enough to trigger it ???
 		// This is kind of weird to do this here.

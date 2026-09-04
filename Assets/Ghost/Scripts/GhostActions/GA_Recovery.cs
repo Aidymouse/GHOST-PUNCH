@@ -18,7 +18,8 @@ public class GA_Recovery : GhostAction {
 			ghost.RestorePoise();
 			ghost.nav_agent.isStopped = false;
 
-			ghost.EnterAction(GhostActions.USING_POWER);
+			ghost.ExitAction();
+			//ghost.EnterAction(GhostActions.USING_POWER);
 			/*
 				 if (nav_destination == null) {
 				 } else {
