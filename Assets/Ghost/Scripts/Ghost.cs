@@ -21,10 +21,11 @@ public enum GhostActions {
 	STAGGER_LARGE,
 
 	// Power actions
+	POW_CHARGING_ESCAPE,
+	POW_SLAP,
 	POW_SCREAM,
 	POW_BLAST,
 	POW_JUMPSCARE,
-	POW_CHARGING_ESCAPE,
 	POW_PEAK_AROUND_CORNER,
 };
 
@@ -56,11 +57,8 @@ public class Ghost : MonoBehaviour
 
   /** Used to find colliders and rigidbodies for switching between ragdoll and animator */
   public GameObject rig;
-
-  [HideInInspector]
-  public GameObject nav_destination;
-  [HideInInspector]
-  public ParticleSystem charge_particles;
+  [HideInInspector] public GameObject nav_destination;
+  [HideInInspector] public ParticleSystem charge_particles;
   Animator anim;
 
 	[Header("Ragdoll")]
@@ -94,7 +92,10 @@ public class Ghost : MonoBehaviour
 	// Interrupt action takes precdence, allowing staggers to interrupt actions
 	public GhostActions? interrupt_action = null;
   public GhostAction[] actions;
-	GhostActions[] powers = { GhostActions.POW_CHARGING_ESCAPE };
+	GhostActions[] powers = { 
+		GhostActions.POW_CHARGING_ESCAPE,
+		GhostActions.POW_SLAP,
+	};
 
   // jumpscare sequence
   [Header("Jumpscare")]
@@ -112,8 +113,7 @@ public class Ghost : MonoBehaviour
   // Spawns when the ghost uses her wave power
   public GameObject wave_orb;
 
-  [HideInInspector]
-  public NavMeshAgent nav_agent;
+  [HideInInspector] public NavMeshAgent nav_agent;
 
 	// TODO: put in respective states
   [HideInInspector] public Timer ti_hit_stun;
@@ -151,6 +151,10 @@ public class Ghost : MonoBehaviour
   {
 		ragdoll_animator = GetComponentInChildren<RagdollAnimator>();
 
+    /* Nav Settings */
+    nav_agent = GetComponent<NavMeshAgent>();
+    nav_agent.updateRotation = false;
+
     /* Init Actions */
     actions = new GhostAction[20];
     actions[(int)GhostActions.STAGGER_LARGE] = new GA_StaggerLarge(this);
@@ -160,6 +164,7 @@ public class Ghost : MonoBehaviour
 
 		// Power Actions
     actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
+    actions[(int)GhostActions.POW_SLAP] = new GA_POW_Slap(this);
 
 
 
@@ -185,9 +190,6 @@ public class Ghost : MonoBehaviour
     /* Animator */
     anim = this.GetComponentInChildren<Animator>();
 
-    /* Nav Settings */
-    nav_agent = GetComponent<NavMeshAgent>();
-    nav_agent.updateRotation = false;
     //nav_agent.destination = nav_destination.position;
 
     charge_particles = GetComponentInChildren<ParticleSystem>();
@@ -260,12 +262,10 @@ public class Ghost : MonoBehaviour
   }
 
   void PickRandomPower() {
-		int power_index = Random.Range(0,1);
+		int power_index = Random.Range(0,powers.Length);
 		if (debug.use_power_override) {
     	power_index = (int)debug.power_override;
 		}
-
-		Debug.Log("Picked random power: " + powers);
 
 		EnterAction(powers[power_index]);
   }
