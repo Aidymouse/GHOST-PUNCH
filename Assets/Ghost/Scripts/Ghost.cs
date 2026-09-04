@@ -309,6 +309,7 @@ public class Ghost : MonoBehaviour
     }
 
 
+
     if (HasHyperArmor()) {
 			// TODO: some minor jolts, but no damage
       return;
@@ -320,6 +321,8 @@ public class Ghost : MonoBehaviour
 		}
 
     poise -= punch.poise_damage;
+
+		ChangeAnimation("Hurt1");
 
     if (ectoplasm_particles) {
       Instantiate(ectoplasm_particles, transform.position, new Quaternion());
