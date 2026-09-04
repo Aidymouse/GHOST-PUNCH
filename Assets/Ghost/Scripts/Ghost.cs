@@ -9,20 +9,18 @@ using Hairibar.Ragdoll;
 using System.Collections.Generic;
 
 public enum GhostActions {
+	// Non-power actions (states)
 	STARTLED, // TODO
-	// TODO: I think moving room can be folded into charging escape - it will be the start of that action
-	MOVING_ROOM,
-	
 	RAGDOLL,
 	RECOVERY,
 	// The state of the ghost rising from the ground - could be wrapped into ragdoll?
 	GET_UP,
 
-
 	STAGGER_MINOR,
 	STAGGER_MEDIUM,
 	STAGGER_LARGE,
 
+	// Power actions
 	POW_SCREAM,
 	POW_BLAST,
 	POW_JUMPSCARE,
@@ -96,7 +94,7 @@ public class Ghost : MonoBehaviour
 	// Interrupt action takes precdence, allowing staggers to interrupt actions
 	public GhostActions? interrupt_action = null;
   public GhostAction[] actions;
-	GhostActions[] powers;
+	GhostActions[] powers = { GhostActions.POW_CHARGING_ESCAPE };
 
   // jumpscare sequence
   [Header("Jumpscare")]
@@ -155,20 +153,15 @@ public class Ghost : MonoBehaviour
 
     /* Init Actions */
     actions = new GhostAction[20];
-    actions[(int)GhostActions.MOVING_ROOM] = new GA_MovingRoom(this);
     actions[(int)GhostActions.STAGGER_LARGE] = new GA_StaggerLarge(this);
     actions[(int)GhostActions.RAGDOLL] = new GA_Ragdoll(this);
     actions[(int)GhostActions.RECOVERY] = new GA_Recovery(this);
     actions[(int)GhostActions.GET_UP] = new GA_GetUp(this, ragdoll_animator.MasterAlpha);
 
-		GhostActions[] powers = {
-			GhostActions.POW_CHARGING_ESCAPE,
-			//GhostActions.POW_SCREAM,
-			//GhostActions.POW_,
-		};
-
 		// Power Actions
     actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
+
+
 
     rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
     rig_colliders = rig.GetComponentsInChildren<Collider>();
@@ -199,12 +192,9 @@ public class Ghost : MonoBehaviour
 
     charge_particles = GetComponentInChildren<ParticleSystem>();
 
-    //nav_destination = null;
 
-    /* Powers */
-    // Set up last so any objects retrieved in constructors are present
-
-    EnterAction(GhostActions.MOVING_ROOM);
+		// Init - pick a random power to start doing
+		PickRandomPower();
 
     currentSound = GetComponent<AudioSource>();
     currentSound.clip = takingDamageSound;
@@ -258,21 +248,25 @@ public class Ghost : MonoBehaviour
 
   }
 
-
 	public void ExitAction() {
 		actions[(int)cur_action].Exit();
+		// TODO: will this always be the case?
+		PickRandomPower();
   }
 
   public void EnterAction(GhostActions action) {
-    ExitAction();
-		//Debug.Log("Entering action: " + action);
 		cur_action = action;
 		actions[(int)cur_action].Enter();
   }
 
-	// TODO:
   void PickRandomPower() {
-    int power_index = debug.use_power_override ? (int)debug.power_override : Random.Range(0, powers.Length); 
+		int power_index = Random.Range(0,1);
+		if (debug.use_power_override) {
+    	power_index = (int)debug.power_override;
+		}
+
+		Debug.Log("Picked random power: " + powers);
+
 		EnterAction(powers[power_index]);
   }
 

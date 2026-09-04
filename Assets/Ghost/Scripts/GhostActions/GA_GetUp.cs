@@ -54,7 +54,7 @@ public class GA_GetUp : GhostAction {
 		if (ti_alpha_fade.Finished()) {
 			Debug.Log("Get Up should end now");
 			ghost.ragdoll_animator.MasterAlpha = max_alpha;
-			ghost.EnterAction(GhostActions.MOVING_ROOM);
+			ghost.ExitAction();
 		}
 	}
 	

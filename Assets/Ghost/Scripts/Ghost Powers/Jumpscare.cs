@@ -1,3 +1,4 @@
+/*
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.AI;
@@ -119,3 +120,4 @@ public class GhostJumpscareController : MonoBehaviour
         ghost.cur_action = GhostActions.MOVING_ROOM;
     }
 }
+*/

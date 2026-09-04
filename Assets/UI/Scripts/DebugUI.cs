@@ -20,7 +20,6 @@ public class DebugUI : MonoBehaviour
   {
 
 		ghost_action_strings = new string[20];
-		ghost_action_strings[(int)GhostActions.MOVING_ROOM] = "Moving Room";
 		ghost_action_strings[(int)GhostActions.STARTLED] = "Startled";
 		ghost_action_strings[(int)GhostActions.POW_CHARGING_ESCAPE] = "(Power) Charging Escape";
 
