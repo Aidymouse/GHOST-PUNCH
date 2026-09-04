@@ -317,12 +317,13 @@ public class Ghost : MonoBehaviour
 
 		if (cur_action == GhostActions.RAGDOLL) {
 			// TODO: special punch case when down
+			PlayMinorHurtAnim();
 			return;
 		}
 
     poise -= punch.poise_damage;
 
-		ChangeAnimation("Hurt1");
+		PlayMinorHurtAnim();
 
     if (ectoplasm_particles) {
       Instantiate(ectoplasm_particles, transform.position, new Quaternion());
@@ -341,6 +342,12 @@ public class Ghost : MonoBehaviour
 			// TODO: minor stagger
     }
   }
+
+	// Layer anim
+	void PlayMinorHurtAnim() {
+		int hurt_anim = Random.Range(1,2+1);
+		ChangeAnimation("Hurt"+hurt_anim);
+	}
 
   void GainFear(int fear_gained) {
     fear_meter += fear_gained;
