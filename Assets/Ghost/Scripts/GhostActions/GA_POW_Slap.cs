@@ -38,9 +38,6 @@ class GA_POW_Slap : GhostAction {
 		phase = GhostSlapPhase.CLOSING_DISTANCE;
 	}
 
-	public override void Exit() {
-			nav_agent.isStopped = false;
-	}
 
 	public override void Update() {
 		if (phase == GhostSlapPhase.CLOSING_DISTANCE) {
@@ -82,6 +79,11 @@ class GA_POW_Slap : GhostAction {
 			ghost.ExitAction();
 		}
 
+	}
+
+	public override void Exit() {
+			nav_agent.isStopped = false;
+			nav_agent.stoppingDistance = 0;
 	}
 
 

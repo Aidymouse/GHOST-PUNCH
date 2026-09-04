@@ -49,7 +49,7 @@ public class GA_POW_ChargingEscape : GhostAction {
 		// TODO: If close to move target, start charging
 		float dist_to_dest = GhostUtils.TopDownDistance(ghost.transform.position, ghost.nav_destination.transform.position);
 //(ghost.transform.position - ghost.nav_destination.transform.position).magnitude;
-		if (dist_to_dest < 1) {
+		if (dist_to_dest <= 1) {
 			ghost.nav_destination = null;
 			Enter_Charge();
 		}
