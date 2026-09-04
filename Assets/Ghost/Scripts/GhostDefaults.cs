@@ -29,4 +29,5 @@ public class GhostDefaults : ScriptableObject
 		public GAD_Scream scream_data;
 		public GAD_Slap slap_data;
 		public GAD_Blast blast_data;
+		public GAD_Twitch twitch_data;
 }

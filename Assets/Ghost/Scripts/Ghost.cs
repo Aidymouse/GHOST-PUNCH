@@ -20,6 +20,8 @@ public enum GhostActions {
 	STAGGER_MEDIUM,
 	STAGGER_LARGE,
 
+	TWITCH,
+
 	// Power actions
 	POW_CHARGING_ESCAPE,
 	POW_SLAP,
@@ -161,6 +163,7 @@ public class Ghost : MonoBehaviour
     actions[(int)GhostActions.RAGDOLL] = new GA_Ragdoll(this);
     actions[(int)GhostActions.RECOVERY] = new GA_Recovery(this);
     actions[(int)GhostActions.GET_UP] = new GA_GetUp(this, ragdoll_animator.MasterAlpha);
+    actions[(int)GhostActions.TWITCH] = new GA_Twitch(this);
 
 		// Power Actions
     actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
@@ -253,13 +256,23 @@ public class Ghost : MonoBehaviour
 	public void ExitAction() {
 		actions[(int)cur_action].Exit();
 		// TODO: will this always be the case?
-		PickRandomPower();
+		DecideNextAction();
   }
 
   public void EnterAction(GhostActions action) {
 		cur_action = action;
 		actions[(int)cur_action].Enter();
   }
+
+	void DecideNextAction() {
+		//TODO: for now just passthrough
+		if (cur_action == GhostActions.TWITCH) {
+			PickRandomPower();
+		} else {
+			EnterAction(GhostActions.TWITCH);
+		}
+
+	}
 
   void PickRandomPower() {
 		int power_index = Random.Range(0,powers.Length);
