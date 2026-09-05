@@ -254,6 +254,7 @@ public class Ghost : MonoBehaviour
   }
 
 	public void ExitAction() {
+		Debug.Log("Ghost Exiting: "+cur_action);
 		actions[(int)cur_action].Exit();
 		// TODO: will this always be the case?
 		DecideNextAction();
@@ -261,6 +262,7 @@ public class Ghost : MonoBehaviour
 
   public void EnterAction(GhostActions action) {
 		cur_action = action;
+		Debug.Log("Ghost Entering: "+cur_action);
 		actions[(int)cur_action].Enter();
   }
 

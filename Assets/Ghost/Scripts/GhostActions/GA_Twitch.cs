@@ -11,6 +11,7 @@ public class GA_Twitch : GhostAction {
 
 	public override void Enter() {
 		int twitch_time = Random.Range(twitch_data.MIN_DURATION, twitch_data.MAX_DURATION+1);
+		Debug.Log("Twitch time set to "+twitch_time);
 		ti_twitch.SetTime(twitch_time, twitch_time);
 	}
 
