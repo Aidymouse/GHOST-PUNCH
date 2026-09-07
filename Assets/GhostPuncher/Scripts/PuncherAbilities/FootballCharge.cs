@@ -116,7 +116,7 @@ public class FootballCharge : PuncherAbility {
 			// TODO: maybe play some special animation, like getting ready to punch?
 			// Alternatively, this could just activate the punch
 			// puncher.ChangeAnimation("ARM_CHARGE_WINDUP");
-			phase = ChargePhase.PUNCHING;
+			StartPunching();
 			return;
 		}
 
@@ -181,12 +181,16 @@ public class FootballCharge : PuncherAbility {
 		}
 	}
 
+	void StartPunching() {
+		phase = ChargePhase.PUNCHING;
+		puncher.ChangeAnimation("ARM_TACKLE_PUNCH");
+	}
+
 	void Update_Punching() {
 		// TODO: start slowing down a little bit
 		ti_punch_delay.Tick(Time.deltaTime);
 
 		if (ti_punch_delay.FinishedThisFrame() || ti_punch_delay.default_time == 0) {
-			puncher.ChangeAnimation("ARM_TACKLE_PUNCH");
 			
 			Punch football_charge_punch = Punch.FromData(puncher.GetFacingDirection(), puncher.defaults.CHARGE_PUNCH_LAUNCHED);
 			/*
