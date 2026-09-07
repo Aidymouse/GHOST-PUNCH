@@ -186,7 +186,7 @@ public class FootballCharge : PuncherAbility {
 		ti_punch_delay.Tick(Time.deltaTime);
 
 		if (ti_punch_delay.FinishedThisFrame() || ti_punch_delay.default_time == 0) {
-			puncher.ChangeAnimation("CHARGE_PUNCH");
+			puncher.ChangeAnimation("ARM_TACKLE_PUNCH");
 			
 			Punch football_charge_punch = Punch.FromData(puncher.GetFacingDirection(), puncher.defaults.CHARGE_PUNCH_LAUNCHED);
 			/*
