@@ -41,7 +41,7 @@ public class GhostPuncher : MonoBehaviour
 	[HideInInspector] public FOVController fov_controller;
 
 	public PuncherDefaults defaults; 
-	public GhostPowerAttribs power_attribs;
+	public GhostDefaults ghost_defaults;
 
 	float fall_velocity;
 
@@ -310,11 +310,11 @@ public class GhostPuncher : MonoBehaviour
 			move_vec += push_dir * push_power;
 			// There is probably a better way of making the push ease out
 			if (push_power < 0.5) {
-				push_power *= power_attribs.WAVE_DECAY / 1.5f;
+				push_power *= ghost_defaults.blast_data.DECAY / 1.5f;
 			} else {
-				push_power *= power_attribs.WAVE_DECAY;
+				push_power *= ghost_defaults.blast_data.DECAY;
 			}
-			if (push_power < power_attribs.WAVE_POWER_THRESHOLD) { push_power = 0; }
+			if (push_power < ghost_defaults.blast_data.POWER_THRESHOLD) { push_power = 0; }
 		}
 
 		// Execute the move

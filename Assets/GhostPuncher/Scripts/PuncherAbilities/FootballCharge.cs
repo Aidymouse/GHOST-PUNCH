@@ -115,13 +115,15 @@ public class FootballCharge : PuncherAbility {
 		if (puncher.action_chargePunch.WasPerformedThisFrame()) {
 			// TODO: maybe play some special animation, like getting ready to punch?
 			// Alternatively, this could just activate the punch
-			puncher.ChangeAnimation("ARM_CHARGE_WINDUP");
-		}
-
-		if (puncher.action_attack.WasPerformedThisFrame()) {
+			// puncher.ChangeAnimation("ARM_CHARGE_WINDUP");
 			phase = ChargePhase.PUNCHING;
 			return;
 		}
+
+		/*
+		if (puncher.action_attack.WasPerformedThisFrame()) {
+		}
+		*/
 
 		// Acceleration needs an FOV effect
 		//ti_fov.Tick(Time.deltaTime);
@@ -180,12 +182,15 @@ public class FootballCharge : PuncherAbility {
 	}
 
 	void Update_Punching() {
+		// TODO: start slowing down a little bit
 		ti_punch_delay.Tick(Time.deltaTime);
 
 		if (ti_punch_delay.FinishedThisFrame() || ti_punch_delay.default_time == 0) {
 			puncher.ChangeAnimation("CHARGE_PUNCH");
 			
-			Punch football_charge_punch = new Punch(
+			Punch football_charge_punch = Punch.FromData(puncher.GetFacingDirection(), puncher.defaults.CHARGE_PUNCH_LAUNCHED);
+			/*
+			new Punch(
 				puncher.GetFacingDirection(),
 				5000,
 				1000,
@@ -193,6 +198,7 @@ public class FootballCharge : PuncherAbility {
 				650,
 				(int)HitClass.PUNCH
 			);
+			*/
 			puncher.LaunchPunch(football_charge_punch, 0);
 
 			puncher.fov_controller.GetToZeroIn(ti_punch_stop.time_remaining/2);

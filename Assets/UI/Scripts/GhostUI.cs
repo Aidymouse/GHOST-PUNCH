@@ -112,6 +112,7 @@ public class GhostUI : MonoBehaviour
 
 		escape_bar.SetValue(ghost.escape_meter);
 		ghost_health_bar.SetValue(ghost.hp);
+		// TODO: while ghost is vulnerable, flash poise bar
 		poise_bar.SetValue(ghost.poise);
 		stamina_bar.SetValue(ghost_puncher.stamina);
 

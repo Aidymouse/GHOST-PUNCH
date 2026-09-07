@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class GhostAction_Recovery : GhostAction {
+public class GA_Recovery : GhostAction {
 
 
-	public GhostAction_Recovery(Ghost g) : base(g) {}
+	public GA_Recovery(Ghost g) : base(g) {}
 
 	public override void Enter() { 
 		ghost.ti_recovery.Activate();
@@ -18,7 +18,8 @@ public class GhostAction_Recovery : GhostAction {
 			ghost.RestorePoise();
 			ghost.nav_agent.isStopped = false;
 
-			ghost.EnterAction(GhostActions.USING_POWER);
+			ghost.ExitAction();
+			//ghost.EnterAction(GhostActions.USING_POWER);
 			/*
 				 if (nav_destination == null) {
 				 } else {

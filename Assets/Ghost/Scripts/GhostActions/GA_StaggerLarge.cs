@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class GhostAction_HitStun : GhostAction {
+public class GA_StaggerLarge : GhostAction {
 
-	public GhostAction_HitStun(Ghost g) : base(g) {}
+	public GA_StaggerLarge(Ghost g) : base(g) {}
 
 	public override void Enter() {
 				ghost.ti_hit_stun.Reset();

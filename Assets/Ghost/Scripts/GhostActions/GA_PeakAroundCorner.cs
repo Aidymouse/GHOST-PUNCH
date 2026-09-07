@@ -1,9 +1,9 @@
 
 using UnityEngine;
 
-public class GhostAction_PeakAroundCorner : GhostAction {
+public class GA_PeakAroundCorner : GhostAction {
 
-	public GhostAction_PeakAroundCorner(Ghost g) : base(g) {}
+	public GA_PeakAroundCorner(Ghost g) : base(g) {}
 
 	public override void Enter() {
 	}

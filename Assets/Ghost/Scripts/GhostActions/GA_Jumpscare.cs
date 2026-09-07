@@ -1,9 +1,9 @@
 using UnityEngine;
 
 // TODO:
-public class GhostAction_Jumpscare : GhostAction {
+public class GA_Jumpscare : GhostAction {
 
-	public GhostAction_Jumpscare(Ghost g) : base(g) {}
+	public GA_Jumpscare(Ghost g) : base(g) {}
 
 	public override void Enter() {
 		// 1. Find spot behind ghost puncher
