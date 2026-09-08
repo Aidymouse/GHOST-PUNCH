@@ -6,6 +6,7 @@ public class GhostUI : MonoBehaviour
 {
 	public Ghost ghost;
 	public GhostPuncher ghost_puncher;
+	StaminaOrbs stamina_orbs;
 
 	TMP_Text ui_escape_meter;
 	TMP_Text ui_ectoplasm;
@@ -69,6 +70,8 @@ public class GhostUI : MonoBehaviour
 
 			}
 		}
+
+		stamina_orbs = GetComponentInChildren<StaminaOrbs>();
 	}	
 
 	void Start()
@@ -115,6 +118,7 @@ public class GhostUI : MonoBehaviour
 		// TODO: while ghost is vulnerable, flash poise bar
 		poise_bar.SetValue(ghost.poise);
 		stamina_bar.SetValue(ghost_puncher.stamina);
+		stamina_orbs.SetStamina(ghost_puncher.stamina);
 
 		/** Fear Bar **/
 		// The goal for the fear bar changes based on punchers current multiplier
