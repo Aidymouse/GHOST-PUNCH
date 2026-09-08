@@ -85,20 +85,22 @@ public class FootballCharge : PuncherAbility {
 	void Update_Starting() {
 		ti_charge.Tick(Time.deltaTime);
 
-		if (ti_charge.FinishedThisFrame()) {
-			puncher.look_damping_left = puncher.defaults.CHARGE_LOOK_LEFT_RIGHT_DAMPING;
-			puncher.look_damping_right = puncher.defaults.CHARGE_LOOK_LEFT_RIGHT_DAMPING;
-			puncher.look_damping_down = puncher.defaults.CHARGE_LOOK_UP_DOWN_DAMPING;
-			puncher.look_damping_up = puncher.defaults.CHARGE_LOOK_UP_DOWN_DAMPING;
+		if (ti_charge.FinishedThisFrame()) { StartCharging(); }
+	}
 
-			puncher.move_damping_left = puncher.defaults.CHARGE_MOVE_LEFT_RIGHT_DAMPING;
-			puncher.move_damping_right = puncher.defaults.CHARGE_MOVE_LEFT_RIGHT_DAMPING;
-			puncher.move_damping_forward = 0;
-			puncher.move_damping_back = 0;
+	void StartCharging() {
+		puncher.look_damping_left = puncher.defaults.CHARGE_LOOK_LEFT_RIGHT_DAMPING;
+		puncher.look_damping_right = puncher.defaults.CHARGE_LOOK_LEFT_RIGHT_DAMPING;
+		puncher.look_damping_down = puncher.defaults.CHARGE_LOOK_UP_DOWN_DAMPING;
+		puncher.look_damping_up = puncher.defaults.CHARGE_LOOK_UP_DOWN_DAMPING;
 
-			charge_object.SetActive(true);
-			phase = ChargePhase.CHARGING;
-		}
+		puncher.move_damping_left = puncher.defaults.CHARGE_MOVE_LEFT_RIGHT_DAMPING;
+		puncher.move_damping_right = puncher.defaults.CHARGE_MOVE_LEFT_RIGHT_DAMPING;
+		puncher.move_damping_forward = 0;
+		puncher.move_damping_back = 0;
+
+		charge_object.SetActive(true);
+		phase = ChargePhase.CHARGING;
 	}
 
 	void Update_Charging() {
