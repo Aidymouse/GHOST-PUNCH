@@ -72,7 +72,7 @@ class GA_POW_Slap : GhostAction {
 			float dist_to_gp = (this.ghost.transform.position - this.ghost.ghostPuncher.transform.position).magnitude;
 			Debug.Log("Slap Dist: "+dist_to_gp);
 			if (dist_to_gp <= slap_data.HIT_DISTANCE) {
-				this.ghost.escape_meter += 10;
+				this.ghost.escape_meter += slap_data.ESCAPE_GAINED_ON_SLAP;
 				this.ghost.ghostPuncher.GetComponent<GhostPuncher>().GetSlapped();
 			}
 			slash_vfx.Play();

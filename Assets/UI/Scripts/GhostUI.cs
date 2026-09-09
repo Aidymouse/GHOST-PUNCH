@@ -7,6 +7,7 @@ public class GhostUI : MonoBehaviour
 	public Ghost ghost;
 	public GhostPuncher ghost_puncher;
 	StaminaOrbs stamina_orbs;
+	EscapeClock escape_clock;
 
 	TMP_Text ui_escape_meter;
 	TMP_Text ui_ectoplasm;
@@ -33,7 +34,7 @@ public class GhostUI : MonoBehaviour
 		foreach (UIBar bar in bars) {
 			switch (bar.name) {
 				case "EscapeBar":
-					escape_bar = bar;
+					//escape_bar = bar;
 					break;
 				case "PoiseBar":
 					poise_bar = bar;
@@ -72,6 +73,7 @@ public class GhostUI : MonoBehaviour
 		}
 
 		stamina_orbs = GetComponentInChildren<StaminaOrbs>();
+		escape_clock = GetComponentInChildren<EscapeClock>();
 	}	
 
 	void Start()
@@ -97,11 +99,11 @@ public class GhostUI : MonoBehaviour
 	}
 
 	public void InitUI(Ghost ghost, GhostPuncher puncher) {
-		escape_bar.SetMaxValue(ghost.escape_needed);
+		//escape_bar.SetMaxValue(ghost.escape_needed);
 		poise_bar.SetMaxValue(ghost.max_poise);
 		ghost_health_bar.SetMaxValue(ghost.defaults.HP);
 		stamina_bar.SetMaxValue(puncher.max_stamina);
-		escape_bar.SetValue(0);
+		//escape_bar.SetValue(0);
 		fear_bar.SetValue(0);
 		fear_reset_bar.SetValue(0);
 	}
@@ -113,12 +115,14 @@ public class GhostUI : MonoBehaviour
 
 		UpdateEscapeMeter(ghost.escape_meter);
 
-		escape_bar.SetValue(ghost.escape_meter);
+		//escape_bar.SetValue(ghost.escape_meter);
 		ghost_health_bar.SetValue(ghost.hp);
 		// TODO: while ghost is vulnerable, flash poise bar
 		poise_bar.SetValue(ghost.poise);
 		stamina_bar.SetValue(ghost_puncher.stamina);
+
 		stamina_orbs.SetStamina(ghost_puncher.stamina);
+		escape_clock.SetTimeLeft(ghost.escape_meter / ghost.escape_needed);
 
 		/** Fear Bar **/
 		// The goal for the fear bar changes based on punchers current multiplier

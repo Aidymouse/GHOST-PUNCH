@@ -8,4 +8,5 @@ public class GAD_Slap : ScriptableObject
     [Tooltip("(seconds) time after charge up before slap collision spawns")] public float DELAY;
     [Tooltip("Distance of ghost to be counter as a slap")] public float HIT_DISTANCE;
 		[Tooltip("The slash effect game object to use")] public GameObject SLASH_EFFECT_OBJECT;
+		[Tooltip("Escape meter the ghost gains when she lands a slap")] public float ESCAPE_GAINED_ON_SLAP;
 }
