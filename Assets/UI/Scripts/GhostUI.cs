@@ -9,9 +9,9 @@ public class GhostUI : MonoBehaviour
 	StaminaOrbs stamina_orbs;
 	EscapeClock escape_clock;
 
-	TMP_Text ui_escape_meter;
-	TMP_Text ui_ectoplasm;
-	TMP_Text txt_fear_meter;
+	[Header("Text")]
+	public TMP_Text txt_ectoplasm;
+	public TMP_Text txt_fear_multiplier;
 
 	Image hurt_indicator;
 	Image slow_indicator;
@@ -51,24 +51,6 @@ public class GhostUI : MonoBehaviour
 				case "FearResetBar":
 					fear_reset_bar = bar;
 					break;
-			}
-		}
-
-		TMP_Text[] texts = GetComponentsInChildren<TMP_Text>(true);
-		foreach (TMP_Text text in texts) {
-			switch (text.name) {
-				case "EscapeMeter": 
-					ui_escape_meter = text;
-					break;
-
-				case "Ectoplasm": 
-					ui_ectoplasm = text;
-					break;
-
-				case "TMP_FearMeter":
-					txt_fear_meter = text;
-					break;
-
 			}
 		}
 
@@ -113,7 +95,6 @@ public class GhostUI : MonoBehaviour
 	{
 		TickTimers();
 
-		UpdateEscapeMeter(ghost.escape_meter);
 
 		//escape_bar.SetValue(ghost.escape_meter);
 		ghost_health_bar.SetValue(ghost.hp);
@@ -137,7 +118,7 @@ public class GhostUI : MonoBehaviour
 
 		fear_reset_bar.SetValue(ghost_puncher.ti_fear_reset.PercentComplete());
 
-		txt_fear_meter.SetText("x"+ghost_puncher.GetFearMultiplier());
+		txt_fear_multiplier.SetText("x"+ghost_puncher.GetFearMultiplier());
 
 		/** Hurt Indicator **/
 		if (!ti_hurt_indicator.Finished()) {
@@ -165,12 +146,9 @@ public class GhostUI : MonoBehaviour
 		ti_hurt_indicator.Tick(Time.deltaTime);
 	}
 
-	public void UpdateEscapeMeter(float value) {
-		ui_escape_meter.SetText("" + value);
-	}
 
 	public void UpdateEctoplasm(int plasm) {
-		ui_ectoplasm.SetText("Ectoplasm: " + plasm);
+		txt_ectoplasm.SetText(""+plasm);
 	}
 
 	public void TriggerHurtIndicator() {
