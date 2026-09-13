@@ -46,6 +46,7 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 
 		// TODO: spawn particles
 		shop.BuyItem(item);
+		item.ShrinkAndDisappear();
 
 	}
 
