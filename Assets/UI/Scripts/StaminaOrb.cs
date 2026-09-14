@@ -3,7 +3,11 @@ using UnityEngine;
 public class StaminaOrb : MonoBehaviour
 {
 
-		public float max_stamina;
+		//public float max_stamina;
+		public float mask_max_width;
+		public float mask_min_width;
+		public RectTransform mask;
+		public GameObject full_img;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Awake() {
@@ -15,7 +19,13 @@ public class StaminaOrb : MonoBehaviour
     void Update() { }
 
 		public void SetPortion(float p) {
-			this.GetComponent<RectTransform>().sizeDelta = new Vector2(100*p, 100);
+			if (p >= 1) {
+				mask.sizeDelta = new Vector2(mask_max_width, 100);
+				full_img.SetActive(true);
+			} else {
+				full_img.SetActive(false);
+				mask.sizeDelta = new Vector2(Lerp.lerp(mask_min_width, mask_max_width, p), 100);
+			}
 		}
 
 }
