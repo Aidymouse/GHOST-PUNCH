@@ -1,5 +1,6 @@
 using UnityEngine;
 
+/** @deprecated - i think? */
 public class VanUI : MonoBehaviour {
 	public ShopVan van;
 

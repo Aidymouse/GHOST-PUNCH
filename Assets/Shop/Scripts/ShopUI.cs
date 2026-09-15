@@ -7,6 +7,9 @@ public interface ShopUIEventHandler : IEventSystemHandler {
   void ClickLeft();
 }
 
+
+
+/* Handles all player input events and handles how the shop responds */
 public class ShopUI : MonoBehaviour, ShopUIEventHandler
 {
 
@@ -15,11 +18,15 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 
 	public TMP_Text item_board_title;
 	public TMP_Text item_board_description;
+	public GameObject shrinking_item;
+
 
   void Start() { 
 
 	}
-  void Update() { }
+
+  void Update() {
+	}
 
   public void ClickRight() {
 		shop.LookRight();
@@ -30,24 +37,38 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
   }
 
 	/* Items */
-	public void MouseOverItem(ShopItem item) {
-		item.StartSpinning();
+	public void MouseOverSlot(ShopSlot slot) {
+		slot.MouseOver();
+
+		if (slot.item) {
+			UpdateBoard(slot.item);
+		}
+
+	}
+
+
+	public void MouseDownSlot(ShopSlot slot) {
+		slot.MouseDown();
+
+		if (slot.item) {
+			shop.BuyItem(slot.item);
+		}
+	}
+
+	public void MouseOutSlot(ShopSlot slot) {
+		slot.MouseOut();
+		ClearBoard();
+	}
+
+	/* Board */
+	public void UpdateBoard(ShopItem item) {
 		item_board_title.SetText(item.name);
 		item_board_description.SetText(item.description);
 	}
 
-	public void MouseOutItem(ShopItem item) {
-		item.StopSpinning();
-		item_board_title.SetText("");
-		item_board_description.SetText("");
-	}
-
-	public void MouseDownItem(ShopItem item) {
-
-		// TODO: spawn particles
-		shop.BuyItem(item);
-		item.ShrinkAndDisappear();
-
+	public void ClearBoard() {
+			item_board_title.SetText("");
+			item_board_description.SetText("");
 	}
 
 	/* Door */
