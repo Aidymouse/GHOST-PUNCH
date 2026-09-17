@@ -95,7 +95,6 @@ public class GhostPuncher : MonoBehaviour
 	// prefab box used as collider for punches
 	public BoxCollider punch_hitbox;
 
-
 	public Animator arm_animator;
 
 	/** Camera effects **/
@@ -117,6 +116,7 @@ public class GhostPuncher : MonoBehaviour
 	[Header("Throwing")]
 	public GameObject held_object;
 	public Transform throw_point;
+	[Tooltip("The parent bone for held objects")] public Transform throw_parent;
 
 	/* Cutscene control toggle */
 	public bool inCutscene = false;

@@ -270,5 +270,28 @@ public class BreakableObject : MonoBehaviour
 		return total_height;
 	}
 
+	public void GetGrabbed(Transform grab_parent) {
+		Rigidbody rb = GetComponent<Rigidbody>();
+		if (rb) {
+			rb.isKinematic = true;
+		}
+		this.transform.SetParent(grab_parent);
+		this.transform.position = grab_parent.transform.position;
+		this.gameObject.layer = LayerMask.NameToLayer("ViewModel");
+		this.enabled = false;
+	}
+
+	public void GetThrown(Vector3 throw_vel, Vector3 throw_torque) {
+		Rigidbody rb = GetComponent<Rigidbody>();
+		if (rb) {
+			rb.isKinematic = false;
+			rb.AddForce(throw_vel);
+			rb.AddTorque(throw_torque);
+		}
+
+		this.enabled = true;
+		this.gameObject.layer = LayerMask.NameToLayer("FlyingObject");
+	}
+
 }
 
