@@ -331,17 +331,6 @@ public class GhostPuncher : MonoBehaviour
 		controller.Move(move_vec * Time.deltaTime);
 	}
 
-
-	/** HOLDING OBJECTS **/
-	void PickUpItem(BreakableObject obj) {
-		// Set postion + rotation
-		// Parent to the right hand bone in the camera rig... kind of awkward
-		// Set the layer to viewmodel
-		// Set the RB to kinematic
-	}
-
-
-
 	/** PUNCH METHODS **/
 	void UpdatePunch() {
 		if (ti_punch_again.FinishedThisFrame()) {

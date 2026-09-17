@@ -6,8 +6,21 @@ public class Throw : PuncherAbility {
 
 	public override void EnterAbility() {
 		if (!puncher.held_object) {
-			puncher.ExitAbility();
+			Grab();
+		} else {
+			ThrowHeld();
 		}
+	}
+
+	void Grab() {
+		// basically find all punch targets and pick the one we're the most looking at up
+		// Set postion + rotation
+		// Parent to the right hand bone in the camera rig... kind of awkward
+		// Set the layer to viewmodel
+		// Set the RB to kinematic
+	}
+	
+	void ThrowHeld() {
 		
 		// To activate infinite beers mode: Uncomment these lines, comment out the line 4 lines down and held_object = null at the bottom.
 		//GameObject thrown = GameObject.Instantiate(puncher.held_object);
@@ -40,8 +53,6 @@ public class Throw : PuncherAbility {
 
 		puncher.ExitAbility();
 	}
-	
 
-	public override void Update() { }
 
 }
