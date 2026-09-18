@@ -14,6 +14,7 @@ public class Throw : PuncherAbility {
 
 	void Grab() {
 		// basically find all punch targets and pick the one we're the most looking at up
+		puncher.ChangeAnimation("Grab");
 
 		Collider[] punched = Physics.OverlapBox(puncher.punch_hitbox.transform.position, puncher.punch_hitbox.transform.localScale/2, puncher.punch_hitbox.transform.rotation, puncher.punchables_mask);		
 	
@@ -44,6 +45,8 @@ public class Throw : PuncherAbility {
 		//GameObject thrown = GameObject.Instantiate(puncher.held_object);
 		//thrown.transform.localScale = new Vector3(100, 100, 100);
 
+		puncher.ChangeAnimation("Throw");
+	
 		GameObject thrown = puncher.held_object;
 
 		/** Spawn thrown thing **/
