@@ -95,7 +95,6 @@ public class GhostPuncher : MonoBehaviour
 	// prefab box used as collider for punches
 	public BoxCollider punch_hitbox;
 
-
 	public Animator arm_animator;
 
 	/** Camera effects **/
@@ -113,6 +112,11 @@ public class GhostPuncher : MonoBehaviour
 	[HideInInspector] public float move_damping_right;
 	[HideInInspector] public float move_damping_forward;
 	[HideInInspector] public float move_damping_back;
+
+	[Header("Throwing")]
+	public GameObject held_object;
+	public Transform throw_point;
+	[Tooltip("The parent bone for held objects")] public Transform throw_parent;
 
 	/* Cutscene control toggle */
 	public bool inCutscene = false;
@@ -209,7 +213,7 @@ public class GhostPuncher : MonoBehaviour
 		// Init abilities
 		equipped_abilities = new PuncherAbility?[3];
 		equipped_abilities[0] = new FootballCharge(this);
-		equipped_abilities[1] = null;
+		equipped_abilities[1] = new Throw(this);
 		equipped_abilities[2] = null;
 
 	}
@@ -234,11 +238,17 @@ public class GhostPuncher : MonoBehaviour
 		UpdateFearMeter();
 
 		// Abilites
-		if (action_ability1.WasPerformedThisFrame() && equipped_abilities[0] is not null) {
-			
-			active_ability = equipped_abilities[0];
-			active_ability.EnterAbility();
-
+		if (active_ability is null) {
+			if (action_ability1.WasPerformedThisFrame() && equipped_abilities[0] is not null) {
+				active_ability = equipped_abilities[0];
+				active_ability.EnterAbility();
+			} else if (action_ability2.WasPerformedThisFrame() && equipped_abilities[1] is not null) {
+				active_ability = equipped_abilities[1];
+				active_ability.EnterAbility();
+			} else if (action_ability3.WasPerformedThisFrame() && equipped_abilities[2] is not null) {
+				active_ability = equipped_abilities[2];
+				active_ability.EnterAbility();
+			}
 		}
 
 		if (active_ability is not null) {
@@ -320,10 +330,6 @@ public class GhostPuncher : MonoBehaviour
 		// Execute the move
 		controller.Move(move_vec * Time.deltaTime);
 	}
-
-
-
-
 
 	/** PUNCH METHODS **/
 	void UpdatePunch() {

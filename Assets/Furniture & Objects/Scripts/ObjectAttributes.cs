@@ -1,6 +1,13 @@
 using UnityEngine;
 using UnityEngine.VFX;
 
+public enum Grabbable {
+	NORMAL,
+	// TODO: not yet implemented
+	SUPER,
+	NO
+}
+
 [CreateAssetMenu(fileName = "ObjectAttributes", menuName = "Scriptable Objects/ObjectAttributes")]
 public class ObjectAttributes : ScriptableObject
 {
@@ -12,4 +19,6 @@ public class ObjectAttributes : ScriptableObject
 	public float OBJECT_DAMAGE;
 	[Tooltip("Force imparted when smashing into an object, in addition to normal physics force")]
 	public float FORCE;
+	[Tooltip("Are objects of this attr grabbable? NORMAL = yes, SUPER = two-handed upgrade, NO = never")]
+	public Grabbable GRABBABLE;
 }
