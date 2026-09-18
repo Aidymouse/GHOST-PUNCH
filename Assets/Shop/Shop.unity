@@ -1055,8 +1055,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3438954217230812006, guid: f2030ea18dfd960278f839469591acf2, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1726469237}
+    - target: {fileID: 3438954217230812006, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_RenderMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3438954217230812006, guid: f2030ea18dfd960278f839469591acf2, type: 3}
+      propertyPath: m_PlaneDistance
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 4176073419624409734, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_IsActive
@@ -1073,6 +1081,10 @@ PrefabInstance:
     - target: {fileID: 6363868400071439805, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -76.01465
+      objectReference: {fileID: 0}
+    - target: {fileID: 6759986522492899320, guid: f2030ea18dfd960278f839469591acf2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 102.79999
       objectReference: {fileID: 0}
     - target: {fileID: 6766530575651329275, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_AnchorMax.x
@@ -14205,6 +14217,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1616325208}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &1726469237 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 165790869509203655, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
+  m_PrefabInstance: {fileID: 1966938409940407737}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1771565991
 GameObject:
   m_ObjectHideFlags: 0
