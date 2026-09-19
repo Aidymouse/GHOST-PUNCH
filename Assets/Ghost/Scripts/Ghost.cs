@@ -77,6 +77,7 @@ public class Ghost : MonoBehaviour
   public AudioSource currentSound;
   public AudioClip takingDamageSound;
   public AudioClip ragdollSound;
+  public AudioClip ghostpunchSound;
   //Sounds temporarily stored on objects lol
   public AudioClip energySound;
   public AudioClip jumpscareSound;
@@ -302,9 +303,11 @@ public class Ghost : MonoBehaviour
     currentSound.pitch = (Random.Range(pitchLow, pitchHigh));
     currentSound.Play();
 
+    AudioSource.PlayClipAtPoint(ghostpunchSound, transform.position);
 
-    // 1 is mega punch and 3 is big object hit
-    if (vulnerable && (punch.hit_class <= (int)HitClass.LARGE_ITEM)) {
+
+        // 1 is mega punch and 3 is big object hit
+        if (vulnerable && (punch.hit_class <= (int)HitClass.LARGE_ITEM)) {
 
       Ragdoll(punch);
       return;
