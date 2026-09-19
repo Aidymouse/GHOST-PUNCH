@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+/** BEWARE: IF you change this, you need to update the ShopPrefabs scriptable object too **/
 public enum ItemType {
 	PROTEIN_POWDER=0,
 	SALT_SHAKER=1,

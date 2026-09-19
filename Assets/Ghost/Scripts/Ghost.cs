@@ -9,25 +9,33 @@ using Hairibar.Ragdoll;
 using System.Collections.Generic;
 
 public enum GhostActions {
-  CHARGING_ESCAPE,
-  STARTLED, // TODO
-  MOVING_ROOM,
-  HIT_STUN,
-  RAGDOLL,
-  RECOVERY,
-	// The state of the ghost rising from the ground
+	// Non-power actions (states)
+	STARTLED, // TODO
+	RAGDOLL,
+	RECOVERY,
+	// The state of the ghost rising from the ground - could be wrapped into ragdoll?
 	GET_UP,
 
-  USING_POWER,
+	STAGGER_MINOR,
+	STAGGER_MEDIUM,
+	STAGGER_LARGE,
 
-	PEAK_AROUND_CORNER,
+	TWITCH,
+
+	// Power actions
+	POW_CHARGING_ESCAPE,
+	POW_SLAP,
+	POW_SCREAM,
+	POW_BLAST,
+	POW_JUMPSCARE,
+	POW_PEAK_AROUND_CORNER,
 };
+
 
 public class Ghost : MonoBehaviour
 {
 
   public GhostDefaults defaults;
-  public GhostPowerAttribs power_attribs;
 	public GPDebug debug;
 
 	// Elevated permissions on this one. We need to be able to end runs!
@@ -51,11 +59,8 @@ public class Ghost : MonoBehaviour
 
   /** Used to find colliders and rigidbodies for switching between ragdoll and animator */
   public GameObject rig;
-
-  [HideInInspector]
-  public GameObject nav_destination;
-  [HideInInspector]
-  public ParticleSystem charge_particles;
+  [HideInInspector] public GameObject nav_destination;
+  [HideInInspector] public ParticleSystem charge_particles;
   Animator anim;
 
 	[Header("Ragdoll")]
@@ -86,7 +91,13 @@ public class Ghost : MonoBehaviour
 
 
   public GhostActions cur_action;
+	// Interrupt action takes precdence, allowing staggers to interrupt actions
+	public GhostActions? interrupt_action = null;
   public GhostAction[] actions;
+	GhostActions[] powers = { 
+		GhostActions.POW_CHARGING_ESCAPE,
+		GhostActions.POW_SLAP,
+	};
 
   // jumpscare sequence
   [Header("Jumpscare")]
@@ -101,15 +112,12 @@ public class Ghost : MonoBehaviour
 
   public float fear_meter;
 
-  GhostPower[] powers;
-  GhostPower active_power;
-
   // Spawns when the ghost uses her wave power
   public GameObject wave_orb;
 
-  [HideInInspector]
-  public NavMeshAgent nav_agent;
+  [HideInInspector] public NavMeshAgent nav_agent;
 
+	// TODO: put in respective states
   [HideInInspector] public Timer ti_hit_stun;
   [HideInInspector] public Timer ti_ragdoll;
   [HideInInspector] public Timer ti_restore_poise;
@@ -145,14 +153,23 @@ public class Ghost : MonoBehaviour
   {
 		ragdoll_animator = GetComponentInChildren<RagdollAnimator>();
 
+    /* Nav Settings */
+    nav_agent = GetComponent<NavMeshAgent>();
+    nav_agent.updateRotation = false;
+
     /* Init Actions */
     actions = new GhostAction[20];
-    actions[(int)GhostActions.CHARGING_ESCAPE] = new GhostAction_ChargingEscape(this);
-    actions[(int)GhostActions.MOVING_ROOM] = new GhostAction_MovingRoom(this);
-    actions[(int)GhostActions.HIT_STUN] = new GhostAction_HitStun(this);
-    actions[(int)GhostActions.RAGDOLL] = new GhostAction_Ragdoll(this);
-    actions[(int)GhostActions.RECOVERY] = new GhostAction_Recovery(this);
-    actions[(int)GhostActions.GET_UP] = new GhostAction_GetUp(this, ragdoll_animator.MasterAlpha);
+    actions[(int)GhostActions.STAGGER_LARGE] = new GA_StaggerLarge(this);
+    actions[(int)GhostActions.RAGDOLL] = new GA_Ragdoll(this);
+    actions[(int)GhostActions.RECOVERY] = new GA_Recovery(this);
+    actions[(int)GhostActions.GET_UP] = new GA_GetUp(this, ragdoll_animator.MasterAlpha);
+    actions[(int)GhostActions.TWITCH] = new GA_Twitch(this);
+
+		// Power Actions
+    actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
+    actions[(int)GhostActions.POW_SLAP] = new GA_POW_Slap(this);
+
+
 
     rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
     rig_colliders = rig.GetComponentsInChildren<Collider>();
@@ -176,23 +193,13 @@ public class Ghost : MonoBehaviour
     /* Animator */
     anim = this.GetComponentInChildren<Animator>();
 
-    /* Nav Settings */
-    nav_agent = GetComponent<NavMeshAgent>();
-    nav_agent.updateRotation = false;
     //nav_agent.destination = nav_destination.position;
 
     charge_particles = GetComponentInChildren<ParticleSystem>();
 
-    //nav_destination = null;
 
-    /* Powers */
-    // Set up last so any objects retrieved in constructors are present
-    powers = new GhostPower[3];
-    powers[0] = new GhostPower_Wave(this, power_attribs);
-    powers[1] = new GhostPower_Slap(this, power_attribs);
-    powers[2] = new GhostPower_Scream(this, power_attribs);
-
-    EnterAction(GhostActions.MOVING_ROOM);
+		// Init - pick a random power to start doing
+		PickRandomPower();
 
     currentSound = GetComponent<AudioSource>();
     currentSound.clip = takingDamageSound;
@@ -233,20 +240,12 @@ public class Ghost : MonoBehaviour
     /* Actions */
 		bool escaped_yet = Escaped();
 
-    switch (cur_action) {
+		if (interrupt_action is not null) {
+		} else {
+			actions[(int)cur_action].Update(); 
+		}
 
-      case GhostActions.USING_POWER: 
-				// TODO: i'm not sure how to refactor this.
-				state_UsingPower();
-				break;
-
-			default:
-				actions[(int)cur_action].Update(); 
-				break;
-
-    }
-
-    tick_timers();
+    TickTimers();
 
 		if (!escaped_yet && Escaped()) {
 			CallEndRun();
@@ -254,73 +253,40 @@ public class Ghost : MonoBehaviour
 
   }
 
-
-	void ExitAction() {
-    // Logic based on what state we're leaving
-    switch (cur_action) {
-      case GhostActions.USING_POWER: 
-				break;
-
-			default:
-				actions[(int)cur_action].Exit();
-				break;
-		}
+	public void ExitAction() {
+		Debug.Log("Ghost Exiting: "+cur_action);
+		actions[(int)cur_action].Exit();
+		// TODO: will this always be the case?
+		DecideNextAction();
   }
 
   public void EnterAction(GhostActions action) {
-
-    ExitAction();
-
-
-		Debug.Log("Entering action: " + action);
-
-    // Enter New State Logic
-    switch (action) {
-
-      case GhostActions.USING_POWER: 
-				cur_action = action;
-				PickRandomPower();
-				break;
-
-			default:
-				actions[(int)action].Enter();
-				cur_action = action;
-				break;
-
-    }
-
+		cur_action = action;
+		Debug.Log("Ghost Entering: "+cur_action);
+		actions[(int)cur_action].Enter();
   }
 
-  /** STATES **/
+	void DecideNextAction() {
+		//TODO: for now just passthrough
+		if (cur_action == GhostActions.TWITCH) {
+			PickRandomPower();
+		} else {
+			EnterAction(GhostActions.TWITCH);
+		}
 
-  void state_UsingPower() {
-    active_power.Update();
+	}
 
-    if (active_power.phase == GhostPower.GhostPowerPhase.DONE) {
-      LeavePower();
-    }
-  }
-
-  /**** POWERS ****/
   void PickRandomPower() {
-    int power_index = power_attribs.OVERRIDE_POWER_IDX == -1 ? Random.Range(0, powers.Length) : power_attribs.OVERRIDE_POWER_IDX; 
-    active_power = powers[power_index];
-    active_power.Reset();
-    active_power.Start();
+		int power_index = Random.Range(0,powers.Length);
+		if (debug.use_power_override) {
+    	power_index = (int)debug.power_override;
+		}
+
+		EnterAction(powers[power_index]);
   }
 
-  void LeavePower() {
-    active_power.End();
-
-    if (Random.Range(1,4) == 3) {
-      PickRandomPower();
-    } else {
-      EnterAction(GhostActions.MOVING_ROOM);
-    }
-  }
-
-  void tick_timers() {
-    if (cur_action != GhostActions.HIT_STUN) {
+  void TickTimers() {
+    if (cur_action != GhostActions.STAGGER_LARGE) {
       ti_restore_poise.Tick(Time.deltaTime);
     }
   }
@@ -345,6 +311,7 @@ public class Ghost : MonoBehaviour
     }
 
 
+
     if (HasHyperArmor()) {
 			// TODO: some minor jolts, but no damage
       return;
@@ -352,10 +319,13 @@ public class Ghost : MonoBehaviour
 
 		if (cur_action == GhostActions.RAGDOLL) {
 			// TODO: special punch case when down
+			PlayMinorHurtAnim();
 			return;
 		}
 
     poise -= punch.poise_damage;
+
+		PlayMinorHurtAnim();
 
     if (ectoplasm_particles) {
       Instantiate(ectoplasm_particles, transform.position, new Quaternion());
@@ -367,22 +337,19 @@ public class Ghost : MonoBehaviour
 
       } else {
 				BecomeVulnerable();
-				EnterAction(GhostActions.HIT_STUN);
+				EnterAction(GhostActions.STAGGER_LARGE);
       }
     } else {
       ti_restore_poise.Reset();
-
-      // TODO: play a random hit animation
-      //int hurt_num = Random.Range(1,3);
-      //PlayAnimation("Hurt"+hurt_num);
-      //PlayAnimation("Hurt1");
-
-      if (cur_action == GhostActions.CHARGING_ESCAPE) {
-				// TODO: there should be a bit of buffer time here or powers come out super fast
-				EnterAction(GhostActions.USING_POWER);
-      }
+			// TODO: minor stagger
     }
   }
+
+	// Layer anim
+	void PlayMinorHurtAnim() {
+		int hurt_anim = Random.Range(1,2+1);
+		ChangeAnimation("Hurt"+hurt_anim);
+	}
 
   void GainFear(int fear_gained) {
     fear_meter += fear_gained;
@@ -398,12 +365,27 @@ public class Ghost : MonoBehaviour
 
   void BecomeVulnerable() {
     vulnerable = true;
-    fear_meter += 5;
+		GainFear(5); // needed?
   }
 
   void StopBeingVulnerable() {
     vulnerable = false;
   }
+
+	public void Stagger(GhostActions stagger_action, Punch punch) {
+		int stagger_level = (int)stagger_action;
+		if (vulnerable) { stagger_level += 1; }
+		
+		if (stagger_level == (int)GhostActions.STAGGER_MINOR) {
+			// TODO:
+		} else if (stagger_level == (int)GhostActions.STAGGER_MEDIUM) {
+			// TODO:
+		} else if (stagger_level == (int)GhostActions.STAGGER_LARGE) {
+			// TODO:
+		} else if (stagger_level > (int)GhostActions.STAGGER_LARGE) {
+			Ragdoll(punch);
+		}
+	}
 
   void Ragdoll(Punch punch) {
     currentSound.clip = ragdollSound;
@@ -415,10 +397,14 @@ public class Ghost : MonoBehaviour
     rig_core.AddForce(punch.direction * punch.force * defaults.MAKE_HER_FLY_FACTOR);
   }
 
+	/* Enter a special power designated action */
+	void PickPower() {
+	}
+
   /** STATUS **/
   // If the ghost has hyper armor, she cannot have her poise break (it can go down though)
   bool HasHyperArmor() {
-    return cur_action == GhostActions.HIT_STUN || cur_action == GhostActions.RECOVERY;
+    return cur_action == GhostActions.STAGGER_LARGE || cur_action == GhostActions.RECOVERY;
 
   }
 
@@ -434,16 +420,17 @@ public class Ghost : MonoBehaviour
 
   // TODO: wrap these in actual state changes so she doesn't keep trying to move around when she's ragdolled
   public void EnableAnimator() {
-    //DisableRagdoll();
-    //anim.enabled = true;
     ragdoll_animator.MasterAlpha = 1;
   }
 
   public void DisableAnimator() {
-    //anim.enabled = false;
     ragdoll_animator.MasterAlpha = 0;
   }
 
+  public void EnableRagdoll() { }
+  public void DisableRagdoll() { }
+
+	/** ANIMATION **/
   public void PlayAnimation(string new_anim) {
     //anim.Rewind(new_anim);
     anim.Play(new_anim, -1, 0.0f);
@@ -453,40 +440,7 @@ public class Ghost : MonoBehaviour
     anim.CrossFade(new_anim, fade_time);
   }
 
-  public void EnableRagdoll() {
-    //DisableAnimator();
-    /*foreach (Collider col in rig_colliders) {
-      col.enabled = true;
-      }*/
-		/*
-    foreach (Rigidbody rb in rig_rbs) {
-      rb.detectCollisions = true;
-      rb.useGravity = true;
-      rb.isKinematic = false;
-    }
-    foreach (CharacterJoint joint in rig_joints) {
-      joint.enableCollision = true;
-    }
-		*/
-  }
-
-  public void DisableRagdoll() {
-    /*foreach (Collider col in rig_colliders) {
-      col.enabled = false;
-      }*/
-		/*
-    foreach (Rigidbody rb in rig_rbs) {
-      //rb.detectCollisions = false;
-      rb.useGravity = false;
-      rb.isKinematic = true;
-    }
-    foreach (CharacterJoint joint in rig_joints) {
-      joint.enableCollision = false;
-    }
-		*/
-  }
-
-
+	/** CONTROL FNS **/
 	public void StartRun() {
 		escape_meter = 0;
 		gameObject.SetActive(true);
@@ -511,7 +465,6 @@ public class Ghost : MonoBehaviour
 		// TODO:
 		this.GetComponent<Ghost>().enabled = false;
 	}
-
 
 	public void PlaySound(string clip_name) {
 		//currentSound.loop = false;	

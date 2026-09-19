@@ -6,10 +6,12 @@ public class GhostUI : MonoBehaviour
 {
 	public Ghost ghost;
 	public GhostPuncher ghost_puncher;
+	StaminaOrbs stamina_orbs;
+	EscapeClock escape_clock;
 
-	TMP_Text ui_escape_meter;
-	TMP_Text ui_ectoplasm;
-	TMP_Text txt_fear_meter;
+	[Header("Text")]
+	public TMP_Text txt_ectoplasm;
+	public TMP_Text txt_fear_multiplier;
 
 	Image hurt_indicator;
 	Image slow_indicator;
@@ -32,7 +34,7 @@ public class GhostUI : MonoBehaviour
 		foreach (UIBar bar in bars) {
 			switch (bar.name) {
 				case "EscapeBar":
-					escape_bar = bar;
+					//escape_bar = bar;
 					break;
 				case "PoiseBar":
 					poise_bar = bar;
@@ -52,23 +54,8 @@ public class GhostUI : MonoBehaviour
 			}
 		}
 
-		TMP_Text[] texts = GetComponentsInChildren<TMP_Text>(true);
-		foreach (TMP_Text text in texts) {
-			switch (text.name) {
-				case "EscapeMeter": 
-					ui_escape_meter = text;
-					break;
-
-				case "Ectoplasm": 
-					ui_ectoplasm = text;
-					break;
-
-				case "TMP_FearMeter":
-					txt_fear_meter = text;
-					break;
-
-			}
-		}
+		stamina_orbs = GetComponentInChildren<StaminaOrbs>();
+		escape_clock = GetComponentInChildren<EscapeClock>();
 	}	
 
 	void Start()
@@ -94,11 +81,11 @@ public class GhostUI : MonoBehaviour
 	}
 
 	public void InitUI(Ghost ghost, GhostPuncher puncher) {
-		escape_bar.SetMaxValue(ghost.escape_needed);
+		//escape_bar.SetMaxValue(ghost.escape_needed);
 		poise_bar.SetMaxValue(ghost.max_poise);
 		ghost_health_bar.SetMaxValue(ghost.defaults.HP);
 		stamina_bar.SetMaxValue(puncher.max_stamina);
-		escape_bar.SetValue(0);
+		//escape_bar.SetValue(0);
 		fear_bar.SetValue(0);
 		fear_reset_bar.SetValue(0);
 	}
@@ -108,12 +95,15 @@ public class GhostUI : MonoBehaviour
 	{
 		TickTimers();
 
-		UpdateEscapeMeter(ghost.escape_meter);
 
-		escape_bar.SetValue(ghost.escape_meter);
+		//escape_bar.SetValue(ghost.escape_meter);
 		ghost_health_bar.SetValue(ghost.hp);
+		// TODO: while ghost is vulnerable, flash poise bar
 		poise_bar.SetValue(ghost.poise);
 		stamina_bar.SetValue(ghost_puncher.stamina);
+
+		stamina_orbs.SetStamina(ghost_puncher.stamina);
+		escape_clock.SetTimeLeft(ghost.escape_meter / ghost.escape_needed);
 
 		/** Fear Bar **/
 		// The goal for the fear bar changes based on punchers current multiplier
@@ -128,7 +118,7 @@ public class GhostUI : MonoBehaviour
 
 		fear_reset_bar.SetValue(ghost_puncher.ti_fear_reset.PercentComplete());
 
-		txt_fear_meter.SetText("x"+ghost_puncher.GetFearMultiplier());
+		txt_fear_multiplier.SetText("x"+ghost_puncher.GetFearMultiplier());
 
 		/** Hurt Indicator **/
 		if (!ti_hurt_indicator.Finished()) {
@@ -156,12 +146,9 @@ public class GhostUI : MonoBehaviour
 		ti_hurt_indicator.Tick(Time.deltaTime);
 	}
 
-	public void UpdateEscapeMeter(float value) {
-		ui_escape_meter.SetText("" + value);
-	}
 
 	public void UpdateEctoplasm(int plasm) {
-		ui_ectoplasm.SetText("Ectoplasm: " + plasm);
+		txt_ectoplasm.SetText(""+plasm);
 	}
 
 	public void TriggerHurtIndicator() {

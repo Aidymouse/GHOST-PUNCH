@@ -33,9 +33,8 @@ public class RagdollAnimController : MonoBehaviour {
 	}
 
 
-	public void PickNewSpot() {
-		ghost.nav_destination = null;
-		ghost.EnterAction(GhostActions.MOVING_ROOM);
+	public void PickNewSpot() { ghost.nav_destination = null;
+		//ghost.EnterAction(GhostActions.MOVING_ROOM);
 	}
 
 	public void GetUp(string dir) {

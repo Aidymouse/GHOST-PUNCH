@@ -1,3 +1,4 @@
+/*
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.VFX;
@@ -69,4 +70,4 @@ class GhostPower_Slap : GhostPower {
 	}
 
 }
-
+*/

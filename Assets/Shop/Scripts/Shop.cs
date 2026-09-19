@@ -66,7 +66,6 @@ public class Shop : MonoBehaviour
 
 
 	/*** Item Management ***/
-
 	public void BuyItem(ShopItem item) {
 		Debug.Log(item.item_id + " costs " + item.cost + " ectoplasm");
 		bought_items.AddItemByType(item.item_id, item.item_level);

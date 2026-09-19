@@ -1,3 +1,4 @@
+/*
 using UnityEngine;
 
 class GhostPower_Wave : GhostPower {
@@ -13,3 +14,4 @@ class GhostPower_Wave : GhostPower {
       Ghost.Instantiate(ghost.wave_orb, ghost.transform.position, new Quaternion()); 
   }
 }
+*/

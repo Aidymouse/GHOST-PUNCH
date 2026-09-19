@@ -38,9 +38,10 @@ public class GhostPuncher : MonoBehaviour
 
 	CharacterController controller;
 	float move_speed;
+	[HideInInspector] public FOVController fov_controller;
 
 	public PuncherDefaults defaults; 
-	public GhostPowerAttribs power_attribs;
+	public GhostDefaults ghost_defaults;
 
 	float fall_velocity;
 
@@ -94,7 +95,6 @@ public class GhostPuncher : MonoBehaviour
 	// prefab box used as collider for punches
 	public BoxCollider punch_hitbox;
 
-
 	public Animator arm_animator;
 
 	/** Camera effects **/
@@ -112,6 +112,11 @@ public class GhostPuncher : MonoBehaviour
 	[HideInInspector] public float move_damping_right;
 	[HideInInspector] public float move_damping_forward;
 	[HideInInspector] public float move_damping_back;
+
+	[Header("Throwing")]
+	public GameObject held_object;
+	public Transform throw_point;
+	[Tooltip("The parent bone for held objects")] public Transform throw_parent;
 
 	/* Cutscene control toggle */
 	public bool inCutscene = false;
@@ -163,6 +168,7 @@ public class GhostPuncher : MonoBehaviour
 		screenShake = GetComponentInChildren<ScreenShake>();
 
 		controller = GetComponent<CharacterController>();
+		fov_controller = GetComponentInChildren<FOVController>();
 
 		// Init Timers
 		ti_punch_cooldown = new Timer(0, defaults.PUNCH_COOLDOWN);
@@ -207,7 +213,7 @@ public class GhostPuncher : MonoBehaviour
 		// Init abilities
 		equipped_abilities = new PuncherAbility?[3];
 		equipped_abilities[0] = new FootballCharge(this);
-		equipped_abilities[1] = null;
+		equipped_abilities[1] = new Throw(this);
 		equipped_abilities[2] = null;
 
 	}
@@ -232,11 +238,17 @@ public class GhostPuncher : MonoBehaviour
 		UpdateFearMeter();
 
 		// Abilites
-		if (action_ability1.WasPerformedThisFrame() && equipped_abilities[0] is not null) {
-			
-			active_ability = equipped_abilities[0];
-			active_ability.EnterAbility();
-
+		if (active_ability is null) {
+			if (action_ability1.WasPerformedThisFrame() && equipped_abilities[0] is not null) {
+				active_ability = equipped_abilities[0];
+				active_ability.EnterAbility();
+			} else if (action_ability2.WasPerformedThisFrame() && equipped_abilities[1] is not null) {
+				active_ability = equipped_abilities[1];
+				active_ability.EnterAbility();
+			} else if (action_ability3.WasPerformedThisFrame() && equipped_abilities[2] is not null) {
+				active_ability = equipped_abilities[2];
+				active_ability.EnterAbility();
+			}
 		}
 
 		if (active_ability is not null) {
@@ -308,20 +320,16 @@ public class GhostPuncher : MonoBehaviour
 			move_vec += push_dir * push_power;
 			// There is probably a better way of making the push ease out
 			if (push_power < 0.5) {
-				push_power *= power_attribs.WAVE_DECAY / 1.5f;
+				push_power *= ghost_defaults.blast_data.DECAY / 1.5f;
 			} else {
-				push_power *= power_attribs.WAVE_DECAY;
+				push_power *= ghost_defaults.blast_data.DECAY;
 			}
-			if (push_power < power_attribs.WAVE_POWER_THRESHOLD) { push_power = 0; }
+			if (push_power < ghost_defaults.blast_data.POWER_THRESHOLD) { push_power = 0; }
 		}
 
 		// Execute the move
 		controller.Move(move_vec * Time.deltaTime);
 	}
-
-
-
-
 
 	/** PUNCH METHODS **/
 	void UpdatePunch() {
@@ -382,6 +390,7 @@ public class GhostPuncher : MonoBehaviour
 	void NormalPunch() {
 		int punch_num = Random.Range(1,5);
 		ChangeAnimation("Jab"+punch_with+punch_num);
+
 		Punch normal_punch = Punch.FromData(
 			punch_hitbox.transform.TransformDirection(Vector3.forward),
 			defaults.NORMAL_PUNCH_DATA
