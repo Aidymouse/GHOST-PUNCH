@@ -33,6 +33,10 @@ public class BreakableObject : MonoBehaviour
 
 	AudioSource audio_source;
 
+	[Header("Grab Attrs")]
+	[Tooltip("Offset from the fist position applied to the object when it is grabbed")] public Vector3 grab_offset;
+	[Tooltip("Rotation (in euler angles fuck you) applied to the object when it is grabbed")] public Vector3 grab_rotation;
+
 	[Header("Old stuff")]
 	public ParticleSystem hit_particles;
 	public ParticleSystem break_particles;
@@ -276,7 +280,10 @@ public class BreakableObject : MonoBehaviour
 			rb.isKinematic = true;
 		}
 		this.transform.SetParent(grab_parent);
-		this.transform.position = grab_parent.transform.position;
+
+		this.transform.SetLocalPositionAndRotation(grab_offset, Quaternion.Euler(grab_rotation.x, grab_rotation.y, grab_rotation.z)); 
+		//position = grab_parent.transform.position + grab_offset;
+
 		this.gameObject.layer = LayerMask.NameToLayer("ViewModel");
 		this.enabled = false;
 	}
