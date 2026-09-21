@@ -214,7 +214,7 @@ public class GhostPuncher : MonoBehaviour
 		equipped_abilities = new PuncherAbility?[3];
 		equipped_abilities[0] = new FootballCharge(this);
 		equipped_abilities[1] = new Throw(this);
-		equipped_abilities[2] = null;
+		equipped_abilities[2] = new Drink(this);
 
 	}
 
