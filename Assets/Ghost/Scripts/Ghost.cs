@@ -121,9 +121,6 @@ public class Ghost : MonoBehaviour
   // When poise hit's 0, the ghost staggers, which makes her vulnerable.
   [HideInInspector] public float poise;
   [HideInInspector] public float max_poise;
-  // If the ghost is vulnerable, a mega punch will send her flying
-  [HideInInspector]
-  public bool vulnerable;
 
   Rigidbody[] rig_rbs;
   Collider[] rig_colliders;
@@ -178,7 +175,6 @@ public class Ghost : MonoBehaviour
 
 
     /* Timers */
-    ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
     ti_restore_poise = new Timer(0, defaults.POISE_RESTORE_TIMER);
     ti_ragdoll = new Timer(0, defaults.RAGDOLL_TIME);
     ti_recovery = new Timer(0);
@@ -224,6 +220,9 @@ public class Ghost : MonoBehaviour
     //transform.TurnTowards(ghostPuncher.transform);
 
     if (ti_restore_poise.FinishedThisFrame()) {
+			if (IsVulnerable()) {
+				StopBeingVulnerable();
+			}
       RestorePoise();
     }
 
@@ -240,6 +239,7 @@ public class Ghost : MonoBehaviour
 		if (!escaped_yet && Escaped()) {
 			CallEndRun();
 		}
+
 
   }
 
@@ -279,6 +279,7 @@ public class Ghost : MonoBehaviour
     if (cur_action != GhostActions.STAGGER_LARGE) {
       ti_restore_poise.Tick(Time.deltaTime);
     }
+
   }
 
 
@@ -288,11 +289,8 @@ public class Ghost : MonoBehaviour
 
     hp -= punch.ghost_damage;
 
-
-
 		// 1 is mega punch and 3 is big object hit
-		if (vulnerable && (punch.hit_class <= (int)HitClass.LARGE_ITEM)) {
-
+		if (IsVulnerable() && (punch.hit_class <= (int)HitClass.LARGE_ITEM)) {
 			Ragdoll(punch);
 			return;
 		}
@@ -316,18 +314,19 @@ public class Ghost : MonoBehaviour
 			return;
 		}
 
-    poise -= punch.poise_damage;
 
 
     if (ectoplasm_particles) {
       Instantiate(ectoplasm_particles, transform.position, new Quaternion());
     }
 
+    poise -= punch.poise_damage;
     if (poise <= 0) {
       if (punch.hit_class <= (int)HitClass.MEGA_PUNCH) {
 				Ragdoll(punch);
 
-      } else {
+      } else if (poise + punch.poise_damage > 0) {
+				// Only happens if this hit got us below 0
 				BecomeVulnerable();
 				EnterAction(GhostActions.STAGGER_LARGE);
       }
@@ -352,21 +351,23 @@ public class Ghost : MonoBehaviour
   }
 
   public void RestorePoise() {
+		if (poise >= max_poise) { return; }
     poise = max_poise;
+	
   }
 
   void BecomeVulnerable() {
-    vulnerable = true;
 		GainFear(5); // needed?
   }
 
-  void StopBeingVulnerable() {
-    vulnerable = false;
+  public void StopBeingVulnerable() {
+		RestorePoise();
   }
+
 
 	public void Stagger(GhostActions stagger_action, Punch punch) {
 		int stagger_level = (int)stagger_action;
-		if (vulnerable) { stagger_level += 1; }
+		if (IsVulnerable()) { stagger_level += 1; }
 		
 		if (stagger_level == (int)GhostActions.STAGGER_MINOR) {
 			// TODO:
@@ -463,6 +464,8 @@ public class Ghost : MonoBehaviour
 
   /** GETTERS */
   public NavMeshAgent get_nav_agent() { return nav_agent; }
+
+	public bool IsVulnerable() { return this.poise <= 0; }
 
 	/** SETTERS */
 	public void SetLayerInChildren(int layer, bool self_too = true) {

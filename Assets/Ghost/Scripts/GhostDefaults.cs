@@ -22,6 +22,11 @@ public class GhostDefaults : ScriptableObject
     public float MAKE_HER_FLY_FACTOR;
 		[Tooltip("How many seconds the ghost needs to charge to end the run")]
 		public float ESCAPE_NEEDED;
+		[Tooltip("How long the ghost spends vulnerable when knocked to 0 poise")]
+		public float VULNERABLE_TIME;
+
+		[Header("Powers")]
+
 		[Tooltip("Sets the default power index. Set to -1 to pick a random power. (0) Wave; (1) Slap; (2) Scream; ")]
 		[Range(-1,2)]
 		public int OVERRIDE_POWER_IDX;

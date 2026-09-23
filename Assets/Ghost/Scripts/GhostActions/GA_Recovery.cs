@@ -15,7 +15,6 @@ public class GA_Recovery : GhostAction {
 		ghost.ti_recovery.Tick(Time.deltaTime);
 
 		if (ghost.ti_recovery.Finished()) {
-			ghost.RestorePoise();
 			ghost.nav_agent.isStopped = false;
 
 			ghost.ExitAction();
