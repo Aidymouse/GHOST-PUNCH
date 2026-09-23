@@ -76,11 +76,9 @@ public class Ghost : MonoBehaviour
   [Header("Sound Effects")]
 	public GhostSounds ghost_sfx;
   public AudioSource ghost_sound;
+	// Seperate audio sources because we need different generators for each fucking varied thing!!!
+	// It's okay the ghost is worth it
   public AudioSource ghost_screams;
-  //Sounds temporarily stored on objects lol
-  public AudioClip energySound;
-  public AudioClip jumpscareSound;
-	public AudioClip sfx_charging_escape;
 
   public float pitchLow;
   public float pitchHigh;
@@ -302,9 +300,6 @@ public class Ghost : MonoBehaviour
 		}
 
 		if (punch.hit_class <= (int)HitClass.PUNCH) {
-			//ghost_sound.pitch = (Random.Range(pitchLow, pitchHigh));
-			//ghost_sound.PlayOneShot(ghost_sfx.HIT_SOUND);
-			//ghost_sound.PlayOneShot(ghost_sfx.HIT_SCREAM);
 			ghost_screams.Play();
 		}
 
