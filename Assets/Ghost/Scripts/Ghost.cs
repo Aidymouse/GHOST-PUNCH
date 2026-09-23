@@ -119,10 +119,8 @@ public class Ghost : MonoBehaviour
   [HideInInspector] public Timer ti_recovery;
 
   // When poise hit's 0, the ghost staggers, which makes her vulnerable.
-  [HideInInspector]
-  public float poise;
-  [HideInInspector]
-  public float max_poise;
+  [HideInInspector] public float poise;
+  [HideInInspector] public float max_poise;
   // If the ghost is vulnerable, a mega punch will send her flying
   [HideInInspector]
   public bool vulnerable;
