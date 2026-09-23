@@ -2590,6 +2590,7 @@ GameObject:
   - component: {fileID: 5757180813942324356}
   - component: {fileID: 282060137847931423}
   - component: {fileID: 1356796624299150421}
+  - component: {fileID: 1062089472777229332}
   m_Layer: 13
   m_Name: RagdollGhost
   m_TagString: Ghost
@@ -2645,12 +2646,9 @@ MonoBehaviour:
   ragprof_animated: {fileID: 11400000, guid: 27f0e250f250407c19fa8ef95ed10b4f, type: 2}
   ragprof_doll: {fileID: 11400000, guid: 26129855e206805db929ed92ee794cc4, type: 2}
   ragdoll: {fileID: 3358995142196449212}
-  ghost_sfx: {fileID: 0}
-  ghost_sound: {fileID: 0}
-  ghost_screams: {fileID: 0}
-  energySound: {fileID: 8300000, guid: 1899586bc4bf80440a03d5fed84e2712, type: 3}
-  jumpscareSound: {fileID: 8300000, guid: cf81402215d375f4f8b25283ba875485, type: 3}
-  sfx_charging_escape: {fileID: 0}
+  ghost_sfx: {fileID: 11400000, guid: 4ac8307cc9bb438f1b02ef89b603e338, type: 2}
+  ghost_sound: {fileID: 1356796624299150421}
+  ghost_screams: {fileID: 1062089472777229332}
   pitchLow: 0.8
   pitchHigh: 1.2
   cur_action: 0
@@ -2747,6 +2745,103 @@ AudioSource:
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 0
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &1062089472777229332
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2587037593647767648}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 6418180475301049370, guid: 982f051c7a140ba279481590f5989f8d, type: 2}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
