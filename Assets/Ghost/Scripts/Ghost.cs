@@ -301,6 +301,7 @@ public class Ghost : MonoBehaviour
 
 		if (punch.hit_class <= (int)HitClass.PUNCH) {
 			ghost_screams.Play();
+    	ghost_sound.PlayOneShot(ghost_sfx.HIT_SOUND);
 		}
 
 
