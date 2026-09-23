@@ -74,17 +74,13 @@ public class Ghost : MonoBehaviour
 
 
   [Header("Sound Effects")]
-  public AudioSource currentSound;
-  public AudioClip takingDamageSound;
-  public AudioClip ragdollSound;
-  public AudioClip ghostpunchSound;
+	public GhostSounds ghost_sfx;
+  public AudioSource ghost_sound;
+  public AudioSource ghost_screams;
   //Sounds temporarily stored on objects lol
   public AudioClip energySound;
   public AudioClip jumpscareSound;
 	public AudioClip sfx_charging_escape;
-
-	[SerializeField]
-	public Dictionary<string, AudioClip> sfx;
 
   public float pitchLow;
   public float pitchHigh;
@@ -202,9 +198,6 @@ public class Ghost : MonoBehaviour
 		// Init - pick a random power to start doing
 		PickRandomPower();
 
-    currentSound = GetComponent<AudioSource>();
-    currentSound.clip = takingDamageSound;
-
   }
 
   // Update is called once per frame
@@ -299,19 +292,21 @@ public class Ghost : MonoBehaviour
 
     hp -= punch.ghost_damage;
 
-    currentSound.clip = takingDamageSound;
-    currentSound.pitch = (Random.Range(pitchLow, pitchHigh));
-    currentSound.Play();
-
-    AudioSource.PlayClipAtPoint(ghostpunchSound, transform.position);
 
 
-        // 1 is mega punch and 3 is big object hit
-        if (vulnerable && (punch.hit_class <= (int)HitClass.LARGE_ITEM)) {
+		// 1 is mega punch and 3 is big object hit
+		if (vulnerable && (punch.hit_class <= (int)HitClass.LARGE_ITEM)) {
 
-      Ragdoll(punch);
-      return;
-    }
+			Ragdoll(punch);
+			return;
+		}
+
+		if (punch.hit_class <= (int)HitClass.PUNCH) {
+			//ghost_sound.pitch = (Random.Range(pitchLow, pitchHigh));
+			//ghost_sound.PlayOneShot(ghost_sfx.HIT_SOUND);
+			//ghost_sound.PlayOneShot(ghost_sfx.HIT_SCREAM);
+			ghost_screams.Play();
+		}
 
 
 
@@ -320,15 +315,15 @@ public class Ghost : MonoBehaviour
       return;
     }
 
+		PlayMinorHurtAnim();
+
 		if (cur_action == GhostActions.RAGDOLL) {
 			// TODO: special punch case when down
-			PlayMinorHurtAnim();
 			return;
 		}
 
     poise -= punch.poise_damage;
 
-		PlayMinorHurtAnim();
 
     if (ectoplasm_particles) {
       Instantiate(ectoplasm_particles, transform.position, new Quaternion());
@@ -391,9 +386,7 @@ public class Ghost : MonoBehaviour
 	}
 
   void Ragdoll(Punch punch) {
-    currentSound.clip = ragdollSound;
-    currentSound.PlayOneShot(ragdollSound);
-    currentSound.Play();
+    ghost_sound.PlayOneShot(ghost_sfx.RAGDOLL_SCREAM);
 
     EnterAction(GhostActions.RAGDOLL);
 
@@ -470,19 +463,7 @@ public class Ghost : MonoBehaviour
 	}
 
 	public void PlaySound(string clip_name) {
-		//currentSound.loop = false;	
 
-		switch (clip_name) {
-			case "charging_escape": {
-				currentSound.clip = sfx_charging_escape;
-				//currentSound.loop = true;	
-				break;
-			}
-			default: {
-				Debug.Log("Cannot play ghost sound: "+clip_name);
-				break;
-			}
-		}
 	}
 
 
