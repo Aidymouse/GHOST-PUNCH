@@ -8,6 +8,8 @@ public class GhostUI : MonoBehaviour
 	public GhostPuncher ghost_puncher;
 	StaminaOrbs stamina_orbs;
 	EscapeClock escape_clock;
+	public GhostHealthBar ghost_health_bar;
+	public GhostHealthBar ghost_poise_bar;
 
 	[Header("Text")]
 	public TMP_Text txt_ectoplasm;
@@ -18,44 +20,20 @@ public class GhostUI : MonoBehaviour
 
 	Timer ti_hurt_indicator;
 
-	UIBar ghost_health_bar;
-	UIBar poise_bar;
-	UIBar escape_bar;
-	UIBar stamina_bar;
-	UIBar fear_bar;
-	UIBar fear_reset_bar;
+	[Header("Fear UI")]
+	public UIBar fear_bar;
+	public UIBar fear_reset_bar;
 
 	[Tooltip("If true, we'll init as soon as we start. Should be false except when testing")]
 	public bool init_on_start;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Awake() {
-		UIBar[] bars = GetComponentsInChildren<UIBar>();
-		foreach (UIBar bar in bars) {
-			switch (bar.name) {
-				case "EscapeBar":
-					//escape_bar = bar;
-					break;
-				case "PoiseBar":
-					poise_bar = bar;
-					break;
-				case "HealthBar":
-					ghost_health_bar = bar;
-					break;
-				case "StaminaBar":
-					stamina_bar = bar;
-					break;
-				case "FearBar":
-					fear_bar = bar;
-					break;
-				case "FearResetBar":
-					fear_reset_bar = bar;
-					break;
-			}
-		}
 
 		stamina_orbs = GetComponentInChildren<StaminaOrbs>();
 		escape_clock = GetComponentInChildren<EscapeClock>();
+
+
 	}	
 
 	void Start()
@@ -81,11 +59,8 @@ public class GhostUI : MonoBehaviour
 	}
 
 	public void InitUI(Ghost ghost, GhostPuncher puncher) {
-		//escape_bar.SetMaxValue(ghost.escape_needed);
-		poise_bar.SetMaxValue(ghost.max_poise);
-		ghost_health_bar.SetMaxValue(ghost.defaults.HP);
-		stamina_bar.SetMaxValue(puncher.max_stamina);
-		//escape_bar.SetValue(0);
+		ghost_health_bar.SetProportion(1);
+		ghost_poise_bar.SetProportion(1);
 		fear_bar.SetValue(0);
 		fear_reset_bar.SetValue(0);
 	}
@@ -95,12 +70,9 @@ public class GhostUI : MonoBehaviour
 	{
 		TickTimers();
 
-
-		//escape_bar.SetValue(ghost.escape_meter);
-		ghost_health_bar.SetValue(ghost.hp);
+		ghost_health_bar.SetPropTarget(ghost.hp / ghost.defaults.HP);
 		// TODO: while ghost is vulnerable, flash poise bar
-		poise_bar.SetValue(ghost.poise);
-		stamina_bar.SetValue(ghost_puncher.stamina);
+		ghost_poise_bar.SetPropTarget(ghost.poise / ghost.max_poise);
 
 		stamina_orbs.SetStamina(ghost_puncher.stamina);
 		escape_clock.SetTimeLeft(ghost.escape_meter / ghost.escape_needed);

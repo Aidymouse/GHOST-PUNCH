@@ -9,11 +9,6 @@ public enum HitClass {
 	ITEM=3,
 }
 
-public enum PuncherAbilites {
-	FOOTBALL_CHARGE=0,
-}
-
-
 /* The hit record is passed around as we execute punches, then taken by the ghost puncher and assessed to see what kind of bonuses we get */
 public struct PunchRecord {
 	public int items_hit;
@@ -214,7 +209,7 @@ public class GhostPuncher : MonoBehaviour
 		equipped_abilities = new PuncherAbility?[3];
 		equipped_abilities[0] = new FootballCharge(this);
 		equipped_abilities[1] = new Throw(this);
-		equipped_abilities[2] = null;
+		equipped_abilities[2] = new Drink(this);
 
 	}
 

@@ -29,13 +29,6 @@ public class Throw : PuncherAbility {
 			break;
 		}
 
-		Debug.Log("Grab hit " + punched.Length + " things");
-		
-		// Set postion + rotation
-		// Parent to the right hand bone in the camera rig... kind of awkward
-		// Set the layer to viewmodel
-		// Set the RB to kinematic
-
 		puncher.ExitAbility();
 	}
 	
