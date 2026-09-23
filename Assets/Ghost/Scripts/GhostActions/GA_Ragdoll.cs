@@ -17,7 +17,6 @@ public class GA_Ragdoll : GhostAction {
 		ghost.EnableRagdoll();
 		*/
 		ghost.nav_agent.isStopped = true;
-		ghost.vulnerable = false;
 		ghost.ragdoll_animator.MasterAlpha = 0;
 
 		ghost.ragdoll_settings.PowerProfile = ghost.ragprof_doll;

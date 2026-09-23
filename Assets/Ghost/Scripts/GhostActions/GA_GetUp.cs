@@ -36,6 +36,8 @@ public class GA_GetUp : GhostAction {
 		// TODO: could track how she facing 
 		ghost.ChangeAnimation("GetUpFaceup");
 
+		ghost.StopBeingVulnerable();
+
 	}
 
 	public override void Exit() {

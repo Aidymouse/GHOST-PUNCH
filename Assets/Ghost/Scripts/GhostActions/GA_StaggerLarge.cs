@@ -2,18 +2,22 @@ using UnityEngine;
 
 public class GA_StaggerLarge : GhostAction {
 
-	public GA_StaggerLarge(Ghost g) : base(g) {}
+	Timer ti_hit_stun;
+
+	public GA_StaggerLarge(Ghost g) : base(g) {
+    ti_hit_stun = new Timer(0, g.defaults.HIT_STUN_TIME);
+	}
 
 	public override void Enter() {
-				ghost.ti_hit_stun.Reset();
+				ti_hit_stun.Reset();
 				ghost.PlayAnimation("Hit_Cower");
 				ghost.nav_agent.isStopped = true;
 	}
 
 	public override void Update() {
-		ghost.ti_hit_stun.Tick(Time.deltaTime);
+		ti_hit_stun.Tick(Time.deltaTime);
 
-		if (ghost.ti_hit_stun.FinishedThisFrame()) {
+		if (ti_hit_stun.FinishedThisFrame()) {
 			ghost.ti_recovery.Set(0);
 			ghost.EnterAction(GhostActions.RECOVERY);
 		}
