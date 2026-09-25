@@ -33,6 +33,10 @@ public class BreakableObject : MonoBehaviour
 
 	AudioSource audio_source;
 
+	[Header("Grab Attrs")]
+	[Tooltip("Offset from the fist position applied to the object when it is grabbed")] public Vector3 grab_offset;
+	[Tooltip("Rotation (in euler angles fuck you) applied to the object when it is grabbed")] public Vector3 grab_rotation;
+
 	[Header("Old stuff")]
 	public ParticleSystem hit_particles;
 	public ParticleSystem break_particles;
@@ -68,16 +72,28 @@ public class BreakableObject : MonoBehaviour
 		object_damage = attrs.OBJECT_DAMAGE;
 		ghost_damage = attrs.GHOST_DAMAGE;
 		force = attrs.FORCE;
-
-		if (material && material.hit_sound) {
-			audio_source = GetComponent<AudioSource>();
-			if (!audio_source) {
-				Debug.LogError("Breakable object missing an audio source component! Adding one manually...");
-				audio_source = this.gameObject.AddComponent<AudioSource>();
-			}
-			audio_source.clip = material.hit_sound;
-		}
 		
+	}
+
+	/* */
+	void InitAudioSource(AudioClip clip) {
+		audio_source = GetComponent<AudioSource>();
+		if (!audio_source) {
+			audio_source = this.gameObject.AddComponent<AudioSource>();
+		}
+		audio_source.clip = clip;
+	}
+
+	void PlayHitSound() {
+		if (!material.hit_sound) { return; }
+		if (!audio_source) { InitAudioSource(material.hit_sound); }
+		audio_source.pitch = Random.Range(material.pitch_low, material.pitch_high);
+		audio_source.Play();
+	}
+
+	void PlayBreakSound() {
+		if (!material.break_sound) { return; }
+		SoundEmitter.PlayVariedSoundAtPoint(material.break_sound, this.transform.position, material.pitch_low, material.pitch_high);
 	}
 
 	// Update is called once per frame
@@ -165,9 +181,8 @@ public class BreakableObject : MonoBehaviour
 
 		//Audio
 		// A breakable object only makes one sound, when it's hit, so we don't need to assign the sound, just play it.
-		if (audio_source) { 
-			audio_source.pitch = (Random.Range(material.pitch_low, material.pitch_high));
-			audio_source.Play(); 
+		if (material && material.hit_sound) {
+			PlayHitSound();
 		}
 			
 
@@ -240,7 +255,7 @@ public class BreakableObject : MonoBehaviour
 		}
 
 		if (material && material.break_sound) {
-			SoundEmitter.Create(material.break_sound);
+			PlayBreakSound();
 		}
 
 		Destroy(this.gameObject);
@@ -276,7 +291,10 @@ public class BreakableObject : MonoBehaviour
 			rb.isKinematic = true;
 		}
 		this.transform.SetParent(grab_parent);
-		this.transform.position = grab_parent.transform.position;
+
+		this.transform.SetLocalPositionAndRotation(grab_offset, Quaternion.Euler(grab_rotation.x, grab_rotation.y, grab_rotation.z)); 
+		//position = grab_parent.transform.position + grab_offset;
+
 		this.gameObject.layer = LayerMask.NameToLayer("ViewModel");
 		this.enabled = false;
 	}

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2356352825661508112}
   - component: {fileID: 1170522420456964033}
   - component: {fileID: 3165106454066868907}
-  - component: {fileID: 762983565510182566}
   - component: {fileID: 7578596147874829423}
   - component: {fileID: 2728183099541995832}
   m_Layer: 0
@@ -93,35 +92,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &762983565510182566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2464648195458157525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventTrigger
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Shop, Assembly-CSharp
-          m_MethodName: BuyItem
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 7578596147874829423}
-            m_ObjectArgumentAssemblyTypeName: ShopItem, Assembly-CSharp
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &7578596147874829423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,7 +107,8 @@ MonoBehaviour:
   item_id: 3
   item_level: 0
   cost: 0
-  name: Ghost Detector
+  shop_defaults: {fileID: 11400000, guid: 44e83f2b44450b1939dc94de47aae33f, type: 2}
+  label: Detector
   description: 
 --- !u!65 &2728183099541995832
 BoxCollider:

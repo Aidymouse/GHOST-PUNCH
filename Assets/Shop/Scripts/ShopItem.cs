@@ -8,14 +8,21 @@ public class ShopItem : MonoBehaviour
 	public ItemType item_id;
 	public int item_level;
 	public int cost;
+	public ShopDefaults shop_defaults;
 
-	public string name;
+	public string label;
 	public string description;
 
 	bool spinning;
 	float spin_speed = 60f;
 
 	bool shrinking = false;
+	float shrink_speed = 1;
+
+	void Awake() {
+		spin_speed = shop_defaults.ITEM_SPIN_SPEED;
+		shrink_speed = shop_defaults.ITEM_SHRINK_SPEED;
+	}
 
 	void Update() {
 		if (spinning) {
@@ -23,7 +30,7 @@ public class ShopItem : MonoBehaviour
 		}
 
 		if (shrinking) {
-			GetComponent<Transform>().localScale -= new Vector3(1, 1, 1) * Time.deltaTime;
+			GetComponent<Transform>().localScale -= new Vector3(shrink_speed, shrink_speed, shrink_speed) * Time.deltaTime;
 
 			if (GetComponent<Transform>().localScale.x < 0.1) {
 				Destroy(this.gameObject);

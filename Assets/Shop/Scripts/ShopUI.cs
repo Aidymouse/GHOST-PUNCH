@@ -19,6 +19,10 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 	public TMP_Text item_board_title;
 	public TMP_Text item_board_description;
 	public GameObject shrinking_item;
+	public AudioSource shop_ui_audio;
+
+	[Header("Sound clips")]
+	public ShopSounds sounds;
 
 
   void Start() { 
@@ -42,6 +46,7 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 
 		if (slot.item) {
 			UpdateBoard(slot.item);
+			shop_ui_audio.PlayOneShot(sounds.ITEM_HOVER);
 		}
 
 	}
@@ -52,6 +57,8 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 
 		if (slot.item) {
 			shop.BuyItem(slot.item);
+			// TODO: at some point we should probably check if the purchase was possible first
+			shop_ui_audio.PlayOneShot(sounds.PURCHASE);
 		}
 	}
 
@@ -62,7 +69,7 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 
 	/* Board */
 	public void UpdateBoard(ShopItem item) {
-		item_board_title.SetText(item.name);
+		item_board_title.SetText(item.label);
 		item_board_description.SetText(item.description);
 	}
 
