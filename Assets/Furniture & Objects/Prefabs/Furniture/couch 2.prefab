@@ -139,20 +139,23 @@ MonoBehaviour:
   hp: 600
   config: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   attrs: {fileID: 11400000, guid: 5a0e5ef241acb00039fce5ad27434804, type: 2}
+  material: {fileID: 0}
   hit_class: 4
   broken_obj: {fileID: 3968138884218380766, guid: f33d41e185e858943af44411f92134f2, type: 3}
   rotation_offset: {x: 90, y: 0, z: 0}
-  break_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
-  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  break_self_particles: {fileID: 1780546180473290174, guid: 6dd91f76c247bb145a0ee4ff3e39b6e6, type: 3}
-  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
-  pitchLow: 0.7
-  pitchHigh: 1.3
-  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
+  grab_offset: {x: 0, y: 0, z: 0}
+  grab_rotation: {x: 0, y: 0, z: 0}
+  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_particles: {fileID: 1780546180473290174, guid: e3bde33a9b26fc941bb0d8d6183c044f, type: 3}
+  break_self_particles: {fileID: 1780546180473290174, guid: 6dd91f76c247bb145a0ee4ff3e39b6e6, type: 3}
+  pitchLow: 0.7
+  pitchHigh: 1.3
+  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
+  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
 --- !u!65 &3376070021765295479
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -347,8 +350,8 @@ GameObject:
   - component: {fileID: 2376604556059486307}
   - component: {fileID: 4207424973404413554}
   - component: {fileID: 674007227660798956}
-  - component: {fileID: 8542372518341760798}
   - component: {fileID: 7469845643733121279}
+  - component: {fileID: 7243644295095164424}
   m_Layer: 11
   m_Name: couch_cushion_2.002
   m_TagString: BreakableObject
@@ -470,41 +473,23 @@ MonoBehaviour:
   hp: -1
   config: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   attrs: {fileID: 11400000, guid: 8dec18908abd20733a25d03637aa53d4, type: 2}
+  material: {fileID: 0}
   hit_class: 4
   broken_obj: {fileID: 0}
   rotation_offset: {x: 0, y: 0, z: 0}
-  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
-  pitchLow: 0.6
-  pitchHigh: 1.4
-  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
---- !u!65 &8542372518341760798
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4697919460526868266}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.008240482, y: 0.008360559, z: 0.0019755636}
-  m_Center: {x: -0.008506886, y: -0.00091440737, z: 0.0036250935}
+  grab_offset: {x: 0, y: 0, z: 0}
+  grab_rotation: {x: 0, y: 0, z: 0}
+  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  pitchLow: 0.6
+  pitchHigh: 1.4
+  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
+  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
 --- !u!82 &7469845643733121279
 AudioSource:
   m_ObjectHideFlags: 0
@@ -602,6 +587,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &7243644295095164424
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4697919460526868266}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.008464015, y: 0.008360559, z: 0.002014377}
+  m_Center: {x: -0.000057968795, y: -0.00091440737, z: 0.003605683}
 --- !u!1 &4733483520356139763
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,20 +745,23 @@ MonoBehaviour:
   hp: -1
   config: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   attrs: {fileID: 11400000, guid: 8dec18908abd20733a25d03637aa53d4, type: 2}
+  material: {fileID: 0}
   hit_class: 4
   broken_obj: {fileID: 0}
   rotation_offset: {x: 0, y: 0, z: 0}
-  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
-  pitchLow: 0.6
-  pitchHigh: 1.4
-  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
+  grab_offset: {x: 0, y: 0, z: 0}
+  grab_rotation: {x: 0, y: 0, z: 0}
+  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  pitchLow: 0.6
+  pitchHigh: 1.4
+  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
+  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
 --- !u!65 &2554457452788718547
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1085,20 +1094,23 @@ MonoBehaviour:
   hp: -1
   config: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   attrs: {fileID: 11400000, guid: 8dec18908abd20733a25d03637aa53d4, type: 2}
+  material: {fileID: 0}
   hit_class: 4
   broken_obj: {fileID: 0}
   rotation_offset: {x: 0, y: 0, z: 0}
-  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
-  pitchLow: 0.6
-  pitchHigh: 1.4
-  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
+  grab_offset: {x: 0, y: 0, z: 0}
+  grab_rotation: {x: 0, y: 0, z: 0}
+  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  pitchLow: 0.6
+  pitchHigh: 1.4
+  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
+  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
 --- !u!65 &5821484193065586154
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1393,20 +1405,23 @@ MonoBehaviour:
   hp: -1
   config: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   attrs: {fileID: 11400000, guid: 8dec18908abd20733a25d03637aa53d4, type: 2}
+  material: {fileID: 0}
   hit_class: 4
   broken_obj: {fileID: 0}
   rotation_offset: {x: 0, y: 0, z: 0}
-  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
-  pitchLow: 0.6
-  pitchHigh: 1.4
-  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
+  grab_offset: {x: 0, y: 0, z: 0}
+  grab_rotation: {x: 0, y: 0, z: 0}
+  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  pitchLow: 0.6
+  pitchHigh: 1.4
+  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
+  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
 --- !u!65 &7714786659479960450
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1577,8 +1592,8 @@ GameObject:
   - component: {fileID: 3309185794706972395}
   - component: {fileID: 5034918511002308099}
   - component: {fileID: 2592134340320380677}
-  - component: {fileID: 1734399949010060336}
   - component: {fileID: 5892315935263935071}
+  - component: {fileID: 6334838260744097636}
   m_Layer: 11
   m_Name: couch_cushion_2.001
   m_TagString: BreakableObject
@@ -1700,41 +1715,23 @@ MonoBehaviour:
   hp: -1
   config: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   attrs: {fileID: 11400000, guid: 8dec18908abd20733a25d03637aa53d4, type: 2}
+  material: {fileID: 0}
   hit_class: 4
   broken_obj: {fileID: 0}
   rotation_offset: {x: 0, y: 0, z: 0}
-  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
-  pitchLow: 0.6
-  pitchHigh: 1.4
-  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
---- !u!65 &1734399949010060336
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8246980554928288367}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.008464015, y: 0.008360559, z: 0.002014377}
-  m_Center: {x: -0.000057968795, y: -0.00091440737, z: 0.003605683}
+  grab_offset: {x: 0, y: 0, z: 0}
+  grab_rotation: {x: 0, y: 0, z: 0}
+  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  pitchLow: 0.6
+  pitchHigh: 1.4
+  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
+  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
 --- !u!82 &5892315935263935071
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1832,6 +1829,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &6334838260744097636
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8246980554928288367}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.008240482, y: 0.008360559, z: 0.0019755636}
+  m_Center: {x: -0.008506886, y: -0.00091440737, z: 0.0036250935}
 --- !u!1 &8871290571622474373
 GameObject:
   m_ObjectHideFlags: 0
@@ -1968,20 +1986,23 @@ MonoBehaviour:
   hp: -1
   config: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   attrs: {fileID: 11400000, guid: 8dec18908abd20733a25d03637aa53d4, type: 2}
+  material: {fileID: 0}
   hit_class: 4
   broken_obj: {fileID: 0}
   rotation_offset: {x: 0, y: 0, z: 0}
-  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
-  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
-  pitchLow: 0.6
-  pitchHigh: 1.4
-  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
+  grab_offset: {x: 0, y: 0, z: 0}
+  grab_rotation: {x: 0, y: 0, z: 0}
+  hit_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  break_self_particles: {fileID: 1236530132058975547, guid: 1efbfd65658013b4191ff9f4e2676dc8, type: 3}
+  pitchLow: 0.6
+  pitchHigh: 1.4
+  hitSoundEffect: {fileID: 8300000, guid: b7ad4351bb8a5f84586e28ba975fa7cc, type: 3}
+  destroyedSoundEffect: {fileID: 8300000, guid: 9341bd1c0317778449a498870644505f, type: 3}
 --- !u!65 &8155899896174149354
 BoxCollider:
   m_ObjectHideFlags: 0
