@@ -10,7 +10,7 @@ public class ShopItem : MonoBehaviour
 	public int cost;
 	public ShopDefaults shop_defaults;
 
-	public string name;
+	public string label;
 	public string description;
 
 	bool spinning;
