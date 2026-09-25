@@ -69,7 +69,7 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 
 	/* Board */
 	public void UpdateBoard(ShopItem item) {
-		item_board_title.SetText(item.name);
+		item_board_title.SetText(item.label);
 		item_board_description.SetText(item.description);
 	}
 
