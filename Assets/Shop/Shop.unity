@@ -7648,6 +7648,7 @@ GameObject:
   m_Component:
   - component: {fileID: 886309019}
   - component: {fileID: 886309020}
+  - component: {fileID: 886309021}
   m_Layer: 0
   m_Name: VCam_Door
   m_TagString: Untagged
@@ -7713,6 +7714,23 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
+--- !u!114 &886309021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886309018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
+  NoiseProfile: {fileID: 11400000, guid: a3dacaec0287d7444b4bd276816e1666, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: 0.3
+  FrequencyGain: 0.6
+  m_NoiseOffsets: {x: 740.11755, y: 566.5662, z: 198.07303}
 --- !u!4 &933034786 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7441168227388144084, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
@@ -13888,6 +13906,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1488249185}
   - component: {fileID: 1488249186}
+  - component: {fileID: 1488249187}
   m_Layer: 0
   m_Name: VCam_Van
   m_TagString: Untagged
@@ -13953,6 +13972,23 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
+--- !u!114 &1488249187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488249184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
+  NoiseProfile: {fileID: 11400000, guid: a3dacaec0287d7444b4bd276816e1666, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: 0.3
+  FrequencyGain: 0.6
+  m_NoiseOffsets: {x: 740.11755, y: 566.5662, z: 198.07303}
 --- !u!65 &1598625095 stripped
 BoxCollider:
   m_CorrespondingSourceObject: {fileID: 2266784551826788977, guid: 26a207495eab47d4abaaa7a3b33f36a7, type: 3}
@@ -15401,6 +15437,34 @@ PrefabInstance:
     - target: {fileID: 2822029873770833289, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
       propertyPath: m_Name
       value: GPCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 6735184006058897260, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
+      propertyPath: DefaultBlend.Time
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6735184006058897260, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
+      propertyPath: DefaultBlend.Style
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6735184006058897260, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
+      propertyPath: DefaultBlend.CustomCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6735184006058897260, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
+      propertyPath: DefaultBlend.CustomCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6735184006058897260, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
+      propertyPath: DefaultBlend.CustomCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6735184006058897260, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
+      propertyPath: DefaultBlend.CustomCurve.m_Curve.Array.data[0].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6735184006058897260, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
+      propertyPath: DefaultBlend.CustomCurve.m_Curve.Array.data[0].outSlope
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7441168227388144084, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
       propertyPath: m_LocalPosition.x
