@@ -1894,6 +1894,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4690088716759090871}
+  - component: {fileID: 6643104678257481163}
   m_Layer: 5
   m_Name: PoiseBar
   m_TagString: Untagged
@@ -1922,6 +1923,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -59.375}
   m_SizeDelta: {x: 650, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6643104678257481163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3403532363678368457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 652f4f6e96fdcbb31bdd22804b80175d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GhostHealthBar
+  mask: {fileID: 5664936546331875224}
+  mask_child: {fileID: 1980143530668419891}
+  proportion: 1
+  prop_target: 1
+  speed: 3
 --- !u!1 &3660958779176734782
 GameObject:
   m_ObjectHideFlags: 0
@@ -3134,6 +3152,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9010413586982475119}
+  - component: {fileID: 2411854665098093794}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -3162,6 +3181,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -62.5}
   m_SizeDelta: {x: 650, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2411854665098093794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5828665059025752395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 652f4f6e96fdcbb31bdd22804b80175d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GhostHealthBar
+  mask: {fileID: 7963121858680961895}
+  mask_child: {fileID: 3037090009036374257}
+  proportion: 1
+  prop_target: 1
+  speed: 3
 --- !u!1 &5899592788965812471
 GameObject:
   m_ObjectHideFlags: 0
@@ -4336,8 +4372,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GhostUI
   ghost: {fileID: 0}
   ghost_puncher: {fileID: 0}
-  ghost_health_bar: {fileID: 0}
-  ghost_poise_bar: {fileID: 0}
+  ghost_health_bar: {fileID: 2411854665098093794}
+  ghost_poise_bar: {fileID: 6643104678257481163}
   txt_ectoplasm: {fileID: 2174524282957417378}
   txt_fear_multiplier: {fileID: 5697091595603153367}
   fear_bar: {fileID: 5412550245684606757}
