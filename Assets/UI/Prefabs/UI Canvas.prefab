@@ -1919,7 +1919,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -59.375}
+  m_AnchoredPosition: {x: 0, y: -53}
   m_SizeDelta: {x: 650, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3660958779176734782
@@ -1933,8 +1933,9 @@ GameObject:
   - component: {fileID: 1980143530668419891}
   - component: {fileID: 431711838007829376}
   - component: {fileID: 5867988791092789082}
+  - component: {fileID: 8038284501021339696}
   m_Layer: 5
-  m_Name: HealthBarColor
+  m_Name: PoiseBarColor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1987,7 +1988,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c2a0d16823bfd474985741ce8a6b9e73, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8d8604e27f3e16849a17b3d1cafd76fc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1997,6 +1998,28 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &8038284501021339696
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3660958779176734782}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3bf109d1452732243a12c15f5137f676, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4058118915607655606
 GameObject:
   m_ObjectHideFlags: 0
@@ -2559,7 +2582,7 @@ GameObject:
   - component: {fileID: 1230265257996462718}
   - component: {fileID: 5711961028630768159}
   m_Layer: 5
-  m_Name: HealthBarBack
+  m_Name: PoiseBarBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3499,7 +3522,7 @@ GameObject:
   - component: {fileID: 1297572804178076632}
   - component: {fileID: 30744980870799801}
   m_Layer: 5
-  m_Name: HealthBarMask
+  m_Name: PoiseBarMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3780,7 +3803,7 @@ Canvas:
   m_GameObject: {fileID: 7078587113666760135}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 2
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 1
@@ -3816,7 +3839,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &8339946849085642906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4307,8 +4330,8 @@ RectTransform:
   - {fileID: 6363868400071439805}
   - {fileID: 7147722827497749361}
   - {fileID: 2107950745915868249}
-  - {fileID: 9010413586982475119}
   - {fileID: 4690088716759090871}
+  - {fileID: 9010413586982475119}
   - {fileID: 6111430800660782577}
   - {fileID: 5592092945651294416}
   - {fileID: 7925301326814576404}
@@ -4751,6 +4774,7 @@ GameObject:
   - component: {fileID: 3037090009036374257}
   - component: {fileID: 1279955711449556995}
   - component: {fileID: 2361084818476898563}
+  - component: {fileID: 9203563629802004655}
   m_Layer: 5
   m_Name: HealthBarColor
   m_TagString: Untagged
@@ -4815,6 +4839,28 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &9203563629802004655
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8708084833215066936}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4d3b8492850c758499d4d8ebf7621d93, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &9011967956577642954
 GameObject:
   m_ObjectHideFlags: 0
