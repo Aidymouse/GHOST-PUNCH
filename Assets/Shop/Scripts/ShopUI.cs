@@ -21,16 +21,14 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 	public GameObject shrinking_item;
 	public AudioSource shop_ui_audio;
 
+
 	[Header("Sound clips")]
 	public ShopSounds sounds;
 
 
-  void Start() { 
+  void Start() { }
 
-	}
-
-  void Update() {
-	}
+  void Update() { }
 
   public void ClickRight() {
 		shop.LookRight();
@@ -76,6 +74,14 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 	public void ClearBoard() {
 			item_board_title.SetText("");
 			item_board_description.SetText("");
+	}
+
+	public void SetBoard(string title, string desc) {
+			item_board_title.SetText(title);
+			item_board_description.SetText(desc);
+	}
+	/* Tip Jar */
+	public void FlashDollarSigns() {
 	}
 
 	/* Door */
