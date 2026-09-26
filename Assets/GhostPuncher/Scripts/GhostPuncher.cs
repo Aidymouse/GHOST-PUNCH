@@ -180,9 +180,10 @@ public class GhostPuncher : MonoBehaviour
 			Debug.Log("Ghost Puncher is going dormant.");
 			GetComponentInChildren<CameraController>().enabled = false;
 			Cursor.lockState = CursorLockMode.None;
+			ChangeAnimation("Shopping");
 
 			if (inCutscene == false) {
-				Debug.LogWarning("Ghost puncher defying desired cutscene state because we started active");
+				Debug.LogWarning("Ghost puncher defying desired cutscene state because we started inactive");
 			}
 			inCutscene = true;
 		}
