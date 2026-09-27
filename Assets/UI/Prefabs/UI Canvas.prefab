@@ -387,7 +387,7 @@ GameObject:
   - component: {fileID: 4807135420245640780}
   - component: {fileID: 2995449383385474189}
   - component: {fileID: 476534541492472285}
-  - component: {fileID: 2495508009107416389}
+  - component: {fileID: 3682776579764088396}
   m_Layer: 5
   m_Name: FearText
   m_TagString: Untagged
@@ -411,8 +411,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 590.5, y: -226.75992}
-  m_SizeDelta: {x: 169.0652, y: 169.0624}
+  m_AnchoredPosition: {x: -11, y: -127}
+  m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2995449383385474189
 CanvasRenderer:
@@ -442,7 +442,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 992b02cbb865053478ba3b69953c3212, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 769fbe720257aff4482cad7a2c4e63b9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -452,7 +452,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!95 &2495508009107416389
+--- !u!95 &3682776579764088396
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -462,7 +462,7 @@ Animator:
   m_GameObject: {fileID: 523844124747265333}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f6b36b22d17ccf948b405ed52f02464e, type: 2}
+  m_Controller: {fileID: 9100000, guid: b47308a7f429e0a4d8192df49504c6d3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -938,6 +938,104 @@ MonoBehaviour:
         m_Calls: []
     overrideTagEffects: 0
   updatesPerSecond: 24
+--- !u!1 &1374326998118306407
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1612198881640577532}
+  - component: {fileID: 5213538217027667748}
+  - component: {fileID: 2566389324661985512}
+  - component: {fileID: 2380550867255667709}
+  m_Layer: 5
+  m_Name: FearBarSquiggle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1612198881640577532
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374326998118306407}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7147722827497749361}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 92, y: 69.5}
+  m_SizeDelta: {x: 300, y: 600}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5213538217027667748
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374326998118306407}
+  m_CullTransparentMesh: 1
+--- !u!114 &2566389324661985512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374326998118306407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 0ec61c99c5c0e5a43bad0f2563ac62f2, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!95 &2380550867255667709
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374326998118306407}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 337bda12b3875d9418f3313cc10e6e8f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1590551411438118671
 GameObject:
   m_ObjectHideFlags: 0
@@ -1638,16 +1736,17 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7099271545706812182}
+  - {fileID: 1612198881640577532}
+  - {fileID: 4807135420245640780}
   - {fileID: 7375644476866931451}
   - {fileID: 7142787204270845741}
   - {fileID: 8579314584957222727}
-  - {fileID: 4807135420245640780}
   - {fileID: 6410054380722785016}
   m_Father: {fileID: 822679978891758911}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -90.399414, y: 0}
+  m_AnchoredPosition: {x: -110, y: -0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3200147387135364616
@@ -1798,7 +1897,7 @@ GameObject:
   - component: {fileID: 5129396998986830575}
   - component: {fileID: 3723548672861199041}
   - component: {fileID: 1183791920279343986}
-  - component: {fileID: 1611895439211579524}
+  - component: {fileID: 5598670438064102089}
   m_Layer: 5
   m_Name: FearBarFull
   m_TagString: Untagged
@@ -1863,7 +1962,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!95 &1611895439211579524
+--- !u!95 &5598670438064102089
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -1873,7 +1972,7 @@ Animator:
   m_GameObject: {fileID: 3249725740962095463}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d39f423615fa82141a268f5715c7dbd4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1919,7 +2018,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -59.375}
+  m_AnchoredPosition: {x: 0, y: -53}
   m_SizeDelta: {x: 650, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3660958779176734782
@@ -1933,8 +2032,9 @@ GameObject:
   - component: {fileID: 1980143530668419891}
   - component: {fileID: 431711838007829376}
   - component: {fileID: 5867988791092789082}
+  - component: {fileID: 8038284501021339696}
   m_Layer: 5
-  m_Name: HealthBarColor
+  m_Name: PoiseBarColor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1987,7 +2087,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c2a0d16823bfd474985741ce8a6b9e73, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8d8604e27f3e16849a17b3d1cafd76fc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1997,6 +2097,28 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &8038284501021339696
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3660958779176734782}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3bf109d1452732243a12c15f5137f676, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4058118915607655606
 GameObject:
   m_ObjectHideFlags: 0
@@ -2258,7 +2380,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 92, y: 69.5}
-  m_SizeDelta: {x: 300, y: 600}
+  m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6410184461550338314
 CanvasRenderer:
@@ -2288,7 +2410,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9a1ae9db4cd1bb94cbedeb01f3d36fab, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1231f436c0fd5764aab4a1f32e3fe7b0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2308,7 +2430,7 @@ Animator:
   m_GameObject: {fileID: 4220688455929398225}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2d9e9a57d1d9e4840a54e071f9ed39fd, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2559,7 +2681,7 @@ GameObject:
   - component: {fileID: 1230265257996462718}
   - component: {fileID: 5711961028630768159}
   m_Layer: 5
-  m_Name: HealthBarBack
+  m_Name: PoiseBarBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3499,7 +3621,7 @@ GameObject:
   - component: {fileID: 1297572804178076632}
   - component: {fileID: 30744980870799801}
   m_Layer: 5
-  m_Name: HealthBarMask
+  m_Name: PoiseBarMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3780,7 +3902,7 @@ Canvas:
   m_GameObject: {fileID: 7078587113666760135}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 2
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 1
@@ -3816,7 +3938,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &8339946849085642906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4307,8 +4429,8 @@ RectTransform:
   - {fileID: 6363868400071439805}
   - {fileID: 7147722827497749361}
   - {fileID: 2107950745915868249}
-  - {fileID: 9010413586982475119}
   - {fileID: 4690088716759090871}
+  - {fileID: 9010413586982475119}
   - {fileID: 6111430800660782577}
   - {fileID: 5592092945651294416}
   - {fileID: 7925301326814576404}
@@ -4751,6 +4873,7 @@ GameObject:
   - component: {fileID: 3037090009036374257}
   - component: {fileID: 1279955711449556995}
   - component: {fileID: 2361084818476898563}
+  - component: {fileID: 9203563629802004655}
   m_Layer: 5
   m_Name: HealthBarColor
   m_TagString: Untagged
@@ -4815,6 +4938,28 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &9203563629802004655
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8708084833215066936}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4d3b8492850c758499d4d8ebf7621d93, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &9011967956577642954
 GameObject:
   m_ObjectHideFlags: 0
