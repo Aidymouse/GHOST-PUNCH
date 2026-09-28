@@ -8,6 +8,7 @@ using Hairibar.Ragdoll.Animation;
 using Hairibar.Ragdoll;
 using System.Collections.Generic;
 
+
 public enum GhostActions {
 	// Non-power actions (states)
 	STARTLED, // TODO
@@ -246,7 +247,7 @@ public class Ghost : MonoBehaviour
   }
 
 	public void ExitAction() {
-		Debug.Log("Ghost Exiting: "+cur_action);
+		if (debug.ghost_logs) Debug.Log("Ghost Exiting: "+cur_action);
 		actions[(int)cur_action].Exit();
 		// TODO: will this always be the case?
 		DecideNextAction();
@@ -254,7 +255,7 @@ public class Ghost : MonoBehaviour
 
   public void EnterAction(GhostActions action) {
 		cur_action = action;
-		Debug.Log("Ghost Entering: "+cur_action);
+		if (debug.ghost_logs) Debug.Log("Ghost Entering: "+cur_action);
 		actions[(int)cur_action].Enter();
   }
 
