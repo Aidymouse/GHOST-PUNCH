@@ -79,6 +79,8 @@ public class Ghost : MonoBehaviour
 	// Seperate audio sources because we need different generators for each fucking varied thing!!!
 	// It's okay the ghost is worth it
   public AudioSource ghost_screams;
+	[Tooltip("Ghost hit sound and particles determined by this material")]
+	public ObjectMaterial ghost_material;
 
   public float pitchLow;
   public float pitchHigh;
@@ -285,9 +287,25 @@ public class Ghost : MonoBehaviour
 
 
   /** EVENTS **/
-  public void GetPunched(Punch punch) {
+  public void GetPunched(Punch punch, RaycastHit? hit=null) {
 
     hp -= punch.ghost_damage;
+
+		// Particles
+		if (ghost_material) {
+			if (ghost_material.hit_sound) {
+				SoundEmitter.PlayVariedSoundAtPoint(ghost_material.hit_sound, transform.position, ghost_material.pitch_low, ghost_material.pitch_high);
+			}
+
+			if (ghost_material.hit_particles && hit is not null) {
+				ParticleSystem p = Instantiate(ghost_material.hit_particles);
+				p.transform.position = hit.Value.point;
+				p.transform.rotation = Quaternion.Euler(-hit.Value.normal);
+				
+			}
+		}
+	
+
 
 		// 1 is mega punch and 3 is big object hit
 		if (IsVulnerable() && (punch.hit_class <= (int)HitClass.LARGE_ITEM)) {
