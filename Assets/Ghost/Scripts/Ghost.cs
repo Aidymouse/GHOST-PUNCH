@@ -45,10 +45,8 @@ public class Ghost : MonoBehaviour
   // Forces are applied to the rig core to send the ghost flying
   public Rigidbody rig_core;
 
-	[HideInInspector]
-  public float escape_meter;
-	[HideInInspector]
-  public float escape_needed;
+	[HideInInspector] public float escape_meter;
+	[HideInInspector] public float escape_needed;
 
   // Hit points
   [HideInInspector]
@@ -472,7 +470,7 @@ public class Ghost : MonoBehaviour
 	/* Just pass through to shop master */
 	public void CallEndRun() {
 		if (debug.dont_end_run == true || !shop_master) { return; }
-		shop_master.EndRun();
+		shop_master.CurryStartEndRun();
 	}
 
 	// Called from GHOSTPUNCH

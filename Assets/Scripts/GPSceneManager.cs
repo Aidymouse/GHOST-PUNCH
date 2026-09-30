@@ -16,14 +16,19 @@ public class GPSceneManager : MonoBehaviour
 			house_master = GameObject.Find("HouseMaster").GetComponent<HouseMaster>();
 		}
 
-		public void Signaled_EndStartRunCutscene() {
+		public void EndStartRunCutscene() {
 			house_master.SceneManaged_EndStartRunCutscene();
 			shop_master.SceneManaged_EndStartRunCutscene();
 		}
 
-		public void EndRun() {
-			house_master.SceneManaged_EndRun();
-			shop_master.SceneManaged_EndRun();
+		public void StartEndRun() {
+			house_master.SceneManaged_StartEndRun();
+			shop_master.SceneManaged_StartEndRun();
+		}
+
+		public void EndEndRun() {
+			house_master.SceneManaged_EndEndRun();
+			shop_master.SceneManaged_EndEndRun();
 		}
 
 }

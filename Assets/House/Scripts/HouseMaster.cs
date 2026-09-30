@@ -6,34 +6,47 @@ public class HouseMaster : MonoBehaviour
 {
 
 		public GameObject enabled_on_run_start;
-		public NavMeshAgent escaper;
-		public CinemachineCamera VCam_Escaper;
 		public Transform house_exit;
+		public EscapeGoblin escape_goblin;
 
 		GhostPuncher puncher;
+		GPSceneManager scene_manager;
+
+
+		void Awake() {
+			GameObject scene_manager_root = GameObject.Find("SceneManager");
+			scene_manager = scene_manager_root.GetComponent<GPSceneManager>();
+		}
 
 		void Start() {
 			// Not a huge fan of this, but how else !?
 			puncher = GameObject.Find("GHOST PUNCHER").GetComponent<GhostPuncher>();
 		}
 
+
 		public void SceneManaged_EndStartRunCutscene() {
 			enabled_on_run_start.SetActive(true);
 		}
 
-		public void SceneManaged_EndRun() {
+		/** START END RUN **/
+		public void SceneManaged_StartEndRun() {
 			// TODO: at some point i'll need to make sure this only happens when we can't see it
 			enabled_on_run_start.SetActive(false);
 
-			// TODO: move the house escaper to the right spot, switch the VCams, and set the location
-			escaper.transform.position = puncher.transform.position;
-			escaper.transform.localEulerAngles = new Vector3(0, puncher.transform.localEulerAngles.y, 0);
+			escape_goblin.gameObject.SetActive(true);
+			escape_goblin.StartEscaping(puncher.transform.position, new Vector3(0, puncher.transform.localEulerAngles.y+180, 0));
 
-			escaper.gameObject.SetActive(true);
-			escaper.destination = house_exit.position;
-
+			// TODO: play the StartEndRun timeline
 		}
 
-		public void EscaperContactedExit() {
+		/** END END RUN */
+		public void CurryEndEndRun() {
+			scene_manager.EndEndRun();
 		}
+
+		public void SceneManaged_EndEndRun() {
+			escape_goblin.StopEscaping();
+			escape_goblin.gameObject.SetActive(false);
+		}
+
 }

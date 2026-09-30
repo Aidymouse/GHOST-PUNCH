@@ -9,7 +9,9 @@ public class ShopMaster : MonoBehaviour
 {
 
 		public PlayableDirector enter_house_timeline;
-		public PlayableDirector end_run_timeline;
+
+		public PlayableDirector start_end_run_timeline;
+		public PlayableDirector end_end_run_timeline;
 
 		public CinemachineCamera VCam_MouseControlled;
 		public CinemachineCamera VCam_Shop;
@@ -32,19 +34,7 @@ public class ShopMaster : MonoBehaviour
 			scene_manager = scene_manager_root.GetComponent<GPSceneManager>();
     }
 
-		/*
-		IEnumerator LoadHouseScene() {
-			// TODO make this load the house scene and let it generate
-			AsyncOperation l = SceneManager.LoadSceneAsync(house_scene, LoadSceneMode.Additive);
-			while (!l.isDone) {
-				yield return null;
-			}
-
-			house_ready = true;
-
-		}
-		*/
-
+		/** START RUN **/
 
 		/** A.k.a StartStartRunCutscene */
 		public void StartRun () {
@@ -75,7 +65,7 @@ public class ShopMaster : MonoBehaviour
  		* This method lets the timeline call it through ShopMaster
  		*/
 		public void Signaled_CurryEndStartRunCutscene() {
-			scene_manager.Signaled_EndStartRunCutscene();
+			scene_manager.EndStartRunCutscene();
 		}
 
 		public void SceneManaged_EndStartRunCutscene() {
@@ -90,40 +80,43 @@ public class ShopMaster : MonoBehaviour
 
 		}
 
-		public void EndRun() {
-			scene_manager.EndRun();
-		}
-
-		public void SceneManaged_EndRun() {
-			Debug.Log("Ending Run!");
-
-			puncher_instance.GetComponent<GhostPuncher>().EndRun();
-			shop.EnableCameras();
-
-
-			// SIGNAL: triggers below Fn
-			end_run_timeline.Play();
-		}
-
 		public void Signaled_TriggerPuncherAnimation(string animation) {
 			puncher_instance.ChangeAnimation(animation);
 		}
 
-		// NOTE: the end run timeline will handle the enablement of the lose UI
-		public void Signaled_EndRunWhiteOpaque() {
+		/** END RUN - START */
+		public void CurryStartEndRun() {
+			scene_manager.StartEndRun();
+		}
+
+		public void SceneManaged_StartEndRun() {
+			start_end_run_timeline.Play();
+
 			ghost_ui.gameObject.SetActive(false);
 
 			shop_door.EndRun();
 			shop_ui.EndRun();
 
 			ghost_instance.EndRun();
+			puncher_instance.EndRun();
+			puncher_instance.ChangeAnimation("KickedOutStart");
 
 			Cursor.lockState = CursorLockMode.None;
 
 			ghost_ui.EndRun();
 		}
 
-	public void Signaled_EndRunCutsceneEnd() {
-	}
+
+		public void Signaled_PauseEndRunEffects() {
+			start_end_run_timeline.Pause();
+		}
+
+		/*** END RUN - END **/
+		public void SceneManaged_EndEndRun() {
+			start_end_run_timeline.Stop();
+			end_end_run_timeline.Play();
+			puncher_instance.ChangeAnimation("KickedOutEnd");
+			shop.EnableCameras();
+		}
 
 }
