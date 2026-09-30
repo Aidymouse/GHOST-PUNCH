@@ -18,11 +18,17 @@ public class GhostHealthBar : MonoBehaviour {
 		prop_target = prop;
 	}
 
+	/*
+ 	* @param prop - The proportion of remaining health!
+ 	*/
 	public void UpdateProp(float prop) {
 		mask.anchoredPosition = new Vector2(-mask.rect.width * (1-prop), mask.anchoredPosition.y);
 		mask_child.anchoredPosition = new Vector2(mask.rect.width * (1-prop), mask_child.anchoredPosition.y);
 	}
 
+	/*
+ 	* @param prop - The proportion of remaining health!
+ 	*/
 	public void SetPropTarget(float prop) {
 		prop_target = prop;
 	}

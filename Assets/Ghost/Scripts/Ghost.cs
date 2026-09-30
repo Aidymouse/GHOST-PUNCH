@@ -8,6 +8,7 @@ using Hairibar.Ragdoll.Animation;
 using Hairibar.Ragdoll;
 using System.Collections.Generic;
 
+
 public enum GhostActions {
 	// Non-power actions (states)
 	STARTLED, // TODO
@@ -44,10 +45,8 @@ public class Ghost : MonoBehaviour
   // Forces are applied to the rig core to send the ghost flying
   public Rigidbody rig_core;
 
-	[HideInInspector]
-  public float escape_meter;
-	[HideInInspector]
-  public float escape_needed;
+	[HideInInspector] public float escape_meter;
+	[HideInInspector] public float escape_needed;
 
   // Hit points
   [HideInInspector]
@@ -74,17 +73,13 @@ public class Ghost : MonoBehaviour
 
 
   [Header("Sound Effects")]
-  public AudioSource currentSound;
-  public AudioClip takingDamageSound;
-  public AudioClip ragdollSound;
-  public AudioClip ghostpunchSound;
-  //Sounds temporarily stored on objects lol
-  public AudioClip energySound;
-  public AudioClip jumpscareSound;
-	public AudioClip sfx_charging_escape;
-
-	[SerializeField]
-	public Dictionary<string, AudioClip> sfx;
+	public GhostSounds ghost_sfx;
+  public AudioSource ghost_sound;
+	// Seperate audio sources because we need different generators for each fucking varied thing!!!
+	// It's okay the ghost is worth it
+  public AudioSource ghost_screams;
+	[Tooltip("Ghost hit sound and particles determined by this material")]
+	public ObjectMaterial ghost_material;
 
   public float pitchLow;
   public float pitchHigh;
@@ -125,13 +120,8 @@ public class Ghost : MonoBehaviour
   [HideInInspector] public Timer ti_recovery;
 
   // When poise hit's 0, the ghost staggers, which makes her vulnerable.
-  [HideInInspector]
-  public float poise;
-  [HideInInspector]
-  public float max_poise;
-  // If the ghost is vulnerable, a mega punch will send her flying
-  [HideInInspector]
-  public bool vulnerable;
+  [HideInInspector] public float poise;
+  [HideInInspector] public float max_poise;
 
   Rigidbody[] rig_rbs;
   Collider[] rig_colliders;
@@ -186,7 +176,6 @@ public class Ghost : MonoBehaviour
 
 
     /* Timers */
-    ti_hit_stun = new Timer(0, defaults.HIT_STUN_TIME);
     ti_restore_poise = new Timer(0, defaults.POISE_RESTORE_TIMER);
     ti_ragdoll = new Timer(0, defaults.RAGDOLL_TIME);
     ti_recovery = new Timer(0);
@@ -199,11 +188,12 @@ public class Ghost : MonoBehaviour
     charge_particles = GetComponentInChildren<ParticleSystem>();
 
 
-		// Init - pick a random power to start doing
-		PickRandomPower();
-
-    currentSound = GetComponent<AudioSource>();
-    currentSound.clip = takingDamageSound;
+		if (debug.ghost_stay_awake) {
+			return;
+		}
+		
+		// The ghost will go to sleep!
+		GoDormant();
 
   }
 
@@ -235,6 +225,9 @@ public class Ghost : MonoBehaviour
     //transform.TurnTowards(ghostPuncher.transform);
 
     if (ti_restore_poise.FinishedThisFrame()) {
+			if (IsVulnerable()) {
+				StopBeingVulnerable();
+			}
       RestorePoise();
     }
 
@@ -252,10 +245,11 @@ public class Ghost : MonoBehaviour
 			CallEndRun();
 		}
 
+
   }
 
 	public void ExitAction() {
-		Debug.Log("Ghost Exiting: "+cur_action);
+		if (debug.ghost_logs) Debug.Log("Ghost Exiting: "+cur_action);
 		actions[(int)cur_action].Exit();
 		// TODO: will this always be the case?
 		DecideNextAction();
@@ -263,7 +257,7 @@ public class Ghost : MonoBehaviour
 
   public void EnterAction(GhostActions action) {
 		cur_action = action;
-		Debug.Log("Ghost Entering: "+cur_action);
+		if (debug.ghost_logs) Debug.Log("Ghost Entering: "+cur_action);
 		actions[(int)cur_action].Enter();
   }
 
@@ -290,28 +284,42 @@ public class Ghost : MonoBehaviour
     if (cur_action != GhostActions.STAGGER_LARGE) {
       ti_restore_poise.Tick(Time.deltaTime);
     }
+
   }
 
 
 
   /** EVENTS **/
-  public void GetPunched(Punch punch) {
+  public void GetPunched(Punch punch, RaycastHit? hit=null) {
 
     hp -= punch.ghost_damage;
 
-    currentSound.clip = takingDamageSound;
-    currentSound.pitch = (Random.Range(pitchLow, pitchHigh));
-    currentSound.Play();
+		// Particles
+		if (ghost_material) {
+			if (ghost_material.hit_sound) {
+				SoundEmitter.PlayVariedSoundAtPoint(ghost_material.hit_sound, transform.position, ghost_material.pitch_low, ghost_material.pitch_high);
+			}
 
-    AudioSource.PlayClipAtPoint(ghostpunchSound, transform.position);
+			if (ghost_material.hit_particles && hit is not null) {
+				ParticleSystem p = Instantiate(ghost_material.hit_particles);
+				p.transform.position = hit.Value.point;
+				p.transform.rotation = Quaternion.Euler(-hit.Value.normal);
+				
+			}
+		}
+	
 
 
-        // 1 is mega punch and 3 is big object hit
-        if (vulnerable && (punch.hit_class <= (int)HitClass.LARGE_ITEM)) {
+		// 1 is mega punch and 3 is big object hit
+		if (IsVulnerable() && (punch.hit_class <= (int)HitClass.LARGE_ITEM)) {
+			Ragdoll(punch);
+			return;
+		}
 
-      Ragdoll(punch);
-      return;
-    }
+		if (punch.hit_class <= (int)HitClass.PUNCH) {
+			ghost_screams.Play();
+    	ghost_sound.PlayOneShot(ghost_sfx.HIT_SOUND);
+		}
 
 
 
@@ -320,25 +328,26 @@ public class Ghost : MonoBehaviour
       return;
     }
 
+		PlayMinorHurtAnim();
+
 		if (cur_action == GhostActions.RAGDOLL) {
 			// TODO: special punch case when down
-			PlayMinorHurtAnim();
 			return;
 		}
 
-    poise -= punch.poise_damage;
 
-		PlayMinorHurtAnim();
 
     if (ectoplasm_particles) {
       Instantiate(ectoplasm_particles, transform.position, new Quaternion());
     }
 
+    poise -= punch.poise_damage;
     if (poise <= 0) {
       if (punch.hit_class <= (int)HitClass.MEGA_PUNCH) {
 				Ragdoll(punch);
 
-      } else {
+      } else if (poise + punch.poise_damage > 0) {
+				// Only happens if this hit got us below 0
 				BecomeVulnerable();
 				EnterAction(GhostActions.STAGGER_LARGE);
       }
@@ -363,21 +372,23 @@ public class Ghost : MonoBehaviour
   }
 
   public void RestorePoise() {
+		if (poise >= max_poise) { return; }
     poise = max_poise;
+	
   }
 
   void BecomeVulnerable() {
-    vulnerable = true;
 		GainFear(5); // needed?
   }
 
-  void StopBeingVulnerable() {
-    vulnerable = false;
+  public void StopBeingVulnerable() {
+		RestorePoise();
   }
+
 
 	public void Stagger(GhostActions stagger_action, Punch punch) {
 		int stagger_level = (int)stagger_action;
-		if (vulnerable) { stagger_level += 1; }
+		if (IsVulnerable()) { stagger_level += 1; }
 		
 		if (stagger_level == (int)GhostActions.STAGGER_MINOR) {
 			// TODO:
@@ -391,9 +402,7 @@ public class Ghost : MonoBehaviour
 	}
 
   void Ragdoll(Punch punch) {
-    currentSound.clip = ragdollSound;
-    currentSound.PlayOneShot(ragdollSound);
-    currentSound.Play();
+    ghost_sound.PlayOneShot(ghost_sfx.RAGDOLL_SCREAM);
 
     EnterAction(GhostActions.RAGDOLL);
 
@@ -448,6 +457,7 @@ public class Ghost : MonoBehaviour
 		escape_meter = 0;
 		gameObject.SetActive(true);
 		this.GetComponent<Ghost>().enabled = true;
+		PickRandomPower();
 	}
 
 	public void ApplyItems(ItemRecord record) {
@@ -460,34 +470,28 @@ public class Ghost : MonoBehaviour
 	/* Just pass through to shop master */
 	public void CallEndRun() {
 		if (debug.dont_end_run == true || !shop_master) { return; }
-		shop_master.EndRun();
+		shop_master.CurryStartEndRun();
 	}
 
 	// Called from GHOSTPUNCH
 	public void EndRun() {
 		// TODO:
+		GoDormant();
+	}
+
+	public void GoDormant() {
 		this.GetComponent<Ghost>().enabled = false;
 	}
 
 	public void PlaySound(string clip_name) {
-		//currentSound.loop = false;	
 
-		switch (clip_name) {
-			case "charging_escape": {
-				currentSound.clip = sfx_charging_escape;
-				//currentSound.loop = true;	
-				break;
-			}
-			default: {
-				Debug.Log("Cannot play ghost sound: "+clip_name);
-				break;
-			}
-		}
 	}
 
 
   /** GETTERS */
   public NavMeshAgent get_nav_agent() { return nav_agent; }
+
+	public bool IsVulnerable() { return this.poise <= 0; }
 
 	/** SETTERS */
 	public void SetLayerInChildren(int layer, bool self_too = true) {

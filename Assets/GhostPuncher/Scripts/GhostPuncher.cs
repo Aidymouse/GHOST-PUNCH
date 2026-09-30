@@ -90,6 +90,7 @@ public class GhostPuncher : MonoBehaviour
 	// prefab box used as collider for punches
 	public BoxCollider punch_hitbox;
 
+	/** Puncher doesn't really own this animator, he just gets executive control of it during gameplay. Punchers arms actually live in the camera and sometimes get externally controlled (like for escape). */
 	public Animator arm_animator;
 
 	/** Camera effects **/
@@ -178,13 +179,8 @@ public class GhostPuncher : MonoBehaviour
 
 		if (!start_active) {
 			Debug.Log("Ghost Puncher is going dormant.");
-			GetComponentInChildren<CameraController>().enabled = false;
-			Cursor.lockState = CursorLockMode.None;
-
-			if (inCutscene == false) {
-				Debug.LogWarning("Ghost puncher defying desired cutscene state because we started active");
-			}
-			inCutscene = true;
+			GoDormant();
+			ChangeAnimation("KickedOutEnd");
 		}
 
 		// Init Fear
@@ -218,9 +214,6 @@ public class GhostPuncher : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (inCutscene)	{
-			return;
-		}
 
 		// Timers
 		this.tick_timers();
@@ -423,13 +416,42 @@ public class GhostPuncher : MonoBehaviour
 		List<int> punched_ids = new List<int>();
 
 		Vector3 look_dir = punch_hitbox.transform.TransformDirection(Vector3.forward);
-		Vector3 look_start = punch_hitbox.transform.position - look_dir * punch_hitbox.transform.localScale.z/2;
+		float punch_width = punch_hitbox.transform.localScale.x;
+		float punch_height = punch_hitbox.transform.localScale.y;
+		float punch_length = punch_hitbox.transform.localScale.z;
+		// Center of flat plane perpendicular to ghost puncher at base of punch hitbox
+		Vector3 look_start = punch_hitbox.transform.position - look_dir * punch_length/2;
+
+
+		Vector3 look_top = look_start + punch_hitbox.transform.TransformDirection(Vector3.up) * punch_height/2;
+		Vector3 look_bottom = look_start - punch_hitbox.transform.TransformDirection(Vector3.up) * punch_height/2;
+		Vector3 look_left = look_start + punch_hitbox.transform.TransformDirection(Vector3.left) * punch_width/2;
+		Vector3 look_right = look_start - punch_hitbox.transform.TransformDirection(Vector3.left) * punch_width/2;
+
+
+		//float hitbox_angle = Mathf.Atan(punch_width / punch_length);
+		//float hitbox_angle = 0.1366432f;
+		//float cross_beam = Mathf.Sqrt(punch_width * punch_width + punch_length * punch_length);
+		//float cross_beam = 1.165054f;
+		//Debug.Log(hitbox_angle+", "+cross_beam);
+
+		//Debug.DrawRay(look_top, look_dir*punch_length, Color.red, 1.0f);
+		//Debug.DrawRay(look_bottom, look_dir*punch_length, Color.blue, 1.0f);
+		//Debug.DrawRay(look_left, look_dir*punch_length, Color.green, 1.0f);
+		//Debug.DrawRay(look_right, look_dir*punch_length, Color.yellow, 1.0f);
 
 		// cast a ray from look dir toward target
-		//RaycastHit[] hits = Physics.RaycastAll(new Ray(look_start, look_dir), punch_hitbox.transform.localScale.z, punchables_mask);
+		// TODO: raycast set up at the moment means you need to be looking right at the thing you're hitting. I honestly don't think anyone will notice lol
+		RaycastHit[] hits = Physics.RaycastAll(new Ray(look_start, look_dir), punch_length, punchables_mask);
 
 		foreach (Collider col in punched) {
 			RaycastHit? relevant_hit = null;
+			foreach (RaycastHit hit in hits) {
+				if (hit.collider.gameObject == col.gameObject) {
+					relevant_hit = hit;
+					break;
+				}
+			}
 
 			//Punch punch_copy = punch; // copy?
 			
@@ -440,12 +462,17 @@ public class GhostPuncher : MonoBehaviour
 
 	}
 
+	/** Iterate through raycast all hits and find the hit point */
+	void DetermineHitPoint(GameObject target, ref RaycastHit[] hits) {
+	}
+
+
 	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids, ref PunchRecord record, RaycastHit? relevant_hit) {
 
 		// May want to move this up later. Also, do we need to cast a ray to get the hit point for particles ??
-		//if (punch.HitClass-1 < punch_particles.Count && punch_particles[hitClass-1]) {
-			//Instantiate(punch_particles[punch.HitClass-1], attack_hit.point, this.transform.rotation);
-		//}
+		if (relevant_hit is not null && punch.hit_class-1 < punch_particles.Count && punch_particles[punch.hit_class-1]) {
+			Instantiate(punch_particles[punch.hit_class-1], relevant_hit.Value.point, this.transform.rotation);
+		}
 
 		if (target.GetComponent<BreakableObject>()) {
 			BreakableObject bo = target.GetComponent<BreakableObject>();
@@ -464,7 +491,7 @@ public class GhostPuncher : MonoBehaviour
 		if (ghost) {
 			int ghost_id = ghost.GetInstanceID();
 			if (punched_ids.Contains(ghost_id)) { return; }
-			ghost.GetPunched(punch);
+			ghost.GetPunched(punch, relevant_hit);
 			punched_ids.Add(ghost_id);
 
 			record.hit_ghost = true;
@@ -605,17 +632,20 @@ public class GhostPuncher : MonoBehaviour
 
 	/* Update all the state needed when a run begins */
 	public void StartRun() {
+		this.enabled = true;
 		GetComponentInChildren<CameraController>().enabled = true;
-		arm_animator.gameObject.SetActive(true);
-		inCutscene = false;
 	}
 
 	public void EndRun() {
-		GetComponentInChildren<CameraController>().enabled = false;
-		// TODO: make this a 'put arms away' animation
-		arm_animator.gameObject.SetActive(true);
-		inCutscene = true;
+		GoDormant();
+	}
 
+/** NOTE: This only handles the state of ghost puncher - there's a lot more going on in terms of handling the end of a run, but that's handled mostly in ShopMaster */
+	void GoDormant() {
+		GetComponentInChildren<CameraController>().enabled = false;
+		//ChangeAnimation("KickedOutEnd");
+		this.enabled = false;
+		
 	}
 
 
