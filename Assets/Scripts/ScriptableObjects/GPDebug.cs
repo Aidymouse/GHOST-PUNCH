@@ -13,5 +13,7 @@ public class GPDebug : ScriptableObject
 	public GhostActions power_override;
 	[Tooltip("Log extended ghost logs")]
 	public bool ghost_logs;
+	[Tooltip("Ghost will stay awake on init")]
+	public bool ghost_stay_awake;
     
 }

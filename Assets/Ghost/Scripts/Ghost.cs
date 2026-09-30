@@ -190,8 +190,12 @@ public class Ghost : MonoBehaviour
     charge_particles = GetComponentInChildren<ParticleSystem>();
 
 
-		// Init - pick a random power to start doing
-		PickRandomPower();
+		if (debug.ghost_stay_awake) {
+			return;
+		}
+		
+		// The ghost will go to sleep!
+		GoDormant();
 
   }
 
@@ -455,6 +459,7 @@ public class Ghost : MonoBehaviour
 		escape_meter = 0;
 		gameObject.SetActive(true);
 		this.GetComponent<Ghost>().enabled = true;
+		PickRandomPower();
 	}
 
 	public void ApplyItems(ItemRecord record) {
@@ -473,6 +478,10 @@ public class Ghost : MonoBehaviour
 	// Called from GHOSTPUNCH
 	public void EndRun() {
 		// TODO:
+		GoDormant();
+	}
+
+	public void GoDormant() {
 		this.GetComponent<Ghost>().enabled = false;
 	}
 

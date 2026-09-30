@@ -46,11 +46,11 @@ public class ShopMaster : MonoBehaviour
 		*/
 
 
+		/** A.k.a StartStartRunCutscene */
 		public void StartRun () {
 			Debug.Log("Start Run");
 
 			shop_door.StartRun();
-
 			shop_ui.StartRun();
 
 			shop.PlaySound(ShopSFX.MWAHAHA);
@@ -62,10 +62,18 @@ public class ShopMaster : MonoBehaviour
 
 			// SIGNAL: this cutscene triggers a signal
 			enter_house_timeline.Play();
+
+			puncher_instance.ChangeAnimation("Entrance");
+
+			Cursor.lockState = CursorLockMode.Locked;
 				
 
 		}
 
+		/** 
+ 		* We want timeline to trigger scene manager, but it lives in a different scene!
+ 		* This method lets the timeline call it through ShopMaster
+ 		*/
 		public void Signaled_CurryEndStartRunCutscene() {
 			scene_manager.Signaled_EndStartRunCutscene();
 		}
@@ -97,9 +105,12 @@ public class ShopMaster : MonoBehaviour
 			end_run_timeline.Play();
 		}
 
+		public void Signaled_TriggerPuncherAnimation(string animation) {
+			puncher_instance.ChangeAnimation(animation);
+		}
+
 		// NOTE: the end run timeline will handle the enablement of the lose UI
 		public void Signaled_EndRunWhiteOpaque() {
-			Debug.Log("Ending Run - received signal");
 			ghost_ui.gameObject.SetActive(false);
 
 			shop_door.EndRun();

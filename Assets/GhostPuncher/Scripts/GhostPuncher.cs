@@ -90,6 +90,7 @@ public class GhostPuncher : MonoBehaviour
 	// prefab box used as collider for punches
 	public BoxCollider punch_hitbox;
 
+	/** Puncher doesn't really own this animator, he just gets executive control of it during gameplay. Punchers arms actually live in the camera and sometimes get externally controlled (like for escape). */
 	public Animator arm_animator;
 
 	/** Camera effects **/
@@ -178,14 +179,8 @@ public class GhostPuncher : MonoBehaviour
 
 		if (!start_active) {
 			Debug.Log("Ghost Puncher is going dormant.");
-			GetComponentInChildren<CameraController>().enabled = false;
-			Cursor.lockState = CursorLockMode.None;
-			ChangeAnimation("Shopping");
-
-			if (inCutscene == false) {
-				Debug.LogWarning("Ghost puncher defying desired cutscene state because we started inactive");
-			}
-			inCutscene = true;
+			GoDormant();
+			ChangeAnimation("KickedOutEnd");
 		}
 
 		// Init Fear
@@ -219,9 +214,6 @@ public class GhostPuncher : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (inCutscene)	{
-			return;
-		}
 
 		// Timers
 		this.tick_timers();
@@ -640,17 +632,20 @@ public class GhostPuncher : MonoBehaviour
 
 	/* Update all the state needed when a run begins */
 	public void StartRun() {
+		this.enabled = true;
 		GetComponentInChildren<CameraController>().enabled = true;
-		arm_animator.gameObject.SetActive(true);
-		inCutscene = false;
 	}
 
 	public void EndRun() {
-		GetComponentInChildren<CameraController>().enabled = false;
-		// TODO: make this a 'put arms away' animation
-		arm_animator.gameObject.SetActive(true);
-		inCutscene = true;
+		GoDormant();
+	}
 
+/** NOTE: This only handles the state of ghost puncher - there's a lot more going on in terms of handling the end of a run, but that's handled mostly in ShopMaster */
+	void GoDormant() {
+		GetComponentInChildren<CameraController>().enabled = false;
+		//ChangeAnimation("KickedOutEnd");
+		this.enabled = false;
+		
 	}
 
 
