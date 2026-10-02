@@ -75,7 +75,7 @@ public class GhostUI : MonoBehaviour
 		ghost_poise_bar.SetPropTarget(ghost.poise / ghost.max_poise);
 
 		stamina_orbs.SetStamina(ghost_puncher.stamina);
-		escape_clock.SetTimeLeft(ghost.escape_meter / ghost.escape_needed);
+		escape_clock.SetTimeLeft(1 - (ghost.escape_meter / ghost.escape_needed));
 
 		/** Fear Bar **/
 		// The goal for the fear bar changes based on punchers current multiplier
