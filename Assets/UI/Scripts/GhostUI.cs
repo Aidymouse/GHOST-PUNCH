@@ -10,7 +10,7 @@ public class GhostUI : MonoBehaviour
 	EscapeClock escape_clock;
 	public GhostHealthBar ghost_health_bar;
 	public GhostHealthBar ghost_poise_bar;
-	public GhostHealthBar ghost_fear_bar;
+	public GhostFearBar ghost_fear_bar;
 
 	[Header("Text")]
 	public TMP_Text txt_ectoplasm;
@@ -26,11 +26,8 @@ public class GhostUI : MonoBehaviour
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Awake() {
-
 		stamina_orbs = GetComponentInChildren<StaminaOrbs>();
 		escape_clock = GetComponentInChildren<EscapeClock>();
-
-
 	}	
 
 	void Start()

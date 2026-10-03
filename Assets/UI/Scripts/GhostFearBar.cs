@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public enum HealthBarOrientation {
@@ -5,7 +6,7 @@ public enum HealthBarOrientation {
 	VERTICAL
 }
 
-public class GhostHealthBar : MonoBehaviour {
+public class GhostFearBar : MonoBehaviour {
 
 	public RectTransform mask;
 	public RectTransform mask_child;
