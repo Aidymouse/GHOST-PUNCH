@@ -10,6 +10,7 @@ public class GhostUI : MonoBehaviour
 	EscapeClock escape_clock;
 	public GhostHealthBar ghost_health_bar;
 	public GhostHealthBar ghost_poise_bar;
+	public GhostHealthBar ghost_fear_bar;
 
 	[Header("Text")]
 	public TMP_Text txt_ectoplasm;
@@ -19,10 +20,6 @@ public class GhostUI : MonoBehaviour
 	Image slow_indicator;
 
 	Timer ti_hurt_indicator;
-
-	[Header("Fear UI")]
-	public UIBar fear_bar;
-	public UIBar fear_reset_bar;
 
 	[Tooltip("If true, we'll init as soon as we start. Should be false except when testing")]
 	public bool init_on_start;
@@ -61,8 +58,6 @@ public class GhostUI : MonoBehaviour
 	public void InitUI(Ghost ghost, GhostPuncher puncher) {
 		ghost_health_bar.SetProportion(1);
 		ghost_poise_bar.SetProportion(1);
-		fear_bar.SetValue(0);
-		fear_reset_bar.SetValue(0);
 	}
 
 	// Update is called once per frame
@@ -80,15 +75,9 @@ public class GhostUI : MonoBehaviour
 		/** Fear Bar **/
 		// The goal for the fear bar changes based on punchers current multiplier
 		float fear_required = ghost_puncher.GetFearRequired();
-		if (fear_required > 0) {
-			float fear_meter = ghost_puncher.fear_meter;
-			float fear_portion = fear_meter / fear_required;
-			fear_bar.SetValue(fear_portion);
-		} else {
-			fear_bar.SetValue(1);
-		}
-
-		fear_reset_bar.SetValue(ghost_puncher.ti_fear_reset.PercentComplete());
+		float fear_meter = ghost_puncher.fear_meter;
+		float fear_portion = fear_meter / fear_required;
+		ghost_fear_bar.SetPropTarget(fear_portion);
 
 		txt_fear_multiplier.SetText("x"+ghost_puncher.GetFearMultiplier());
 

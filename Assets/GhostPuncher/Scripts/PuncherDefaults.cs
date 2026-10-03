@@ -47,9 +47,16 @@ public class PuncherDefaults : ScriptableObject
 	[Header("Fear Meter")]
 	[Tooltip("The multipliers applied to damage. multipliers[n] required fear_required[n] fear to be attained")]
 	public List<float> FEAR_MULTIPLIERS;
-	[Tooltip("Fear required to attain the multiplier at N. Fear starts from 0 at each stage")]
+	[Tooltip("Fear required to attain the multiplier at N. Fear starts from 0 at each stage. Has one additional number than multipliers to create a cap for your highest fear multiplier")]
 	public List<float> FEAR_REQUIRED;
-	[Tooltip("(seconds) Time that a combo remains, resets when hitting ghost or furniture")]
+	[Tooltip("(seconds) How long fear drain is paused when hitting furniture or ghost")]
+	public float FEAR_DRAIN_PAUSE;
+	[Tooltip("(seconds) Time puncher has to reclaim the fear meter when it hits 0")]
+	public float FEAR_LAST_CHANCE;
+	[Tooltip("(percent / second) Rate of fear drain")]
+	public float FEAR_DRAIN;
+
+	[Tooltip("DEPRECATED - (seconds) Time that a combo remains, resets when hitting ghost or furniture")]
 	public List<float> FEAR_RESET_TIMERS;
 
 	[Header("Football Charge")]

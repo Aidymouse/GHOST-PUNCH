@@ -1,5 +1,10 @@
 using UnityEngine;
 
+public enum HealthBarOrientation {
+	HORIZONTAL,
+	VERTICAL
+}
+
 public class GhostHealthBar : MonoBehaviour {
 
 	public RectTransform mask;
@@ -8,6 +13,7 @@ public class GhostHealthBar : MonoBehaviour {
 	public float proportion = 1;
 	public float prop_target = 1;
 	public float speed = 6f;
+	public HealthBarOrientation orientation;
 
 
 	/*
@@ -22,8 +28,13 @@ public class GhostHealthBar : MonoBehaviour {
  	* @param prop - The proportion of remaining health!
  	*/
 	public void UpdateProp(float prop) {
-		mask.anchoredPosition = new Vector2(-mask.rect.width * (1-prop), mask.anchoredPosition.y);
-		mask_child.anchoredPosition = new Vector2(mask.rect.width * (1-prop), mask_child.anchoredPosition.y);
+		if (orientation == HealthBarOrientation.HORIZONTAL) {
+			mask.anchoredPosition = new Vector2(-mask.rect.width * (1-prop), mask.anchoredPosition.y);
+			mask_child.anchoredPosition = new Vector2(mask.rect.width * (1-prop), mask_child.anchoredPosition.y);
+		} else if (orientation == HealthBarOrientation.VERTICAL) {
+			mask.anchoredPosition = new Vector2(mask.anchoredPosition.x, -mask.rect.height * (1-prop));
+			mask_child.anchoredPosition = new Vector2(mask.anchoredPosition.x, mask.rect.height * (1-prop));
+		}
 	}
 
 	/*
