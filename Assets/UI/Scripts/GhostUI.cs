@@ -10,7 +10,7 @@ public class GhostUI : MonoBehaviour
 	EscapeClock escape_clock;
 	public GhostHealthBar ghost_health_bar;
 	public GhostHealthBar ghost_poise_bar;
-	public GhostFearBar ghost_fear_bar;
+	public GhostHealthBar ghost_fear_bar;
 
 	[Header("Text")]
 	public TMP_Text txt_ectoplasm;
@@ -70,13 +70,24 @@ public class GhostUI : MonoBehaviour
 		escape_clock.SetTimeLeft(1 - (ghost.escape_meter / ghost.escape_needed));
 
 		/** Fear Bar **/
-		// The goal for the fear bar changes based on punchers current multiplier
-		float fear_required = ghost_puncher.GetFearRequired();
-		float fear_meter = ghost_puncher.fear_meter;
-		float fear_portion = fear_meter / fear_required;
-		ghost_fear_bar.SetPropTarget(fear_portion);
+		if (ghost_puncher.fear_index == 0 && ghost_puncher.fear_meter == 0) {
+			ghost_fear_bar.gameObject.SetActive(false);
+		} else {
+			ghost_fear_bar.gameObject.SetActive(true);
 
-		txt_fear_multiplier.SetText("x"+ghost_puncher.GetFearMultiplier());
+			// We need to find the percentage of the way to the next stage
+			float fear_required_this_stage = ghost_puncher.defaults.FEAR_REQUIRED[ghost_puncher.fear_index+1];
+			float threshold_low = ghost_puncher.fear_thresholds[ghost_puncher.fear_index];
+			float fear_this_stage = ghost_puncher.fear_meter - threshold_low;
+			float fear_stage_portion = fear_this_stage / fear_required_this_stage;
+			float fear_portion = ghost_puncher.fear_index + fear_stage_portion;
+
+			//Debug.Log("Fear threshold: [" + threshold_low + ", " + ghost_puncher.fear_thresholds[ghost_puncher.fear_index+1] + "], Fear Meter: " + ghost_puncher.fear_meter + ", Portion: " + fear_portion + ", Fear Requried This Stage: " + fear_required_this_stage);
+
+			ghost_fear_bar.SetPropTarget(fear_portion);
+
+			txt_fear_multiplier.SetText("x"+ghost_puncher.GetFearMultiplier());
+		}
 
 		/** Hurt Indicator **/
 		if (!ti_hurt_indicator.Finished()) {

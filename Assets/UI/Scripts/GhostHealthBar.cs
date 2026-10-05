@@ -14,6 +14,14 @@ public class GhostHealthBar : MonoBehaviour {
 	public float prop_target = 1;
 	public float speed = 6f;
 	public HealthBarOrientation orientation;
+	public Vector2 offset;
+
+	[Tooltip("X or Y position of mask when bar is full")] public float mask_full;
+	[Tooltip("X or Y position of mask when bar is empty")] public float mask_empty;
+		//62.97
+	[Tooltip("")] public float child_offset;
+	//[Tooltip("X or Y position of bar graphic when bar is full")] public float bar_full;
+	//[Tooltip("X or Y position of bar graphic when bar is empty")] public float bar_empty;
 
 	/*
  	* @param prop - The proportion of remaining health!
@@ -26,13 +34,21 @@ public class GhostHealthBar : MonoBehaviour {
 	/*
  	* @param prop - The proportion of remaining health!
  	*/
-	public void UpdateProp(float prop) {
+	public void UpdateProp(float proportion) {
+
+		float prop = proportion % 1;
+		if (prop == 0 && proportion != 0) {
+			prop = 1;
+		}
+
+		float pos = Lerp.lerp(mask_empty, mask_full, prop);
+
 		if (orientation == HealthBarOrientation.HORIZONTAL) {
-			mask.anchoredPosition = new Vector2(-mask.rect.width * (1-prop), mask.anchoredPosition.y);
-			mask_child.anchoredPosition = new Vector2(mask.rect.width * (1-prop), mask_child.anchoredPosition.y);
+			mask.anchoredPosition = new Vector2(pos, mask.anchoredPosition.y);
+			mask_child.anchoredPosition = new Vector2(-pos + child_offset, mask_child.anchoredPosition.y);
 		} else if (orientation == HealthBarOrientation.VERTICAL) {
-			mask.anchoredPosition = new Vector2(mask.anchoredPosition.x, -mask.rect.height * (1-prop));
-			mask_child.anchoredPosition = new Vector2(mask.anchoredPosition.x, mask.rect.height * (1-prop));
+			mask.anchoredPosition = new Vector2(mask.anchoredPosition.x, pos);
+			mask_child.anchoredPosition = new Vector2(mask.anchoredPosition.x, -pos + child_offset);
 		}
 	}
 

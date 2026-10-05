@@ -64,6 +64,8 @@ public class GhostPuncher : MonoBehaviour
 	// Fear drain in percent per second
 	[HideInInspector] public float fear_drain;
 	[HideInInspector] public float fear_multiplier;
+	// Since filter is one big counter, it's nice if we derive fear thresholds and keep them around
+	[HideInInspector] public List<float> fear_thresholds;
 	[HideInInspector] public float fear_meter;
 	// Pauses fear drain
 	public Timer ti_fear_drain_pause;
@@ -189,10 +191,19 @@ public class GhostPuncher : MonoBehaviour
 
 		// Init Fear
 		fear_index = 0;
-		max_fear_index = defaults.FEAR_MULTIPLIERS.Count;
+		max_fear_index = defaults.FEAR_MULTIPLIERS.Count-1;
 		ti_fear_drain_pause = new Timer(defaults.FEAR_DRAIN_PAUSE, defaults.FEAR_DRAIN_PAUSE);
 		ti_fear_last_chance = new Timer(defaults.FEAR_LAST_CHANCE, defaults.FEAR_LAST_CHANCE);
 		fear_drain = defaults.FEAR_DRAIN;
+		fear_thresholds = new List<float>();
+		for (int i=0; i<defaults.FEAR_REQUIRED.Count; i++) {
+			fear_thresholds.Add(defaults.FEAR_REQUIRED[i]);
+			if (i > 0) {
+				fear_thresholds[i] += fear_thresholds[i-1];
+			}
+			Debug.Log("Fear threshold for mult idx " + i + ": " + fear_thresholds[i]);
+		}
+
 
 		// Init mouse damping
 		look_damping_left = 1;
@@ -577,22 +588,22 @@ public class GhostPuncher : MonoBehaviour
 			if (ti_fear_last_chance.Finished()) { ResetFear(); }
 		}
 
-		if (this.fear_meter >= GetFearRequired() && this.fear_index < this.max_fear_index) {
-			this.fear_index += 1;
-			this.fear_meter = GetFearRequired() * 0.2f;
+		if (this.fear_meter >= GetFearRequired()) {
+			if (this.fear_index < this.max_fear_index) {
+				this.fear_index += 1;
+				this.fear_meter = fear_thresholds[this.fear_index] + defaults.FEAR_REQUIRED[this.fear_index+1] * 0.2f;
+			} else {
+				this.fear_meter = GetFearRequired(); 
+			}
 		}
 
-		if (this.fear_meter > GetFearRequired()) { this.fear_meter = GetFearRequired(); }
 
 	}
 
 	
 	/** Get's the fear required for the next fear tier. */
 	public float GetFearRequired() {
-		if (this.fear_index < this.max_fear_index) {
-			return defaults.FEAR_REQUIRED[this.fear_index+1];
-		}
-		return defaults.FEAR_REQUIRED[this.fear_index];
+		return fear_thresholds[this.fear_index+1];
 	}
  	
 	/** Gets the fear mutlipler (applied to damage) */

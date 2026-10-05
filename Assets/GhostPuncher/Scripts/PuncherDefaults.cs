@@ -45,9 +45,9 @@ public class PuncherDefaults : ScriptableObject
 	public float MEGAPUNCH_FEAR;
 
 	[Header("Fear Meter")]
-	[Tooltip("The multipliers applied to damage. multipliers[n] required fear_required[n] fear to be attained")]
+	[Tooltip("The multipliers applied to damage. Multipliers[n] requires fear_required[n] fear to be attained")]
 	public List<float> FEAR_MULTIPLIERS;
-	[Tooltip("Fear required to attain the multiplier at N. Fear starts from 0 at each stage. Has one additional number than multipliers to create a cap for your highest fear multiplier")]
+	[Tooltip("Fear required to attain the multiplier at N. Fear essentially starts from 0 at each stage. Has one additional number than multipliers to create a cap for your highest fear multiplier")]
 	public List<float> FEAR_REQUIRED;
 	[Tooltip("(seconds) How long fear drain is paused when hitting furniture or ghost")]
 	public float FEAR_DRAIN_PAUSE;
