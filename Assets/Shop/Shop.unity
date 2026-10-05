@@ -1133,11 +1133,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!224 &244908117 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5129396998986830575, guid: f2030ea18dfd960278f839469591acf2, type: 3}
-  m_PrefabInstance: {fileID: 377983690}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &258469683 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7779610476648712797, guid: 26a207495eab47d4abaaa7a3b33f36a7, type: 3}
@@ -1825,9 +1820,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7078587113666760135, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2085200266}
-    - targetCorrespondingSourceObject: {fileID: 3008679747110337630, guid: f2030ea18dfd960278f839469591acf2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1759831624}
   m_SourcePrefab: {fileID: 100100000, guid: f2030ea18dfd960278f839469591acf2, type: 3}
 --- !u!114 &377983691 stripped
 MonoBehaviour:
@@ -2720,11 +2712,6 @@ Camera:
   m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!224 &614953099 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7375644476866931451, guid: f2030ea18dfd960278f839469591acf2, type: 3}
-  m_PrefabInstance: {fileID: 377983690}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &672182605
 GameObject:
   m_ObjectHideFlags: 0
@@ -5231,33 +5218,17 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 165790869509203655, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
   m_PrefabInstance: {fileID: 1966938409940407737}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1759831622 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3008679747110337630, guid: f2030ea18dfd960278f839469591acf2, type: 3}
+--- !u!114 &1759831624 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4520870974762171677, guid: f2030ea18dfd960278f839469591acf2, type: 3}
   m_PrefabInstance: {fileID: 377983690}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1759831624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1759831622}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 652f4f6e96fdcbb31bdd22804b80175d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GhostHealthBar
-  mask: {fileID: 614953099}
-  mask_child: {fileID: 244908117}
-  proportion: 0
-  prop_target: 0
-  speed: 6
-  orientation: 1
-  offset: {x: 0, y: 156}
-  mask_full: -44.43
-  mask_empty: -444.6
-  child_offset: 62.97
 --- !u!1 &1771565991
 GameObject:
   m_ObjectHideFlags: 0
