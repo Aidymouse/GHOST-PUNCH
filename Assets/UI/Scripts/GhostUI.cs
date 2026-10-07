@@ -10,6 +10,7 @@ public class GhostUI : MonoBehaviour
 	EscapeClock escape_clock;
 	public GhostHealthBar ghost_health_bar;
 	public GhostHealthBar ghost_poise_bar;
+	public GhostHealthBar ghost_fear_bar;
 
 	[Header("Text")]
 	public TMP_Text txt_ectoplasm;
@@ -20,20 +21,13 @@ public class GhostUI : MonoBehaviour
 
 	Timer ti_hurt_indicator;
 
-	[Header("Fear UI")]
-	public UIBar fear_bar;
-	public UIBar fear_reset_bar;
-
 	[Tooltip("If true, we'll init as soon as we start. Should be false except when testing")]
 	public bool init_on_start;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Awake() {
-
 		stamina_orbs = GetComponentInChildren<StaminaOrbs>();
 		escape_clock = GetComponentInChildren<EscapeClock>();
-
-
 	}	
 
 	void Start()
@@ -61,8 +55,6 @@ public class GhostUI : MonoBehaviour
 	public void InitUI(Ghost ghost, GhostPuncher puncher) {
 		ghost_health_bar.SetProportion(1);
 		ghost_poise_bar.SetProportion(1);
-		fear_bar.SetValue(0);
-		fear_reset_bar.SetValue(0);
 	}
 
 	// Update is called once per frame
@@ -75,22 +67,27 @@ public class GhostUI : MonoBehaviour
 		ghost_poise_bar.SetPropTarget(ghost.poise / ghost.max_poise);
 
 		stamina_orbs.SetStamina(ghost_puncher.stamina);
-		escape_clock.SetTimeLeft(ghost.escape_meter / ghost.escape_needed);
+		escape_clock.SetTimeLeft(1 - (ghost.escape_meter / ghost.escape_needed));
 
 		/** Fear Bar **/
-		// The goal for the fear bar changes based on punchers current multiplier
-		float fear_required = ghost_puncher.GetFearRequired();
-		if (fear_required > 0) {
-			float fear_meter = ghost_puncher.fear_meter;
-			float fear_portion = fear_meter / fear_required;
-			fear_bar.SetValue(fear_portion);
+		if (ghost_puncher.fear_index == 0 && ghost_puncher.fear_meter == 0) {
+			ghost_fear_bar.gameObject.SetActive(false);
 		} else {
-			fear_bar.SetValue(1);
+			ghost_fear_bar.gameObject.SetActive(true);
+
+			// We need to find the percentage of the way to the next stage
+			float fear_required_this_stage = ghost_puncher.defaults.FEAR_REQUIRED[ghost_puncher.fear_index+1];
+			float threshold_low = ghost_puncher.fear_thresholds[ghost_puncher.fear_index];
+			float fear_this_stage = ghost_puncher.fear_meter - threshold_low;
+			float fear_stage_portion = fear_this_stage / fear_required_this_stage;
+			float fear_portion = ghost_puncher.fear_index + fear_stage_portion;
+
+			//Debug.Log("Fear threshold: [" + threshold_low + ", " + ghost_puncher.fear_thresholds[ghost_puncher.fear_index+1] + "], Fear Meter: " + ghost_puncher.fear_meter + ", Portion: " + fear_portion + ", Fear Requried This Stage: " + fear_required_this_stage);
+
+			ghost_fear_bar.SetPropTarget(fear_portion);
+
+			txt_fear_multiplier.SetText("x"+ghost_puncher.GetFearMultiplier());
 		}
-
-		fear_reset_bar.SetValue(ghost_puncher.ti_fear_reset.PercentComplete());
-
-		txt_fear_multiplier.SetText("x"+ghost_puncher.GetFearMultiplier());
 
 		/** Hurt Indicator **/
 		if (!ti_hurt_indicator.Finished()) {
