@@ -71,6 +71,12 @@ public class Ghost : MonoBehaviour
 	// The ragdoll object itself, moved when the ghost is getting up
 	public GameObject ragdoll;
 
+	[Header("Knockback")]
+	public Rigidbody kb_rigidbody;
+	public Collider kb_collider;
+	Timer ti_knockback;
+	// TODO: the ghost sinks into the floor a little? Collider needs to accomodate that
+
 
   [Header("Sound Effects")]
 	public GhostSounds ghost_sfx;
@@ -104,7 +110,6 @@ public class Ghost : MonoBehaviour
   public PlayableDirector jumpscareTimeline;
   public bool inJumpscare = false;
 
-  public ParticleSystem ectoplasm_particles;
 
   public float fear_meter;
 
@@ -138,6 +143,8 @@ public class Ghost : MonoBehaviour
     hp = defaults.HP;
 		escape_needed = defaults.ESCAPE_NEEDED;
 		escape_meter = 0;
+
+		ti_knockback = new Timer(0, defaults.KNOCKBACK_TIMER);
 	}
 
   void Start()
@@ -201,6 +208,13 @@ public class Ghost : MonoBehaviour
   // Update is called once per frame
   public void Update()
   {
+
+		if (!ti_knockback.Finished()) {
+			ti_knockback.Tick(Time.deltaTime);
+			if (ti_knockback.Finished()) {
+				DisableKnockback();
+			}
+		}
 
     /* Rotate towards ghost puncher */
     // TODO: when we flee we should look that direction instead
@@ -293,6 +307,7 @@ public class Ghost : MonoBehaviour
   /** EVENTS **/
   public void GetPunched(Punch punch, RaycastHit? hit=null) {
 
+		// Damage
     hp -= punch.ghost_damage;
 
 		// Particles
@@ -336,12 +351,16 @@ public class Ghost : MonoBehaviour
 			return;
 		}
 
+	// Knockback
+	EnableKnockback();
+	Vector3 knockback_dir = punch.direction;
+	knockback_dir.y = 0;
+	kb_rigidbody.AddForce(knockback_dir.normalized * punch.force * defaults.KNOCKBACK_FACTOR);
+	ti_knockback.Reset();
 
 
-    if (ectoplasm_particles) {
-      Instantiate(ectoplasm_particles, transform.position, new Quaternion());
-    }
 
+	// Poise
     poise -= punch.poise_damage;
     if (poise <= 0) {
       if (punch.hit_class <= (int)HitClass.MEGA_PUNCH) {
@@ -488,6 +507,20 @@ public class Ghost : MonoBehaviour
 
 	}
 
+
+	public void EnableKnockback() {
+		nav_agent.enabled = false;
+
+		kb_rigidbody.isKinematic = false;
+		kb_collider.enabled = true;
+	}
+	
+	public void DisableKnockback() {
+		nav_agent.enabled = true;
+
+		kb_rigidbody.isKinematic = true;
+		kb_collider.enabled = false;
+	}
 
   /** GETTERS */
   public NavMeshAgent get_nav_agent() { return nav_agent; }
