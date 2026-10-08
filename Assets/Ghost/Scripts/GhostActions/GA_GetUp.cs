@@ -17,7 +17,8 @@ public class GA_GetUp : GhostAction {
 	public GA_GetUp(Ghost g, float init_max_alpha) : base(g) {
 		// It would be nice if this eased...
 		ti_alpha_fade = new Timer(1.0f, 1.0f);
-		max_alpha = init_max_alpha;
+		//max_alpha = init_max_alpha;
+		max_alpha = 1;
 	}
 
 	public override void Enter() {
@@ -31,6 +32,8 @@ public class GA_GetUp : GhostAction {
 		ghost.transform.position -= ragdoll_offset;
 		ghost.rig_core.transform.position += ragdoll_offset;
 		ghost.ragdoll_settings.PowerProfile = ghost.ragprof_animated;
+
+		ti_alpha_fade.Reset();
 
 
 		// TODO: could track how she facing 
@@ -56,6 +59,7 @@ public class GA_GetUp : GhostAction {
 		if (ti_alpha_fade.Finished()) {
 			Debug.Log("Get Up should end now");
 			ghost.ragdoll_animator.MasterAlpha = max_alpha;
+			ghost.ragdoll_animator.forceTargetPose = true;
 			ghost.ExitAction();
 		}
 	}

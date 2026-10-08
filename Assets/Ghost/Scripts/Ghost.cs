@@ -143,6 +143,7 @@ public class Ghost : MonoBehaviour
   void Start()
   {
 		ragdoll_animator = GetComponentInChildren<RagdollAnimator>();
+	ragdoll_animator.forceTargetPose = true;
 
     /* Nav Settings */
     nav_agent = GetComponent<NavMeshAgent>();

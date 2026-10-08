@@ -16,6 +16,8 @@ public class GhostDefaults : ScriptableObject
     public float POISE_RESTORE_TIMER;
     [Tooltip("Time spent ragdolled after being SMASHED!")]
     public float RAGDOLL_TIME;
+	[Tooltip("After ragdolling, we'll ramp the ragdolls alpha from 0 to 1 over this period of time, after which we'll turn force target pose back on")]
+	public float FORCE_POSE_TIMER;
     [Tooltip("Time spent recovering (getting up from ragdolling)")]
     public float RECOVERY_TIME;
     [Tooltip("Multiplier added to punch force when the ghost ragdolls")]
@@ -24,6 +26,8 @@ public class GhostDefaults : ScriptableObject
 		public float ESCAPE_NEEDED;
 		[Tooltip("How long the ghost spends vulnerable when knocked to 0 poise")]
 		public float VULNERABLE_TIME;
+
+
 
 		[Header("Powers")]
 

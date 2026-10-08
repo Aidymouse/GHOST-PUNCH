@@ -20,6 +20,7 @@ public class GA_Ragdoll : GhostAction {
 		ghost.ragdoll_animator.MasterAlpha = 0;
 
 		ghost.ragdoll_settings.PowerProfile = ghost.ragprof_doll;
+		ghost.ragdoll_animator.forceTargetPose = false;
 
 	}
 
@@ -31,6 +32,9 @@ public class GA_Ragdoll : GhostAction {
 		//ghost.rig_core.position += ragdoll_offset;
 		//Debug.Log(ragdoll_offset);
 
+		//ghost.ragdoll_settings.PowerProfile = ghost.ragprof_animated;
+		// We actually want to slide the master alpha up instead of just setting the target pose instantly
+		//ghost.ragdoll_animator.forceTargetPose = true;
 		ghost.SetLayerInChildren(LayerMask.NameToLayer("Ghost"));
 		ghost.DisableRagdoll();
 		ghost.EnableAnimator();
