@@ -71,6 +71,7 @@ public class GhostUI : MonoBehaviour
 
 		/** Fear Bar **/
 		if (ghost_puncher.fear_index == 0 && ghost_puncher.fear_meter == 0) {
+			ghost_fear_bar.SetProportion(0);
 			ghost_fear_bar.gameObject.SetActive(false);
 		} else {
 			ghost_fear_bar.gameObject.SetActive(true);

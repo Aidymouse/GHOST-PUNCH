@@ -12,6 +12,8 @@ public class GhostHealthBar : MonoBehaviour {
 
 	public float proportion = 1;
 	public float prop_target = 1;
+	/* For nice bar draining around 1s and 0s for looping bars. TODO: */
+	public float last_prop_change;
 	public float speed = 6f;
 	public HealthBarOrientation orientation;
 	public Vector2 offset;
@@ -27,8 +29,10 @@ public class GhostHealthBar : MonoBehaviour {
  	* @param prop - The proportion of remaining health!
  	*/
 	public void SetProportion(float prop) {
-		prop = prop;
-		prop_target = prop;
+		this.last_prop_change = prop - this.proportion;
+		this.proportion = prop;
+		this.prop_target = prop;
+		UpdateProp(prop);
 	}
 
 	/*
@@ -37,8 +41,14 @@ public class GhostHealthBar : MonoBehaviour {
 	public void UpdateProp(float proportion) {
 
 		float prop = proportion % 1;
-		if (prop == 0 && proportion != 0) {
-			prop = 1;
+		
+		if (proportion % 1 == 0) {
+			if (last_prop_change > 0) {
+				prop = 1;
+			}
+			if (last_prop_change < 0) {
+				prop = 0;
+			}
 		}
 
 		float pos = Lerp.lerp(mask_empty, mask_full, prop);
@@ -67,9 +77,11 @@ public class GhostHealthBar : MonoBehaviour {
 			proportion = prop_target;
 		} else {
 			if (prop_target > proportion) {
+				last_prop_change = prop_change;
 				proportion += prop_change;
 			} else if (prop_target < proportion) {
 				proportion -= prop_change;
+				last_prop_change = -prop_change;
 			}
 		}
 
