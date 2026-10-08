@@ -61,9 +61,15 @@ public class GhostPuncher : MonoBehaviour
 	// Indexes into the fear_multipliers and fear_required lists of defaults
 	[HideInInspector] public int fear_index;
 	[HideInInspector] public int max_fear_index;
+	// Fear drain in percent per second
+	[HideInInspector] public float fear_drain;
 	[HideInInspector] public float fear_multiplier;
+	// Since filter is one big counter, it's nice if we derive fear thresholds and keep them around
+	[HideInInspector] public List<float> fear_thresholds;
 	[HideInInspector] public float fear_meter;
-	public Timer ti_fear_reset;
+	// Pauses fear drain
+	public Timer ti_fear_drain_pause;
+	public Timer ti_fear_last_chance;
 
 	public AudioSource footstepSound;
 	public float pitchLow;
@@ -184,9 +190,20 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 		// Init Fear
-		ti_fear_reset = new Timer(0, defaults.FEAR_RESET_TIMERS[0]); // this is a variable timer...
 		fear_index = 0;
-		max_fear_index = 3;
+		max_fear_index = defaults.FEAR_MULTIPLIERS.Count-1;
+		ti_fear_drain_pause = new Timer(defaults.FEAR_DRAIN_PAUSE, defaults.FEAR_DRAIN_PAUSE);
+		ti_fear_last_chance = new Timer(defaults.FEAR_LAST_CHANCE, defaults.FEAR_LAST_CHANCE);
+		fear_drain = defaults.FEAR_DRAIN;
+		fear_thresholds = new List<float>();
+		for (int i=0; i<defaults.FEAR_REQUIRED.Count; i++) {
+			fear_thresholds.Add(defaults.FEAR_REQUIRED[i]);
+			if (i > 0) {
+				fear_thresholds[i] += fear_thresholds[i-1];
+			}
+			Debug.Log("Fear threshold for mult idx " + i + ": " + fear_thresholds[i]);
+		}
+
 
 		// Init mouse damping
 		look_damping_left = 1;
@@ -502,16 +519,12 @@ public class GhostPuncher : MonoBehaviour
 	void AssessPunchRecord(PunchRecord record) {
 		if (record.items_hit > 0) {
 			stamina += defaults.STAMINA_GAINED_ON_HIT;
-			if (this.fear_meter > 0 || this.fear_index != 0) {
-				ti_fear_reset.Reset();
-			}
+			ti_fear_drain_pause.Reset();
 		}
 
 		if (record.hit_ghost) {
-			if (this.fear_index < this.max_fear_index) {
-				this.fear_meter += defaults.PUNCH_FEAR;
-			}
-			ti_fear_reset.Reset();
+			this.fear_meter += defaults.PUNCH_FEAR;
+			ti_fear_drain_pause.Reset();
 		}
 	}
 
@@ -562,34 +575,47 @@ public class GhostPuncher : MonoBehaviour
 	}
 
 	void UpdateFearMeter() {
-		ti_fear_reset.Tick(Time.deltaTime);
-		if (ti_fear_reset.Finished()) {
-			this.fear_multiplier = 1;
-			this.fear_meter = 0;
-			this.fear_index = 0;
-			this.ti_fear_reset.SetTime(0, defaults.FEAR_RESET_TIMERS[0]);
+		ti_fear_drain_pause.Tick(Time.deltaTime);
+		if (ti_fear_drain_pause.Finished()) {
+			float fear_drain_amount = fear_drain * GetFearRequired();
+			this.fear_meter -= fear_drain_amount * Time.deltaTime;
 		}
 
+		if (this.fear_meter < 0) { this.fear_meter = 0; }
 
-		if (this.fear_meter >= GetFearRequired() && this.fear_index < this.max_fear_index) {
-			this.fear_index += 1;
-			this.ti_fear_reset.SetTime(defaults.FEAR_RESET_TIMERS[this.fear_index], defaults.FEAR_RESET_TIMERS[this.fear_index]);
-			this.fear_meter = 0;
+		if (this.fear_meter <= 0) {
+			ti_fear_last_chance.Tick(Time.deltaTime);
+			if (ti_fear_last_chance.Finished()) { ResetFear(); }
 		}
+
+		if (this.fear_meter >= GetFearRequired()) {
+			if (this.fear_index < this.max_fear_index) {
+				this.fear_index += 1;
+				this.fear_meter = fear_thresholds[this.fear_index] + defaults.FEAR_REQUIRED[this.fear_index+1] * 0.2f;
+			} else {
+				this.fear_meter = GetFearRequired(); 
+			}
+		}
+
 
 	}
 
 	
-	// Get's the fear required for the next fear tier
+	/** Get's the fear required for the next fear tier. */
 	public float GetFearRequired() {
-		if (this.fear_index < this.max_fear_index) {
-			return defaults.FEAR_REQUIRED[this.fear_index+1];
-		}
-		return -1;
+		return fear_thresholds[this.fear_index+1];
 	}
  	
+	/** Gets the fear mutlipler (applied to damage) */
 	public float GetFearMultiplier() {
 		return defaults.FEAR_MULTIPLIERS[this.fear_index];
+	}
+
+	/** Reset fear to 0 */
+	public void ResetFear() {
+		this.fear_multiplier = 1;
+		this.fear_meter = 0;
+		this.fear_index = 0;
 	}
 
 	/** ANIMATION **/

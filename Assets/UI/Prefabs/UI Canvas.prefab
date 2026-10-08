@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EscapeClock
   clock_hand: {fileID: 8772697613659071662}
+  clock_color: {fileID: 0}
 --- !u!1 &439771594315994790
 GameObject:
   m_ObjectHideFlags: 0
@@ -1716,6 +1717,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7147722827497749361}
+  - component: {fileID: 4520870974762171677}
   m_Layer: 5
   m_Name: FearMeter
   m_TagString: Untagged
@@ -1749,6 +1751,28 @@ RectTransform:
   m_AnchoredPosition: {x: -110, y: -0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4520870974762171677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3008679747110337630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 652f4f6e96fdcbb31bdd22804b80175d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GhostHealthBar
+  mask: {fileID: 7375644476866931451}
+  mask_child: {fileID: 5129396998986830575}
+  proportion: 0
+  prop_target: 0
+  speed: 6
+  orientation: 1
+  offset: {x: 0, y: 156}
+  mask_full: -44.43
+  mask_empty: -444.6
+  child_offset: 62.97
 --- !u!1 &3200147387135364616
 GameObject:
   m_ObjectHideFlags: 0
@@ -2039,6 +2063,11 @@ MonoBehaviour:
   proportion: 1
   prop_target: 1
   speed: 3
+  orientation: 0
+  offset: {x: 0, y: 0}
+  mask_full: 0
+  mask_empty: -650
+  child_offset: 0
 --- !u!1 &3660958779176734782
 GameObject:
   m_ObjectHideFlags: 0
@@ -3328,6 +3357,11 @@ MonoBehaviour:
   proportion: 1
   prop_target: 1
   speed: 3
+  orientation: 0
+  offset: {x: 0, y: 0}
+  mask_full: 0
+  mask_empty: -650
+  child_offset: 0
 --- !u!1 &5899592788965812471
 GameObject:
   m_ObjectHideFlags: 0
@@ -3982,7 +4016,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &8339946849085642906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4505,10 +4539,9 @@ MonoBehaviour:
   ghost_puncher: {fileID: 0}
   ghost_health_bar: {fileID: 2411854665098093794}
   ghost_poise_bar: {fileID: 6643104678257481163}
+  ghost_fear_bar: {fileID: 0}
   txt_ectoplasm: {fileID: 2174524282957417378}
   txt_fear_multiplier: {fileID: 5697091595603153367}
-  fear_bar: {fileID: 5412550245684606757}
-  fear_reset_bar: {fileID: 5447630781869769514}
   init_on_start: 0
 --- !u!1 &7553077921021859770
 GameObject:
