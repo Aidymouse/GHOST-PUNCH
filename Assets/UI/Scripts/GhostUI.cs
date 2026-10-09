@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using EasyTextEffects;
 
 public class GhostUI : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GhostUI : MonoBehaviour
 	[Header("Text")]
 	public TMP_Text txt_ectoplasm;
 	public TMP_Text txt_fear_multiplier;
+	public TextEffect txt_fear_jitter_effect;
 
 	Image hurt_indicator;
 	Image slow_indicator;
@@ -87,6 +89,7 @@ public class GhostUI : MonoBehaviour
 			ghost_fear_bar.SetPropTarget(fear_portion);
 
 			txt_fear_multiplier.SetText("x"+ghost_puncher.GetFearMultiplier());
+			txt_fear_jitter_effect.Refresh();
 		}
 
 		/** Hurt Indicator **/
