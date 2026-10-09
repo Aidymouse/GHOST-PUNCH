@@ -29,7 +29,7 @@ public class GhostHealthBar : MonoBehaviour {
  	* @param prop - The proportion of remaining health!
  	*/
 	public void SetProportion(float prop) {
-		this.last_prop_change = prop - this.proportion;
+		this.last_prop_change = 0;
 		this.proportion = prop;
 		this.prop_target = prop;
 		UpdateProp(prop);
@@ -41,15 +41,6 @@ public class GhostHealthBar : MonoBehaviour {
 	public void UpdateProp(float proportion) {
 
 		float prop = proportion % 1;
-		
-		if (proportion % 1 == 0) {
-			if (last_prop_change > 0) {
-				prop = 1;
-			}
-			if (last_prop_change < 0) {
-				prop = 0;
-			}
-		}
 
 		float pos = Lerp.lerp(mask_empty, mask_full, prop);
 
@@ -66,6 +57,7 @@ public class GhostHealthBar : MonoBehaviour {
  	* @param prop - The proportion of remaining health!
  	*/
 	public void SetPropTarget(float prop) {
+		last_prop_change = prop - prop_target;
 		prop_target = prop;
 	}
 
@@ -77,11 +69,9 @@ public class GhostHealthBar : MonoBehaviour {
 			proportion = prop_target;
 		} else {
 			if (prop_target > proportion) {
-				last_prop_change = prop_change;
 				proportion += prop_change;
 			} else if (prop_target < proportion) {
 				proportion -= prop_change;
-				last_prop_change = -prop_change;
 			}
 		}
 

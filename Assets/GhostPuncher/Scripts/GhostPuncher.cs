@@ -578,7 +578,7 @@ public class GhostPuncher : MonoBehaviour
 		ti_fear_drain_pause.Tick(Time.deltaTime);
 		if (ti_fear_drain_pause.Finished()) {
 			float fear_drain_amount = fear_drain * GetFearRequired();
-			Debug.Log("Fear required: " + GetFearRequired() + " x " + fear_drain + " = " + fear_drain_amount);
+			//Debug.Log("Fear required: " + GetFearRequired() + " x " + fear_drain + " = " + fear_drain_amount);
 
 			// If we crossed the boundary, reset fear last chance
 			if (this.fear_meter > fear_thresholds[this.fear_index]) {
@@ -600,7 +600,7 @@ public class GhostPuncher : MonoBehaviour
 				this.fear_index += 1;
 				this.fear_meter = fear_thresholds[this.fear_index] + defaults.FEAR_REQUIRED[this.fear_index+1] * 0.2f;
 			} else {
-				this.fear_meter = GetFearRequired(); 
+				this.fear_meter = GetFearRequired() - 0.01f;
 			}
 		}
 
