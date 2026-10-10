@@ -14,6 +14,7 @@ public enum GhostActions {
 	STARTLED, // TODO
 	RAGDOLL,
 	RECOVERY,
+	SCURRY,
 	// The state of the ghost rising from the ground - could be wrapped into ragdoll?
 	GET_UP,
 
@@ -53,14 +54,15 @@ public class Ghost : MonoBehaviour
   public float hp;
 
   public GameObject ghostPuncher_obj;
-  [HideInInspector]
-  public GhostPuncher ghostPuncher;
+  [HideInInspector] public GhostPuncher ghostPuncher;
 
   /** Used to find colliders and rigidbodies for switching between ragdoll and animator */
   public GameObject rig;
   [HideInInspector] public GameObject nav_destination;
   [HideInInspector] public ParticleSystem charge_particles;
   Animator anim;
+
+	Transform? look_at;
 
 	[Header("Ragdoll")]
   [HideInInspector]
@@ -122,7 +124,6 @@ public class Ghost : MonoBehaviour
   [HideInInspector] public Timer ti_hit_stun;
   [HideInInspector] public Timer ti_ragdoll;
   [HideInInspector] public Timer ti_restore_poise;
-  [HideInInspector] public Timer ti_recovery;
 
   // When poise hit's 0, the ghost staggers, which makes her vulnerable.
   [HideInInspector] public float poise;
@@ -132,10 +133,11 @@ public class Ghost : MonoBehaviour
   Collider[] rig_colliders;
   CharacterJoint[] rig_joints;
 
-  float turn_speed;
 
 	void Awake() {
     ghostPuncher = ghostPuncher_obj.GetComponent<GhostPuncher>();
+
+		LookAt(ghostPuncher.transform);
 
 		// Apply Defaults
     poise = defaults.POISE;
@@ -163,6 +165,7 @@ public class Ghost : MonoBehaviour
     actions[(int)GhostActions.RECOVERY] = new GA_Recovery(this);
     actions[(int)GhostActions.GET_UP] = new GA_GetUp(this, ragdoll_animator.MasterAlpha);
     actions[(int)GhostActions.TWITCH] = new GA_Twitch(this);
+    actions[(int)GhostActions.SCURRY] = new GA_Scurry(this);
 
 		// Power Actions
     actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
@@ -178,7 +181,6 @@ public class Ghost : MonoBehaviour
 
     // needs to update on ghost slap somehow too		
 
-    turn_speed = defaults.TURN_SPEED;
     fear_meter = 0;
 
 
@@ -186,7 +188,6 @@ public class Ghost : MonoBehaviour
     /* Timers */
     ti_restore_poise = new Timer(0, defaults.POISE_RESTORE_TIMER);
     ti_ragdoll = new Timer(0, defaults.RAGDOLL_TIME);
-    ti_recovery = new Timer(0);
 
     /* Animator */
     anim = this.GetComponentInChildren<Animator>();
@@ -216,14 +217,18 @@ public class Ghost : MonoBehaviour
 			}
 		}
 
-    /* Rotate towards ghost puncher */
-    // TODO: when we flee we should look that direction instead
-    if (!SpinDisabled()) {
-      Vector3 toGhostPuncher = ghostPuncher.transform.position - transform.position;
-      toGhostPuncher.y = 0;
-      Quaternion ghostPuncher_angle = Quaternion.LookRotation(toGhostPuncher);
+    /* Update where ghost is looking */
+		// Unless otherwise specified, use the ghost punchers location
+		
+		
+    if (!SpinDisabled() && look_at is not null) {
+			Vector3 look_pos = look_at.position;
+			Debug.Log("Ghost looking at " + look_pos);
+      Vector3 toLookedAt = look_pos - transform.position;
+      toLookedAt.y = 0;
+      Quaternion lookedAngle = Quaternion.LookRotation(toLookedAt);
       float turn_speed = 100;
-      transform.rotation = Quaternion.RotateTowards(transform.rotation, ghostPuncher_angle, turn_speed * Time.deltaTime);
+      transform.rotation = Quaternion.RotateTowards(transform.rotation, lookedAngle, turn_speed * Time.deltaTime);
     }
 
 
@@ -509,14 +514,14 @@ public class Ghost : MonoBehaviour
 
 
 	public void EnableKnockback() {
-		nav_agent.enabled = false;
+		nav_agent.isStopped = true;
 
 		kb_rigidbody.isKinematic = false;
 		kb_collider.enabled = true;
 	}
 	
 	public void DisableKnockback() {
-		nav_agent.enabled = true;
+		nav_agent.isStopped = false;
 
 		kb_rigidbody.isKinematic = true;
 		kb_collider.enabled = false;
@@ -538,5 +543,13 @@ public class Ghost : MonoBehaviour
 		foreach (Transform t in children) {
 			t.gameObject.layer = layer;
 		}
+	}
+
+	public void LookAt(Transform new_look_at) {
+		look_at = new_look_at;
+	}
+
+	public void StopLooking() {
+		look_at = null;
 	}
 }

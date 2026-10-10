@@ -45,6 +45,8 @@ public class GA_GetUp : GhostAction {
 
 	public override void Exit() {
 		Debug.Log("Exit get up");
+		ghost.ragdoll_animator.MasterAlpha = max_alpha;
+		ghost.ragdoll_animator.forceTargetPose = true;
 	}
 
 	public override void Update() {
@@ -57,9 +59,6 @@ public class GA_GetUp : GhostAction {
 		ghost.ragdoll_animator.MasterAlpha = 0.2f * ti_alpha_fade.GetPercentage();
 	
 		if (ti_alpha_fade.Finished()) {
-			Debug.Log("Get Up should end now");
-			ghost.ragdoll_animator.MasterAlpha = max_alpha;
-			ghost.ragdoll_animator.forceTargetPose = true;
 			ghost.ExitAction();
 		}
 	}

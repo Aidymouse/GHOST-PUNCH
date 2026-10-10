@@ -52,9 +52,8 @@ public class GA_Ragdoll : GhostAction {
 		*/
 
 		if (ghost.ti_ragdoll.FinishedThisFrame()) {
-			ghost.ti_recovery.Set(1);
 			Exit();
-			ghost.EnterAction(GhostActions.GET_UP);
+			ghost.EnterAction(GhostActions.SCURRY);
 		}
 	}
 
