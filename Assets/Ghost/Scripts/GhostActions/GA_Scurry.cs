@@ -33,13 +33,16 @@ public class GA_Scurry : GhostAction {
 		// Maybe just walk random ??
 	}
 
+
 	public override void Exit() {
 			ghost.ChangeAnimation("Idle");
 	}
 
 	public override void Update() {
 
-		Debug.Log(ghost.nav_agent.destination + ", " + ghost.nav_agent.remainingDistance);
+		//Debug.Log(ghost.nav_agent.destination + ", " + ghost.nav_agent.remainingDistance);
+
+		ghost.LookAt(ghost.nav_agent.steeringTarget);
 
 		if (ghost.nav_agent.remainingDistance < 0.2) {
 			ghost.ExitAction();

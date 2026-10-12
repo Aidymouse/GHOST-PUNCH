@@ -51,7 +51,7 @@ class GA_POW_Slap : GhostAction {
 	void Update_ClosingDistance() {
 		nav_agent.destination = ghost.ghostPuncher.transform.position;
 
-		float dist_to_puncher = (ghost.ghostPuncher.transform.position - ghost.transform.position).magnitude;
+		float dist_to_puncher = ghost.nav_agent.remainingDistance;
 		if (dist_to_puncher < slap_data.STOP_DISTANCE) {
 			StartSlap();
 		}
@@ -70,7 +70,7 @@ class GA_POW_Slap : GhostAction {
 
 		if (ti_slap_delay.Finished()) {
 			float dist_to_gp = (this.ghost.transform.position - this.ghost.ghostPuncher.transform.position).magnitude;
-			Debug.Log("Slap Dist: "+dist_to_gp);
+			//Debug.Log("Slap Dist: "+dist_to_gp);
 			if (dist_to_gp <= slap_data.HIT_DISTANCE) {
 				this.ghost.escape_meter += slap_data.ESCAPE_GAINED_ON_SLAP;
 				this.ghost.ghostPuncher.GetComponent<GhostPuncher>().GetSlapped();

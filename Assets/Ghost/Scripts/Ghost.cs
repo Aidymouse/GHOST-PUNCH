@@ -62,7 +62,10 @@ public class Ghost : MonoBehaviour
   [HideInInspector] public ParticleSystem charge_particles;
   Animator anim;
 
-	Transform? look_at;
+	/** Position the ghost currently wants to look towards */
+	Vector3? look_at;
+	/** If present, the ghost will update it's look_at vector to be the position of this target */
+	GameObject? look_target;
 
 	[Header("Ragdoll")]
   [HideInInspector]
@@ -137,7 +140,7 @@ public class Ghost : MonoBehaviour
 	void Awake() {
     ghostPuncher = ghostPuncher_obj.GetComponent<GhostPuncher>();
 
-		LookAt(ghostPuncher.transform);
+		LookAt(ghostPuncher.gameObject);
 
 		// Apply Defaults
     poise = defaults.POISE;
@@ -221,14 +224,18 @@ public class Ghost : MonoBehaviour
 		// Unless otherwise specified, use the ghost punchers location
 		
 		
-    if (!SpinDisabled() && look_at is not null) {
-			Vector3 look_pos = look_at.position;
-			Debug.Log("Ghost looking at " + look_pos);
+    if (!SpinDisabled() && (look_at is not null || look_target is not null)) {
+			if (look_target is not null) {
+				look_at = look_target.transform.position;
+			}
+			Vector3 look_pos = look_at.Value;
       Vector3 toLookedAt = look_pos - transform.position;
       toLookedAt.y = 0;
       Quaternion lookedAngle = Quaternion.LookRotation(toLookedAt);
-      float turn_speed = 100;
+      float turn_speed = 360;
       transform.rotation = Quaternion.RotateTowards(transform.rotation, lookedAngle, turn_speed * Time.deltaTime);
+
+			Debug.DrawRay(transform.position, toLookedAt*100, Color.cyan);
     }
 
 
@@ -268,11 +275,15 @@ public class Ghost : MonoBehaviour
 
   }
 
-	public void ExitAction() {
+	public void ExitAction(GhostActions? next_action = null) {
 		if (debug.ghost_logs) Debug.Log("Ghost Exiting: "+cur_action);
 		actions[(int)cur_action].Exit();
 		// TODO: will this always be the case?
-		DecideNextAction();
+		if (next_action is not null) {
+			EnterAction(next_action.Value);
+		} else {
+			DecideNextAction();
+		}
   }
 
   public void EnterAction(GhostActions action) {
@@ -357,12 +368,14 @@ public class Ghost : MonoBehaviour
 		}
 
 	// Knockback
+	// TODO: look into nav_agent.nextPosition as possible point
+	/*
 	EnableKnockback();
 	Vector3 knockback_dir = punch.direction;
 	knockback_dir.y = 0;
 	kb_rigidbody.AddForce(knockback_dir.normalized * punch.force * defaults.KNOCKBACK_FACTOR);
 	ti_knockback.Reset();
-
+	*/
 
 
 	// Poise
@@ -429,6 +442,7 @@ public class Ghost : MonoBehaviour
   void Ragdoll(Punch punch) {
     ghost_sound.PlayOneShot(ghost_sfx.RAGDOLL_SCREAM);
 
+		ExitAction();
     EnterAction(GhostActions.RAGDOLL);
 
     rig_core.AddForce(punch.direction * punch.force * defaults.MAKE_HER_FLY_FACTOR);
@@ -545,11 +559,21 @@ public class Ghost : MonoBehaviour
 		}
 	}
 
-	public void LookAt(Transform new_look_at) {
-		look_at = new_look_at;
+	/** Looks at static vector 3 location, overriding look target */
+	public void LookAt(Vector3 look_pos) {
+		look_target = null;
+		look_at = look_pos;
 	}
 
+	/** Makes game object the focus of the ghosts attention, updated look_at to always focus on this things transform.position */
+	public void LookAt(GameObject new_target) {
+		look_target = new_target;
+		look_at = look_target.transform.position;
+	}
+
+	/** Ghost will not face any particular direction */
 	public void StopLooking() {
 		look_at = null;
+		look_target = null;
 	}
 }

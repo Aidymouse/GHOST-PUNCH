@@ -27,6 +27,7 @@ public class GA_GetUp : GhostAction {
 		//ghost.ragdoll_animator.MasterAlpha = max_alpha;
 		//ghost.EnterAction(GhostActions.MOVING_ROOM);
 
+		// Since the ragdoll is part of the ghost parent, it actually flies off and the transform is all messed up. This code syncs the positions again
 		Vector3 ragdoll_offset = ghost.transform.position - ghost.rig_core.transform.position;
 		ragdoll_offset.y = 0;
 		ghost.transform.position -= ragdoll_offset;
@@ -37,7 +38,8 @@ public class GA_GetUp : GhostAction {
 
 
 		// TODO: could track how she facing 
-		ghost.ChangeAnimation("GetUpFaceup");
+		//ghost.ChangeAnimation("GetUpFaceup");
+		ghost.ChangeAnimation("Crawl");
 
 		ghost.StopBeingVulnerable();
 
@@ -59,7 +61,7 @@ public class GA_GetUp : GhostAction {
 		ghost.ragdoll_animator.MasterAlpha = 0.2f * ti_alpha_fade.GetPercentage();
 	
 		if (ti_alpha_fade.Finished()) {
-			ghost.ExitAction();
+			ghost.ExitAction(GhostActions.SCURRY);
 		}
 	}
 	
