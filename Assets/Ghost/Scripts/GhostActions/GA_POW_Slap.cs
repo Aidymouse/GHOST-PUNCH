@@ -33,6 +33,7 @@ class GA_POW_Slap : GhostAction {
 		
 		phase = GhostSlapPhase.CLOSING_DISTANCE;
 		ghost.ChangeAnimation("Rush");
+		ghost.LookAt(ghost.ghostPuncher.gameObject);
 	}
 
 
