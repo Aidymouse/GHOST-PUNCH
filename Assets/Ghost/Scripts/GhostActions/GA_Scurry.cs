@@ -8,9 +8,11 @@ public class GA_Scurry : GhostAction {
 
 	public override void Enter() {
 		// Find a point somewhere
-		Vector3? rand_pos = NavMeshUtil.GetRandomPoint(ghost.transform.position, 10);
+		Vector3? rand_pos = NavMeshUtil.GetRandomPoint(ghost.transform.position, 10, 5, true);
 
 		if (rand_pos is not null) {
+
+			Debug.Log("Dist to generated point=" + (ghost.transform.position - rand_pos.Value).magnitude);
 
 			GameObject g = GameObject.Instantiate(ghost.defaults.scurry_data.debug_spawn);
 			g.transform.position = rand_pos.Value;

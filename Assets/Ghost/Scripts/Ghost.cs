@@ -442,8 +442,8 @@ public class Ghost : MonoBehaviour
   void Ragdoll(Punch punch) {
     ghost_sound.PlayOneShot(ghost_sfx.RAGDOLL_SCREAM);
 
-		ExitAction();
-    EnterAction(GhostActions.RAGDOLL);
+	ExitAction(GhostActions.RAGDOLL);
+    //EnterAction(GhostActions.RAGDOLL);
 
     rig_core.AddForce(punch.direction * punch.force * defaults.MAKE_HER_FLY_FACTOR);
   }
