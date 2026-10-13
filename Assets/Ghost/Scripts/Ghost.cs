@@ -12,8 +12,11 @@ using System.Collections.Generic;
 public enum GhostActions {
 	// Non-power actions (states)
 	STARTLED, // TODO
+	/** Ghost is ragdolled */
 	RAGDOLL,
+	/** Unused ? */
 	RECOVERY,
+	/** When the ghost is crawling around */
 	SCURRY,
 	// The state of the ghost rising from the ground - could be wrapped into ragdoll?
 	GET_UP,
@@ -22,6 +25,7 @@ public enum GhostActions {
 	STAGGER_MEDIUM,
 	STAGGER_LARGE,
 
+	/** @deprecated */
 	TWITCH,
 
 	// Power actions
@@ -232,7 +236,7 @@ public class Ghost : MonoBehaviour
       Vector3 toLookedAt = look_pos - transform.position;
       toLookedAt.y = 0;
       Quaternion lookedAngle = Quaternion.LookRotation(toLookedAt);
-      float turn_speed = 360;
+      float turn_speed = nav_agent.angularSpeed;
       transform.rotation = Quaternion.RotateTowards(transform.rotation, lookedAngle, turn_speed * Time.deltaTime);
 
 			Debug.DrawRay(transform.position, toLookedAt*100, Color.cyan);
