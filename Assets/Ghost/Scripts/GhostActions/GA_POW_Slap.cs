@@ -31,9 +31,8 @@ class GA_POW_Slap : GhostAction {
 		ghost.nav_agent.destination = ghost.ghostPuncher.transform.position;
 		//ghost.nav_agent.stoppingDistance = slap_data.STOP_DISTANCE;
 		
-		phase = GhostSlapPhase.CLOSING_DISTANCE;
-		ghost.ChangeAnimation("Rush");
-		ghost.LookAt(ghost.ghostPuncher.gameObject);
+		// TODO: come back and remove all this closing distance crap
+		phase = GhostSlapPhase.SLAPPING;
 	}
 
 

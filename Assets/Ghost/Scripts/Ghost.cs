@@ -29,10 +29,15 @@ public enum GhostActions {
 	TWITCH,
 
 	// Power actions
-	POW_CHARGING_ESCAPE,
 	POW_SLAP,
-	POW_SCREAM,
 	POW_BLAST,
+
+	POW_RUSH,
+	POW_SCREAM,
+
+	POW_CHARGING_ESCAPE,
+
+	/** To categorise */
 	POW_JUMPSCARE,
 	POW_PEAK_AROUND_CORNER,
 };
@@ -105,10 +110,6 @@ public class Ghost : MonoBehaviour
 	// Interrupt action takes precdence, allowing staggers to interrupt actions
 	public GhostActions? interrupt_action = null;
   public GhostAction[] actions;
-	GhostActions[] powers = { 
-		GhostActions.POW_CHARGING_ESCAPE,
-		GhostActions.POW_SLAP,
-	};
 
   // jumpscare sequence
   [Header("Jumpscare")]
@@ -140,6 +141,10 @@ public class Ghost : MonoBehaviour
   Collider[] rig_colliders;
   CharacterJoint[] rig_joints;
 
+	/** Actions */
+	public GhostActionSet close_range_actions;
+	public GhostActionSet mid_range_actions;
+	public GhostActionSet far_range_actions;
 
 	void Awake() {
     ghostPuncher = ghostPuncher_obj.GetComponent<GhostPuncher>();
@@ -171,8 +176,8 @@ public class Ghost : MonoBehaviour
     actions[(int)GhostActions.RAGDOLL] = new GA_Ragdoll(this);
     actions[(int)GhostActions.RECOVERY] = new GA_Recovery(this);
     actions[(int)GhostActions.GET_UP] = new GA_GetUp(this, ragdoll_animator.MasterAlpha);
-    actions[(int)GhostActions.TWITCH] = new GA_Twitch(this);
     actions[(int)GhostActions.SCURRY] = new GA_Scurry(this);
+    actions[(int)GhostActions.POW_RUSH] = new GA_Rush(this);
 
 		// Power Actions
     actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
@@ -281,6 +286,7 @@ public class Ghost : MonoBehaviour
 	public void ExitAction(GhostActions? next_action = null) {
 		if (debug.ghost_logs) Debug.Log("Ghost Exiting: "+cur_action);
 		actions[(int)cur_action].Exit();
+
 		// TODO: will this always be the case?
 		if (next_action is not null) {
 			EnterAction(next_action.Value);
@@ -296,17 +302,38 @@ public class Ghost : MonoBehaviour
   }
 
 	void DecideNextAction() {
-		PickRandomPower();
-	}
+		// How far am I from ghost puncher?
+		Vector3 to_ghost_puncher = transform.position - ghostPuncher.transform.position;
 
-  void PickRandomPower() {
-		int power_index = Random.Range(0,powers.Length);
-		if (debug.use_power_override) {
-    	power_index = (int)debug.power_override;
+		GhostActionSet choose_from = close_range_actions;
+
+		float max_height_diff = 2;
+		if (to_ghost_puncher.y > max_height_diff) {
+			if (debug.ghost_logs) Debug.Log("Choosing FAR range action");
+			choose_from = far_range_actions;
+		} else {
+			to_ghost_puncher.y = 0;
+			float dist = to_ghost_puncher.magnitude;
+
+			if (dist > defaults.FAR_RANGE) {
+				if (debug.ghost_logs) Debug.Log("Choosing FAR range action");
+				choose_from = far_range_actions;
+			} else if (dist > defaults.MID_RANGE) {
+				if (debug.ghost_logs) Debug.Log("Choosing MID range action");
+				choose_from = mid_range_actions;
+			} else {
+				if (debug.ghost_logs) Debug.Log("Choosing CLOSE range action");
+			}
 		}
 
-		EnterAction(powers[power_index]);
-  }
+		if (choose_from.debug) {
+			EnterAction(choose_from.debug_action);
+			return;
+		}
+
+		EnterAction(choose_from.WeightedPickAction());
+	}
+
 
   void TickTimers() {
     if (cur_action != GhostActions.STAGGER_LARGE) {
@@ -439,8 +466,7 @@ public class Ghost : MonoBehaviour
   void Ragdoll(Punch punch) {
     ghost_sound.PlayOneShot(ghost_sfx.RAGDOLL_SCREAM);
 
-	ExitAction(GhostActions.RAGDOLL);
-    //EnterAction(GhostActions.RAGDOLL);
+		ExitAction(GhostActions.RAGDOLL);
 
     rig_core.AddForce(punch.direction * punch.force * defaults.MAKE_HER_FLY_FACTOR);
   }
@@ -485,6 +511,7 @@ public class Ghost : MonoBehaviour
   }
 
   public void ChangeAnimation(string new_anim, float fade_time=0f) {
+		Debug.Log("Ghost animating to" + new_anim);
     anim.CrossFade(new_anim, fade_time);
   }
 
@@ -496,7 +523,7 @@ public class Ghost : MonoBehaviour
 		// TODO: reset health and shit!
 
 		this.GetComponent<Ghost>().enabled = true;
-		PickRandomPower();
+		DecideNextAction();
 	}
 
 	public void ApplyItems(ItemRecord record) {
