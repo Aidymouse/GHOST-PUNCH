@@ -236,10 +236,9 @@ public class Ghost : MonoBehaviour
       Vector3 toLookedAt = look_pos - transform.position;
       toLookedAt.y = 0;
       Quaternion lookedAngle = Quaternion.LookRotation(toLookedAt);
-      float turn_speed = nav_agent.angularSpeed;
-      transform.rotation = Quaternion.RotateTowards(transform.rotation, lookedAngle, turn_speed * Time.deltaTime);
-
-			Debug.DrawRay(transform.position, toLookedAt*100, Color.cyan);
+			float turn_speed = nav_agent.angularSpeed;
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, lookedAngle, turn_speed * Time.deltaTime);
+			//Debug.DrawRay(transform.position, toLookedAt*100, Color.cyan);
     }
 
 
@@ -493,6 +492,9 @@ public class Ghost : MonoBehaviour
 	public void StartRun() {
 		escape_meter = 0;
 		gameObject.SetActive(true);
+
+		// TODO: reset health and shit!
+
 		this.GetComponent<Ghost>().enabled = true;
 		PickRandomPower();
 	}

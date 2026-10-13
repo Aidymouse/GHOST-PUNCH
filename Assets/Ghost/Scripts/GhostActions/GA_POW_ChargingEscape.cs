@@ -71,6 +71,7 @@ public class GA_POW_ChargingEscape : GhostAction {
 		ghost.escape_meter += Time.deltaTime;
 
 		// Can I see the player? Have I seen them for some amount of timer? Startle!
+		// Was I punched by the player? Startle!
 	}
 
 }
