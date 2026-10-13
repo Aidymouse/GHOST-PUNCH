@@ -11,14 +11,13 @@ public class GA_StaggerLarge : GhostAction {
 	public override void Enter() {
 				ti_hit_stun.Reset();
 				ghost.PlayAnimation("Hit_Cower");
-				ghost.nav_agent.isStopped = true;
+				//ghost.nav_agent.isStopped = true;
 	}
 
 	public override void Update() {
 		ti_hit_stun.Tick(Time.deltaTime);
 
 		if (ti_hit_stun.FinishedThisFrame()) {
-			ghost.ti_recovery.Set(0);
 			ghost.EnterAction(GhostActions.RECOVERY);
 		}
  	}

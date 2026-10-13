@@ -9,7 +9,6 @@ enum GhostSlapPhase {
 
 class GA_POW_Slap : GhostAction {
 
-	NavMeshAgent nav_agent;
 	GameObject slash_effect_obj;
 	VisualEffect slash_vfx;
 
@@ -19,7 +18,6 @@ class GA_POW_Slap : GhostAction {
 
 	public GA_POW_Slap(Ghost g) : base(g) {
 
-		nav_agent = ghost.get_nav_agent();
 
 		slap_data = ghost.defaults.slap_data;
 
@@ -29,11 +27,10 @@ class GA_POW_Slap : GhostAction {
 	}
 
 	public override void Enter() {
-		NavMeshAgent nav_agent = this.ghost.get_nav_agent();
 
 		Vector3 ghostPuncher_position = ghost.ghostPuncher.transform.position;
-		nav_agent.destination = ghost.ghostPuncher.transform.position;
-		nav_agent.stoppingDistance = slap_data.STOP_DISTANCE;
+		ghost.nav_agent.destination = ghost.ghostPuncher.transform.position;
+		//ghost.nav_agent.stoppingDistance = slap_data.STOP_DISTANCE;
 		
 		phase = GhostSlapPhase.CLOSING_DISTANCE;
 	}
@@ -49,10 +46,9 @@ class GA_POW_Slap : GhostAction {
 
 	/** Sub-states **/
 	void Update_ClosingDistance() {
-		nav_agent.destination = ghost.ghostPuncher.transform.position;
+		ghost.nav_agent.destination = ghost.ghostPuncher.transform.position;
 
-		float dist_to_puncher = (ghost.ghostPuncher.transform.position - ghost.transform.position).magnitude;
-		if (dist_to_puncher < slap_data.STOP_DISTANCE) {
+		if (ghost.nav_agent.remainingDistance < slap_data.STOP_DISTANCE) {
 			StartSlap();
 		}
 	
@@ -62,7 +58,7 @@ class GA_POW_Slap : GhostAction {
 			ti_slap_delay.Reset();
 			ghost.ChangeAnimation("Power_SlapLeft");
 			phase = GhostSlapPhase.SLAPPING;
-			nav_agent.isStopped = true;
+			ghost.nav_agent.isStopped = true;
 	}
 
 	void Update_Slapping() {
@@ -70,7 +66,7 @@ class GA_POW_Slap : GhostAction {
 
 		if (ti_slap_delay.Finished()) {
 			float dist_to_gp = (this.ghost.transform.position - this.ghost.ghostPuncher.transform.position).magnitude;
-			Debug.Log("Slap Dist: "+dist_to_gp);
+			//Debug.Log("Slap Dist: "+dist_to_gp);
 			if (dist_to_gp <= slap_data.HIT_DISTANCE) {
 				this.ghost.escape_meter += slap_data.ESCAPE_GAINED_ON_SLAP;
 				this.ghost.ghostPuncher.GetComponent<GhostPuncher>().GetSlapped();
@@ -82,8 +78,7 @@ class GA_POW_Slap : GhostAction {
 	}
 
 	public override void Exit() {
-			nav_agent.isStopped = false;
-			nav_agent.stoppingDistance = 0;
+			ghost.nav_agent.isStopped = false;
 	}
 
 

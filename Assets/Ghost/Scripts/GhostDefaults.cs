@@ -25,6 +25,14 @@ public class GhostDefaults : ScriptableObject
 		[Tooltip("How long the ghost spends vulnerable when knocked to 0 poise")]
 		public float VULNERABLE_TIME;
 
+		[Header("Knockback")]
+		[Tooltip("Time in knockback - should be very short!")]
+		public float KNOCKBACK_TIMER;
+		[Tooltip("Multiplier applied to punch force for knockback - should probably be below 1")]
+		public float KNOCKBACK_FACTOR;
+
+
+
 		[Header("Powers")]
 
 		[Tooltip("Sets the default power index. Set to -1 to pick a random power. (0) Wave; (1) Slap; (2) Scream; ")]
@@ -35,4 +43,5 @@ public class GhostDefaults : ScriptableObject
 		public GAD_Slap slap_data;
 		public GAD_Blast blast_data;
 		public GAD_Twitch twitch_data;
+		public GAD_Scurry scurry_data;
 }

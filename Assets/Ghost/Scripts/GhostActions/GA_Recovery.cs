@@ -2,19 +2,21 @@ using UnityEngine;
 
 public class GA_Recovery : GhostAction {
 
+  Timer ti_recovery = new Timer(0);
 
 	public GA_Recovery(Ghost g) : base(g) {}
 
 	public override void Enter() { 
-		ghost.ti_recovery.Activate();
 		// TODO: if the ghost was attacking this should probably be 0...
-		ghost.ChangeAnimation("Idle", ghost.ti_recovery.time_remaining);
+		ghost.ChangeAnimation("Idle", ti_recovery.time_remaining);
+		ti_recovery.Set(1);
+		ti_recovery.Activate();
 	}
 
 	public override void Update() {
-		ghost.ti_recovery.Tick(Time.deltaTime);
+		ti_recovery.Tick(Time.deltaTime);
 
-		if (ghost.ti_recovery.Finished()) {
+		if (ti_recovery.Finished()) {
 			ghost.nav_agent.isStopped = false;
 
 			ghost.ExitAction();

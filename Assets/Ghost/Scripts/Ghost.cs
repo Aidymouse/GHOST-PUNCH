@@ -14,6 +14,7 @@ public enum GhostActions {
 	STARTLED, // TODO
 	RAGDOLL,
 	RECOVERY,
+	SCURRY,
 	// The state of the ghost rising from the ground - could be wrapped into ragdoll?
 	GET_UP,
 
@@ -53,14 +54,18 @@ public class Ghost : MonoBehaviour
   public float hp;
 
   public GameObject ghostPuncher_obj;
-  [HideInInspector]
-  public GhostPuncher ghostPuncher;
+  [HideInInspector] public GhostPuncher ghostPuncher;
 
   /** Used to find colliders and rigidbodies for switching between ragdoll and animator */
   public GameObject rig;
   [HideInInspector] public GameObject nav_destination;
   [HideInInspector] public ParticleSystem charge_particles;
   Animator anim;
+
+	/** Position the ghost currently wants to look towards */
+	Vector3? look_at;
+	/** If present, the ghost will update it's look_at vector to be the position of this target */
+	GameObject? look_target;
 
 	[Header("Ragdoll")]
   [HideInInspector]
@@ -70,6 +75,12 @@ public class Ghost : MonoBehaviour
 	public RagdollPowerProfile ragprof_doll;
 	// The ragdoll object itself, moved when the ghost is getting up
 	public GameObject ragdoll;
+
+	[Header("Knockback")]
+	public Rigidbody kb_rigidbody;
+	public Collider kb_collider;
+	Timer ti_knockback;
+	// TODO: the ghost sinks into the floor a little? Collider needs to accomodate that
 
 
   [Header("Sound Effects")]
@@ -104,7 +115,6 @@ public class Ghost : MonoBehaviour
   public PlayableDirector jumpscareTimeline;
   public bool inJumpscare = false;
 
-  public ParticleSystem ectoplasm_particles;
 
   public float fear_meter;
 
@@ -117,7 +127,6 @@ public class Ghost : MonoBehaviour
   [HideInInspector] public Timer ti_hit_stun;
   [HideInInspector] public Timer ti_ragdoll;
   [HideInInspector] public Timer ti_restore_poise;
-  [HideInInspector] public Timer ti_recovery;
 
   // When poise hit's 0, the ghost staggers, which makes her vulnerable.
   [HideInInspector] public float poise;
@@ -127,10 +136,11 @@ public class Ghost : MonoBehaviour
   Collider[] rig_colliders;
   CharacterJoint[] rig_joints;
 
-  float turn_speed;
 
 	void Awake() {
     ghostPuncher = ghostPuncher_obj.GetComponent<GhostPuncher>();
+
+		LookAt(ghostPuncher.gameObject);
 
 		// Apply Defaults
     poise = defaults.POISE;
@@ -138,11 +148,14 @@ public class Ghost : MonoBehaviour
     hp = defaults.HP;
 		escape_needed = defaults.ESCAPE_NEEDED;
 		escape_meter = 0;
+
+		ti_knockback = new Timer(0, defaults.KNOCKBACK_TIMER);
 	}
 
   void Start()
   {
 		ragdoll_animator = GetComponentInChildren<RagdollAnimator>();
+	ragdoll_animator.forceTargetPose = true;
 
     /* Nav Settings */
     nav_agent = GetComponent<NavMeshAgent>();
@@ -155,6 +168,7 @@ public class Ghost : MonoBehaviour
     actions[(int)GhostActions.RECOVERY] = new GA_Recovery(this);
     actions[(int)GhostActions.GET_UP] = new GA_GetUp(this, ragdoll_animator.MasterAlpha);
     actions[(int)GhostActions.TWITCH] = new GA_Twitch(this);
+    actions[(int)GhostActions.SCURRY] = new GA_Scurry(this);
 
 		// Power Actions
     actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
@@ -170,7 +184,6 @@ public class Ghost : MonoBehaviour
 
     // needs to update on ghost slap somehow too		
 
-    turn_speed = defaults.TURN_SPEED;
     fear_meter = 0;
 
 
@@ -178,7 +191,6 @@ public class Ghost : MonoBehaviour
     /* Timers */
     ti_restore_poise = new Timer(0, defaults.POISE_RESTORE_TIMER);
     ti_ragdoll = new Timer(0, defaults.RAGDOLL_TIME);
-    ti_recovery = new Timer(0);
 
     /* Animator */
     anim = this.GetComponentInChildren<Animator>();
@@ -201,14 +213,29 @@ public class Ghost : MonoBehaviour
   public void Update()
   {
 
-    /* Rotate towards ghost puncher */
-    // TODO: when we flee we should look that direction instead
-    if (!SpinDisabled()) {
-      Vector3 toGhostPuncher = ghostPuncher.transform.position - transform.position;
-      toGhostPuncher.y = 0;
-      Quaternion ghostPuncher_angle = Quaternion.LookRotation(toGhostPuncher);
-      float turn_speed = 100;
-      transform.rotation = Quaternion.RotateTowards(transform.rotation, ghostPuncher_angle, turn_speed * Time.deltaTime);
+		if (!ti_knockback.Finished()) {
+			ti_knockback.Tick(Time.deltaTime);
+			if (ti_knockback.Finished()) {
+				DisableKnockback();
+			}
+		}
+
+    /* Update where ghost is looking */
+		// Unless otherwise specified, use the ghost punchers location
+		
+		
+    if (!SpinDisabled() && (look_at is not null || look_target is not null)) {
+			if (look_target is not null) {
+				look_at = look_target.transform.position;
+			}
+			Vector3 look_pos = look_at.Value;
+      Vector3 toLookedAt = look_pos - transform.position;
+      toLookedAt.y = 0;
+      Quaternion lookedAngle = Quaternion.LookRotation(toLookedAt);
+      float turn_speed = 360;
+      transform.rotation = Quaternion.RotateTowards(transform.rotation, lookedAngle, turn_speed * Time.deltaTime);
+
+			Debug.DrawRay(transform.position, toLookedAt*100, Color.cyan);
     }
 
 
@@ -248,11 +275,15 @@ public class Ghost : MonoBehaviour
 
   }
 
-	public void ExitAction() {
+	public void ExitAction(GhostActions? next_action = null) {
 		if (debug.ghost_logs) Debug.Log("Ghost Exiting: "+cur_action);
 		actions[(int)cur_action].Exit();
 		// TODO: will this always be the case?
-		DecideNextAction();
+		if (next_action is not null) {
+			EnterAction(next_action.Value);
+		} else {
+			DecideNextAction();
+		}
   }
 
   public void EnterAction(GhostActions action) {
@@ -292,6 +323,7 @@ public class Ghost : MonoBehaviour
   /** EVENTS **/
   public void GetPunched(Punch punch, RaycastHit? hit=null) {
 
+		// Damage
     hp -= punch.ghost_damage;
 
 		// Particles
@@ -335,12 +367,18 @@ public class Ghost : MonoBehaviour
 			return;
 		}
 
+	// Knockback
+	// TODO: look into nav_agent.nextPosition as possible point
+	/*
+	EnableKnockback();
+	Vector3 knockback_dir = punch.direction;
+	knockback_dir.y = 0;
+	kb_rigidbody.AddForce(knockback_dir.normalized * punch.force * defaults.KNOCKBACK_FACTOR);
+	ti_knockback.Reset();
+	*/
 
 
-    if (ectoplasm_particles) {
-      Instantiate(ectoplasm_particles, transform.position, new Quaternion());
-    }
-
+	// Poise
     poise -= punch.poise_damage;
     if (poise <= 0) {
       if (punch.hit_class <= (int)HitClass.MEGA_PUNCH) {
@@ -404,7 +442,8 @@ public class Ghost : MonoBehaviour
   void Ragdoll(Punch punch) {
     ghost_sound.PlayOneShot(ghost_sfx.RAGDOLL_SCREAM);
 
-    EnterAction(GhostActions.RAGDOLL);
+	ExitAction(GhostActions.RAGDOLL);
+    //EnterAction(GhostActions.RAGDOLL);
 
     rig_core.AddForce(punch.direction * punch.force * defaults.MAKE_HER_FLY_FACTOR);
   }
@@ -488,6 +527,20 @@ public class Ghost : MonoBehaviour
 	}
 
 
+	public void EnableKnockback() {
+		nav_agent.isStopped = true;
+
+		kb_rigidbody.isKinematic = false;
+		kb_collider.enabled = true;
+	}
+	
+	public void DisableKnockback() {
+		nav_agent.isStopped = false;
+
+		kb_rigidbody.isKinematic = true;
+		kb_collider.enabled = false;
+	}
+
   /** GETTERS */
   public NavMeshAgent get_nav_agent() { return nav_agent; }
 
@@ -504,5 +557,23 @@ public class Ghost : MonoBehaviour
 		foreach (Transform t in children) {
 			t.gameObject.layer = layer;
 		}
+	}
+
+	/** Looks at static vector 3 location, overriding look target */
+	public void LookAt(Vector3 look_pos) {
+		look_target = null;
+		look_at = look_pos;
+	}
+
+	/** Makes game object the focus of the ghosts attention, updated look_at to always focus on this things transform.position */
+	public void LookAt(GameObject new_target) {
+		look_target = new_target;
+		look_at = look_target.transform.position;
+	}
+
+	/** Ghost will not face any particular direction */
+	public void StopLooking() {
+		look_at = null;
+		look_target = null;
 	}
 }

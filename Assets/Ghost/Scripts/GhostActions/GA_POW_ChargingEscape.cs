@@ -46,9 +46,10 @@ public class GA_POW_ChargingEscape : GhostAction {
 	}
 
 	public void Update_Move() {
-		// TODO: If close to move target, start charging
-		float dist_to_dest = GhostUtils.TopDownDistance(ghost.transform.position, ghost.nav_destination.transform.position);
-//(ghost.transform.position - ghost.nav_destination.transform.position).magnitude;
+
+		ghost.LookAt(ghost.nav_agent.steeringTarget);
+
+		float dist_to_dest = ghost.nav_agent.remainingDistance;
 		if (dist_to_dest <= 1) {
 			ghost.nav_destination = null;
 			Enter_Charge();
@@ -62,6 +63,7 @@ public class GA_POW_ChargingEscape : GhostAction {
 		ghost.ChangeAnimation("ChargeEscape");
 		ghost.PlaySound("charging_escape");
 		phase = ChargingEscapePhase.CHARGE;
+		ghost.LookAt(ghost.ghostPuncher.gameObject);
 	}
 
 	public void Update_Charge() {

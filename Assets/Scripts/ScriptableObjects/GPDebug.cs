@@ -15,5 +15,7 @@ public class GPDebug : ScriptableObject
 	public bool ghost_logs;
 	[Tooltip("Ghost will stay awake on init")]
 	public bool ghost_stay_awake;
+	[Tooltip("Simple orb for debug spawning an object at a spot")]
+	public GameObject debug_orb;
     
 }
