@@ -481,8 +481,8 @@ public class GhostPuncher : MonoBehaviour
 	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids, ref PunchRecord record, RaycastHit? relevant_hit) {
 
 		// May want to move this up later. Also, do we need to cast a ray to get the hit point for particles ??
-		if (relevant_hit is not null && punch.hit_class-1 < punch_particles.Count && punch_particles[punch.hit_class-1]) {
-			Instantiate(punch_particles[punch.hit_class-1], relevant_hit.Value.point, this.transform.rotation);
+		if (relevant_hit is not null && punch.hit_class < punch_particles.Count && punch_particles[punch.hit_class]) {
+			Instantiate(punch_particles[punch.hit_class], relevant_hit.Value.point, this.transform.rotation);
 		}
 
 		if (target.GetComponent<BreakableObject>()) {
