@@ -193,22 +193,9 @@ public class FootballCharge : PuncherAbility {
 		ti_punch_delay.Tick(Time.deltaTime);
 
 		if (ti_punch_delay.FinishedThisFrame() || ti_punch_delay.default_time == 0) {
-			
 			Punch football_charge_punch = Punch.FromData(puncher.GetFacingDirection(), puncher.defaults.CHARGE_PUNCH_LAUNCHED);
-			/*
-			new Punch(
-				puncher.GetFacingDirection(),
-				5000,
-				1000,
-				450,
-				650,
-				(int)HitClass.PUNCH
-			);
-			*/
 			puncher.LaunchPunch(football_charge_punch, 0);
-
 			puncher.fov_controller.GetToZeroIn(ti_punch_stop.time_remaining/2);
-
 		}
 
 		if (!ti_punch_delay.Finished()) {
