@@ -315,10 +315,10 @@ public class Ghost : MonoBehaviour
 
 
   /** EVENTS **/
-  public void GetPunched(Punch punch, RaycastHit? hit=null) {
+	public void GetPunched(Punch punch, RaycastHit? hit=null) {
 
 		// Damage
-    hp -= punch.ghost_damage;
+		hp -= punch.ghost_damage;
 
 		// Particles
 		if (ghost_material) {
@@ -330,10 +330,10 @@ public class Ghost : MonoBehaviour
 				ParticleSystem p = Instantiate(ghost_material.hit_particles);
 				p.transform.position = hit.Value.point;
 				p.transform.rotation = Quaternion.Euler(-hit.Value.normal);
-				
+
 			}
 		}
-	
+
 
 
 		// 1 is mega punch and 3 is big object hit
@@ -344,15 +344,30 @@ public class Ghost : MonoBehaviour
 
 		if (punch.hit_class <= (int)HitClass.PUNCH) {
 			ghost_screams.Play();
-    	ghost_sound.PlayOneShot(ghost_sfx.HIT_SOUND);
+			ghost_sound.PlayOneShot(ghost_sfx.HIT_SOUND);
+		}
+
+		// Poise
+		poise -= punch.poise_damage;
+		if (poise <= 0) {
+			if (punch.hit_class <= (int)HitClass.MEGA_PUNCH) {
+				Ragdoll(punch);
+
+			} else if (poise + punch.poise_damage > 0) {
+				// Only happens if this hit got us below 0
+				BecomeVulnerable();
+				EnterAction(GhostActions.STAGGER_LARGE);
+			}
+		} else {
+			ti_restore_poise.Reset();
+			// TODO: minor stagger
 		}
 
 
-
-    if (HasHyperArmor()) {
+		if (HasHyperArmor()) {
 			// TODO: some minor jolts, but no damage
-      return;
-    }
+			return;
+		}
 
 		PlayMinorHurtAnim();
 
@@ -361,33 +376,18 @@ public class Ghost : MonoBehaviour
 			return;
 		}
 
-	// Knockback
-	// TODO: look into nav_agent.nextPosition as possible point
-	/*
-	EnableKnockback();
-	Vector3 knockback_dir = punch.direction;
-	knockback_dir.y = 0;
-	kb_rigidbody.AddForce(knockback_dir.normalized * punch.force * defaults.KNOCKBACK_FACTOR);
-	ti_knockback.Reset();
-	*/
+		// Knockback
+		// TODO: look into nav_agent.nextPosition as possible point
+		/*
+			 EnableKnockback();
+			 Vector3 knockback_dir = punch.direction;
+			 knockback_dir.y = 0;
+			 kb_rigidbody.AddForce(knockback_dir.normalized * punch.force * defaults.KNOCKBACK_FACTOR);
+			 ti_knockback.Reset();
+			 */
 
 
-	// Poise
-    poise -= punch.poise_damage;
-    if (poise <= 0) {
-      if (punch.hit_class <= (int)HitClass.MEGA_PUNCH) {
-				Ragdoll(punch);
-
-      } else if (poise + punch.poise_damage > 0) {
-				// Only happens if this hit got us below 0
-				BecomeVulnerable();
-				EnterAction(GhostActions.STAGGER_LARGE);
-      }
-    } else {
-      ti_restore_poise.Reset();
-			// TODO: minor stagger
-    }
-  }
+	}
 
 	// Layer anim
 	void PlayMinorHurtAnim() {
