@@ -2,12 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
-public enum HitClass {
-	MEGA_PUNCH=0,
-	LARGE_ITEM=1,
-	PUNCH=2,
-	ITEM=3,
-}
 
 /* The hit record is passed around as we execute punches, then taken by the ghost puncher and assessed to see what kind of bonuses we get */
 public struct PunchRecord {
