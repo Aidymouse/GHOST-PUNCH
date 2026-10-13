@@ -177,11 +177,11 @@ public class Ghost : MonoBehaviour
     actions[(int)GhostActions.RECOVERY] = new GA_Recovery(this);
     actions[(int)GhostActions.GET_UP] = new GA_GetUp(this, ragdoll_animator.MasterAlpha);
     actions[(int)GhostActions.SCURRY] = new GA_Scurry(this);
-    actions[(int)GhostActions.POW_RUSH] = new GA_Rush(this);
 
 		// Power Actions
     actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
     actions[(int)GhostActions.POW_SLAP] = new GA_POW_Slap(this);
+    actions[(int)GhostActions.POW_RUSH] = new GA_Rush(this);
 
 
 

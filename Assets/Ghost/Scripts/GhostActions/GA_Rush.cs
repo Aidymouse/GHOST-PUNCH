@@ -8,6 +8,9 @@ public class GA_Rush : GhostAction {
 
 	public override void Enter() {
 		ghost.ChangeAnimation("Rush");
+		// For some reason if I don't set this right here right now the action ends instantly / over and over and the idle animation takes over
+		// Even though the ghost gets where she needs to???
+		ghost.nav_agent.destination = ghost.ghostPuncher.transform.position;
 	}
 
 	public override void Exit() {
