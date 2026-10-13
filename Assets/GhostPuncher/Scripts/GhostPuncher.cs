@@ -2,12 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
-public enum HitClass {
-	MEGA_PUNCH=0,
-	LARGE_ITEM=1,
-	PUNCH=2,
-	ITEM=3,
-}
 
 /* The hit record is passed around as we execute punches, then taken by the ghost puncher and assessed to see what kind of bonuses we get */
 public struct PunchRecord {
@@ -422,7 +416,7 @@ public class GhostPuncher : MonoBehaviour
 		AssessPunchRecord(record);
 	}
 
-	/** returns true if we hit something */
+	/** Returns a punch record with data about the stuff we hit with this punch */
 	PunchRecord ExecutePunch(Punch punch, float stamina_used) {
 
 		PunchRecord record = new PunchRecord();
@@ -487,8 +481,8 @@ public class GhostPuncher : MonoBehaviour
 	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids, ref PunchRecord record, RaycastHit? relevant_hit) {
 
 		// May want to move this up later. Also, do we need to cast a ray to get the hit point for particles ??
-		if (relevant_hit is not null && punch.hit_class-1 < punch_particles.Count && punch_particles[punch.hit_class-1]) {
-			Instantiate(punch_particles[punch.hit_class-1], relevant_hit.Value.point, this.transform.rotation);
+		if (relevant_hit is not null && punch.hit_class < punch_particles.Count && punch_particles[punch.hit_class]) {
+			Instantiate(punch_particles[punch.hit_class], relevant_hit.Value.point, this.transform.rotation);
 		}
 
 		if (target.GetComponent<BreakableObject>()) {
@@ -505,11 +499,11 @@ public class GhostPuncher : MonoBehaviour
 
 		Ghost ghost = target.GetComponent<Ghost>();
 		if (!ghost) { ghost = target.GetComponentInParent<Ghost>(); }
-		if (ghost) {
-			int ghost_id = ghost.GetInstanceID();
-			if (punched_ids.Contains(ghost_id)) { return; }
+		if (ghost && !record.hit_ghost) {
+			//int ghost_id = ghost.GetInstanceID();
+			//if (punched_ids.Contains(ghost_id)) { return; }
 			ghost.GetPunched(punch, relevant_hit);
-			punched_ids.Add(ghost_id);
+			//punched_ids.Add(ghost_id);
 
 			record.hit_ghost = true;
 		}

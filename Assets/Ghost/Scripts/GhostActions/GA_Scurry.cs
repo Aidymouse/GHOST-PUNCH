@@ -4,7 +4,13 @@ using UnityEngine;
 // TODO:
 public class GA_Scurry : GhostAction {
 
-	public GA_Scurry(Ghost g) : base(g) {}
+	float base_angular_speed;
+	float base_speed;
+
+	public GA_Scurry(Ghost g) : base(g) {
+		base_angular_speed = g.nav_agent.angularSpeed;
+		base_speed = g.nav_agent.speed;
+	}
 
 	public override void Enter() {
 		// Find a point somewhere
@@ -14,14 +20,16 @@ public class GA_Scurry : GhostAction {
 
 			Debug.Log("Dist to generated point=" + (ghost.transform.position - rand_pos.Value).magnitude);
 
-			GameObject g = GameObject.Instantiate(ghost.defaults.scurry_data.debug_spawn);
-			g.transform.position = rand_pos.Value;
+			//GameObject g = GameObject.Instantiate(ghost.defaults.scurry_data.debug_spawn);
+			//g.transform.position = rand_pos.Value;
 
 			ghost.nav_agent.SetDestination(rand_pos.Value);
-			ghost.ChangeAnimation("Crawl");
+			ghost.ChangeAnimation(ghost.defaults.scurry_data.animation_name);
 			ghost.ragdoll_animator.forceTargetPose = true;
 			ghost.ragdoll_animator.MasterAlpha = 1;
 			ghost.nav_agent.isStopped = false;
+			ghost.nav_agent.angularSpeed = ghost.defaults.scurry_data.turn_speed;
+			ghost.nav_agent.speed = ghost.defaults.scurry_data.speed;
 
 		} else {
 
@@ -38,6 +46,8 @@ public class GA_Scurry : GhostAction {
 
 	public override void Exit() {
 			ghost.ChangeAnimation("Idle");
+			ghost.nav_agent.angularSpeed = base_angular_speed;
+			ghost.nav_agent.speed = base_speed;
 	}
 
 	public override void Update() {

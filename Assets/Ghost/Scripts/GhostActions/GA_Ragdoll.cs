@@ -32,7 +32,7 @@ public class GA_Ragdoll : GhostAction {
 		//ghost.rig_core.position += ragdoll_offset;
 		//Debug.Log(ragdoll_offset);
 
-		//ghost.ragdoll_settings.PowerProfile = ghost.ragprof_animated;
+		ghost.ragdoll_settings.PowerProfile = ghost.ragprof_animated;
 		// We actually want to slide the master alpha up instead of just setting the target pose instantly
 		//ghost.ragdoll_animator.forceTargetPose = true;
 		ghost.SetLayerInChildren(LayerMask.NameToLayer("Ghost"));
@@ -52,8 +52,7 @@ public class GA_Ragdoll : GhostAction {
 		*/
 
 		if (ghost.ti_ragdoll.FinishedThisFrame()) {
-			Exit();
-			ghost.EnterAction(GhostActions.GET_UP);
+			ghost.ExitAction(GhostActions.GET_UP);
 		}
 	}
 

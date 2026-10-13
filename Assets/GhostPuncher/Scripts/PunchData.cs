@@ -1,13 +1,20 @@
 using UnityEngine;
 
+public enum HitClass {
+	MEGA_PUNCH=0,
+	LARGE_ITEM=1,
+	PUNCH=2,
+	ITEM=3,
+}
+
 public class Punch {
-	public Punch(Vector3 dir, float f, float o_dmg, float g_dmg, float p_dmg, int hc) {
+	public Punch(Vector3 dir, float f, float o_dmg, float g_dmg, float p_dmg, HitClass hc) {
 		direction = dir;
 		force = f;
 		object_damage = o_dmg;
 		ghost_damage = g_dmg;
 		poise_damage = p_dmg;
-		hit_class = hc;
+		hit_class = (int)hc;
 	}
 
 	public static Punch FromData(Vector3 direction, PunchData data) {
@@ -40,5 +47,5 @@ public class PunchData : ScriptableObject
 	[Tooltip("Damage the ghost takes from a default punch")]
 	public float ghost_damage;
 	[Tooltip("Class of hit for this punch (1=mega, 2=normal)")]
-	public int hit_class;
+	public HitClass hit_class;
 }

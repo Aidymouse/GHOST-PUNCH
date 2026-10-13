@@ -6,8 +6,6 @@ public class GhostDefaults : ScriptableObject
 
     [Tooltip("Amount of hit points")]
     public float HP;
-    [Tooltip("How fast (in degress/second I think) the ghost rotates towards you")]
-    public float TURN_SPEED;
     [Tooltip("How long the ghost is stunned for")]
     public float HIT_STUN_TIME;
     [Tooltip("The poise value for the normal ghost. The ghost always reacts to hits in some way but if this breaks she stops moving and flinches.")]
@@ -39,9 +37,14 @@ public class GhostDefaults : ScriptableObject
 		[Range(-1,2)]
 		public int OVERRIDE_POWER_IDX;
 
+		[Tooltip("(meters) range at which a mid-range power will be chosen")]
+		public float MID_RANGE;
+		[Tooltip("(meters) range beyond which a far-range power will be chosen")]
+		public float FAR_RANGE;
+
 		public GAD_Scream scream_data;
 		public GAD_Slap slap_data;
 		public GAD_Blast blast_data;
-		public GAD_Twitch twitch_data;
 		public GAD_Scurry scurry_data;
+		public GAD_Rush rush_data;
 }

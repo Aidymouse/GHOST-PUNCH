@@ -14,7 +14,7 @@ public class BreakableObject : MonoBehaviour
 	[Tooltip("Material controls things like particles and sound effects")]
 	public ObjectMaterial material;
 	[Tooltip("When I hit something, they'll use this to figure out what I am. (3) heavy object; (4) light object")]
-	public int hit_class = 4;
+	public HitClass hit_class = HitClass.ITEM;
 
 
 	[Header("Broken Child")]

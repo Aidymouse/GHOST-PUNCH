@@ -18,7 +18,6 @@ class GA_POW_Slap : GhostAction {
 
 	public GA_POW_Slap(Ghost g) : base(g) {
 
-
 		slap_data = ghost.defaults.slap_data;
 
 		slash_effect_obj = Ghost.Instantiate(slap_data.SLASH_EFFECT_OBJECT, ghost.transform);
@@ -32,7 +31,8 @@ class GA_POW_Slap : GhostAction {
 		ghost.nav_agent.destination = ghost.ghostPuncher.transform.position;
 		//ghost.nav_agent.stoppingDistance = slap_data.STOP_DISTANCE;
 		
-		phase = GhostSlapPhase.CLOSING_DISTANCE;
+		// TODO: come back and remove all this closing distance crap
+		phase = GhostSlapPhase.SLAPPING;
 	}
 
 
@@ -48,6 +48,7 @@ class GA_POW_Slap : GhostAction {
 	void Update_ClosingDistance() {
 		ghost.nav_agent.destination = ghost.ghostPuncher.transform.position;
 
+		// TODO: AND she's facing the right way!
 		if (ghost.nav_agent.remainingDistance < slap_data.STOP_DISTANCE) {
 			StartSlap();
 		}

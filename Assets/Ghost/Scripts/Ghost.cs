@@ -12,8 +12,11 @@ using System.Collections.Generic;
 public enum GhostActions {
 	// Non-power actions (states)
 	STARTLED, // TODO
+	/** Ghost is ragdolled */
 	RAGDOLL,
+	/** Unused ? */
 	RECOVERY,
+	/** When the ghost is crawling around */
 	SCURRY,
 	// The state of the ghost rising from the ground - could be wrapped into ragdoll?
 	GET_UP,
@@ -22,13 +25,19 @@ public enum GhostActions {
 	STAGGER_MEDIUM,
 	STAGGER_LARGE,
 
+	/** @deprecated */
 	TWITCH,
 
 	// Power actions
-	POW_CHARGING_ESCAPE,
 	POW_SLAP,
-	POW_SCREAM,
 	POW_BLAST,
+
+	POW_RUSH,
+	POW_SCREAM,
+
+	POW_CHARGING_ESCAPE,
+
+	/** To categorise */
 	POW_JUMPSCARE,
 	POW_PEAK_AROUND_CORNER,
 };
@@ -101,10 +110,6 @@ public class Ghost : MonoBehaviour
 	// Interrupt action takes precdence, allowing staggers to interrupt actions
 	public GhostActions? interrupt_action = null;
   public GhostAction[] actions;
-	GhostActions[] powers = { 
-		GhostActions.POW_CHARGING_ESCAPE,
-		GhostActions.POW_SLAP,
-	};
 
   // jumpscare sequence
   [Header("Jumpscare")]
@@ -136,6 +141,10 @@ public class Ghost : MonoBehaviour
   Collider[] rig_colliders;
   CharacterJoint[] rig_joints;
 
+	/** Actions */
+	public GhostActionSet close_range_actions;
+	public GhostActionSet mid_range_actions;
+	public GhostActionSet far_range_actions;
 
 	void Awake() {
     ghostPuncher = ghostPuncher_obj.GetComponent<GhostPuncher>();
@@ -167,12 +176,12 @@ public class Ghost : MonoBehaviour
     actions[(int)GhostActions.RAGDOLL] = new GA_Ragdoll(this);
     actions[(int)GhostActions.RECOVERY] = new GA_Recovery(this);
     actions[(int)GhostActions.GET_UP] = new GA_GetUp(this, ragdoll_animator.MasterAlpha);
-    actions[(int)GhostActions.TWITCH] = new GA_Twitch(this);
     actions[(int)GhostActions.SCURRY] = new GA_Scurry(this);
 
 		// Power Actions
     actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
     actions[(int)GhostActions.POW_SLAP] = new GA_POW_Slap(this);
+    actions[(int)GhostActions.POW_RUSH] = new GA_Rush(this);
 
 
 
@@ -232,10 +241,9 @@ public class Ghost : MonoBehaviour
       Vector3 toLookedAt = look_pos - transform.position;
       toLookedAt.y = 0;
       Quaternion lookedAngle = Quaternion.LookRotation(toLookedAt);
-      float turn_speed = 360;
-      transform.rotation = Quaternion.RotateTowards(transform.rotation, lookedAngle, turn_speed * Time.deltaTime);
-
-			Debug.DrawRay(transform.position, toLookedAt*100, Color.cyan);
+			float turn_speed = nav_agent.angularSpeed;
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, lookedAngle, turn_speed * Time.deltaTime);
+			//Debug.DrawRay(transform.position, toLookedAt*100, Color.cyan);
     }
 
 
@@ -278,6 +286,7 @@ public class Ghost : MonoBehaviour
 	public void ExitAction(GhostActions? next_action = null) {
 		if (debug.ghost_logs) Debug.Log("Ghost Exiting: "+cur_action);
 		actions[(int)cur_action].Exit();
+
 		// TODO: will this always be the case?
 		if (next_action is not null) {
 			EnterAction(next_action.Value);
@@ -293,23 +302,38 @@ public class Ghost : MonoBehaviour
   }
 
 	void DecideNextAction() {
-		//TODO: for now just passthrough
-		if (cur_action == GhostActions.TWITCH) {
-			PickRandomPower();
+		// How far am I from ghost puncher?
+		Vector3 to_ghost_puncher = transform.position - ghostPuncher.transform.position;
+
+		GhostActionSet choose_from = close_range_actions;
+
+		float max_height_diff = 2;
+		if (to_ghost_puncher.y > max_height_diff) {
+			if (debug.ghost_logs) Debug.Log("Choosing FAR range action");
+			choose_from = far_range_actions;
 		} else {
-			EnterAction(GhostActions.TWITCH);
+			to_ghost_puncher.y = 0;
+			float dist = to_ghost_puncher.magnitude;
+
+			if (dist > defaults.FAR_RANGE) {
+				if (debug.ghost_logs) Debug.Log("Choosing FAR range action");
+				choose_from = far_range_actions;
+			} else if (dist > defaults.MID_RANGE) {
+				if (debug.ghost_logs) Debug.Log("Choosing MID range action");
+				choose_from = mid_range_actions;
+			} else {
+				if (debug.ghost_logs) Debug.Log("Choosing CLOSE range action");
+			}
 		}
 
+		if (choose_from.debug) {
+			EnterAction(choose_from.debug_action);
+			return;
+		}
+
+		EnterAction(choose_from.WeightedPickAction());
 	}
 
-  void PickRandomPower() {
-		int power_index = Random.Range(0,powers.Length);
-		if (debug.use_power_override) {
-    	power_index = (int)debug.power_override;
-		}
-
-		EnterAction(powers[power_index]);
-  }
 
   void TickTimers() {
     if (cur_action != GhostActions.STAGGER_LARGE) {
@@ -321,10 +345,10 @@ public class Ghost : MonoBehaviour
 
 
   /** EVENTS **/
-  public void GetPunched(Punch punch, RaycastHit? hit=null) {
+	public void GetPunched(Punch punch, RaycastHit? hit=null) {
 
 		// Damage
-    hp -= punch.ghost_damage;
+		hp -= punch.ghost_damage;
 
 		// Particles
 		if (ghost_material) {
@@ -336,10 +360,10 @@ public class Ghost : MonoBehaviour
 				ParticleSystem p = Instantiate(ghost_material.hit_particles);
 				p.transform.position = hit.Value.point;
 				p.transform.rotation = Quaternion.Euler(-hit.Value.normal);
-				
+
 			}
 		}
-	
+
 
 
 		// 1 is mega punch and 3 is big object hit
@@ -350,15 +374,30 @@ public class Ghost : MonoBehaviour
 
 		if (punch.hit_class <= (int)HitClass.PUNCH) {
 			ghost_screams.Play();
-    	ghost_sound.PlayOneShot(ghost_sfx.HIT_SOUND);
+			ghost_sound.PlayOneShot(ghost_sfx.HIT_SOUND);
+		}
+
+		// Poise
+		poise -= punch.poise_damage;
+		if (poise <= 0) {
+			if (punch.hit_class <= (int)HitClass.MEGA_PUNCH) {
+				Ragdoll(punch);
+
+			} else if (poise + punch.poise_damage > 0) {
+				// Only happens if this hit got us below 0
+				BecomeVulnerable();
+				EnterAction(GhostActions.STAGGER_LARGE);
+			}
+		} else {
+			ti_restore_poise.Reset();
+			// TODO: minor stagger
 		}
 
 
-
-    if (HasHyperArmor()) {
+		if (HasHyperArmor()) {
 			// TODO: some minor jolts, but no damage
-      return;
-    }
+			return;
+		}
 
 		PlayMinorHurtAnim();
 
@@ -367,33 +406,18 @@ public class Ghost : MonoBehaviour
 			return;
 		}
 
-	// Knockback
-	// TODO: look into nav_agent.nextPosition as possible point
-	/*
-	EnableKnockback();
-	Vector3 knockback_dir = punch.direction;
-	knockback_dir.y = 0;
-	kb_rigidbody.AddForce(knockback_dir.normalized * punch.force * defaults.KNOCKBACK_FACTOR);
-	ti_knockback.Reset();
-	*/
+		// Knockback
+		// TODO: look into nav_agent.nextPosition as possible point
+		/*
+			 EnableKnockback();
+			 Vector3 knockback_dir = punch.direction;
+			 knockback_dir.y = 0;
+			 kb_rigidbody.AddForce(knockback_dir.normalized * punch.force * defaults.KNOCKBACK_FACTOR);
+			 ti_knockback.Reset();
+			 */
 
 
-	// Poise
-    poise -= punch.poise_damage;
-    if (poise <= 0) {
-      if (punch.hit_class <= (int)HitClass.MEGA_PUNCH) {
-				Ragdoll(punch);
-
-      } else if (poise + punch.poise_damage > 0) {
-				// Only happens if this hit got us below 0
-				BecomeVulnerable();
-				EnterAction(GhostActions.STAGGER_LARGE);
-      }
-    } else {
-      ti_restore_poise.Reset();
-			// TODO: minor stagger
-    }
-  }
+	}
 
 	// Layer anim
 	void PlayMinorHurtAnim() {
@@ -442,8 +466,7 @@ public class Ghost : MonoBehaviour
   void Ragdoll(Punch punch) {
     ghost_sound.PlayOneShot(ghost_sfx.RAGDOLL_SCREAM);
 
-	ExitAction(GhostActions.RAGDOLL);
-    //EnterAction(GhostActions.RAGDOLL);
+		ExitAction(GhostActions.RAGDOLL);
 
     rig_core.AddForce(punch.direction * punch.force * defaults.MAKE_HER_FLY_FACTOR);
   }
@@ -488,6 +511,7 @@ public class Ghost : MonoBehaviour
   }
 
   public void ChangeAnimation(string new_anim, float fade_time=0f) {
+		Debug.Log("Ghost animating to" + new_anim);
     anim.CrossFade(new_anim, fade_time);
   }
 
@@ -495,8 +519,11 @@ public class Ghost : MonoBehaviour
 	public void StartRun() {
 		escape_meter = 0;
 		gameObject.SetActive(true);
+
+		// TODO: reset health and shit!
+
 		this.GetComponent<Ghost>().enabled = true;
-		PickRandomPower();
+		DecideNextAction();
 	}
 
 	public void ApplyItems(ItemRecord record) {

@@ -5064,13 +5064,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1726604543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 23.05, y: 3.517, z: -0.4}
+  m_LocalRotation: {x: 0.58070296, y: 0, z: 0, w: 0.8141155}
+  m_LocalPosition: {x: 23.05, y: 4.25, z: 2.000105}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 549830403}
-  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 71, y: 0, z: 0}
 --- !u!114 &1726604545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5113,8 +5113,8 @@ Light:
   m_Color: {r: 0.9339622, g: 1, b: 0.93468577, a: 1}
   m_Intensity: 15
   m_Range: 10
-  m_SpotAngle: 105
-  m_InnerSpotAngle: 0
+  m_SpotAngle: 99.405045
+  m_InnerSpotAngle: 27.944029
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
     m_Type: 0
@@ -8374,6 +8374,50 @@ PrefabInstance:
       propertyPath: ghostPuncher_obj
       value: 
       objectReference: {fileID: 40756439}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: far_range_actions
+      value: 
+      objectReference: {fileID: 11400000, guid: cf2051af28eddf2ebbbc50a488f0079e, type: 2}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: mid_range_actions
+      value: 
+      objectReference: {fileID: 11400000, guid: 868ae9704eb9ea7bc83cd307771069e5, type: 2}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: close_range_actions
+      value: 
+      objectReference: {fileID: 11400000, guid: 2839fac0e22442eb892a7c4210ccd1b7, type: 2}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: close_range.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: far_range_actions.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: mid_range_actions.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: close_range_actions.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'far_range_actions.Array.data[0]'
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'mid_range_actions.Array.data[0]'
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'mid_range_actions.Array.data[1]'
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'close_range_actions.Array.data[0]'
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 3243.2441
@@ -8397,22 +8441,6 @@ PrefabInstance:
     - target: {fileID: 5588121910982609743, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_IsKinematic
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5757180813942324356, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
-      propertyPath: m_AutoBraking
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5757180813942324356, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
-      propertyPath: m_Acceleration
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 5757180813942324356, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
-      propertyPath: m_AngularSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5757180813942324356, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
-      propertyPath: m_StoppingDistance
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
