@@ -422,7 +422,7 @@ public class GhostPuncher : MonoBehaviour
 		AssessPunchRecord(record);
 	}
 
-	/** returns true if we hit something */
+	/** Returns a punch record with data about the stuff we hit with this punch */
 	PunchRecord ExecutePunch(Punch punch, float stamina_used) {
 
 		PunchRecord record = new PunchRecord();
@@ -505,11 +505,11 @@ public class GhostPuncher : MonoBehaviour
 
 		Ghost ghost = target.GetComponent<Ghost>();
 		if (!ghost) { ghost = target.GetComponentInParent<Ghost>(); }
-		if (ghost) {
-			int ghost_id = ghost.GetInstanceID();
-			if (punched_ids.Contains(ghost_id)) { return; }
+		if (ghost && !record.hit_ghost) {
+			//int ghost_id = ghost.GetInstanceID();
+			//if (punched_ids.Contains(ghost_id)) { return; }
 			ghost.GetPunched(punch, relevant_hit);
-			punched_ids.Add(ghost_id);
+			//punched_ids.Add(ghost_id);
 
 			record.hit_ghost = true;
 		}
