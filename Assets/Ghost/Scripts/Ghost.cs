@@ -293,13 +293,7 @@ public class Ghost : MonoBehaviour
   }
 
 	void DecideNextAction() {
-		//TODO: for now just passthrough
-		if (cur_action == GhostActions.TWITCH) {
-			PickRandomPower();
-		} else {
-			EnterAction(GhostActions.TWITCH);
-		}
-
+		PickRandomPower();
 	}
 
   void PickRandomPower() {
