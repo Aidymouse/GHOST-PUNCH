@@ -5064,13 +5064,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1726604543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.58070296, y: 0, z: 0, w: 0.8141155}
-  m_LocalPosition: {x: 23.05, y: 4.25, z: 2.000105}
+  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 23.05, y: 3.517, z: -0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 549830403}
-  m_LocalEulerAnglesHint: {x: 71, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
 --- !u!114 &1726604545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5113,8 +5113,8 @@ Light:
   m_Color: {r: 0.9339622, g: 1, b: 0.93468577, a: 1}
   m_Intensity: 15
   m_Range: 10
-  m_SpotAngle: 99.405045
-  m_InnerSpotAngle: 27.944029
+  m_SpotAngle: 105
+  m_InnerSpotAngle: 0
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
     m_Type: 0
@@ -8400,15 +8400,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5757180813942324356, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AutoBraking
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5757180813942324356, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_Acceleration
-      value: 100
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5757180813942324356, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularSpeed
-      value: 90
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5757180813942324356, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
