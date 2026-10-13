@@ -14,11 +14,11 @@ public class GA_Scurry : GhostAction {
 
 			Debug.Log("Dist to generated point=" + (ghost.transform.position - rand_pos.Value).magnitude);
 
-			GameObject g = GameObject.Instantiate(ghost.defaults.scurry_data.debug_spawn);
-			g.transform.position = rand_pos.Value;
+			//GameObject g = GameObject.Instantiate(ghost.defaults.scurry_data.debug_spawn);
+			//g.transform.position = rand_pos.Value;
 
 			ghost.nav_agent.SetDestination(rand_pos.Value);
-			ghost.ChangeAnimation("Crawl");
+			ghost.ChangeAnimation(ghost.defaults.scurry_data.animation_name);
 			ghost.ragdoll_animator.forceTargetPose = true;
 			ghost.ragdoll_animator.MasterAlpha = 1;
 			ghost.nav_agent.isStopped = false;
