@@ -33,10 +33,6 @@ public class GhostDefaults : ScriptableObject
 
 		[Header("Powers")]
 
-		[Tooltip("Sets the default power index. Set to -1 to pick a random power. (0) Wave; (1) Slap; (2) Scream; ")]
-		[Range(-1,2)]
-		public int OVERRIDE_POWER_IDX;
-
 		[Tooltip("(meters) range at which a mid-range power will be chosen")]
 		public float MID_RANGE;
 		[Tooltip("(meters) range beyond which a far-range power will be chosen")]

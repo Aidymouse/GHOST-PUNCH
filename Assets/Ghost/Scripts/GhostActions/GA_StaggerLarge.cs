@@ -3,16 +3,18 @@ using UnityEngine;
 public class GA_StaggerLarge : GhostAction {
 
 	Timer ti_hit_stun;
-	
 
 	public GA_StaggerLarge(Ghost g) : base(g) {
     ti_hit_stun = new Timer(0, g.defaults.stagger_large_data.STAGGER_TIME);
 	}
 
 	public override void Enter() {
-				ti_hit_stun.Reset();
-				ghost.PlayAnimation("Hit_Cower");
-				//ghost.nav_agent.isStopped = true;
+		ti_hit_stun.Reset();
+		ghost.PlayAnimation("StaggerLarge");
+	}
+
+	public override void Exit() {
+		ghost.PlayAnimation("StaggerLarge_End");
 	}
 
 	public override void Update() {

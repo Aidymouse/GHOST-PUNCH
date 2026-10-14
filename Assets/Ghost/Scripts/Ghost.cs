@@ -204,8 +204,6 @@ public class Ghost : MonoBehaviour
     /* Animator */
     anim = this.GetComponentInChildren<Animator>();
 
-    //nav_agent.destination = nav_destination.position;
-
     charge_particles = GetComponentInChildren<ParticleSystem>();
 
 
@@ -240,9 +238,11 @@ public class Ghost : MonoBehaviour
 			Vector3 look_pos = look_at.Value;
       Vector3 toLookedAt = look_pos - transform.position;
       toLookedAt.y = 0;
-      Quaternion lookedAngle = Quaternion.LookRotation(toLookedAt);
-			float turn_speed = nav_agent.angularSpeed;
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, lookedAngle, turn_speed * Time.deltaTime);
+			if (toLookedAt != Vector3.zero) {
+				Quaternion lookedAngle = Quaternion.LookRotation(toLookedAt);
+				float turn_speed = nav_agent.angularSpeed;
+				transform.rotation = Quaternion.RotateTowards(transform.rotation, lookedAngle, turn_speed * Time.deltaTime);
+			}
 			//Debug.DrawRay(transform.position, toLookedAt*100, Color.cyan);
     }
 
@@ -387,7 +387,7 @@ public class Ghost : MonoBehaviour
 			} else if (poise + punch.poise_damage > 0) {
 				// Only happens if this hit got us below 0
 				BecomeVulnerable();
-				EnterAction(GhostActions.STAGGER_LARGE);
+				ExitAction(GhostActions.STAGGER_LARGE);
 			}
 		} else {
 			ti_restore_poise.Reset();
@@ -512,7 +512,6 @@ public class Ghost : MonoBehaviour
   }
 
   public void ChangeAnimation(string new_anim, float fade_time=0f) {
-		Debug.Log("Ghost animating to" + new_anim);
     anim.CrossFade(new_anim, fade_time);
   }
 
