@@ -7,6 +7,8 @@ public class WaveOrb : MonoBehaviour
 	public Vector3 particle_offset;
 	public float life_timer;
 
+	bool hit_puncher;
+
 	public GAD_Blast attrs;
 
 	public float object_damage;
@@ -14,18 +16,15 @@ public class WaveOrb : MonoBehaviour
 
 
 	Timer life;
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
-	{
+	void Start() {
+		hit_puncher = false;
+
 		life = new Timer(life_timer);
 
 		Instantiate(wave_particles, transform.position + particle_offset, transform.rotation);
-	
 	}
 
-	// Update is called once per frame
-	void Update()
-	{
+	void Update() {
 
 		float expansion = expansion_speed * Time.deltaTime;
 
@@ -41,8 +40,6 @@ public class WaveOrb : MonoBehaviour
 
 
 	void OnTriggerEnter(Collider col) {
-
-		
 		if (col.gameObject.CompareTag("BreakableObject")) {
 			Vector3 dir = (col.transform.position - transform.position).normalized;
 			dir.y = 0;
@@ -51,14 +48,17 @@ public class WaveOrb : MonoBehaviour
 			if (bo) {
 				bo.GetPunched(wave_punch);
 			}
-		} else if (col.gameObject.CompareTag("GhostPuncher")) {
-			Debug.Log("I hit the ghost puncher!");
-				GhostPuncher gp = col.gameObject.GetComponent<GhostPuncher>();
-				if (gp) {
-						Vector3 dir = (col.transform.position - transform.position).normalized;
-						dir.y = 0;
-						gp.GetPushed(dir, attrs.POWER);
-				}
+		} else if (!hit_puncher && col.gameObject.CompareTag("GhostPuncher")) {
+			hit_puncher = true;
+			Debug.Log("Wave Orb: I hit the ghost puncher!");
+			GhostPuncher gp = col.gameObject.GetComponent<GhostPuncher>();
+			if (gp) {
+				Vector3 dir = (col.transform.position - transform.position).normalized;
+				dir.y = 0;
+				gp.GetPushed(dir, attrs.POWER);
+			} else {
+				Debug.LogError("Wave Orb: I hit an object with GhostPuncher tag but no ghost puncher component?");
+			}
 		}
-}
+	}
 }

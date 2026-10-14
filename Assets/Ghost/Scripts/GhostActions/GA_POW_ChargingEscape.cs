@@ -23,11 +23,18 @@ public class GA_POW_ChargingEscape : GhostAction {
 		ghost.charge_particles.Stop();
 	}
 
+
 	public override void Update() {
 		if (phase == ChargingEscapePhase.MOVE) {
 			Update_Move();
 		} else if (phase == ChargingEscapePhase.CHARGE) {
 			Update_Charge();
+		}
+	}
+
+	public override void GetPunched(Punch punch, RaycastHit? hit=null) {
+		if (punch.hit_class == (int)HitClass.PUNCH && phase == ChargingEscapePhase.CHARGE) {
+			ghost.ExitAction(GhostActions.STAGGER_MEDIUM);
 		}
 	}
 

@@ -173,6 +173,7 @@ public class Ghost : MonoBehaviour
     /* Init Actions */
     actions = new GhostAction[20];
     actions[(int)GhostActions.STAGGER_LARGE] = new GA_StaggerLarge(this);
+    actions[(int)GhostActions.STAGGER_MEDIUM] = new GA_StaggerMedium(this);
     actions[(int)GhostActions.RAGDOLL] = new GA_Ragdoll(this);
     actions[(int)GhostActions.RECOVERY] = new GA_Recovery(this);
     actions[(int)GhostActions.GET_UP] = new GA_GetUp(this, ragdoll_animator.MasterAlpha);
@@ -182,8 +183,7 @@ public class Ghost : MonoBehaviour
     actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
     actions[(int)GhostActions.POW_SLAP] = new GA_POW_Slap(this);
     actions[(int)GhostActions.POW_RUSH] = new GA_Rush(this);
-
-
+    actions[(int)GhostActions.POW_BLAST] = new GA_Blast(this);
 
     rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
     rig_colliders = rig.GetComponentsInChildren<Collider>();
@@ -364,6 +364,7 @@ public class Ghost : MonoBehaviour
 			}
 		}
 
+		actions[(int)cur_action].GetPunched(punch, hit);
 
 
 		// 1 is mega punch and 3 is big object hit

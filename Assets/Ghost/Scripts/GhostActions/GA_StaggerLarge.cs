@@ -3,9 +3,10 @@ using UnityEngine;
 public class GA_StaggerLarge : GhostAction {
 
 	Timer ti_hit_stun;
+	
 
 	public GA_StaggerLarge(Ghost g) : base(g) {
-    ti_hit_stun = new Timer(0, g.defaults.HIT_STUN_TIME);
+    ti_hit_stun = new Timer(0, g.defaults.stagger_large_data.STAGGER_TIME);
 	}
 
 	public override void Enter() {
@@ -18,7 +19,7 @@ public class GA_StaggerLarge : GhostAction {
 		ti_hit_stun.Tick(Time.deltaTime);
 
 		if (ti_hit_stun.FinishedThisFrame()) {
-			ghost.EnterAction(GhostActions.RECOVERY);
+			ghost.ExitAction();
 		}
  	}
 

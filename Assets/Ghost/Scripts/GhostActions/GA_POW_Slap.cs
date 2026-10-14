@@ -33,6 +33,7 @@ class GA_POW_Slap : GhostAction {
 		
 		// TODO: come back and remove all this closing distance crap
 		phase = GhostSlapPhase.SLAPPING;
+		StartSlap();
 	}
 
 
