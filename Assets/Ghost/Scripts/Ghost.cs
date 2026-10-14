@@ -363,6 +363,7 @@ public class Ghost : MonoBehaviour
 			}
 		}
 
+		actions[(int)cur_action].GetPunched(punch, hit);
 
 
 		// 1 is mega punch and 3 is big object hit
