@@ -384,33 +384,46 @@ public class GhostPuncher : MonoBehaviour
 			defaults.NORMAL_PUNCH_DATA
 		);
 
-		LaunchPunch(normal_punch, defaults.PUNCH_STAMINA);
+		if (defaults.PUNCH_STAMINA > 0) {
+			Debug.LogError("Punch has not had non-zero stamina implemented properly");
+		}
+
+		SpendStamina(defaults.PUNCH_STAMINA);
+
+		LaunchPunch(normal_punch);
 	}
 
 	void DoMegaPunch() {
-		ChangeAnimation("CHARGE_PUNCH");
-		if (fovKick) fovKick.BigKick();
-		Punch mega_punch = Punch.FromData(punch_hitbox.transform.TransformDirection(Vector3.forward), defaults.MEGAPUNCH_DATA);
+		if (stamina < defaults.MEGAPUNCH_STAMINA) {
+			NormalPunch();
+			return;
+		}
 
-		LaunchPunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
+		ChangeAnimation("CHARGE_PUNCH");
+
+		if (fovKick) fovKick.BigKick();
+
+		Punch mega_punch = Punch.FromData(punch_hitbox.transform.TransformDirection(Vector3.forward), defaults.MEGAPUNCH_DATA);
+		SpendStamina(defaults.MEGAPUNCH_STAMINA);
+		LaunchPunch(mega_punch);
+
 	}
 
-	public void LaunchPunch(Punch punch, float stamina_used) {
+	/** Takes a punch object and actually does it */
+	public void LaunchPunch(Punch punch) {
 		if (fovKick) { fovKick.SmallKick(); }
 
-		PunchRecord record = ExecutePunch(punch, stamina_used);
+		PunchRecord record = ExecutePunch(punch);
 
 		AssessPunchRecord(record);
 	}
 
 	/** Returns a punch record with data about the stuff we hit with this punch */
-	PunchRecord ExecutePunch(Punch punch, float stamina_used) {
+	PunchRecord ExecutePunch(Punch punch) {
 
 		PunchRecord record = new PunchRecord();
 		record.punch = punch;
 		Collider[] punched = Physics.OverlapBox(punch_hitbox.transform.position, punch_hitbox.transform.localScale/2, punch_hitbox.transform.rotation, punchables_mask);		
-
-		SpendStamina(stamina_used);
 
 		List<int> punched_ids = new List<int>();
 
