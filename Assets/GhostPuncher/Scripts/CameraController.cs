@@ -13,7 +13,9 @@ public class CameraController : MonoBehaviour
 	// For mouse damping
 	public GhostPuncher puncher;
 
+	/** Angle of X rotation */
 	float lookX;
+	/** Angle i'm looking up or down at */
 	float lookY;
 	Vector2 lookDelta;
 
@@ -27,6 +29,8 @@ public class CameraController : MonoBehaviour
 		action_look = InputSystem.actions.FindAction("Look");
 		Cursor.lockState = CursorLockMode.Locked;
 		sensitivity = settings.mouse_sensitivity;
+
+		lookX = transform.rotation.eulerAngles.y;
 	}
 
 	// Update is called once per frame
