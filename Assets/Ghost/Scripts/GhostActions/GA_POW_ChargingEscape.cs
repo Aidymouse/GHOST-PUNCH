@@ -43,13 +43,18 @@ public class GA_POW_ChargingEscape : GhostAction {
 	// Move
 	public void Enter_Move() {
 		// TODO: Choose a spot to go
-		GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
-		int dest_idx = Random.Range(0, destinations.Length);
-		GameObject dest_obj = destinations[dest_idx];
+	
+		Vector3? new_spot = NavMeshUtil.GetRandomPoint(ghost.transform.position, 50, 10);
+		if (new_spot is null) {
+			ghost.ExitAction();
+			return;
+		}
 
-		ghost.nav_agent.destination = dest_obj.transform.position;
-		//if (debug) { Debug.Log("[MovingRoom] new dest"+dest_obj.transform.position); }
-		ghost.nav_destination = dest_obj;
+		//GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
+		//int dest_idx = Random.Range(0, destinations.Length);
+		//GameObject dest_obj = destinations[dest_idx];
+
+		ghost.nav_agent.destination = new_spot.Value;
 	}
 
 	public void Update_Move() {
@@ -57,8 +62,8 @@ public class GA_POW_ChargingEscape : GhostAction {
 		ghost.LookAt(ghost.nav_agent.steeringTarget);
 
 		float dist_to_dest = ghost.nav_agent.remainingDistance;
-		if (dist_to_dest <= 1) {
-			ghost.nav_destination = null;
+
+		if (!ghost.nav_agent.pathPending && dist_to_dest <= 1) {
 			Enter_Charge();
 		}
 	}

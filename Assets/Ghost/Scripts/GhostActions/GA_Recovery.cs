@@ -20,13 +20,6 @@ public class GA_Recovery : GhostAction {
 			ghost.nav_agent.isStopped = false;
 
 			ghost.ExitAction();
-			//ghost.EnterAction(GhostActions.USING_POWER);
-			/*
-				 if (nav_destination == null) {
-				 } else {
-				 EnterAction(GhostActions.MOVING_ROOM);
-				 }
-				 */
 		}
 	}
 
