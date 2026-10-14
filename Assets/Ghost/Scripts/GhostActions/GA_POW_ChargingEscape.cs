@@ -34,7 +34,7 @@ public class GA_POW_ChargingEscape : GhostAction {
 
 	public override void GetPunched(Punch punch, RaycastHit? hit=null) {
 		if (punch.hit_class == (int)HitClass.PUNCH && phase == ChargingEscapePhase.CHARGE) {
-			ghost.ExitAction(GhostActions.STAGGER_LARGE);
+			ghost.ExitAction(GhostActions.STAGGER_MEDIUM);
 		}
 	}
 

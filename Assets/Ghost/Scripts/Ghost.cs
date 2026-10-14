@@ -173,6 +173,7 @@ public class Ghost : MonoBehaviour
     /* Init Actions */
     actions = new GhostAction[20];
     actions[(int)GhostActions.STAGGER_LARGE] = new GA_StaggerLarge(this);
+    actions[(int)GhostActions.STAGGER_MEDIUM] = new GA_StaggerMedium(this);
     actions[(int)GhostActions.RAGDOLL] = new GA_Ragdoll(this);
     actions[(int)GhostActions.RECOVERY] = new GA_Recovery(this);
     actions[(int)GhostActions.GET_UP] = new GA_GetUp(this, ragdoll_animator.MasterAlpha);

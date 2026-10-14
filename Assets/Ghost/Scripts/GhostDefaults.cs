@@ -47,4 +47,6 @@ public class GhostDefaults : ScriptableObject
 		public GAD_Blast blast_data;
 		public GAD_Scurry scurry_data;
 		public GAD_Rush rush_data;
+		public GAD_StaggerLarge stagger_large_data;
+		public GAD_StaggerMedium stagger_medium_data;
 }
