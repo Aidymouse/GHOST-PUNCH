@@ -2,12 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
-public enum HitClass {
-	MEGA_PUNCH=0,
-	LARGE_ITEM=1,
-	PUNCH=2,
-	ITEM=3,
-}
 
 /* The hit record is passed around as we execute punches, then taken by the ghost puncher and assessed to see what kind of bonuses we get */
 public struct PunchRecord {
@@ -15,6 +9,7 @@ public struct PunchRecord {
 	public int items_broken;
 	public bool hit_ghost;
 	public bool ragdolled_ghost;
+	public Punch punch;
 }
 
 
@@ -37,6 +32,8 @@ public class GhostPuncher : MonoBehaviour
 
 	public PuncherDefaults defaults; 
 	public GhostDefaults ghost_defaults;
+
+	public ScreenShake screen_shake_controller;
 
 	float fall_velocity;
 
@@ -123,11 +120,6 @@ public class GhostPuncher : MonoBehaviour
 	/* Cutscene control toggle */
 	public bool inCutscene = false;
 
-	// TODO: this could totally be a status effect
-	Vector3 push_dir;
-	float push_power;
-	float push_power_decay = 25;
-
 	List<StatusEffect> statuses = new List<StatusEffect>();
 	[Tooltip("The position in the list corresponds to the hit class. Slot 1 = hit class 1 (strong punch), etc.")]
 	public List<ParticleSystem> punch_particles = new List<ParticleSystem>();
@@ -167,7 +159,6 @@ public class GhostPuncher : MonoBehaviour
 
 		/* Camera effects */
 		fovKick = GetComponentInChildren<FOVKick>();
-		screenShake = GetComponentInChildren<ScreenShake>();
 
 		controller = GetComponent<CharacterController>();
 		fov_controller = GetComponentInChildren<FOVController>();
@@ -233,7 +224,8 @@ public class GhostPuncher : MonoBehaviour
 	{
 
 		// Timers
-		this.tick_timers();
+		TickTimers();
+		UpdateStatusEffects();
 
 		
 		if (active_ability is null || active_ability.lock_punch == false) {
@@ -321,16 +313,7 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 		// Push
-		if (push_power > 0) {
-			move_vec += push_dir * push_power;
-			// There is probably a better way of making the push ease out
-			if (push_power < 0.5) {
-				push_power *= ghost_defaults.blast_data.DECAY / 1.5f;
-			} else {
-				push_power *= ghost_defaults.blast_data.DECAY;
-			}
-			if (push_power < ghost_defaults.blast_data.POWER_THRESHOLD) { push_power = 0; }
-		}
+		move_vec += GetPushVector();
 
 		// Execute the move
 		controller.Move(move_vec * Time.deltaTime);
@@ -407,7 +390,6 @@ public class GhostPuncher : MonoBehaviour
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
 		if (fovKick) fovKick.BigKick();
-		if (screenShake) screenShake.Shake(0.2f);
 		Punch mega_punch = Punch.FromData(punch_hitbox.transform.TransformDirection(Vector3.forward), defaults.MEGAPUNCH_DATA);
 
 		LaunchPunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
@@ -415,17 +397,17 @@ public class GhostPuncher : MonoBehaviour
 
 	public void LaunchPunch(Punch punch, float stamina_used) {
 		if (fovKick) { fovKick.SmallKick(); }
-		if (screenShake) { screenShake.Shake(0.05f); }
 
 		PunchRecord record = ExecutePunch(punch, stamina_used);
 
 		AssessPunchRecord(record);
 	}
 
-	/** returns true if we hit something */
+	/** Returns a punch record with data about the stuff we hit with this punch */
 	PunchRecord ExecutePunch(Punch punch, float stamina_used) {
 
 		PunchRecord record = new PunchRecord();
+		record.punch = punch;
 		Collider[] punched = Physics.OverlapBox(punch_hitbox.transform.position, punch_hitbox.transform.localScale/2, punch_hitbox.transform.rotation, punchables_mask);		
 
 		SpendStamina(stamina_used);
@@ -487,8 +469,8 @@ public class GhostPuncher : MonoBehaviour
 	void ProcessPunchTarget(GameObject target, Punch punch, List<int> punched_ids, ref PunchRecord record, RaycastHit? relevant_hit) {
 
 		// May want to move this up later. Also, do we need to cast a ray to get the hit point for particles ??
-		if (relevant_hit is not null && punch.hit_class-1 < punch_particles.Count && punch_particles[punch.hit_class-1]) {
-			Instantiate(punch_particles[punch.hit_class-1], relevant_hit.Value.point, this.transform.rotation);
+		if (relevant_hit is not null && punch.hit_class < punch_particles.Count && punch_particles[punch.hit_class]) {
+			Instantiate(punch_particles[punch.hit_class], relevant_hit.Value.point, this.transform.rotation);
 		}
 
 		if (target.GetComponent<BreakableObject>()) {
@@ -505,11 +487,11 @@ public class GhostPuncher : MonoBehaviour
 
 		Ghost ghost = target.GetComponent<Ghost>();
 		if (!ghost) { ghost = target.GetComponentInParent<Ghost>(); }
-		if (ghost) {
-			int ghost_id = ghost.GetInstanceID();
-			if (punched_ids.Contains(ghost_id)) { return; }
+		if (ghost && !record.hit_ghost) {
+			//int ghost_id = ghost.GetInstanceID();
+			//if (punched_ids.Contains(ghost_id)) { return; }
 			ghost.GetPunched(punch, relevant_hit);
-			punched_ids.Add(ghost_id);
+			//punched_ids.Add(ghost_id);
 
 			record.hit_ghost = true;
 		}
@@ -517,14 +499,19 @@ public class GhostPuncher : MonoBehaviour
 
 	// After a punch is executed, assess the record to see what bonuses we get
 	void AssessPunchRecord(PunchRecord record) {
+
+		//screen_shake_controller.Shake(0.015f);
+
 		if (record.items_hit > 0) {
 			stamina += defaults.STAMINA_GAINED_ON_HIT;
 			ti_fear_drain_pause.Reset();
+			screen_shake_controller.Shake(record.punch.screen_shake);
 		}
 
 		if (record.hit_ghost) {
 			this.fear_meter += defaults.PUNCH_FEAR;
 			ti_fear_drain_pause.Reset();
+			screen_shake_controller.Shake(record.punch.screen_shake);
 		}
 	}
 
@@ -559,16 +546,19 @@ public class GhostPuncher : MonoBehaviour
 		return move_vec;
 	}
 
-	void tick_timers() {
+	void TickTimers() {
 		ti_punch_cooldown.Tick(Time.deltaTime);
 		ti_punch_again.Tick(Time.deltaTime);
 		ti_charge_up.Tick(Time.deltaTime);
 		ti_stamina_recharge.Tick(Time.deltaTime);
 
 
+	}
+
+	void UpdateStatusEffects() {
 		for (int i=statuses.Count-1; i>=0; i--) {
-			statuses[i].Duration.Tick(Time.deltaTime);
-			if (statuses[i].Duration.Finished()) {
+			statuses[i].Update();
+			if (statuses[i].remove_me) {
 				statuses.RemoveAt(i);
 			}
 		}
@@ -578,12 +568,19 @@ public class GhostPuncher : MonoBehaviour
 		ti_fear_drain_pause.Tick(Time.deltaTime);
 		if (ti_fear_drain_pause.Finished()) {
 			float fear_drain_amount = fear_drain * GetFearRequired();
+			//Debug.Log("Fear required: " + GetFearRequired() + " x " + fear_drain + " = " + fear_drain_amount);
+
+			// If we crossed the boundary, reset fear last chance
+			if (this.fear_meter > fear_thresholds[this.fear_index]) {
+				ti_fear_last_chance.Reset();
+			}
+
 			this.fear_meter -= fear_drain_amount * Time.deltaTime;
 		}
 
-		if (this.fear_meter < 0) { this.fear_meter = 0; }
+		if (this.fear_meter < fear_thresholds[this.fear_index]) { this.fear_meter = fear_thresholds[this.fear_index]; }
 
-		if (this.fear_meter <= 0) {
+		if (this.fear_meter <= fear_thresholds[this.fear_index]) {
 			ti_fear_last_chance.Tick(Time.deltaTime);
 			if (ti_fear_last_chance.Finished()) { ResetFear(); }
 		}
@@ -593,7 +590,7 @@ public class GhostPuncher : MonoBehaviour
 				this.fear_index += 1;
 				this.fear_meter = fear_thresholds[this.fear_index] + defaults.FEAR_REQUIRED[this.fear_index+1] * 0.2f;
 			} else {
-				this.fear_meter = GetFearRequired(); 
+				this.fear_meter = GetFearRequired() - 0.01f;
 			}
 		}
 
@@ -643,8 +640,8 @@ public class GhostPuncher : MonoBehaviour
 	}
 
 	public void GetPushed(Vector3 dir, float power) {
-		push_dir = dir.normalized;
-		push_power = power;
+		S_Push push_status = new S_Push(5, dir, power, ghost_defaults.blast_data.DECAY);
+		AddStatus(push_status);
 	}
 
 	public void GetSlapped() {
@@ -721,6 +718,19 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 		return total_slow_multiplier;
+	}
+
+	Vector3 GetPushVector() {
+		Vector3 push = new Vector3(0, 0, 0);
+	
+		for (int i=statuses.Count-1; i>=0; i--) {
+			if (statuses[i].Type == StatusType.PUSH) {
+				push += statuses[i].GetVector3Value(StatusAttribs.PUSH_VECTOR);
+			}
+		}
+		
+		return push;
+
 	}
 
 }

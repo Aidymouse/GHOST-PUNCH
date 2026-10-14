@@ -5,6 +5,7 @@ public class FootballCollider : MonoBehaviour {
 	GhostPuncher p;
 	public bool end_charge;
 	bool hit_ghost_this_frame;
+
 	public void Awake() {
 		p = GetComponentInParent<GhostPuncher>();
 		hit_ghost_this_frame = false;
@@ -15,6 +16,8 @@ public class FootballCollider : MonoBehaviour {
 	}
 
 	public void OnTriggerEnter(Collider col) {
+
+		if (end_charge) { return; }
 
 		BreakableObject bo = col.gameObject.GetComponent<BreakableObject>();
 		if (bo) {
@@ -32,7 +35,7 @@ public class FootballCollider : MonoBehaviour {
 				bo.GetPunched(trample_punch);
 			} 
 		} else {
-			Debug.Log(col.gameObject);
+			//Debug.Log(col.gameObject);
 		}
 
 		// Do frame check when hit ghost because we're hitting a rigidbody collider and we could be hitting a bunch of them at once

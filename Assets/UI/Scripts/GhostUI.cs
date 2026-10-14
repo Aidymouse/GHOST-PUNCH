@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using EasyTextEffects;
 
 public class GhostUI : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GhostUI : MonoBehaviour
 	[Header("Text")]
 	public TMP_Text txt_ectoplasm;
 	public TMP_Text txt_fear_multiplier;
+	public TextEffect txt_fear_jitter_effect;
 
 	Image hurt_indicator;
 	Image slow_indicator;
@@ -53,8 +55,8 @@ public class GhostUI : MonoBehaviour
 	}
 
 	public void InitUI(Ghost ghost, GhostPuncher puncher) {
-		ghost_health_bar.SetProportion(1);
-		ghost_poise_bar.SetProportion(1);
+		ghost_health_bar.SetProportion(1 - 0.001f);
+		ghost_poise_bar.SetProportion(1 - 0.001f);
 	}
 
 	// Update is called once per frame
@@ -62,15 +64,21 @@ public class GhostUI : MonoBehaviour
 	{
 		TickTimers();
 
-		ghost_health_bar.SetPropTarget(ghost.hp / ghost.defaults.HP);
+		float health_prop = ghost.hp / ghost.defaults.HP;
+		if (health_prop == 1) { health_prop -= 0.001f; }
+		ghost_health_bar.SetPropTarget(health_prop);
+
 		// TODO: while ghost is vulnerable, flash poise bar
-		ghost_poise_bar.SetPropTarget(ghost.poise / ghost.max_poise);
+		float poise_prop = ghost.poise / ghost.max_poise;
+		if (poise_prop == 1) { poise_prop -= 0.001f; }
+		ghost_poise_bar.SetPropTarget(poise_prop);
 
 		stamina_orbs.SetStamina(ghost_puncher.stamina);
 		escape_clock.SetTimeLeft(1 - (ghost.escape_meter / ghost.escape_needed));
 
 		/** Fear Bar **/
 		if (ghost_puncher.fear_index == 0 && ghost_puncher.fear_meter == 0) {
+			ghost_fear_bar.SetProportion(0);
 			ghost_fear_bar.gameObject.SetActive(false);
 		} else {
 			ghost_fear_bar.gameObject.SetActive(true);
@@ -87,6 +95,7 @@ public class GhostUI : MonoBehaviour
 			ghost_fear_bar.SetPropTarget(fear_portion);
 
 			txt_fear_multiplier.SetText("x"+ghost_puncher.GetFearMultiplier());
+			txt_fear_jitter_effect.Refresh();
 		}
 
 		/** Hurt Indicator **/

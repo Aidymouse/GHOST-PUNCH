@@ -16,19 +16,14 @@ public class ScreenShake : MonoBehaviour
 
     void LateUpdate()
     {
-        if (shakeIntensity > 0)
-        {
-            Vector3 offset;
-            {
-                offset = Random.insideUnitSphere;
-            }
+        if (shakeIntensity > 0) {
+            Vector3 offset = Random.insideUnitSphere;
 
             transform.localPosition = originalPos + offset * shakeIntensity;
 
             shakeIntensity -= Time.deltaTime * shakeDecay;
-        }
-        else
-        {
+
+        } else {
             shakeIntensity = 0f;
             transform.localPosition = originalPos;
         }
@@ -36,9 +31,6 @@ public class ScreenShake : MonoBehaviour
 
     public void Shake(float intensity)
     {
-        shakeIntensity += intensity;
-
-        // clamp so punches don’t explode the camera
-        shakeIntensity = Mathf.Min(shakeIntensity, maxShakeIntensity);
+        shakeIntensity = Mathf.Min(intensity, maxShakeIntensity);
     }
 }

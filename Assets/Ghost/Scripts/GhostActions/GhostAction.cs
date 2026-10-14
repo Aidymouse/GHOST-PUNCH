@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class GhostAction {
 
 	public Ghost ghost;
@@ -12,4 +14,5 @@ public class GhostAction {
 
 	public virtual void Update() { }
 
+	public virtual void GetPunched(Punch punch, RaycastHit? hit=null) {}
 }

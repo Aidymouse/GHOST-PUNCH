@@ -31,26 +31,38 @@ public class GA_POW_ChargingEscape : GhostAction {
 		}
 	}
 
+	public override void GetPunched(Punch punch, RaycastHit? hit=null) {
+		if (punch.hit_class <= (int)HitClass.PUNCH) {
+			ghost.ExitAction(GhostActions.STAGGER_MEDIUM);
+		}
+	}
+
 	/** Sub-states **/
 
 	// Move
 	public void Enter_Move() {
 		// TODO: Choose a spot to go
-		GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
-		int dest_idx = Random.Range(0, destinations.Length);
-		GameObject dest_obj = destinations[dest_idx];
+	
+		Vector3? new_spot = NavMeshUtil.GetRandomPoint(ghost.transform.position, 50, 10);
+		if (new_spot is null) {
+			ghost.ExitAction();
+			return;
+		}
 
-		ghost.nav_agent.destination = dest_obj.transform.position;
-		//if (debug) { Debug.Log("[MovingRoom] new dest"+dest_obj.transform.position); }
-		ghost.nav_destination = dest_obj;
+		//GameObject[] destinations = GameObject.FindGameObjectsWithTag("GhostDestination"); // Supposedly slow, but shouldn't be a big deal
+		//int dest_idx = Random.Range(0, destinations.Length);
+		//GameObject dest_obj = destinations[dest_idx];
+
+		ghost.nav_agent.destination = new_spot.Value;
 	}
 
 	public void Update_Move() {
-		// TODO: If close to move target, start charging
-		float dist_to_dest = GhostUtils.TopDownDistance(ghost.transform.position, ghost.nav_destination.transform.position);
-//(ghost.transform.position - ghost.nav_destination.transform.position).magnitude;
-		if (dist_to_dest <= 1) {
-			ghost.nav_destination = null;
+
+		ghost.LookAt(ghost.nav_agent.steeringTarget);
+
+		float dist_to_dest = ghost.nav_agent.remainingDistance;
+
+		if (!ghost.nav_agent.pathPending && dist_to_dest <= 1) {
 			Enter_Charge();
 		}
 	}
@@ -62,6 +74,7 @@ public class GA_POW_ChargingEscape : GhostAction {
 		ghost.ChangeAnimation("ChargeEscape");
 		ghost.PlaySound("charging_escape");
 		phase = ChargingEscapePhase.CHARGE;
+		ghost.LookAt(ghost.ghostPuncher.gameObject);
 	}
 
 	public void Update_Charge() {
@@ -69,6 +82,7 @@ public class GA_POW_ChargingEscape : GhostAction {
 		ghost.escape_meter += Time.deltaTime;
 
 		// Can I see the player? Have I seen them for some amount of timer? Startle!
+		// Was I punched by the player? Startle!
 	}
 
 }

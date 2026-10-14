@@ -2646,9 +2646,12 @@ MonoBehaviour:
   ragprof_animated: {fileID: 11400000, guid: 27f0e250f250407c19fa8ef95ed10b4f, type: 2}
   ragprof_doll: {fileID: 11400000, guid: 26129855e206805db929ed92ee794cc4, type: 2}
   ragdoll: {fileID: 3358995142196449212}
+  kb_rigidbody: {fileID: 0}
+  kb_collider: {fileID: 0}
   ghost_sfx: {fileID: 11400000, guid: 4ac8307cc9bb438f1b02ef89b603e338, type: 2}
   ghost_sound: {fileID: 1356796624299150421}
   ghost_screams: {fileID: 1062089472777229332}
+  ghost_material: {fileID: 0}
   pitchLow: 0.8
   pitchHigh: 1.2
   cur_action: 0
@@ -2658,13 +2661,14 @@ MonoBehaviour:
   jumpscareTarget: {fileID: 0}
   jumpscareTimeline: {fileID: 0}
   inJumpscare: 0
-  ectoplasm_particles: {fileID: 198321120434662062, guid: 3651ded74eece6c439a4c02aa2471dd7, type: 3}
   fear_meter: 0
   wave_orb: {fileID: 8074112012794229111, guid: ae93a043bd81acdc487b5fe3fb284938, type: 3}
   nav_agent: {fileID: 0}
   poise: 0
   max_poise: 0
-  vulnerable: 0
+  close_range_actions: {fileID: 0}
+  mid_range_actions: {fileID: 0}
+  far_range_actions: {fileID: 0}
 --- !u!136 &900925822181595062
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2698,13 +2702,13 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.3
-  m_Speed: 6
-  m_Acceleration: 8
+  m_Speed: 5
+  m_Acceleration: 100
   avoidancePriority: 50
-  m_AngularSpeed: 360
+  m_AngularSpeed: 180
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
