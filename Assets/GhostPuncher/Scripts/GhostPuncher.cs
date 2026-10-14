@@ -117,11 +117,6 @@ public class GhostPuncher : MonoBehaviour
 	/* Cutscene control toggle */
 	public bool inCutscene = false;
 
-	// TODO: this could totally be a status effect
-	Vector3 push_dir;
-	float push_power;
-	float push_power_decay = 25;
-
 	List<StatusEffect> statuses = new List<StatusEffect>();
 	[Tooltip("The position in the list corresponds to the hit class. Slot 1 = hit class 1 (strong punch), etc.")]
 	public List<ParticleSystem> punch_particles = new List<ParticleSystem>();
@@ -227,7 +222,8 @@ public class GhostPuncher : MonoBehaviour
 	{
 
 		// Timers
-		this.tick_timers();
+		TickTimers();
+		UpdateStatusEffects();
 
 		
 		if (active_ability is null || active_ability.lock_punch == false) {
@@ -315,16 +311,7 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 		// Push
-		if (push_power > 0) {
-			move_vec += push_dir * push_power;
-			// There is probably a better way of making the push ease out
-			if (push_power < 0.5) {
-				push_power *= ghost_defaults.blast_data.DECAY / 1.5f;
-			} else {
-				push_power *= ghost_defaults.blast_data.DECAY;
-			}
-			if (push_power < ghost_defaults.blast_data.POWER_THRESHOLD) { push_power = 0; }
-		}
+		move_vec += GetPushVector();
 
 		// Execute the move
 		controller.Move(move_vec * Time.deltaTime);
@@ -553,16 +540,19 @@ public class GhostPuncher : MonoBehaviour
 		return move_vec;
 	}
 
-	void tick_timers() {
+	void TickTimers() {
 		ti_punch_cooldown.Tick(Time.deltaTime);
 		ti_punch_again.Tick(Time.deltaTime);
 		ti_charge_up.Tick(Time.deltaTime);
 		ti_stamina_recharge.Tick(Time.deltaTime);
 
 
+	}
+
+	void UpdateStatusEffects() {
 		for (int i=statuses.Count-1; i>=0; i--) {
-			statuses[i].Duration.Tick(Time.deltaTime);
-			if (statuses[i].Duration.Finished()) {
+			statuses[i].Update();
+			if (statuses[i].remove_me) {
 				statuses.RemoveAt(i);
 			}
 		}
@@ -644,8 +634,8 @@ public class GhostPuncher : MonoBehaviour
 	}
 
 	public void GetPushed(Vector3 dir, float power) {
-		push_dir = dir.normalized;
-		push_power = power;
+		S_Push push_status = new S_Push(5, dir, power, ghost_defaults.blast_data.DECAY);
+		AddStatus(push_status);
 	}
 
 	public void GetSlapped() {
@@ -722,6 +712,19 @@ public class GhostPuncher : MonoBehaviour
 		}
 
 		return total_slow_multiplier;
+	}
+
+	Vector3 GetPushVector() {
+		Vector3 push = new Vector3(0, 0, 0);
+	
+		for (int i=statuses.Count-1; i>=0; i--) {
+			if (statuses[i].Type == StatusType.PUSH) {
+				push += statuses[i].GetVector3Value(StatusAttribs.PUSH_VECTOR);
+			}
+		}
+		
+		return push;
+
 	}
 
 }
