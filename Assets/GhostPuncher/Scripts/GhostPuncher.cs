@@ -9,6 +9,7 @@ public struct PunchRecord {
 	public int items_broken;
 	public bool hit_ghost;
 	public bool ragdolled_ghost;
+	public Punch punch;
 }
 
 
@@ -31,6 +32,8 @@ public class GhostPuncher : MonoBehaviour
 
 	public PuncherDefaults defaults; 
 	public GhostDefaults ghost_defaults;
+
+	public ScreenShake screen_shake_controller;
 
 	float fall_velocity;
 
@@ -156,7 +159,6 @@ public class GhostPuncher : MonoBehaviour
 
 		/* Camera effects */
 		fovKick = GetComponentInChildren<FOVKick>();
-		screenShake = GetComponentInChildren<ScreenShake>();
 
 		controller = GetComponent<CharacterController>();
 		fov_controller = GetComponentInChildren<FOVController>();
@@ -388,7 +390,6 @@ public class GhostPuncher : MonoBehaviour
 	void DoMegaPunch() {
 		ChangeAnimation("CHARGE_PUNCH");
 		if (fovKick) fovKick.BigKick();
-		if (screenShake) screenShake.Shake(0.2f);
 		Punch mega_punch = Punch.FromData(punch_hitbox.transform.TransformDirection(Vector3.forward), defaults.MEGAPUNCH_DATA);
 
 		LaunchPunch(mega_punch, defaults.MEGAPUNCH_STAMINA);
@@ -396,7 +397,6 @@ public class GhostPuncher : MonoBehaviour
 
 	public void LaunchPunch(Punch punch, float stamina_used) {
 		if (fovKick) { fovKick.SmallKick(); }
-		if (screenShake) { screenShake.Shake(0.05f); }
 
 		PunchRecord record = ExecutePunch(punch, stamina_used);
 
@@ -407,6 +407,7 @@ public class GhostPuncher : MonoBehaviour
 	PunchRecord ExecutePunch(Punch punch, float stamina_used) {
 
 		PunchRecord record = new PunchRecord();
+		record.punch = punch;
 		Collider[] punched = Physics.OverlapBox(punch_hitbox.transform.position, punch_hitbox.transform.localScale/2, punch_hitbox.transform.rotation, punchables_mask);		
 
 		SpendStamina(stamina_used);
@@ -498,14 +499,19 @@ public class GhostPuncher : MonoBehaviour
 
 	// After a punch is executed, assess the record to see what bonuses we get
 	void AssessPunchRecord(PunchRecord record) {
+
+		//screen_shake_controller.Shake(0.015f);
+
 		if (record.items_hit > 0) {
 			stamina += defaults.STAMINA_GAINED_ON_HIT;
 			ti_fear_drain_pause.Reset();
+			screen_shake_controller.Shake(record.punch.screen_shake);
 		}
 
 		if (record.hit_ghost) {
 			this.fear_meter += defaults.PUNCH_FEAR;
 			ti_fear_drain_pause.Reset();
+			screen_shake_controller.Shake(record.punch.screen_shake);
 		}
 	}
 
