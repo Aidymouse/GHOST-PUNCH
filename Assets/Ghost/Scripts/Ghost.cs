@@ -182,8 +182,7 @@ public class Ghost : MonoBehaviour
     actions[(int)GhostActions.POW_CHARGING_ESCAPE] = new GA_POW_ChargingEscape(this);
     actions[(int)GhostActions.POW_SLAP] = new GA_POW_Slap(this);
     actions[(int)GhostActions.POW_RUSH] = new GA_Rush(this);
-
-
+    actions[(int)GhostActions.POW_BLAST] = new GA_Blast(this);
 
     rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
     rig_colliders = rig.GetComponentsInChildren<Collider>();
