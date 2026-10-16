@@ -104,8 +104,6 @@ public class Ghost : MonoBehaviour
   public float pitchLow;
   public float pitchHigh;
 
-
-
   public GhostActions cur_action;
 	// Interrupt action takes precdence, allowing staggers to interrupt actions
 	public GhostActions? interrupt_action = null;
@@ -120,13 +118,12 @@ public class Ghost : MonoBehaviour
   public PlayableDirector jumpscareTimeline;
   public bool inJumpscare = false;
 
-
   public float fear_meter;
 
   // Spawns when the ghost uses her wave power
   public GameObject wave_orb;
 
-  [HideInInspector] public NavMeshAgent nav_agent;
+  public NavMeshAgent nav_agent;
 
 	// TODO: put in respective states
   [HideInInspector] public Timer ti_hit_stun;
@@ -167,7 +164,7 @@ public class Ghost : MonoBehaviour
 	ragdoll_animator.forceTargetPose = true;
 
     /* Nav Settings */
-    nav_agent = GetComponent<NavMeshAgent>();
+    //nav_agent = GetComponent<NavMeshAgent>();
     nav_agent.updateRotation = false;
 
     /* Init Actions */
