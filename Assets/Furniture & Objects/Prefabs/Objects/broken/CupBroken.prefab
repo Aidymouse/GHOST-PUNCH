@@ -127,7 +127,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4408274292559766880}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 6d1b2880e3be5424aa79112e276529e9, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -156,17 +156,20 @@ MonoBehaviour:
   hp: 600
   config: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   attrs: {fileID: 11400000, guid: 6e6a4a8b37d3cb0d98f6e2ca79cc9a82, type: 2}
-  hit_class: 4
+  material: {fileID: 11400000, guid: 00029d7440b27dc499f840ea2884b879, type: 2}
+  hit_class: 3
   broken_obj: {fileID: 0}
   rotation_offset: {x: 0, y: 0, z: 0}
-  break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
-  hit_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
-  break_self_particles: {fileID: 0}
-  hitSoundEffect: {fileID: 0}
-  pitchLow: 0
-  pitchHigh: 0
-  destroyedSoundEffect: {fileID: 0}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
+  grab_offset: {x: 0, y: 0, z: 0}
+  grab_rotation: {x: 0, y: 0, z: 0}
+  hit_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
+  break_particles: {fileID: 8684065977712981870, guid: 56ccd8892ff0a3b49854e30592cb3fed, type: 3}
+  break_self_particles: {fileID: 0}
+  pitchLow: 0
+  pitchHigh: 0
+  hitSoundEffect: {fileID: 0}
+  destroyedSoundEffect: {fileID: 0}
