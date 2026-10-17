@@ -241,12 +241,12 @@ public class BreakableObject : MonoBehaviour
 			Rigidbody[] rbs = broken.GetComponentsInChildren<Rigidbody>();
 
 			foreach (Rigidbody crb in rbs) {
-				// TODO: use child breakable object material spawn particles
-				/*
-				if (material.spawn_) {
-					Instantiate(break_particles, crb.transform.position, new Quaternion());
+				BreakableObject cbo = crb.gameObject.GetComponent<BreakableObject>();
+				if (cbo) {
+					if (cbo.material && cbo.material.spawn_particles) {
+						Instantiate(cbo.material.spawn_particles, crb.transform.position, new Quaternion());
+					}
 				}
-				*/
 
 				crb.isKinematic = false;
 				// TODO: some actual conservation of momentum here?
