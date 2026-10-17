@@ -1,3 +1,6 @@
+using UnityEngine;
+using UnityEngine.AI;
+
 public class GhostPathing : MonoBehaviour {
 
 	NavMeshAgent nav_agent;
