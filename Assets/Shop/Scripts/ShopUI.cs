@@ -21,10 +21,10 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 	public GameObject shrinking_item;
 	public AudioSource shop_ui_audio;
 
+	public Animator arms_animator;
 
 	[Header("Sound clips")]
 	public ShopSounds sounds;
-
 
   void Start() { }
 
@@ -47,6 +47,7 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 			shop_ui_audio.PlayOneShot(sounds.ITEM_HOVER);
 		}
 
+
 	}
 
 
@@ -58,6 +59,9 @@ public class ShopUI : MonoBehaviour, ShopUIEventHandler
 			// TODO: at some point we should probably check if the purchase was possible first
 			shop_ui_audio.PlayOneShot(sounds.PURCHASE);
 		}
+
+
+		arms_animator.Play("Point");
 	}
 
 	public void MouseOutSlot(ShopSlot slot) {
