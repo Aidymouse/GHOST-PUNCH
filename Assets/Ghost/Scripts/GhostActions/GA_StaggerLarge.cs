@@ -11,6 +11,8 @@ public class GA_StaggerLarge : GhostAction {
 	public override void Enter() {
 		ti_hit_stun.Reset();
 		ghost.PlayAnimation("StaggerLarge");
+		ghost.nav_agent.isStopped = true;
+		//ghost.nav_agent.destination = null;
 	}
 
 	public override void Exit() {
