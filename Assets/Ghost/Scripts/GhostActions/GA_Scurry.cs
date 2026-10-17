@@ -50,7 +50,7 @@ public class GA_Scurry : GhostAction {
 
 		ghost.LookAt(ghost.nav_agent.steeringTarget);
 
-		if (ghost.nav_agent.remainingDistance < 0.2) {
+		if (ghost.nav_agent.remainingDistance <= ghost.nav_agent.stoppingDistance) {
 			ghost.ExitAction();
 		}
 	}

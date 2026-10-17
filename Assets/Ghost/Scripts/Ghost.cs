@@ -69,7 +69,7 @@ public class Ghost : MonoBehaviour
   public GameObject rig;
   [HideInInspector] public GameObject nav_destination;
   [HideInInspector] public ParticleSystem charge_particles;
-  Animator anim;
+  public Animator animator;
 
 	/** Position the ghost currently wants to look towards */
 	Vector3? look_at;
@@ -167,6 +167,9 @@ public class Ghost : MonoBehaviour
     //nav_agent = GetComponent<NavMeshAgent>();
     nav_agent.updateRotation = false;
 
+    /* Animator */
+    animator = this.GetComponentInChildren<Animator>();
+
     /* Init Actions */
     actions = new GhostAction[20];
     actions[(int)GhostActions.STAGGER_LARGE] = new GA_StaggerLarge(this);
@@ -198,8 +201,6 @@ public class Ghost : MonoBehaviour
     ti_restore_poise = new Timer(0, defaults.POISE_RESTORE_TIMER);
     ti_ragdoll = new Timer(0, defaults.RAGDOLL_TIME);
 
-    /* Animator */
-    anim = this.GetComponentInChildren<Animator>();
 
     charge_particles = GetComponentInChildren<ParticleSystem>();
 
@@ -505,11 +506,11 @@ public class Ghost : MonoBehaviour
 	/** ANIMATION **/
   public void PlayAnimation(string new_anim) {
     //anim.Rewind(new_anim);
-    anim.Play(new_anim, -1, 0.0f);
+    animator.Play(new_anim, -1, 0.0f);
   }
 
   public void ChangeAnimation(string new_anim, float fade_time=0f) {
-    anim.CrossFade(new_anim, fade_time);
+    animator.CrossFade(new_anim, fade_time);
   }
 
 	/** CONTROL FNS **/
