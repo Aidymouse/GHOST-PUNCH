@@ -1449,6 +1449,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1759831624}
     - target: {fileID: 991094059715461095, guid: f2030ea18dfd960278f839469591acf2, type: 3}
+      propertyPath: ectoplasm_counter
+      value: 
+      objectReference: {fileID: 377983695}
+    - target: {fileID: 991094059715461095, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: txt_fear_jitter_effect
       value: 
       objectReference: {fileID: 377983692}
@@ -1510,7 +1514,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5697091595603153367, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_hasFontAssetChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5846456842074216263, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: clock_color
@@ -1594,7 +1598,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7434732120166592170, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7823924120277053318, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1750,6 +1754,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7078587113666760135, guid: f2030ea18dfd960278f839469591acf2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2085200266}
+    - targetCorrespondingSourceObject: {fileID: 2514329108329001412, guid: f2030ea18dfd960278f839469591acf2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 377983695}
   m_SourcePrefab: {fileID: 100100000, guid: f2030ea18dfd960278f839469591acf2, type: 3}
 --- !u!114 &377983691 stripped
 MonoBehaviour:
@@ -1773,6 +1780,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: EasyTextEffects::EasyTextEffects.TextEffect
+--- !u!1 &377983693 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2514329108329001412, guid: f2030ea18dfd960278f839469591acf2, type: 3}
+  m_PrefabInstance: {fileID: 377983690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &377983694 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2174524282957417378, guid: f2030ea18dfd960278f839469591acf2, type: 3}
+  m_PrefabInstance: {fileID: 377983690}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377983693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &377983695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377983693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f8a310addca83f4a65fce8b9a60cb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EctoplasmCounter
+  acceleration: 5
+  ectoplasm_text: {fileID: 377983694}
 --- !u!114 &380681657 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8633748743642199167, guid: 40317c87c5366cb488d98dfd7518a2dc, type: 3}
@@ -6602,27 +6639,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7441168227388144084, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17.720001
+      value: 17.517
       objectReference: {fileID: 0}
     - target: {fileID: 7441168227388144084, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.8092899
+      value: -1.40729
       objectReference: {fileID: 0}
     - target: {fileID: 7441168227388144084, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -19.577
+      value: -19.674
       objectReference: {fileID: 0}
     - target: {fileID: 7441168227388144084, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9979716
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 7441168227388144084, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.06366141
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7441168227388144084, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 7441168227388144084, guid: 243cb7d952d75f42b8910c8f239d062e, type: 3}
       propertyPath: m_LocalRotation.z

@@ -86,7 +86,8 @@ public class GhostPuncher : MonoBehaviour
 	PuncherAbility? active_ability = null;
 
 	/* Other */
-	int ectoplasm = 0;
+	[HideInInspector]
+	public float ectoplasm = 0;
 
 	// layers that are punchable.
 	public LayerMask punchables_mask;
@@ -525,6 +526,7 @@ public class GhostPuncher : MonoBehaviour
 			this.fear_meter += defaults.PUNCH_FEAR;
 			ti_fear_drain_pause.Reset();
 			screen_shake_controller.Shake(record.punch.screen_shake);
+			ectoplasm += record.punch.ghost_damage;
 		}
 	}
 

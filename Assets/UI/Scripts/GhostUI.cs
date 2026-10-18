@@ -12,9 +12,9 @@ public class GhostUI : MonoBehaviour
 	public GhostHealthBar ghost_health_bar;
 	public GhostHealthBar ghost_poise_bar;
 	public GhostHealthBar ghost_fear_bar;
+	public EctoplasmCounter ectoplasm_counter;
 
 	[Header("Text")]
-	public TMP_Text txt_ectoplasm;
 	public TMP_Text txt_fear_multiplier;
 	public TextEffect txt_fear_jitter_effect;
 
@@ -62,17 +62,19 @@ public class GhostUI : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		TickTimers();
 
+		/** Health **/
 		float health_prop = ghost.hp / ghost.defaults.HP;
 		if (health_prop == 1) { health_prop -= 0.001f; }
 		ghost_health_bar.SetPropTarget(health_prop);
 
+		/** Poise **/
 		// TODO: while ghost is vulnerable, flash poise bar
 		float poise_prop = ghost.poise / ghost.max_poise;
 		if (poise_prop == 1) { poise_prop -= 0.001f; }
 		ghost_poise_bar.SetPropTarget(poise_prop);
 
+		/** Stamina **/
 		stamina_orbs.SetStamina(ghost_puncher.stamina);
 		escape_clock.SetTimeLeft(1 - (ghost.escape_meter / ghost.escape_needed));
 
@@ -98,7 +100,13 @@ public class GhostUI : MonoBehaviour
 			txt_fear_jitter_effect.Refresh();
 		}
 
+		/** Ectoplasm Counter **/
+		ectoplasm_counter.SetTarget(ghost_puncher.ectoplasm);
+
+
 		/** Hurt Indicator **/
+		ti_hurt_indicator.Tick(Time.deltaTime);
+
 		if (!ti_hurt_indicator.Finished()) {
 			Color hurt_color = hurt_indicator.color;
 			hurt_color.a = ti_hurt_indicator.PercentComplete();
@@ -118,15 +126,6 @@ public class GhostUI : MonoBehaviour
 
 		/** TODO: Slowed Indicator **/
 
-	}
-
-	void TickTimers() {
-		ti_hurt_indicator.Tick(Time.deltaTime);
-	}
-
-
-	public void UpdateEctoplasm(int plasm) {
-		txt_ectoplasm.SetText(""+plasm);
 	}
 
 	public void TriggerHurtIndicator() {
