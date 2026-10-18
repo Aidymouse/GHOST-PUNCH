@@ -40,7 +40,6 @@ public class BreakableObject : MonoBehaviour
 	[Header("Old stuff")]
 	public ParticleSystem hit_particles;
 	public ParticleSystem break_particles;
-	public ParticleSystem break_self_particles;
 	public float pitchLow;
 	public float pitchHigh;
 	public AudioClip hitSoundEffect;
