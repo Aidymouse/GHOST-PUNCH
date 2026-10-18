@@ -68,7 +68,7 @@ public class Ghost : MonoBehaviour
   /** Used to find colliders and rigidbodies for switching between ragdoll and animator */
   public GameObject rig;
   [HideInInspector] public GameObject nav_destination;
-  [HideInInspector] public ParticleSystem charge_particles;
+  public ParticleSystem charge_particles;
   public Animator animator;
 
 	/** Position the ghost currently wants to look towards */
@@ -200,9 +200,6 @@ public class Ghost : MonoBehaviour
     /* Timers */
     ti_restore_poise = new Timer(0, defaults.POISE_RESTORE_TIMER);
     ti_ragdoll = new Timer(0, defaults.RAGDOLL_TIME);
-
-
-    charge_particles = GetComponentInChildren<ParticleSystem>();
 
 
 		if (debug.ghost_stay_awake) {
