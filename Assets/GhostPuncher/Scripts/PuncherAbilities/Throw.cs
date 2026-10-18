@@ -2,7 +2,13 @@ using UnityEngine;
 
 public class Throw : PuncherAbility {
 
-	public Throw(GhostPuncher p) : base(p) { }
+	Timer ti_grab;
+
+	public Throw(GhostPuncher p) : base(p) {
+		float grab_len = AnimUtil.GetClipLength("Grab", p.arm_animator);
+		Debug.Log("Grab len " + grab_len);
+		ti_grab = new Timer(0, grab_len);
+	}
 
 	public override void EnterAbility() {
 		if (!puncher.held_object) {
@@ -29,8 +35,26 @@ public class Throw : PuncherAbility {
 			break;
 		}
 
+		// Control animator
+		puncher.arm_animator.SetFloat("HeldItem", 0);
+		if (puncher.held_object != null) {
+			puncher.arm_animator.SetFloat("HeldItem", 1);
+		}
+
+		// Either reset timer to wait for grab anim to finish, or just exit action
+		//ti_grab.Reset();
 		puncher.ExitAbility();
 	}
+
+	/*
+	public override void Update() {
+		ti_grab.Tick(Time.deltaTime);
+		if (ti_grab.FinishedThisFrame()) {
+
+			puncher.ExitAbility();
+		}
+	}
+	*/
 	
 	void ThrowHeld() {
 		
@@ -56,6 +80,7 @@ public class Throw : PuncherAbility {
 
 
 		puncher.held_object = null;
+		puncher.arm_animator.SetFloat("HeldItem", 0);
 
 		puncher.ExitAbility();
 	}
