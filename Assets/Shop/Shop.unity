@@ -3041,7 +3041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c430f382484144e925c097c2d33cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Animation.Rigging::UnityEngine.Animations.Rigging.MultiAimConstraint
-  m_Weight: 1
+  m_Weight: 0
   m_Data:
     m_ConstrainedObject: {fileID: 481972852}
     m_SourceObjects:
@@ -5003,6 +5003,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1059927685577339065, guid: c2f746ca61dcf904aa176bfacbf2fb76, type: 3}
   m_PrefabInstance: {fileID: 1402625753}
   m_PrefabAsset: {fileID: 0}
+--- !u!137 &1407759943 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3915157595188928313, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+  m_PrefabInstance: {fileID: 5544241934951952866}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1413552324
 GameObject:
   m_ObjectHideFlags: 0
@@ -5048,7 +5053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b342d8ce5c2fd48b8fa3147d48d1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Animation.Rigging::UnityEngine.Animations.Rigging.Rig
-  m_Weight: 1
+  m_Weight: 0
   m_Effectors: []
 --- !u!1 &1488249184
 GameObject:
@@ -8932,6 +8937,14 @@ PrefabInstance:
       propertyPath: knockback_obj
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: mesh_material
+      value: 
+      objectReference: {fileID: 2100000, guid: 6f7abeea7903b51429926dc7ff0f030d, type: 2}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: mesh_renderer
+      value: 
+      objectReference: {fileID: 1407759943}
     - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: ghost_material
       value: 

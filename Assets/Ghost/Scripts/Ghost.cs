@@ -57,6 +57,7 @@ public class Ghost : MonoBehaviour
 
 	[HideInInspector] public float escape_meter;
 	[HideInInspector] public float escape_needed;
+	public Renderer mesh_renderer;
 
   // Hit points
   [HideInInspector]
@@ -147,6 +148,10 @@ public class Ghost : MonoBehaviour
     ghostPuncher = ghostPuncher_obj.GetComponent<GhostPuncher>();
 
 		LookAt(ghostPuncher.gameObject);
+
+		mesh_renderer.material.SetFloat("_FlashAmount", 0.2f);
+		float f = mesh_renderer.material.GetFloat("_FlashAmount");
+		Debug.Log("Renderer"+f);
 
 		// Apply Defaults
     poise = defaults.POISE;
@@ -264,8 +269,12 @@ public class Ghost : MonoBehaviour
     /* Actions */
 		bool escaped_yet = Escaped();
 
+
 		if (interrupt_action is not null) {
 		} else {
+			if (actions[(int)cur_action] == null) {
+				Debug.LogError("Trying to update ghost action " + cur_action + " but it isn't implemented on the ghost");
+			}
 			actions[(int)cur_action].Update(); 
 		}
 

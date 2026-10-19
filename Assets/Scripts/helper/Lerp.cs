@@ -2,6 +2,10 @@ using UnityEngine;
 
 class Lerp {
 	public static float lerp(float start, float end, float pct) {
+		return Lerp.Linear(start, end, pct);
+	}
+
+	public static float Linear(float start, float end, float pct) {
 		return (start + (end - start) * pct);
 	}
 
