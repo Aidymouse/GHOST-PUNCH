@@ -17,10 +17,14 @@ public class FlashController : MonoBehaviour {
 
 	/** Initiates flashing, set flashes to -1 for infinite. Optionally set other params too.
  	* TODO: color */
-	public void StartFlashing(int flashes, float? flash_duration=null, float? min=null, float? max=null) {
+	public void StartFlashing(int flashes, float? flash_duration=null, float? min=null, float? max=null, Color? flash_color=null) {
 		if (flash_duration is not null) {
 			ti_flash.SetTime(flash_duration.Value, flash_duration.Value); 
 			ti_flash.Reset();
+		}
+
+		if (flash_color is not null) {
+			SetFlashColor(flash_color.Value);
 		}
 
 		if (min is not null) { flash_min = min.Value; }
@@ -77,6 +81,10 @@ public class FlashController : MonoBehaviour {
 	/**  FN for setting the actual flash. For now it's just the first material on a renderer. */
 	void SetFlashAmount(float amnt) {
 			renderer.material.SetFloat("_FlashAmount", amnt);
+	}
+
+	void SetFlashColor(Color color) {
+			renderer.material.SetColor("_Flash_Color", color);
 	}
 
 

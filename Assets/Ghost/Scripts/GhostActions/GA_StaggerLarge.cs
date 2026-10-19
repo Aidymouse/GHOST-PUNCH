@@ -22,7 +22,8 @@ public class GA_StaggerLarge : GhostAction {
 			-1,
 			ghost.defaults.stagger_large_data.FLASH_PERIOD,
 			ghost.defaults.stagger_large_data.FLASH_MIN,
-			ghost.defaults.stagger_large_data.FLASH_MAX
+			ghost.defaults.stagger_large_data.FLASH_MAX,
+			ghost.defaults.stagger_large_data.FLASH_COLOR
 		);
 	}
 

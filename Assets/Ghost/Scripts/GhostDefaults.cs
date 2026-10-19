@@ -30,6 +30,12 @@ public class GhostDefaults : ScriptableObject
 		public float KNOCKBACK_FACTOR;
 
 
+		[Header("Flashing")]
+		public float PUNCHED_FLASH_PERIOD;
+		public float PUNCHED_FLASH_MIN;
+		public float PUNCHED_FLASH_MAX;
+		public Color PUNCHED_FLASH_COLOR;
+
 
 		[Header("Powers")]
 

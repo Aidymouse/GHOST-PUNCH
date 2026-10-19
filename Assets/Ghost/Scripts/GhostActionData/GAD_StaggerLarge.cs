@@ -13,4 +13,5 @@ public class GAD_StaggerLarge : ScriptableObject
 	public float FLASH_MIN;
 	[Tooltip("Highest flash value")]
 	public float FLASH_MAX;
+	public Color FLASH_COLOR;
 }

@@ -381,6 +381,8 @@ public class Ghost : MonoBehaviour
 			return;
 		}
 
+		flash_controller.StartFlashing(1, defaults.PUNCHED_FLASH_PERIOD, defaults.PUNCHED_FLASH_MIN, defaults.PUNCHED_FLASH_MAX, defaults.PUNCHED_FLASH_COLOR);
+
 		if (punch.hit_class <= (int)HitClass.PUNCH) {
 			ghost_screams.Play();
 			ghost_sound.PlayOneShot(ghost_sfx.HIT_SOUND);
