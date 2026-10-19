@@ -19,7 +19,7 @@ public class ObjectMaterial : ScriptableObject
 	public ParticleSystem hit_particles;
 	[Tooltip("Particles to spawn when the object breaks, if any")]
 	public ParticleSystem break_particles;
-	[Tooltip("[NOT FUNCTIONAL] Particles to spawn at the same time an object spawns")]
+	[Tooltip("Particles spawned on object spawn")]
 	public ParticleSystem spawn_particles;
     
 }

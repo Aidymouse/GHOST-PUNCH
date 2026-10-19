@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 731607151166793335}
   - component: {fileID: 8530225939253915433}
   - component: {fileID: 6734296215522521893}
+  - component: {fileID: 7892580384054365118}
   m_Layer: 6
   m_Name: Bag
   m_TagString: BreakableObject
@@ -136,20 +137,23 @@ MonoBehaviour:
   hp: 900
   config: {fileID: 11400000, guid: d96ef3a0632bc447a8f15dd9485a75fe, type: 2}
   attrs: {fileID: 11400000, guid: 6e6a4a8b37d3cb0d98f6e2ca79cc9a82, type: 2}
-  hit_class: 4
+  material: {fileID: 11400000, guid: 530766b3683057f43b4fe42528c8d818, type: 2}
+  hit_class: 3
   broken_obj: {fileID: 0}
   rotation_offset: {x: 0, y: 0, z: 0}
-  break_particles: {fileID: 0}
-  hit_particles: {fileID: 1236530132058975547, guid: 34890770309837c43855ad14ad547ff1, type: 3}
-  break_self_particles: {fileID: 1236530132058975547, guid: 26580492915f7d241932c58020c40d07, type: 3}
-  hitSoundEffect: {fileID: 8300000, guid: eee6f29a447b3774a993b7efa6dffbec, type: 3}
-  pitchLow: 0.8
-  pitchHigh: 1.2
-  destroyedSoundEffect: {fileID: 8300000, guid: b3586e9f75e99be42869d02a03b0e64e, type: 3}
   poise_damage: 0
   ghost_damage: 0
   object_damage: 0
   force: 0
+  grab_offset: {x: 0, y: 0, z: 0}
+  grab_rotation: {x: 0, y: 0, z: 0}
+  hit_particles: {fileID: 1236530132058975547, guid: 34890770309837c43855ad14ad547ff1, type: 3}
+  break_particles: {fileID: 0}
+  break_self_particles: {fileID: 1236530132058975547, guid: 26580492915f7d241932c58020c40d07, type: 3}
+  pitchLow: 0.8
+  pitchHigh: 1.2
+  hitSoundEffect: {fileID: 8300000, guid: eee6f29a447b3774a993b7efa6dffbec, type: 3}
+  destroyedSoundEffect: {fileID: 8300000, guid: b3586e9f75e99be42869d02a03b0e64e, type: 3}
 --- !u!65 &8530225939253915433
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -157,7 +161,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5708783044659321412}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 4e75f4ed22e84094fbb8b0f85aee642f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -268,3 +272,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!135 &7892580384054365118
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5708783044659321412}
+  m_Material: {fileID: 13400000, guid: 4e75f4ed22e84094fbb8b0f85aee642f, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.0025
+  m_Center: {x: 0, y: 0, z: -0.0017}

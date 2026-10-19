@@ -7,4 +7,11 @@ public class GAD_StaggerLarge : ScriptableObject
 	public float STAGGER_TIME;
 	[Tooltip("Animation for large stagger")]
 	public string ANIMATION;
+	[Tooltip("Time taken for 1 flash")]
+	public float FLASH_PERIOD;
+	[Tooltip("Lowest flash value")]
+	public float FLASH_MIN;
+	[Tooltip("Highest flash value")]
+	public float FLASH_MAX;
+	public Color FLASH_COLOR;
 }

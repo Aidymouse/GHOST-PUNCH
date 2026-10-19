@@ -194,7 +194,7 @@ public class FootballCharge : PuncherAbility {
 
 		if (ti_punch_delay.FinishedThisFrame() || ti_punch_delay.default_time == 0) {
 			Punch football_charge_punch = Punch.FromData(puncher.GetFacingDirection(), puncher.defaults.CHARGE_PUNCH_LAUNCHED);
-			puncher.LaunchPunch(football_charge_punch, 0);
+			puncher.LaunchPunch(football_charge_punch);
 			puncher.fov_controller.GetToZeroIn(ti_punch_stop.time_remaining/2);
 		}
 

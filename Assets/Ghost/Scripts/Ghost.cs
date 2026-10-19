@@ -57,6 +57,7 @@ public class Ghost : MonoBehaviour
 
 	[HideInInspector] public float escape_meter;
 	[HideInInspector] public float escape_needed;
+	public Renderer mesh_renderer;
 
   // Hit points
   [HideInInspector]
@@ -67,9 +68,14 @@ public class Ghost : MonoBehaviour
 
   /** Used to find colliders and rigidbodies for switching between ragdoll and animator */
   public GameObject rig;
+
+
+	/** Flashing */
+	public FlashController flash_controller;
+
   [HideInInspector] public GameObject nav_destination;
-  [HideInInspector] public ParticleSystem charge_particles;
-  Animator anim;
+  public ParticleSystem charge_particles;
+  public Animator animator;
 
 	/** Position the ghost currently wants to look towards */
 	Vector3? look_at;
@@ -77,6 +83,7 @@ public class Ghost : MonoBehaviour
 	GameObject? look_target;
 
 	[Header("Ragdoll")]
+
   [HideInInspector]
 	public RagdollAnimator ragdoll_animator;
 	public RagdollSettings ragdoll_settings;
@@ -104,8 +111,6 @@ public class Ghost : MonoBehaviour
   public float pitchLow;
   public float pitchHigh;
 
-
-
   public GhostActions cur_action;
 	// Interrupt action takes precdence, allowing staggers to interrupt actions
 	public GhostActions? interrupt_action = null;
@@ -120,13 +125,12 @@ public class Ghost : MonoBehaviour
   public PlayableDirector jumpscareTimeline;
   public bool inJumpscare = false;
 
-
   public float fear_meter;
 
   // Spawns when the ghost uses her wave power
   public GameObject wave_orb;
 
-  [HideInInspector] public NavMeshAgent nav_agent;
+  public NavMeshAgent nav_agent;
 
 	// TODO: put in respective states
   [HideInInspector] public Timer ti_hit_stun;
@@ -140,6 +144,7 @@ public class Ghost : MonoBehaviour
   Rigidbody[] rig_rbs;
   Collider[] rig_colliders;
   CharacterJoint[] rig_joints;
+
 
 	/** Actions */
 	public GhostActionSet close_range_actions;
@@ -159,6 +164,7 @@ public class Ghost : MonoBehaviour
 		escape_meter = 0;
 
 		ti_knockback = new Timer(0, defaults.KNOCKBACK_TIMER);
+
 	}
 
   void Start()
@@ -167,8 +173,11 @@ public class Ghost : MonoBehaviour
 	ragdoll_animator.forceTargetPose = true;
 
     /* Nav Settings */
-    nav_agent = GetComponent<NavMeshAgent>();
+    //nav_agent = GetComponent<NavMeshAgent>();
     nav_agent.updateRotation = false;
+
+    /* Animator */
+    animator = this.GetComponentInChildren<Animator>();
 
     /* Init Actions */
     actions = new GhostAction[20];
@@ -200,11 +209,6 @@ public class Ghost : MonoBehaviour
     /* Timers */
     ti_restore_poise = new Timer(0, defaults.POISE_RESTORE_TIMER);
     ti_ragdoll = new Timer(0, defaults.RAGDOLL_TIME);
-
-    /* Animator */
-    anim = this.GetComponentInChildren<Animator>();
-
-    charge_particles = GetComponentInChildren<ParticleSystem>();
 
 
 		if (debug.ghost_stay_awake) {
@@ -269,8 +273,12 @@ public class Ghost : MonoBehaviour
     /* Actions */
 		bool escaped_yet = Escaped();
 
+
 		if (interrupt_action is not null) {
 		} else {
+			if (actions[(int)cur_action] == null) {
+				Debug.LogError("Trying to update ghost action " + cur_action + " but it isn't implemented on the ghost");
+			}
 			actions[(int)cur_action].Update(); 
 		}
 
@@ -372,6 +380,8 @@ public class Ghost : MonoBehaviour
 			Ragdoll(punch);
 			return;
 		}
+
+		flash_controller.StartFlashing(1, defaults.PUNCHED_FLASH_PERIOD, defaults.PUNCHED_FLASH_MIN, defaults.PUNCHED_FLASH_MAX, defaults.PUNCHED_FLASH_COLOR);
 
 		if (punch.hit_class <= (int)HitClass.PUNCH) {
 			ghost_screams.Play();
@@ -508,11 +518,11 @@ public class Ghost : MonoBehaviour
 	/** ANIMATION **/
   public void PlayAnimation(string new_anim) {
     //anim.Rewind(new_anim);
-    anim.Play(new_anim, -1, 0.0f);
+    animator.Play(new_anim, -1, 0.0f);
   }
 
   public void ChangeAnimation(string new_anim, float fade_time=0f) {
-    anim.CrossFade(new_anim, fade_time);
+    animator.CrossFade(new_anim, fade_time);
   }
 
 	/** CONTROL FNS **/
