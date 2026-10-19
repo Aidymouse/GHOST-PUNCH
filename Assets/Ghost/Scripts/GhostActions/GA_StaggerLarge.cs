@@ -18,7 +18,7 @@ public class GA_StaggerLarge : GhostAction {
 		ghost.PlayAnimation("StaggerLarge");
 		ghost.nav_agent.isStopped = true;
 
-		ghost.StartFlashing(
+		ghost.flash_controller.StartFlashing(
 			-1,
 			ghost.defaults.stagger_large_data.FLASH_PERIOD,
 			ghost.defaults.stagger_large_data.FLASH_MIN,
@@ -36,7 +36,7 @@ public class GA_StaggerLarge : GhostAction {
 
 		if (ti_hit_stun.FinishedThisFrame()) {
 			ghost.ChangeAnimation("StaggerLarge_End");
-			ghost.num_flashes = 1;
+			ghost.flash_controller.Countdown(1);
 			ti_recover.Activate();
 		}
 

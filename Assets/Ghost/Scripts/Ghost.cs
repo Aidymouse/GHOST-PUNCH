@@ -68,6 +68,11 @@ public class Ghost : MonoBehaviour
 
   /** Used to find colliders and rigidbodies for switching between ragdoll and animator */
   public GameObject rig;
+
+
+	/** Flashing */
+	public FlashController flash_controller;
+
   [HideInInspector] public GameObject nav_destination;
   public ParticleSystem charge_particles;
   public Animator animator;
@@ -78,6 +83,7 @@ public class Ghost : MonoBehaviour
 	GameObject? look_target;
 
 	[Header("Ragdoll")]
+
   [HideInInspector]
 	public RagdollAnimator ragdoll_animator;
 	public RagdollSettings ragdoll_settings;
@@ -139,11 +145,6 @@ public class Ghost : MonoBehaviour
   Collider[] rig_colliders;
   CharacterJoint[] rig_joints;
 
-	/** Flashing */
-	Timer ti_flash;
-	float flash_max;
-	float flash_min;
-	[HideInInspector] public int num_flashes;
 
 	/** Actions */
 	public GhostActionSet close_range_actions;
@@ -164,8 +165,6 @@ public class Ghost : MonoBehaviour
 
 		ti_knockback = new Timer(0, defaults.KNOCKBACK_TIMER);
 
-		ti_flash = new Timer(0, 0.25f);
-		ti_flash.Deactivate();
 	}
 
   void Start()
@@ -270,11 +269,6 @@ public class Ghost : MonoBehaviour
 			}
       RestorePoise();
     }
-
-		// Flash
-		if (ti_flash.IsActive()) {
-			UpdateFlash();
-		}
 
     /* Actions */
 		bool escaped_yet = Escaped();
@@ -518,56 +512,6 @@ public class Ghost : MonoBehaviour
 
   public void EnableRagdoll() { }
   public void DisableRagdoll() { }
-
-	/** FLASHING **/
-	// TODO: flash color
-	public void StartFlashing(int flashes, float? flash_duration=null, float? min=null, float? max=null) {
-		if (flash_duration is not null) {
-			ti_flash.SetTime(flash_duration.Value, flash_duration.Value); 
-			ti_flash.Reset();
-		}
-
-		if (min is not null) { flash_min = min.Value; }
-		if (max is not null) { flash_max = max.Value; }
-
-		num_flashes = flashes;
-		ti_flash.Activate();
-		//mesh_renderer.material.SetFloat("_FlashAmount", 0);
-	}
-
-	public void UpdateFlash() {
-		ti_flash.Tick(Time.deltaTime);
-
-		float half_period = ti_flash.default_time / 2;
-		float flash_up = ti_flash.time_remaining - half_period;
-
-		if (flash_up > 0) {
-			float percent_flash_up = 1 - flash_up / half_period;
-			mesh_renderer.material.SetFloat("_FlashAmount", Lerp.Linear(flash_min, flash_max, percent_flash_up));
-		} else {
-			float percent_flash_down = ti_flash.time_remaining / half_period;
-			mesh_renderer.material.SetFloat("_FlashAmount", Lerp.Linear(flash_min, flash_max, percent_flash_down));
-		}
-
-		if (ti_flash.Finished()) {
-			if (num_flashes > 0) {
-				num_flashes -= 1;
-				Debug.Log("Num flashes: "+num_flashes);
-				if (num_flashes <= 0) {
-					StopFlashing();
-					return;
-				}
-			}
-			ti_flash.Reset();
-		}
-
-	}
-
-	public void StopFlashing() {
-		mesh_renderer.material.SetFloat("_FlashAmount", 0);
-		ti_flash.Deactivate();
-	}
-
 
 	/** ANIMATION **/
   public void PlayAnimation(string new_anim) {

@@ -6886,6 +6886,19 @@ NavMeshAgent:
   m_CorrespondingSourceObject: {fileID: 5757180813942324356, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
   m_PrefabInstance: {fileID: 5544241934951952866}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2080810818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1202651149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edbefedb1183cb181906b6b0efada895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlashController
+  renderer: {fileID: 1407759943}
 --- !u!224 &2085200262 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8708211375682209202, guid: f2030ea18dfd960278f839469591acf2, type: 3}
@@ -9113,6 +9126,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 4a415e6a9d3e56e4d8b872609f68b57d, type: 3}
     - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: flash_controller
+      value: 
+      objectReference: {fileID: 2080810818}
+    - target: {fileID: 5085450913482942971, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: ghostPuncher_obj
       value: 
       objectReference: {fileID: 40756439}
@@ -9348,6 +9365,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2587037593647767648, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2080810808}
+    - targetCorrespondingSourceObject: {fileID: 2587037593647767648, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2080810818}
     - targetCorrespondingSourceObject: {fileID: 6346036149561700378, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1747745231}
