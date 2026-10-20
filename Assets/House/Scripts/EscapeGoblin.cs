@@ -13,10 +13,16 @@ public class EscapeGoblin : MonoBehaviour
 	NavMeshAgent nav_agent;
 	public CinemachineCamera VCam_Escaper;
 	public Transform house_exit;
+	[Tooltip("Change in the nav agents max speed")]
+	public float acceleration;
+	public float speed_cap;
+	float speed_base;
 
 	public void Awake() {
 		ti_escape_timeout = new Timer(escape_timeout, escape_timeout);
 		nav_agent = GetComponent<NavMeshAgent>();
+
+		speed_base = nav_agent.speed;
 	}
 
 	public void Update() {
@@ -31,6 +37,9 @@ public class EscapeGoblin : MonoBehaviour
 		if (dist.magnitude < 0.2) {
 			Debug.Log("Close enough to exit trigger");
 		}
+
+		nav_agent.speed += acceleration * Time.deltaTime;
+		if (nav_agent.speed > speed_cap) { nav_agent.speed = speed_cap; }
 		
 	}
 
@@ -42,9 +51,11 @@ public class EscapeGoblin : MonoBehaviour
 	}
 
 	public void StartEscaping(Vector3 pos, Vector3 facing_rotation) {
-			nav_agent.transform.position = pos;
+			transform.position = pos;
+			//nav_agent.transform.position = pos;
 			nav_agent.transform.localEulerAngles = facing_rotation;
 			nav_agent.destination = house_exit.position;
+			nav_agent.speed = speed_base;
 
 			ti_escape_timeout.Reset();
 	}

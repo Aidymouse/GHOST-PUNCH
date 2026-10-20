@@ -45,5 +45,9 @@ return 0;
 		}
 	}
 
+	public virtual string GetDebugString() {
+		return "["+Type+"] No debug string available";
+	}
+
 }
 

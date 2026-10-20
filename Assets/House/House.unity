@@ -5213,10 +5213,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.1
-  m_Speed: 60
-  m_Acceleration: 15
+  m_Speed: 3
+  m_Acceleration: 120
   avoidancePriority: 50
-  m_AngularSpeed: 200
+  m_AngularSpeed: 360
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
@@ -5337,6 +5337,8 @@ MonoBehaviour:
   escape_timeout: 5
   VCam_Escaper: {fileID: 634068212}
   house_exit: {fileID: 2046431560}
+  acceleration: 2
+  speed_cap: 30
 --- !u!4 &204415048 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7906439028156682317, guid: fe692579201ebf243b3a682954aca73c, type: 3}

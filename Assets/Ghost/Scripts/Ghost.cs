@@ -68,6 +68,11 @@ public class Ghost : MonoBehaviour
 
   /** Used to find colliders and rigidbodies for switching between ragdoll and animator */
   public GameObject rig;
+
+
+	/** Flashing */
+	public FlashController flash_controller;
+
   [HideInInspector] public GameObject nav_destination;
   public ParticleSystem charge_particles;
   public Animator animator;
@@ -78,6 +83,7 @@ public class Ghost : MonoBehaviour
 	GameObject? look_target;
 
 	[Header("Ragdoll")]
+
   [HideInInspector]
 	public RagdollAnimator ragdoll_animator;
 	public RagdollSettings ragdoll_settings;
@@ -139,6 +145,7 @@ public class Ghost : MonoBehaviour
   Collider[] rig_colliders;
   CharacterJoint[] rig_joints;
 
+
 	/** Actions */
 	public GhostActionSet close_range_actions;
 	public GhostActionSet mid_range_actions;
@@ -149,10 +156,6 @@ public class Ghost : MonoBehaviour
 
 		LookAt(ghostPuncher.gameObject);
 
-		mesh_renderer.material.SetFloat("_FlashAmount", 0.2f);
-		float f = mesh_renderer.material.GetFloat("_FlashAmount");
-		Debug.Log("Renderer"+f);
-
 		// Apply Defaults
     poise = defaults.POISE;
 		max_poise = defaults.POISE;
@@ -161,6 +164,7 @@ public class Ghost : MonoBehaviour
 		escape_meter = 0;
 
 		ti_knockback = new Timer(0, defaults.KNOCKBACK_TIMER);
+
 	}
 
   void Start()
@@ -189,6 +193,7 @@ public class Ghost : MonoBehaviour
     actions[(int)GhostActions.POW_SLAP] = new GA_POW_Slap(this);
     actions[(int)GhostActions.POW_RUSH] = new GA_Rush(this);
     actions[(int)GhostActions.POW_BLAST] = new GA_Blast(this);
+    actions[(int)GhostActions.POW_SCREAM] = new GA_Scream(this);
 
     rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
     rig_colliders = rig.GetComponentsInChildren<Collider>();
@@ -287,6 +292,10 @@ public class Ghost : MonoBehaviour
 
   }
 
+	public GhostAction? GetCurrentAction() {
+		return actions[(int)cur_action];
+	}
+
 	public void ExitAction(GhostActions? next_action = null) {
 		if (debug.ghost_logs) Debug.Log("Ghost Exiting: "+cur_action);
 		actions[(int)cur_action].Exit();
@@ -376,6 +385,8 @@ public class Ghost : MonoBehaviour
 			Ragdoll(punch);
 			return;
 		}
+
+		flash_controller.StartFlashing(1, defaults.PUNCHED_FLASH_PERIOD, defaults.PUNCHED_FLASH_MIN, defaults.PUNCHED_FLASH_MAX, defaults.PUNCHED_FLASH_COLOR);
 
 		if (punch.hit_class <= (int)HitClass.PUNCH) {
 			ghost_screams.Play();

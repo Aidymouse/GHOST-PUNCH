@@ -28,7 +28,7 @@ public class Timer
 	public void SetTime(float new_time, float? max_time=null) {
 		this.time_remaining = new_time;
 		if (max_time is not null) {
-			this.default_time = (float)max_time;
+			this.default_time = max_time.Value;
 		}
 	}
 
@@ -48,6 +48,11 @@ public class Timer
 	public float PercentComplete() {
 		if (this.default_time == 0) { return 1; }
 		return this.time_remaining / this.default_time;
+	}
+
+	/** */
+	public float GetTime() {
+		return this.time_remaining;
 	}
 
 	/**
