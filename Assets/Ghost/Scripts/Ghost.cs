@@ -487,7 +487,9 @@ public class Ghost : MonoBehaviour
 
 		ExitAction(GhostActions.RAGDOLL);
 
-    rig_core.AddForce(punch.direction * punch.force * defaults.MAKE_HER_FLY_FACTOR);
+		Vector3 punch_dir = Vector3.RotateTowards(punch.direction, Vector3.up, defaults.RAGDOLL_ROTATION, 100);
+
+    rig_core.AddForce(punch_dir * punch.force * defaults.MAKE_HER_FLY_FACTOR);
   }
 
 	/* Enter a special power designated action */
