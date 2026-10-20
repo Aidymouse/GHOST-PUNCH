@@ -24,6 +24,12 @@ public class GA_Scream : GhostAction {
 			ghost.scream_particles.Play();
 			SoundEmitter.PlayVariedSoundAtPoint(ghost.defaults.scream_data.SCREAM_SFX, ghost.scream_particles.transform.position, 1, 1);
 
+			ghost.aberrator.StartAberrating(
+				ghost.defaults.scream_data.ABERRATION_SPIKE,
+				ghost.defaults.scream_data.ABERRATION_SPIKE_TIME,
+				ghost.defaults.scream_data.ABERRATION_DROP_TIME
+			);
+
 			float dist_to_puncher = GhostUtils.TopDownDistance(ghost.transform.position, ghost.ghostPuncher.transform.position);
 
 			//Debug.Log("Launching scream with range " + ghost.defaults.scream_data.RANGE + ", puncher is " + dist_to_puncher + "m away");

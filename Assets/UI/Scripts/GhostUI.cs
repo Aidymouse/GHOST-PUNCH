@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using EasyTextEffects;
+using UnityEngine.Rendering;
 
 public class GhostUI : MonoBehaviour
 {
@@ -123,6 +124,8 @@ public class GhostUI : MonoBehaviour
 			TriggerHurtIndicator();
 			ghost_puncher.uiFlag_slapped_this_frame = false;
 		}
+
+		/** Aberration */
 
 		/** TODO: Slowed Indicator **/
 

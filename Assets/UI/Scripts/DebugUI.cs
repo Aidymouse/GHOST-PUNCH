@@ -12,12 +12,17 @@ public class DebugUI : MonoBehaviour
 
   public TMP_Text gp_statuses;
 
+	public Aberrator aberrator;
+	public TMP_Text aberration_state;
+	
   void Start() { }
 
   void Update() {
 		
 		UpdateGhostActionPanel();
 		UpdateGPStatusPanel();
+
+		UpdateAberrationPanel();
 
   }
 
@@ -33,4 +38,10 @@ public class DebugUI : MonoBehaviour
 		}
 		gp_statuses.SetText(s);
 	}
+
+	
+	void UpdateAberrationPanel() {
+		aberration_state.SetText(aberrator.GetDebugString());
+	}
+
 }

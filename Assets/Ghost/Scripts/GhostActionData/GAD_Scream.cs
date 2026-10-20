@@ -14,4 +14,10 @@ public class GAD_Scream : ScriptableObject
 		[Tooltip("Time spent hanging around after scream animation finishes")]
     public float HANG_TIME;
 		public AudioClip SCREAM_SFX;
+
+		[Tooltip("What aberration will get to during scream")]
+		[Range(0, 1)]
+		public float ABERRATION_SPIKE;
+		public float ABERRATION_SPIKE_TIME;
+		public float ABERRATION_DROP_TIME;
 }
