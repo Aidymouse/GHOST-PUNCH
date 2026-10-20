@@ -6458,7 +6458,7 @@ GameObject:
   - component: {fileID: 1771565995}
   - component: {fileID: 1771565994}
   - component: {fileID: 1771565993}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BlackBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9321,6 +9321,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 532156318657441742, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 532156318657441742, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 532156318657441742, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 532156318657441742, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 540.54065
       objectReference: {fileID: 0}
@@ -9335,12 +9347,48 @@ PrefabInstance:
     - target: {fileID: 532156318657441742, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 675.6758
+      objectReference: {fileID: 0}
+    - target: {fileID: 532156318657441742, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 532156318657441742, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 532156318657441742, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 588310867024049777, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 1081.0813
       objectReference: {fileID: 0}
@@ -9355,6 +9403,22 @@ PrefabInstance:
     - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 1351.3516
+      objectReference: {fileID: 0}
+    - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 12.907401
+      objectReference: {fileID: 0}
+    - target: {fileID: 640118914646055768, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 12.907401
       objectReference: {fileID: 0}
     - target: {fileID: 965316563351377347, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_Mass
@@ -9380,6 +9444,38 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1101752100103978583, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_VertexStreams.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101752100103978583, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'm_VertexStreams.Array.data[1]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101752100103978583, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'm_VertexStreams.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101752100103978583, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'm_VertexStreams.Array.data[3]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101752100103978583, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'm_VertexStreams.Array.data[4]'
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1155591248251092922, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1155591248251092922, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1155591248251092922, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -30
+      objectReference: {fileID: 0}
     - target: {fileID: 1155591248251092922, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 4324.325
@@ -9396,6 +9492,42 @@ PrefabInstance:
       propertyPath: m_AngularYZLimitSpring.spring
       value: 5405.4062
       objectReference: {fileID: 0}
+    - target: {fileID: 1155591248251092922, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1155591248251092922, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1155591248251092922, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 2.8618505
+      objectReference: {fileID: 0}
+    - target: {fileID: 1155591248251092922, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 2.8618505
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255584224321288510, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255584224321288510, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255584224321288510, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255584224321288510, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255584224321288510, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 1255584224321288510, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 2702.7031
@@ -9411,6 +9543,22 @@ PrefabInstance:
     - target: {fileID: 1255584224321288510, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 3378.379
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255584224321288510, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255584224321288510, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255584224321288510, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1255584224321288510, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1294914970478853608, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_Mass
@@ -9473,6 +9621,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2549203647137806243, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2549203647137806243, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2549203647137806243, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 2549203647137806243, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 540.54065
       objectReference: {fileID: 0}
@@ -9506,11 +9666,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2757891901815986919, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYMotion
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2757891901815986919, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularZMotion
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2757891901815986919, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2757891901815986919, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2757891901815986919, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
@@ -9528,6 +9696,30 @@ PrefabInstance:
       propertyPath: m_AngularYZLimitSpring.spring
       value: 3378.379
       objectReference: {fileID: 0}
+    - target: {fileID: 2757891901815986919, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2757891901815986919, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817537736592383219, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817537736592383219, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817537736592383219, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817537736592383219, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 2817537736592383219, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 1081.0813
@@ -9543,6 +9735,22 @@ PrefabInstance:
     - target: {fileID: 2817537736592383219, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 1351.3516
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817537736592383219, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817537736592383219, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817537736592383219, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817537736592383219, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2863425699571367834, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_Mass
@@ -9609,6 +9817,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3376651420818684898, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZMotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376651420818684898, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376651420818684898, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376651420818684898, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376651420818684898, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376651420818684898, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 3243.2441
       objectReference: {fileID: 0}
@@ -9623,6 +9851,38 @@ PrefabInstance:
     - target: {fileID: 3376651420818684898, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 4054.0552
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376651420818684898, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376651420818684898, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376651420818684898, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3376651420818684898, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3941212165153792531, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3941212165153792531, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3941212165153792531, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3941212165153792531, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 3941212165153792531, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
@@ -9639,6 +9899,22 @@ PrefabInstance:
     - target: {fileID: 3941212165153792531, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 1351.3516
+      objectReference: {fileID: 0}
+    - target: {fileID: 3941212165153792531, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3941212165153792531, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3941212165153792531, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 3941212165153792531, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 4186410445244939891, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9653,6 +9929,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4307383810528069905, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307383810528069905, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307383810528069905, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307383810528069905, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307383810528069905, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 105
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307383810528069905, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 1081.0813
       objectReference: {fileID: 0}
@@ -9667,6 +9963,34 @@ PrefabInstance:
     - target: {fileID: 4307383810528069905, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 1351.3516
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307383810528069905, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307383810528069905, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307383810528069905, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4740890269893738270, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4740890269893738270, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4740890269893738270, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4740890269893738270, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4740890269893738270, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
@@ -9684,6 +10008,34 @@ PrefabInstance:
       propertyPath: m_AngularYZLimitSpring.spring
       value: 675.6758
       objectReference: {fileID: 0}
+    - target: {fileID: 4740890269893738270, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4740890269893738270, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4740890269893738270, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4740890269893738270, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5016866640187298999, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5016866640187298999, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5016866640187298999, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -30
+      objectReference: {fileID: 0}
     - target: {fileID: 5016866640187298999, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 1081.0813
@@ -9699,6 +10051,22 @@ PrefabInstance:
     - target: {fileID: 5016866640187298999, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 1351.3516
+      objectReference: {fileID: 0}
+    - target: {fileID: 5016866640187298999, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5016866640187298999, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5016866640187298999, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 14.130528
+      objectReference: {fileID: 0}
+    - target: {fileID: 5016866640187298999, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 14.130528
       objectReference: {fileID: 0}
     - target: {fileID: 5057734122672502527, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_Mass
@@ -9809,6 +10177,26 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZMotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 3243.2441
       objectReference: {fileID: 0}
@@ -9823,6 +10211,22 @@ PrefabInstance:
     - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 4054.0552
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508207149208280977, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5588121910982609743, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_Mass
@@ -9845,6 +10249,26 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYMotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZMotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 540.54065
       objectReference: {fileID: 0}
@@ -9859,6 +10283,22 @@ PrefabInstance:
     - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 675.6758
+      objectReference: {fileID: 0}
+    - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 20.41037
+      objectReference: {fileID: 0}
+    - target: {fileID: 6041399587086720991, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 20.41037
       objectReference: {fileID: 0}
     - target: {fileID: 6425276331201352596, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_Mass
@@ -9869,6 +10309,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6431581718525781514, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6431581718525781514, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 6431581718525781514, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6431581718525781514, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6431581718525781514, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 6431581718525781514, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 2702.7031
       objectReference: {fileID: 0}
@@ -9884,6 +10344,26 @@ PrefabInstance:
       propertyPath: m_AngularYZLimitSpring.spring
       value: 3378.379
       objectReference: {fileID: 0}
+    - target: {fileID: 6431581718525781514, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6431581718525781514, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6431581718525781514, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6431581718525781514, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6850828172349889454, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -90
+      objectReference: {fileID: 0}
     - target: {fileID: 6850828172349889454, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 2702.7031
@@ -9899,12 +10379,36 @@ PrefabInstance:
     - target: {fileID: 6850828172349889454, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 3378.379
+      objectReference: {fileID: 0}
+    - target: {fileID: 6850828172349889454, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 20.442299
+      objectReference: {fileID: 0}
+    - target: {fileID: 6850828172349889454, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 20.442299
       objectReference: {fileID: 0}
     - target: {fileID: 6890377757213271608, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_Shadows.m_Type
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7092694974655083052, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092694974655083052, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092694974655083052, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092694974655083052, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092694974655083052, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 2162.1626
       objectReference: {fileID: 0}
@@ -9920,6 +10424,38 @@ PrefabInstance:
       propertyPath: m_AngularYZLimitSpring.spring
       value: 2702.7031
       objectReference: {fileID: 0}
+    - target: {fileID: 7092694974655083052, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092694974655083052, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092694974655083052, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092694974655083052, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361285498384745954, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361285498384745954, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361285498384745954, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361285498384745954, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7361285498384745954, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 2162.1626
@@ -9935,6 +10471,22 @@ PrefabInstance:
     - target: {fileID: 7361285498384745954, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 2702.7031
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361285498384745954, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361285498384745954, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361285498384745954, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361285498384745954, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 7557742888209833767, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_IsActive
@@ -9957,6 +10509,22 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8384232631985485571, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8384232631985485571, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.limit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8384232631985485571, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.limit
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8384232631985485571, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.limit
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8384232631985485571, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularXLimitSpring.damper
       value: 1081.0813
       objectReference: {fileID: 0}
@@ -9971,6 +10539,42 @@ PrefabInstance:
     - target: {fileID: 8384232631985485571, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: m_AngularYZLimitSpring.spring
       value: 1351.3516
+      objectReference: {fileID: 0}
+    - target: {fileID: 8384232631985485571, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularYLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8384232631985485571, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_AngularZLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8384232631985485571, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_LowAngularXLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8384232631985485571, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_HighAngularXLimit.contactDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8490245608306970896, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: m_VertexStreams.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8490245608306970896, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'm_VertexStreams.Array.data[1]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8490245608306970896, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'm_VertexStreams.Array.data[2]'
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8490245608306970896, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'm_VertexStreams.Array.data[3]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8490245608306970896, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
+      propertyPath: 'm_VertexStreams.Array.data[4]'
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8491082998878690300, guid: f2046e533d0fa35a987ea3c33919610c, type: 3}
       propertyPath: stopAction
