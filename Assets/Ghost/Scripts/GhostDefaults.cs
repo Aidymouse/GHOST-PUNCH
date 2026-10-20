@@ -14,6 +14,8 @@ public class GhostDefaults : ScriptableObject
     public float POISE_RESTORE_TIMER;
     [Tooltip("Time spent ragdolled after being SMASHED!")]
     public float RAGDOLL_TIME;
+    [Tooltip("(radians) Upwards rotation added to punch direction when ghost is ragdolled")]
+    public float RAGDOLL_ROTATION;
     [Tooltip("Time spent recovering (getting up from ragdolling)")]
     public float RECOVERY_TIME;
     [Tooltip("Multiplier added to punch force when the ghost ragdolls")]
