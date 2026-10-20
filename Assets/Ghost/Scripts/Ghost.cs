@@ -75,6 +75,7 @@ public class Ghost : MonoBehaviour
 
   [HideInInspector] public GameObject nav_destination;
   public ParticleSystem charge_particles;
+  public ParticleSystem scream_particles;
   public Animator animator;
 
 	/** Position the ghost currently wants to look towards */
