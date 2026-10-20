@@ -15,7 +15,6 @@ public class PuncherDefaults : ScriptableObject
 	[Tooltip("Range of the punch in default unity units")]
 	public float PUNCH_RANGE;
 
-
 	[Header("Stamina")]
 	[Tooltip("Maximum stamina for ghost puncher with no items")]
 	public float BASE_STAMINA;
@@ -78,7 +77,6 @@ public class PuncherDefaults : ScriptableObject
 	[Tooltip("FOV offset from normal at full charge speed")] public float CHARGE_FOV_OFFSET;
 	[Tooltip("Speed of FOV change")] public float CHARGE_FOV_SPEED;
 
-	[Header("Throwing stuff")]
-	[Tooltip("Force applied to thrown items")] public float THROW_FORCE;
-	[Tooltip("Spin force applied to thrown items")] public float THROW_TORQUE;
+	[Header("Abilities")]
+	public PAD_Throw throw_data;
 }
