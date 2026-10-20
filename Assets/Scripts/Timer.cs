@@ -50,6 +50,11 @@ public class Timer
 		return this.time_remaining / this.default_time;
 	}
 
+	/** */
+	public float GetTime() {
+		return this.time_remaining;
+	}
+
 	/**
  	* Lerps between timer start and end. 1.0 at start, 0.0 at timer end.
  	* @param lerp_type - Used to change type

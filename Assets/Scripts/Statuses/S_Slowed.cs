@@ -17,5 +17,8 @@ public class S_Slowed : StatusEffect {
 		return 0;
 	}
 	
+	public override string GetDebugString() {
+		return "["+Type+"] Dur: " + Duration.GetTime() + ", % Reduction: " + SlowValue;
+	}
 }
 
