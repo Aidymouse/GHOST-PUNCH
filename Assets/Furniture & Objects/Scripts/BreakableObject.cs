@@ -147,6 +147,7 @@ public class BreakableObject : MonoBehaviour
 
 		// If the thing we just hit is a ghost, deal some damage to it, and also take some damage (WIP)
 		} else if (col.gameObject.tag == "GhostBodyCollider") {
+
 			if (col.relativeVelocity.magnitude > 6) {
 				Ghost ghost = col.gameObject.GetComponentInParent<Ghost>();
 				if (ghost) {
@@ -158,6 +159,8 @@ public class BreakableObject : MonoBehaviour
 				// TODO: I should probably also take some damage - a ghost just flew into me!
 				// This probably will end up being a punch. Oh well.
 			}
+
+			Break(force, transform.position, -GetComponent<Rigidbody>().linearVelocity.normalized);
 
 		} else {
 			if (col.relativeVelocity.magnitude > 6) {
