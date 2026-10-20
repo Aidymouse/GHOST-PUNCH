@@ -20,6 +20,7 @@ public class GA_Scream : GhostAction {
 	public override void Update() {
 		ti_scream_charge.Tick(Time.deltaTime);
 		if (ti_scream_charge.FinishedThisFrame()) {
+			ghost.scream_particles.Play();
 
 			float dist_to_puncher = GhostUtils.TopDownDistance(ghost.transform.position, ghost.ghostPuncher.transform.position);
 
