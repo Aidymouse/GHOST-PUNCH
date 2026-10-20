@@ -160,7 +160,7 @@ public class BreakableObject : MonoBehaviour
 				// This probably will end up being a punch. Oh well.
 			}
 
-			Break(force, transform.position, -GetComponent<Rigidbody>().linearVelocity.normalized);
+			TakeDamage(9999, force, transform.position, -GetComponent<Rigidbody>().linearVelocity.normalized);
 
 		} else {
 			if (col.relativeVelocity.magnitude > 6) {
