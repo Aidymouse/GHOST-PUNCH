@@ -13,4 +13,5 @@ public class GAD_Scream : ScriptableObject
     public float DELAY;
 		[Tooltip("Time spent hanging around after scream animation finishes")]
     public float HANG_TIME;
+		public AudioClip SCREAM_SFX;
 }
