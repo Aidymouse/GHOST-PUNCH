@@ -121,7 +121,8 @@ public class GhostPuncher : MonoBehaviour
 	/* Cutscene control toggle */
 	public bool inCutscene = false;
 
-	List<StatusEffect> statuses = new List<StatusEffect>();
+	[HideInInspector]
+	public List<StatusEffect> statuses = new List<StatusEffect>();
 	[Tooltip("The position in the list corresponds to the hit class. Slot 1 = hit class 1 (strong punch), etc.")]
 	public List<ParticleSystem> punch_particles = new List<ParticleSystem>();
 
@@ -297,10 +298,12 @@ public class GhostPuncher : MonoBehaviour
 
 		Vector3 move_vec = new Vector3(0, fall_velocity, 0);
 
+		// Slow
 		float speed_multiplier = 1 - GetSlowMultiplier();
 		desired_control_vec *= speed_multiplier;
 		move_vec += desired_control_vec;
 
+		// Walking animation
 		if (desired_control_vec.magnitude > 0) {
 			if (!arm_animator.GetBool("Walking")) {
 				PlayAnimation("Walk", 1);

@@ -193,6 +193,7 @@ public class Ghost : MonoBehaviour
     actions[(int)GhostActions.POW_SLAP] = new GA_POW_Slap(this);
     actions[(int)GhostActions.POW_RUSH] = new GA_Rush(this);
     actions[(int)GhostActions.POW_BLAST] = new GA_Blast(this);
+    actions[(int)GhostActions.POW_SCREAM] = new GA_Scream(this);
 
     rig_rbs = rig.GetComponentsInChildren<Rigidbody>();
     rig_colliders = rig.GetComponentsInChildren<Collider>();
@@ -290,6 +291,10 @@ public class Ghost : MonoBehaviour
 
 
   }
+
+	public GhostAction? GetCurrentAction() {
+		return actions[(int)cur_action];
+	}
 
 	public void ExitAction(GhostActions? next_action = null) {
 		if (debug.ghost_logs) Debug.Log("Ghost Exiting: "+cur_action);

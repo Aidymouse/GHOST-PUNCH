@@ -15,4 +15,8 @@ public class GhostAction {
 	public virtual void Update() { }
 
 	public virtual void GetPunched(Punch punch, RaycastHit? hit=null) {}
+
+	public virtual string GetDebugString() {
+		return "No debug string assigned!";
+	}
 }
