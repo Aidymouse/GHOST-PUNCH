@@ -49,6 +49,8 @@ public class Ghost : MonoBehaviour
   public GhostDefaults defaults;
 	public GPDebug debug;
 
+	public Aberrator aberrator;
+
 	// Elevated permissions on this one. We need to be able to end runs!
 	public ShopMaster shop_master;
 

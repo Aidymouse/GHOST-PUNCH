@@ -61,15 +61,24 @@ public class Timer
  	* @param backwards - Makes it 0 at start, 1.0 at end
  	*/
 	public float GetLerped(LerpTypes lerp_type=LerpTypes.LINEAR, bool backwards=false) {
-		// TODO:
+		// TODO: backwards
+
+		float perc = PercentComplete();
+		if (backwards) { perc = 1 - PercentComplete(); }
+	
 		if (lerp_type == LerpTypes.EASE_OUT) {
-			return Lerp.EaseOutCubic(PercentComplete());
+			return Lerp.EaseOutCubic(perc);
 		} else if (lerp_type == LerpTypes.EASE_IN) {
-			return Lerp.EaseInCubic(PercentComplete());
+			return Lerp.EaseInCubic(perc);
 		}
 
-		return PercentComplete();
+		return perc;
 
+	}
+	
+	/** Lerp two values based on the percentage completed of the timer. Lerp Up means weight goes UP as time goes DOWN */
+	public float LerpValue(float min, float max, bool lerp_up=false, LerpTypes type=LerpTypes.LINEAR) {
+		return Lerp.Linear(min, max, GetLerped(type, lerp_up));
 	}
 
 
@@ -111,4 +120,8 @@ public class Timer
   public bool IsActive() {
     return this.active;
   }
+
+	public string GetDebugString() {
+		return (IsActive() ? "[O] " : "[ ] ") + GetTime() + " (" + PercentComplete() + ")";
+	}
 }
