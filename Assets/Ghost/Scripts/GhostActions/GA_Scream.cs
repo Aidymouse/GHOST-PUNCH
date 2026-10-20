@@ -9,7 +9,6 @@ public class GA_Scream : GhostAction {
 		float scream_anim_duration = AnimUtil.GetClipLength("Scream", g.animator);
 		ti_scream = new Timer(0, scream_anim_duration + ghost.defaults.scream_data.HANG_TIME);
 		ti_scream_charge = new Timer(0, ghost.defaults.scream_data.DELAY);
-		Debug.Log("Delay" + ghost.defaults.scream_data.DELAY);
 	}
 
 	public override void Enter() {
@@ -24,7 +23,7 @@ public class GA_Scream : GhostAction {
 
 			float dist_to_puncher = GhostUtils.TopDownDistance(ghost.transform.position, ghost.ghostPuncher.transform.position);
 
-			Debug.Log("Launching scream with range " + ghost.defaults.scream_data.RANGE + ", puncher is " + dist_to_puncher + "m away");
+			//Debug.Log("Launching scream with range " + ghost.defaults.scream_data.RANGE + ", puncher is " + dist_to_puncher + "m away");
 
 			if (dist_to_puncher <= ghost.defaults.scream_data.RANGE) {
 				S_Slowed slowed = new S_Slowed(ghost.defaults.scream_data.SPEED_REDUCTION_DURATION, ghost.defaults.scream_data.SPEED_REDUCTION);
