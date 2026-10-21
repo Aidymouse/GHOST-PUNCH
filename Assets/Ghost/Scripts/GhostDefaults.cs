@@ -25,6 +25,12 @@ public class GhostDefaults : ScriptableObject
 		[Tooltip("How long the ghost spends vulnerable when knocked to 0 poise")]
 		public float VULNERABLE_TIME;
 
+		[Header("Ghost Shake")]
+		[Tooltip("Duration of shake when ghost is punched")]
+		public float PUNCHED_SHAKE_DURATION;
+		[Tooltip("Strength of shake when ghost is punched")]
+		public float PUNCHED_SHAKE_STRENGTH;
+
 		[Header("Knockback")]
 		[Tooltip("Time in knockback - should be very short!")]
 		public float KNOCKBACK_TIMER;

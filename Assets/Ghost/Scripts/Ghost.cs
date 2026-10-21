@@ -60,6 +60,8 @@ public class Ghost : MonoBehaviour
 	[HideInInspector] public float escape_meter;
 	[HideInInspector] public float escape_needed;
 	public Renderer mesh_renderer;
+	[Tooltip("The visual model of the ghost, for visual effects involving offset (e.g. ghost shake)")]
+	public GameObject ghost_visual;
 
   // Hit points
   [HideInInspector]
@@ -84,6 +86,11 @@ public class Ghost : MonoBehaviour
 	Vector3? look_at;
 	/** If present, the ghost will update it's look_at vector to be the position of this target */
 	GameObject? look_target;
+
+	[Header("Shake")]
+	public Timer ti_shake;
+	public float shake_max_strength;
+	public float shake_strength;
 
 	[Header("Ragdoll")]
 
@@ -167,6 +174,7 @@ public class Ghost : MonoBehaviour
 		escape_meter = 0;
 
 		ti_knockback = new Timer(0, defaults.KNOCKBACK_TIMER);
+		ti_shake = new Timer(0, 0);
 
 	}
 
@@ -224,7 +232,7 @@ public class Ghost : MonoBehaviour
 
   }
 
-  // Update is called once per frame
+	/** Lots of ghost state is handled in the ghost power, but anything global happens here */
   public void Update()
   {
 
@@ -234,6 +242,9 @@ public class Ghost : MonoBehaviour
 				DisableKnockback();
 			}
 		}
+
+		// Update shake
+		UpdateShake();
 
     /* Update where ghost is looking */
 		// Unless otherwise specified, use the ghost punchers location
@@ -390,6 +401,7 @@ public class Ghost : MonoBehaviour
 		}
 
 		flash_controller.StartFlashing(1, defaults.PUNCHED_FLASH_PERIOD, defaults.PUNCHED_FLASH_MIN, defaults.PUNCHED_FLASH_MAX, defaults.PUNCHED_FLASH_COLOR);
+		StartShaking(defaults.PUNCHED_SHAKE_DURATION, defaults.PUNCHED_SHAKE_STRENGTH);
 
 		if (punch.hit_class <= (int)HitClass.PUNCH) {
 			ghost_screams.Play();
@@ -571,6 +583,32 @@ public class Ghost : MonoBehaviour
 
 	public void PlaySound(string clip_name) {
 
+	}
+
+	/** Shaking **/
+
+	public void StartShaking(float time, float strength) {
+		ti_shake.SetTime(time, time);
+		shake_max_strength = strength;
+	}
+
+	void UpdateShake() {
+		if (!ti_shake.Finished()) {
+			ti_shake.Tick(Time.deltaTime);
+			shake_strength = ti_shake.LerpValue(0, shake_max_strength);
+			if (ti_shake.Finished()) {
+				StopShaking();
+			}
+		}
+
+		if (shake_strength > 0) {
+			Vector3 offset = Random.insideUnitSphere;
+			ghost_visual.transform.localPosition = offset * shake_strength;
+		}
+	}
+
+	public void StopShaking() {
+		ghost_visual.transform.localPosition = new Vector3(0, 0, 0);
 	}
 
 

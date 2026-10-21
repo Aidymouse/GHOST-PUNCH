@@ -9,6 +9,7 @@ public class DebugUI : MonoBehaviour
 
   public TMP_Text ghost_action;
   public TMP_Text ghost_action_state;
+  public TMP_Text ghost_shake;
 
   public TMP_Text gp_statuses;
 
@@ -29,6 +30,8 @@ public class DebugUI : MonoBehaviour
 	void UpdateGhostActionPanel() {
 		ghost_action.SetText("" + ghost.cur_action);
 		ghost_action_state.SetText(ghost.GetCurrentAction()?.GetDebugString() ?? "");
+
+		ghost_shake.SetText(ghost.ti_shake.GetDebugString() + "\n" + ghost.shake_strength + "\n" + ghost.ghost_visual.transform.localPosition);
 	}
 
 	void UpdateGPStatusPanel() {
