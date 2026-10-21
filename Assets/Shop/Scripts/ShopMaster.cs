@@ -101,7 +101,6 @@ public class ShopMaster : MonoBehaviour
 			puncher_instance.EndRun();
 			puncher_instance.ChangeAnimation("KickedOutStart");
 
-			Cursor.lockState = CursorLockMode.None;
 
 			ghost_ui.EndRun();
 		}
@@ -116,6 +115,7 @@ public class ShopMaster : MonoBehaviour
 			start_end_run_timeline.Stop();
 			end_end_run_timeline.Play();
 			puncher_instance.ChangeAnimation("KickedOutEnd");
+			Cursor.lockState = CursorLockMode.None;
 			shop.EnableCameras();
 		}
 
