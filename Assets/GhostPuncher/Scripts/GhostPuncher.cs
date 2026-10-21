@@ -438,7 +438,6 @@ public class GhostPuncher : MonoBehaviour
 		// Center of flat plane perpendicular to ghost puncher at base of punch hitbox
 		Vector3 look_start = punch_hitbox.transform.position - look_dir * punch_length/2;
 
-
 		Vector3 look_top = look_start + punch_hitbox.transform.TransformDirection(Vector3.up) * punch_height/2;
 		Vector3 look_bottom = look_start - punch_hitbox.transform.TransformDirection(Vector3.up) * punch_height/2;
 		Vector3 look_left = look_start + punch_hitbox.transform.TransformDirection(Vector3.left) * punch_width/2;
@@ -461,9 +460,22 @@ public class GhostPuncher : MonoBehaviour
 		RaycastHit[] hits = Physics.RaycastAll(new Ray(look_start, look_dir), punch_length, punchables_mask);
 
 		foreach (Collider col in punched) {
+
 			RaycastHit? relevant_hit = null;
+			
+			Ghost collider_ghost = col.gameObject.GetComponent<Ghost>();
+			if (!collider_ghost) { collider_ghost = col.gameObject.GetComponentInParent<Ghost>(); }
+			
+
 			foreach (RaycastHit hit in hits) {
 				if (hit.collider.gameObject == col.gameObject) {
+					relevant_hit = hit;
+					break;
+				}
+				// If the raycast hit a child of ghost and the collider is a child of ghost then we actually do want to return the hit for that part
+				Ghost raycast_ghost = hit.collider.gameObject.GetComponent<Ghost>();
+				if (!raycast_ghost) { raycast_ghost = hit.collider.gameObject.GetComponentInParent<Ghost>(); }
+				if (collider_ghost && raycast_ghost) {
 					relevant_hit = hit;
 					break;
 				}
