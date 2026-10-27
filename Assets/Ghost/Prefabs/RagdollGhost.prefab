@@ -2591,6 +2591,8 @@ GameObject:
   - component: {fileID: 282060137847931423}
   - component: {fileID: 1356796624299150421}
   - component: {fileID: 1062089472777229332}
+  - component: {fileID: 5175314111961943000}
+  - component: {fileID: 6669136357943132979}
   m_Layer: 13
   m_Name: RagdollGhost
   m_TagString: Ghost
@@ -2631,11 +2633,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Ghost
   defaults: {fileID: 11400000, guid: f65ac4378dccf01439f9d94d46eefaed, type: 2}
   debug: {fileID: 11400000, guid: bc071c09bc0d398fb991b1c9154b44d0, type: 2}
+  aberrator: {fileID: 0}
   shop_master: {fileID: 0}
   rig_core: {fileID: 3070539423319855926}
   escape_meter: 0
   escape_needed: 30
-  mesh_renderer: {fileID: 0}
+  mesh_renderer: {fileID: 3915157595188928313}
+  ghost_visual: {fileID: 6346036149561700378}
   hp: 0
   ghostPuncher_obj: {fileID: 0}
   ghostPuncher: {fileID: 0}
@@ -2645,6 +2649,8 @@ MonoBehaviour:
   charge_particles: {fileID: 4449622196882092581}
   scream_particles: {fileID: 8491082998878690300}
   animator: {fileID: 0}
+  shake_max_strength: 0
+  shake_strength: 0
   ragdoll_animator: {fileID: 0}
   ragdoll_settings: {fileID: 6223803304138731776}
   ragprof_animated: {fileID: 11400000, guid: 27f0e250f250407c19fa8ef95ed10b4f, type: 2}
@@ -2667,12 +2673,13 @@ MonoBehaviour:
   inJumpscare: 0
   fear_meter: 0
   wave_orb: {fileID: 8074112012794229111, guid: ae93a043bd81acdc487b5fe3fb284938, type: 3}
-  nav_agent: {fileID: 0}
+  nav_agent: {fileID: 5757180813942324356}
+  mover: {fileID: 6669136357943132979}
   poise: 0
   max_poise: 0
-  close_range_actions: {fileID: 0}
-  mid_range_actions: {fileID: 0}
-  far_range_actions: {fileID: 0}
+  close_range_actions: {fileID: 11400000, guid: 2839fac0e22442eb892a7c4210ccd1b7, type: 2}
+  mid_range_actions: {fileID: 11400000, guid: 868ae9704eb9ea7bc83cd307771069e5, type: 2}
+  far_range_actions: {fileID: 11400000, guid: cf2051af28eddf2ebbbc50a488f0079e, type: 2}
 --- !u!136 &900925822181595062
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2706,11 +2713,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.3
-  m_Speed: 5
+  m_Speed: 4
   m_Acceleration: 100
   avoidancePriority: 50
   m_AngularSpeed: 180
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
@@ -2927,6 +2934,33 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5175314111961943000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2587037593647767648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edbefedb1183cb181906b6b0efada895, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlashController
+  renderer: {fileID: 3915157595188928313}
+--- !u!114 &6669136357943132979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2587037593647767648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef33a29e135488d9aa031494e2828799, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GhostMover
+  ghost: {fileID: 5085450913482942971}
+  nav_agent: {fileID: 5757180813942324356}
 --- !u!1 &2619111090810152954
 GameObject:
   m_ObjectHideFlags: 0

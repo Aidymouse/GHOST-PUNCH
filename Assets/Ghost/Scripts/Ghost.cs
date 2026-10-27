@@ -49,6 +49,7 @@ public class Ghost : MonoBehaviour
   public GhostDefaults defaults;
 	public GPDebug debug;
 
+	[Tooltip("Controller for screen space chromatic aberration")]
 	public Aberrator aberrator;
 
 	// Elevated permissions on this one. We need to be able to end runs!
@@ -141,6 +142,7 @@ public class Ghost : MonoBehaviour
   public GameObject wave_orb;
 
   public NavMeshAgent nav_agent;
+	public GhostMover mover;
 
 	// TODO: put in respective states
   [HideInInspector] public Timer ti_hit_stun;
