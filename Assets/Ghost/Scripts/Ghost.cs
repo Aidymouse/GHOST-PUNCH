@@ -84,9 +84,9 @@ public class Ghost : MonoBehaviour
   public Animator animator;
 
 	/** Position the ghost currently wants to look towards */
-	Vector3? look_at;
+	[HideInInspector] public Vector3? look_at;
 	/** If present, the ghost will update it's look_at vector to be the position of this target */
-	GameObject? look_target;
+	[HideInInspector] public GameObject? look_target;
 
 	[Header("Shake")]
 	public Timer ti_shake;
@@ -250,7 +250,6 @@ public class Ghost : MonoBehaviour
 
     /* Update where ghost is looking */
 		// Unless otherwise specified, use the ghost punchers location
-		
 		
     if (!SpinDisabled() && (look_at is not null || look_target is not null)) {
 			if (look_target is not null) {

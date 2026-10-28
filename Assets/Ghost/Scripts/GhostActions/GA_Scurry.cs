@@ -6,10 +6,12 @@ public class GA_Scurry : GhostAction {
 
 	float base_angular_speed;
 	float base_speed;
+	float scurry_stopping_distance;
 
 	public GA_Scurry(Ghost g) : base(g) {
 		base_angular_speed = g.nav_agent.angularSpeed;
 		base_speed = g.nav_agent.speed;
+		scurry_stopping_distance = g.mover.base_nav_info.stoppingDistance;
 	}
 
 	public override void Enter() {
@@ -17,13 +19,17 @@ public class GA_Scurry : GhostAction {
 		Vector3? rand_pos = NavMeshUtil.GetRandomPoint(ghost.transform.position, 10, 5, true);
 
 		if (rand_pos is not null) {
-			ghost.nav_agent.SetDestination(rand_pos.Value);
 			ghost.ChangeAnimation(ghost.defaults.scurry_data.animation_name);
 			ghost.ragdoll_animator.forceTargetPose = true;
 			ghost.ragdoll_animator.MasterAlpha = 1;
+
 			ghost.nav_agent.isStopped = false;
-			ghost.nav_agent.angularSpeed = ghost.defaults.scurry_data.turn_speed;
-			ghost.nav_agent.speed = ghost.defaults.scurry_data.speed;
+
+			NavInfo scurry_nav_info = new NavInfo(ghost.mover.base_nav_info);
+			scurry_nav_info.speed = ghost.defaults.scurry_data.speed;
+			scurry_nav_info.angularSpeed = ghost.defaults.scurry_data.turn_speed;
+
+			ghost.mover.GoSomewhere(new NavState(rand_pos.Value, scurry_nav_info, true, "Scurry"));
 
 		} else {
 
@@ -40,17 +46,17 @@ public class GA_Scurry : GhostAction {
 
 	public override void Exit() {
 			ghost.ChangeAnimation("Idle");
-			ghost.nav_agent.angularSpeed = base_angular_speed;
-			ghost.nav_agent.speed = base_speed;
+			//ghost.nav_agent.angularSpeed = base_angular_speed;
+			//ghost.nav_agent.speed = base_speed;
 	}
 
 	public override void Update() {
 
 		//Debug.Log(ghost.nav_agent.destination + ", " + ghost.nav_agent.remainingDistance);
 
-		ghost.LookAt(ghost.nav_agent.steeringTarget);
+		//ghost.LookAt(ghost.nav_agent.steeringTarget);
 
-		if (ghost.nav_agent.remainingDistance <= ghost.nav_agent.stoppingDistance) {
+		if (ghost.nav_agent.remainingDistance <= scurry_stopping_distance) {
 			ghost.ExitAction();
 		}
 	}
